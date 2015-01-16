@@ -1,4 +1,4 @@
-import Event = require('../../createts/events/Event')
+import Event = require('../../createts/event/Event')
 
 /*
  * MouseEvent

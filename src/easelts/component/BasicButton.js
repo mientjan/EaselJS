@@ -77,14 +77,17 @@ define(["require", "exports", '../display/Container', '../display/Text', '../dis
                     case 1:
                         {
                             marginArray.push(marginArray[0], marginArray[0], marginArray[0]);
+                            break;
                         }
                     case 2:
                         {
                             marginArray.push(marginArray[0], marginArray[1]);
+                            break;
                         }
                     case 3:
                         {
                             marginArray.push(marginArray[1]);
+                            break;
                         }
                 }
                 marginArray.length = 4;

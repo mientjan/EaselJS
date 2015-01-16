@@ -18,8 +18,8 @@ define(["require", "exports"], function (require, exports) {
             this.y = y;
             this.z = z;
             this.w = w;
-            this._clampScalar_min = new Vector4();
-            this._clampScalar_max = new Vector4();
+            this.__clampScalarMin = null;
+            this.__clampScalarMax = null;
         }
         Vector4.prototype.set = function (x, y, z, w) {
             this.x = x;
@@ -310,8 +310,14 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.clampScalar = function (minVal, maxVal) {
-            var min = this._clampScalar_min;
-            var max = this._clampScalar_max;
+            if (!this.__clampScalarMin) {
+                this.__clampScalarMin = new Vector4(0, 0, 0, 0);
+            }
+            if (!this.__clampScalarMax) {
+                this.__clampScalarMax = new Vector4(0, 0, 0, 0);
+            }
+            var min = this.__clampScalarMin;
+            var max = this.__clampScalarMax;
             min.set(minVal, minVal, minVal, minVal);
             max.set(maxVal, maxVal, maxVal, maxVal);
             return this.clamp(min, max);

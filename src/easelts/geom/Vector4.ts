@@ -564,13 +564,21 @@ class Vector4
 
 	}
 
-	private _clampScalar_min = new Vector4();
-	private _clampScalar_max = new Vector4();
+	private __clampScalarMin:Vector4 = null;
+	private __clampScalarMax:Vector4 = null;
 
 	public clampScalar(minVal, maxVal)
 	{
-		var min = this._clampScalar_min;
-		var max = this._clampScalar_max;
+		if(!this.__clampScalarMin){
+			this.__clampScalarMin = new Vector4(0, 0, 0, 0);
+		}
+
+		if(!this.__clampScalarMax){
+			this.__clampScalarMax = new Vector4(0, 0, 0, 0);
+		}
+
+		var min = this.__clampScalarMin;
+		var max = this.__clampScalarMax;
 
 		min.set(minVal, minVal, minVal, minVal);
 		max.set(maxVal, maxVal, maxVal, maxVal);

@@ -911,7 +911,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 
 		var scale = this._cacheScale;
 		var offX = this._cacheOffsetX;
-		var offY = this._cacheOffsetY
+		var offY = this._cacheOffsetY;
 		var fBounds;
 		if(fBounds = this._applyFilterBounds(offX, offY, 0, 0))
 		{

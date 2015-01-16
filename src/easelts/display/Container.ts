@@ -766,7 +766,7 @@ class Container extends DisplayObject
 		for(var i = l - 1; i >= 0; i--)
 		{
 			var child = children[i];
-			var hitArea = child.hitArea
+			var hitArea = child.hitArea;
 			var mask = child.mask;
 
 

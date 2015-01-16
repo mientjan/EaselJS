@@ -395,7 +395,7 @@ class Stage extends Container
 		super('100%', '100%', 0, 0, 0, 0);
 
 		//
-		var onResize:Function = null
+		var onResize:Function = null;
 		var size:Size = null;
 
 		switch(element.tagName)
@@ -507,7 +507,7 @@ class Stage extends Container
 		//			return;
 		//		}
 
-		this.drawstartSignal.emit()
+		this.drawstartSignal.emit();
 
 		DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
 
