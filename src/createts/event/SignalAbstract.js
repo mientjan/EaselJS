@@ -125,6 +125,11 @@ define(["require", "exports", './SignalConnection'], function (require, exports,
                 p = p._next;
             }
         };
+        SignalAbstract.prototype.dispose = function () {
+            while (this._head != void 0) {
+                this._head.dispose();
+            }
+        };
         SignalAbstract.DISPATCHING_SENTINEL = new SignalConnection(null, null);
         return SignalAbstract;
     })();

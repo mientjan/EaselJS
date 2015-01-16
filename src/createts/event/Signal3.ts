@@ -1,7 +1,7 @@
 import Event = require('./Event');
 
 /*
- * Signal
+ * Signal3
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -30,34 +30,34 @@ import SignalAbstract = require('./SignalAbstract');
 /**
  * @namespace createts.events
  * @module createts
- * @class Signal
+ * @class Signal3
  */
-class Signal extends SignalAbstract
+class Signal3<T1,T2,T3> extends SignalAbstract
 {
 	/**
 	 * Emit the signal, notifying each connected listener.
 	 *
 	 * @method emit
 	 */
-	public emit()
+	public emit(arg1:T1, arg2:T2, arg3:T3)
 	{
 		if(this.dispatching())
 		{
-			this.defer(() => this.emitImpl());
+			this.defer(() => this.emitImpl(arg1, arg2, arg3));
 		}
 		else
 		{
-			this.emitImpl();
+			this.emitImpl(arg1, arg2, arg3);
 		}
 	}
 
-	private emitImpl()
+	private emitImpl(arg1:T1, arg2:T2, arg3:T3)
 	{
 		var head = this.willEmit();
 		var p = head;
 		while(p != null)
 		{
-			p._listener();
+			p._listener(arg1, arg2, arg3)
 			if(!p.stayInList)
 			{
 				p.dispose();
@@ -68,4 +68,4 @@ class Signal extends SignalAbstract
 	}
 }
 
-export = Signal;
+export = Signal3;

@@ -8,11 +8,11 @@ define(["require", "exports", './SignalAbstract'], function (require, exports, S
     /**
      * @namespace createts.events
      * @module createts
-     * @class Signal
+     * @class Signal3
      */
-    var Signal = (function (_super) {
-        __extends(Signal, _super);
-        function Signal() {
+    var Signal3 = (function (_super) {
+        __extends(Signal3, _super);
+        function Signal3() {
             _super.apply(this, arguments);
         }
         /**
@@ -20,20 +20,20 @@ define(["require", "exports", './SignalAbstract'], function (require, exports, S
          *
          * @method emit
          */
-        Signal.prototype.emit = function () {
+        Signal3.prototype.emit = function (arg1, arg2, arg3) {
             var _this = this;
             if (this.dispatching()) {
-                this.defer(function () { return _this.emitImpl(); });
+                this.defer(function () { return _this.emitImpl(arg1, arg2, arg3); });
             }
             else {
-                this.emitImpl();
+                this.emitImpl(arg1, arg2, arg3);
             }
         };
-        Signal.prototype.emitImpl = function () {
+        Signal3.prototype.emitImpl = function (arg1, arg2, arg3) {
             var head = this.willEmit();
             var p = head;
             while (p != null) {
-                p._listener();
+                p._listener(arg1, arg2, arg3);
                 if (!p.stayInList) {
                     p.dispose();
                 }
@@ -41,7 +41,7 @@ define(["require", "exports", './SignalAbstract'], function (require, exports, S
             }
             this.didEmit(head);
         };
-        return Signal;
+        return Signal3;
     })(SignalAbstract);
-    return Signal;
+    return Signal3;
 });
