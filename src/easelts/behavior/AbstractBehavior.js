@@ -19,7 +19,7 @@ define(["require", "exports"], function (require, exports) {
          */
         AbstractBehaviour.prototype.initialize = function (owner) {
             if (this.owner) {
-                throw new Error('behavior already has a owner');
+                throw new Error('behavior already has an owner');
             }
             this.owner = owner;
         };

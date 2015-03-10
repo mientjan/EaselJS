@@ -22,7 +22,7 @@ class AbstractBehaviour
 	{
 		if(this.owner)
 		{
-			throw new Error('behavior already has a owner')
+			throw new Error('behavior already has an owner')
 		}
 
 		this.owner = owner;

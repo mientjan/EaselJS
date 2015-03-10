@@ -864,7 +864,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @method enableMouseInteraction
 	 * @return void
 	 */
-	public enableMouseInteraction()
+	public enableMouseInteraction():void
 	{
 		this.mouseEnabled = true;
 	}
@@ -873,7 +873,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @method disableMouseInteraction
 	 * @return void
 	 */
-	public disableMouseInteraction()
+	public disableMouseInteraction():void
 	{
 		this.mouseEnabled = false;
 	}

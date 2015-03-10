@@ -1,6 +1,5 @@
 import AbstractBehavior = require('./AbstractBehavior');
 import DisplayObject = require('../display/DisplayObject');
-import Stage = require('../display/Stage');
 import Container = require('../display/Container');
 import DisplayType = require('../enum/DisplayType');
 
@@ -10,8 +9,6 @@ import DisplayType = require('../enum/DisplayType');
  */
 class ButtonBehavior extends AbstractBehavior
 {
-	private _stage:Stage;
-
 	private _onClickInstance:Function = null;
 	private _onPointerOverInstance:Function = null;
 	private _onPointerOutInstance:Function = null;
@@ -63,7 +60,6 @@ class ButtonBehavior extends AbstractBehavior
 			this.owner.removeEventListener(DisplayObject.EVENT_MOUSE_OUT, this._onPointerOutInstance);
 		}
 
-		this._stage = null;
 		this._onClickInstance = null;
 		this._onPointerOverInstance = null;
 		this._onPointerOutInstance = null;
