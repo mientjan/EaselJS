@@ -10,74 +10,87 @@ define(["require", "exports", './AbstractBehavior', '../display/DisplayObject', 
      */
     var MouseOverBehavior = (function (_super) {
         __extends(MouseOverBehavior, _super);
-        function MouseOverBehavior(area) {
-            var _this = this;
+        function MouseOverBehavior(hitArea) {
             _super.call(this);
             this._rectangle = null;
-            this._radiusPow = 0.0;
+            this._circle = null;
+            this._circleRadiusPow = 0.0;
             this._hasMouseOver = false;
             this._tickerSignalConnection = null;
-            this.update = function (delta) {
-                _this.checkMouseOver();
-            };
-            if (area !== void 0) {
-                if (typeof area == "number") {
-                    this._radiusPow = area * area;
+            if (hitArea !== void 0) {
+                if (hitArea.hasOwnProperty("x") && hitArea.hasOwnProperty("y") && hitArea.hasOwnProperty("radius")) {
+                    this._circle = hitArea;
+                    this._circleRadiusPow = hitArea.radius * hitArea.radius;
                 }
-                else if (area.hasOwnProperty("x") && area.hasOwnProperty("y") && area.hasOwnProperty("width") && area.hasOwnProperty("height")) {
-                    this._rectangle = area;
+                else if (hitArea.hasOwnProperty("x") && hitArea.hasOwnProperty("y") && hitArea.hasOwnProperty("width") && hitArea.hasOwnProperty("height")) {
+                    this._rectangle = hitArea;
                 }
                 else {
-                    throw new Error("Invalid type area");
+                    throw new Error("hitArea is of invalid type");
                 }
             }
         }
         MouseOverBehavior.prototype.initialize = function (owner) {
             _super.prototype.initialize.call(this, owner);
             this.owner.cursor = 'pointer';
-            this._tickerSignalConnection = Ticker.getInstance().tickSignal.connect(this.update);
+            this._tickerSignalConnection = Ticker.getInstance().tickSignal.connect(this.update.bind(this));
+        };
+        MouseOverBehavior.prototype.update = function (delta) {
+            var stage = this.owner.stage;
+            if (stage && stage.mouseEnabled && stage.mouseChildren && this.owner.mouseEnabled) {
+                this.checkMouseOver();
+            }
+            else {
+                if (this._hasMouseOver) {
+                    this.changeMouseOverState(false);
+                }
+            }
         };
         MouseOverBehavior.prototype.checkMouseOver = function () {
             var isWithin = false;
-            if (this.owner.stage) {
-                this._stage = this.owner.stage;
+            var mousePosition = this.owner.globalToLocal(this.owner.stage.mouseX, this.owner.stage.mouseY);
+            if (this._circle) {
+                mousePosition.x -= this._circle.x;
+                mousePosition.y -= this._circle.y;
+                isWithin = (mousePosition.x * mousePosition.x + mousePosition.y * mousePosition.y < this._circleRadiusPow);
             }
-            if (!this._stage || !this.owner.mouseEnabled) {
-                isWithin = false;
+            else if (this._rectangle) {
+                isWithin = (mousePosition.x > this._rectangle.x && mousePosition.x < this._rectangle.x + this._rectangle.width) && (mousePosition.y > this._rectangle.y && mousePosition.y < this._rectangle.y + this._rectangle.height);
             }
             else {
-                var mousePosition = this.owner.globalToLocal(this._stage.mouseX, this._stage.mouseY);
-                if (this._radiusPow) {
-                    isWithin = (mousePosition.x * mousePosition.x + mousePosition.y * mousePosition.y < this._radiusPow);
-                }
-                else if (this._rectangle) {
-                    isWithin = (mousePosition.x > this._rectangle.x && mousePosition.x < this._rectangle.x + this._rectangle.width) && (mousePosition.y > this._rectangle.y && mousePosition.y < this._rectangle.y + this._rectangle.height);
-                }
-                else {
-                    isWithin = (mousePosition.x > 0 && mousePosition.x < this.owner.width) && (mousePosition.y > 0 && mousePosition.y < this.owner.height);
-                }
+                isWithin = (mousePosition.x > 0 && mousePosition.x < this.owner.width) && (mousePosition.y > 0 && mousePosition.y < this.owner.height);
             }
             if (!this._hasMouseOver && isWithin) {
-                this.owner.dispatchEvent(new PointerEvent(DisplayObject.EVENT_MOUSE_OVER, true, false, this._stage.mouseX, this._stage.mouseY, null, -1, true, this._stage.mouseX, this._stage.mouseY));
-                this._hasMouseOver = true;
-                if (this.owner.stage) {
-                    this.owner.stage.canvas.style.cursor = this.owner.cursor;
-                }
+                this.changeMouseOverState(true);
             }
             else if (this._hasMouseOver && !isWithin) {
-                this.owner.dispatchEvent(new PointerEvent(DisplayObject.EVENT_MOUSE_OUT, true, false, this._stage.mouseX, this._stage.mouseY, null, -1, true, this._stage.mouseX, this._stage.mouseY));
-                this._hasMouseOver = false;
-                if (this.owner.stage) {
-                    this.owner.stage.canvas.style.cursor = "";
-                }
+                this.changeMouseOverState(false);
             }
         };
+        MouseOverBehavior.prototype.changeMouseOverState = function (hasMouseOver) {
+            this._hasMouseOver = hasMouseOver;
+            var stageMouseX;
+            var stageMouseY;
+            var stage = this.owner.stage;
+            if (stage) {
+                stageMouseX = stage.mouseX;
+                stageMouseY = stage.mouseY;
+                stage.canvas.style.cursor = hasMouseOver ? this.owner.cursor : "";
+            }
+            var eventType = hasMouseOver ? DisplayObject.EVENT_MOUSE_OVER : DisplayObject.EVENT_MOUSE_OUT;
+            this.owner.dispatchEvent(new PointerEvent(eventType, true, false, stageMouseX, stageMouseY, null, -1, true, stageMouseX, stageMouseY));
+        };
         MouseOverBehavior.prototype.destruct = function () {
+            if (this._hasMouseOver) {
+                this.changeMouseOverState(false);
+            }
             if (this._tickerSignalConnection) {
                 this._tickerSignalConnection.dispose();
                 this._tickerSignalConnection = null;
             }
+            this._circle = null;
             this._rectangle = null;
+            _super.prototype.destruct.call(this);
         };
         return MouseOverBehavior;
     })(AbstractBehavior);

@@ -48,7 +48,6 @@ define(["require", "exports", './AbstractBehavior', '../display/DisplayObject'],
             if (this._onPointerOutInstance) {
                 this.owner.removeEventListener(DisplayObject.EVENT_MOUSE_OUT, this._onPointerOutInstance);
             }
-            this._stage = null;
             this._onClickInstance = null;
             this._onPointerOverInstance = null;
             this._onPointerOutInstance = null;

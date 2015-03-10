@@ -1,10 +1,9 @@
 import Rectangle = require('../geom/Rectangle');
+import Circle = require('../geom/Circle');
 import AbstractBehavior = require('./AbstractBehavior');
 import DisplayObject = require('../display/DisplayObject');
 import Point = require('../geom/Point');
 import PointerEvent = require('../event/PointerEvent');
-import MouseEvent = require('../event/MouseEvent');
-import Signal = require('../../createts/event/Signal');
 import SignalConnection = require('../../createts/event/SignalConnection');
 import Ticker = require('../../createts/util/Ticker');
 import Stage = require('../display/Stage');
@@ -16,33 +15,34 @@ import Stage = require('../display/Stage');
 class MouseOverBehavior extends AbstractBehavior
 {
 	private _rectangle:Rectangle = null;
-	private _radiusPow:number = 0.0;
+
+	private _circle:Circle = null;
+	private _circleRadiusPow:number = 0.0;
 
 	private _hasMouseOver:boolean = false;
 
 	private _tickerSignalConnection:SignalConnection = null;
 
-	private _stage:Stage;
-
-	constructor(area?:Rectangle);
-	constructor(area?:number);
-	constructor(area?:any)
+	constructor(hitArea?:Rectangle);
+	constructor(hitArea?:Circle);
+	constructor(hitArea?:any)
 	{
 		super();
 
-		if (area !== void 0)
+		if (hitArea !== void 0)
 		{
-			if (typeof area == "number")
+			if (hitArea.hasOwnProperty("x") && hitArea.hasOwnProperty("y") && hitArea.hasOwnProperty("radius"))
 			{
-				this._radiusPow = area * area;
+				this._circle = hitArea;
+				this._circleRadiusPow = hitArea.radius * hitArea.radius;
 			}
-			else if (area.hasOwnProperty("x") && area.hasOwnProperty("y") && area.hasOwnProperty("width") && area.hasOwnProperty("height"))
+			else if (hitArea.hasOwnProperty("x") && hitArea.hasOwnProperty("y") && hitArea.hasOwnProperty("width") && hitArea.hasOwnProperty("height"))
 			{
-				this._rectangle = area;
+				this._rectangle = hitArea;
 			}
 			else
 			{
-				throw new Error("Invalid type area");
+				throw new Error("hitArea is of invalid type");
 			}
 		}
 	}
@@ -53,78 +53,96 @@ class MouseOverBehavior extends AbstractBehavior
 
 		this.owner.cursor = 'pointer';
 
-		this._tickerSignalConnection = Ticker.getInstance().tickSignal.connect(this.update);
+		this._tickerSignalConnection = Ticker.getInstance().tickSignal.connect(this.update.bind(this));
 	}
 
-	public update = (delta:number) =>
+	private update(delta:number)
 	{
-		this.checkMouseOver();
+		var stage:Stage = this.owner.stage;
+
+		if (stage && stage.mouseEnabled && stage.mouseChildren && this.owner.mouseEnabled)
+		{
+			this.checkMouseOver();
+		}
+		else
+		{
+			if (this._hasMouseOver)
+			{
+				this.changeMouseOverState(false);
+			}
+		}
 	}
 
 	public checkMouseOver():void
 	{
 		var isWithin:boolean = false;
+		var mousePosition:Point = this.owner.globalToLocal(this.owner.stage.mouseX, this.owner.stage.mouseY);
 
-		if (this.owner.stage)
+		if(this._circle)
 		{
-			this._stage = this.owner.stage;
+			mousePosition.x -= this._circle.x;
+			mousePosition.y -= this._circle.y;
+			isWithin = (mousePosition.x * mousePosition.x + mousePosition.y * mousePosition.y < this._circleRadiusPow);
 		}
-
-		if (!this._stage || !this.owner.mouseEnabled)
+		else if(this._rectangle)
 		{
-			isWithin = false;
+			isWithin =
+				(mousePosition.x > this._rectangle.x && mousePosition.x < this._rectangle.x + this._rectangle.width) &&
+				(mousePosition.y > this._rectangle.y && mousePosition.y < this._rectangle.y + this._rectangle.height);
 		}
 		else
 		{
-			var mousePosition:Point = this.owner.globalToLocal(this._stage.mouseX, this._stage.mouseY);
-
-			if(this._radiusPow)
-			{
-				isWithin = (mousePosition.x * mousePosition.x + mousePosition.y * mousePosition.y < this._radiusPow);
-			}
-			else if(this._rectangle)
-			{
-				isWithin = (mousePosition.x > this._rectangle.x && mousePosition.x < this._rectangle.x + this._rectangle.width) &&
-						   (mousePosition.y > this._rectangle.y && mousePosition.y < this._rectangle.y + this._rectangle.height);
-			}
-			else
-			{
-				isWithin = (mousePosition.x > 0 && mousePosition.x < this.owner.width) &&
-						   (mousePosition.y > 0 && mousePosition.y < this.owner.height);
-			}
+			isWithin =
+				(mousePosition.x > 0 && mousePosition.x < this.owner.width) &&
+				(mousePosition.y > 0 && mousePosition.y < this.owner.height);
 		}
 
 		if (!this._hasMouseOver && isWithin)
 		{
-			this.owner.dispatchEvent(new PointerEvent(DisplayObject.EVENT_MOUSE_OVER, true, false, this._stage.mouseX, this._stage.mouseY, null, -1, true, this._stage.mouseX, this._stage.mouseY));
-			this._hasMouseOver = true;
-
-			if (this.owner.stage)
-			{
-				this.owner.stage.canvas.style.cursor = this.owner.cursor;
-			}
+			this.changeMouseOverState(true);
 		}
 		else if (this._hasMouseOver && !isWithin)
 		{
-			this.owner.dispatchEvent(new PointerEvent(DisplayObject.EVENT_MOUSE_OUT, true, false, this._stage.mouseX, this._stage.mouseY, null, -1, true, this._stage.mouseX, this._stage.mouseY));
-			this._hasMouseOver = false;
-
-			if (this.owner.stage)
-			{
-				this.owner.stage.canvas.style.cursor = "";
-			}
+			this.changeMouseOverState(false);
 		}
+	}
+
+	private changeMouseOverState(hasMouseOver:boolean):void
+	{
+		this._hasMouseOver = hasMouseOver;
+
+		var stageMouseX:number;
+		var stageMouseY:number;
+
+		var stage:Stage = this.owner.stage;
+		if (stage)
+		{
+			stageMouseX = stage.mouseX;
+			stageMouseY = stage.mouseY;
+			stage.canvas.style.cursor = hasMouseOver ? this.owner.cursor : "";
+		}
+
+		var eventType:string = hasMouseOver ? DisplayObject.EVENT_MOUSE_OVER : DisplayObject.EVENT_MOUSE_OUT;
+		this.owner.dispatchEvent(new PointerEvent(eventType, true, false, stageMouseX, stageMouseY, null, -1, true, stageMouseX, stageMouseY));
 	}
 
 	public destruct():void
 	{
+		if (this._hasMouseOver)
+		{
+			this.changeMouseOverState(false);
+		}
+
 		if (this._tickerSignalConnection)
 		{
 			this._tickerSignalConnection.dispose();
 			this._tickerSignalConnection = null;
 		}
 
+		this._circle = null;
 		this._rectangle = null;
+
+		super.destruct();
 	}
 }
 
