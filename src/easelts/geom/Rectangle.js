@@ -89,6 +89,16 @@ define(["require", "exports"], function (require, exports) {
             this.height = height;
             return this;
         };
+        /**
+         * Determines whether the specified point is contained within the rectangular region defined by this Rectangle object.
+         * @method contains
+         * @param {number} x The x coordinate (horizontal position) of the point.
+         * @param {number} y The y coordinate (vertical position) of the point.
+         * @return {boolean} A value of true if the Rectangle object contains the specified point; otherwise false.
+         */
+        Rectangle.prototype.contains = function (x, y) {
+            return (x >= this.x && x <= (this.x + this.width)) && (y >= this.y && y <= (this.y + this.height));
+        };
         // public methods:
         /**
          * Copies all properties from the specified rectangle to this rectangle.

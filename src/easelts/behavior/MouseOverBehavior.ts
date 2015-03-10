@@ -60,7 +60,7 @@ class MouseOverBehavior extends AbstractBehavior
 	{
 		var stage:Stage = this.owner.stage;
 
-		if (stage && stage.mouseEnabled && stage.mouseChildren && this.owner.mouseEnabled)
+		if (this.owner.visible && this.owner.mouseEnabled && stage && stage.mouseEnabled && stage.mouseChildren)
 		{
 			this.checkMouseOver();
 		}
@@ -80,21 +80,17 @@ class MouseOverBehavior extends AbstractBehavior
 
 		if(this._circle)
 		{
-			mousePosition.x -= this._circle.x;
-			mousePosition.y -= this._circle.y;
-			isWithin = (mousePosition.x * mousePosition.x + mousePosition.y * mousePosition.y < this._circleRadiusPow);
+			isWithin = this._circle.contains(mousePosition.x, mousePosition.y);
 		}
 		else if(this._rectangle)
 		{
-			isWithin =
-				(mousePosition.x > this._rectangle.x && mousePosition.x < this._rectangle.x + this._rectangle.width) &&
-				(mousePosition.y > this._rectangle.y && mousePosition.y < this._rectangle.y + this._rectangle.height);
+			isWithin = this._rectangle.contains(mousePosition.x, mousePosition.y);
 		}
 		else
 		{
 			isWithin =
-				(mousePosition.x > 0 && mousePosition.x < this.owner.width) &&
-				(mousePosition.y > 0 && mousePosition.y < this.owner.height);
+				(mousePosition.x >= 0 && mousePosition.x <= this.owner.width) &&
+				(mousePosition.y >= 0 && mousePosition.y <= this.owner.height);
 		}
 
 		if (!this._hasMouseOver && isWithin)

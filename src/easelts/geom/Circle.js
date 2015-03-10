@@ -24,6 +24,18 @@ define(["require", "exports"], function (require, exports) {
             return this.setProperies(circle.x, circle.y, circle.radius);
         };
         /**
+         * Determines whether the specified point is contained within the circular region defined by this Circle object.
+         * @method contains
+         * @param {number} x The x coordinate (horizontal position) of the point.
+         * @param {number} y The y coordinate (vertical position) of the point.
+         * @return {boolean} A value of true if the Circle object contains the specified point; otherwise false.
+         */
+        Circle.prototype.contains = function (x, y) {
+            x -= this.x;
+            y -= this.y;
+            return (x * x + y * y < this.radius * this.radius);
+        };
+        /**
          * Returns a clone of the Circle instance.
          * @method clone
          * @return {Circle} a clone of the Circle instance.
