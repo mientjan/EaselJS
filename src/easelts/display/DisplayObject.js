@@ -347,6 +347,14 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
              * @default null
              **/
             this._bounds = null;
+            /**
+             * Defines styles for use in a FlexBox
+             * @property style
+             * @public
+             * @type {IFlexBoxStyle}
+             * @default null
+             **/
+            this.style = {};
             this._off = false;
             this.DisplayObject_draw = this.draw;
             this.DisplayObject_getBounds = this._getBounds;

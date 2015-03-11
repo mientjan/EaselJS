@@ -62,6 +62,8 @@ import IDisplayType = require('../interface/IDisplayType');
 
 import IBehavior = require('../behavior/IBehavior');
 
+import IFlexBoxStyle = require('../component/flexbox/IFlexBoxStyle');
+
 /**
  * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
  * @class DisplayObject
@@ -538,6 +540,15 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @default null
 	 **/
 	public _bounds:Rectangle = null;
+
+	/**
+	 * Defines styles for use in a FlexBox
+	 * @property style
+	 * @public
+	 * @type {IFlexBoxStyle}
+	 * @default null
+	 **/
+	public style:IFlexBoxStyle = {};
 
 	public _off:boolean = false;
 
@@ -1866,7 +1877,6 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 				this.y = Math.round(FluidCalculation.calcUnit(size.height, this._y_calc));
 			}
 		}
-
 	}
 
 	public destruct():void

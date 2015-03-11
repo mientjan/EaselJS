@@ -282,7 +282,7 @@ class Container extends DisplayObject
 	 * @param {number} index The index to add the child at.
 	 * @return {DisplayObject} Returns the last child that was added, or the last child if multiple children were added.
 	 **/
-	public addChildAt(child:DisplayObject, index:number)
+	public addChildAt(child:DisplayObject, index:number):DisplayObject
 	{
 		if(child.parent)
 		{
@@ -325,7 +325,7 @@ class Container extends DisplayObject
 	 * @param {DisplayObject} child The child to remove.
 	 * @return {Boolean} true if the child (or children) was removed, or false if it was not in the display list.
 	 **/
-	public removeChild(...children:DisplayObject[])
+	public removeChild(...children:DisplayObject[]):boolean
 	{
 		var l = children.length;
 		if(l > 1)
@@ -357,7 +357,7 @@ class Container extends DisplayObject
 	 * @param {Number} index The index of the child to remove.
 	 * @return {Boolean} true if the child (or children) was removed, or false if any index was out of range.
 	 **/
-	public removeChildAt(...index:number[])
+	public removeChildAt(...index:number[]):boolean
 	{
 		var l = index.length;
 		if(l > 1)
