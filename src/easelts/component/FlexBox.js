@@ -5,6 +5,20 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 define(["require", "exports", '../display/Container', '../../facebook/Layout', '../enum/DisplayType'], function (require, exports, Container, Layout, DisplayType) {
+    /**
+     * Usage example:
+     *
+     * var box:FlexBox = new FlexBox("100%", 400, 0, 0);
+     * box.style = {flexDirection:"row", padding: 10};
+     *
+     * var square1:SquareColor = new SquareColor("#ff0000", 100, 100);
+     * square1.style.flex = 1;
+     * box.addChild(square1);
+     *
+     * var square2:SquareColor = new SquareColor("#ff0000", 100, 100);
+     * square2.style.marginLeft = 10;
+     * box.addChild(square2);
+     */
     var FlexBox = (function (_super) {
         __extends(FlexBox, _super);
         function FlexBox(width, height, x, y, regX, regY) {

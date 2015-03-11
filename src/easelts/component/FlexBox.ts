@@ -9,6 +9,22 @@ import IFlexBoxStyle = require('./flexbox/IFlexBoxStyle');
 import IFlexBoxNode = require('./flexbox/IFlexBoxNode');
 import DisplayType = require('../enum/DisplayType');
 
+
+/**
+ * Usage example:
+ *
+ * var box:FlexBox = new FlexBox("100%", 400, 0, 0);
+ * box.style = {flexDirection:"row", padding: 10};
+ *
+ * var square1:SquareColor = new SquareColor("#ff0000", 100, 100);
+ * square1.style.flex = 1;
+ * box.addChild(square1);
+ *
+ * var square2:SquareColor = new SquareColor("#ff0000", 100, 100);
+ * square2.style.marginLeft = 10;
+ * box.addChild(square2);
+ */
+
 class FlexBox extends Container
 {
 	constructor(width:any = '100%', height:any = '100%', x:any = 0, y:any = 0, regX:any = 0, regY:any = 0)
