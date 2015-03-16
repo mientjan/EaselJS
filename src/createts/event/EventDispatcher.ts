@@ -355,7 +355,7 @@ class EventDispatcher
 	 * @param {String} type The string type of the event.
 	 * @return {Boolean} Returns true if there is at least one listener for the specified event.
 	 **/
-	public hasEventListener(type)
+	public hasEventListener(type:string)
 	{
 		var listeners = this._listeners, captureListeners = this._captureListeners;
 		return !!((listeners && listeners[type]) || (captureListeners && captureListeners[type]));
@@ -372,7 +372,7 @@ class EventDispatcher
 	 * @param {String} type The string type of the event.
 	 * @return {Boolean} Returns `true` if there is at least one listener for the specified event.
 	 **/
-	public willTrigger(type)
+	public willTrigger(type:string)
 	{
 		var o = this;
 		while(o)
@@ -390,7 +390,7 @@ class EventDispatcher
 	 * @method toString
 	 * @return {String} a string representation of the instance.
 	 **/
-	public toString()
+	public toString():string
 	{
 		return "[EventDispatcher]";
 	}

@@ -176,11 +176,7 @@ class Bitmap extends DisplayObject
 			this.height = this.image.height;
 		}
 
-
-		if(this._parentSizeIsKnown)
-		{
-			this.onResize(new Size(this.parent.width, this.parent.height));
-		}
+		this.isDirty = true;
 
 		this.dispatchEvent(Bitmap.EVENT_ONLOAD);
 	}

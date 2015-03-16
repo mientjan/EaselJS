@@ -30,11 +30,15 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.createCanvas = createCanvas;
     function createImage(src, onLoad) {
+        if (src === void 0) { src = null; }
         if (onLoad === void 0) { onLoad = null; }
         var img = document.createElement('img');
-        if (onLoad)
+        if (onLoad) {
             img.onload = onLoad;
-        img.src = src;
+        }
+        if (src) {
+            img.src = src;
+        }
         return img;
     }
     exports.createImage = createImage;

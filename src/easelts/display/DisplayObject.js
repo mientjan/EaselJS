@@ -31,7 +31,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", '../../createts/event/EventDispatcher', '../util/UID', '../util/Methods', './Shadow', '../enum/CalculationType', '../enum/DisplayType', '../geom/FluidCalculation', '../geom/Matrix2', '../geom/Rectangle', '../geom/Size', '../geom/Point'], function (require, exports, EventDispatcher, UID, Methods, Shadow, CalculationType, DisplayType, FluidCalculation, m2, Rectangle, Size, Point) {
+define(["require", "exports", '../../createts/event/EventDispatcher', '../../createts/event/Signal2', '../util/UID', '../util/Methods', './Shadow', '../enum/CalculationType', '../enum/DisplayType', '../geom/FluidCalculation', '../geom/Matrix2', '../geom/Rectangle', '../geom/Point'], function (require, exports, EventDispatcher, Signal2, UID, Methods, Shadow, CalculationType, DisplayType, FluidCalculation, m2, Rectangle, Point) {
     /**
      * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
      * @class DisplayObject
@@ -46,15 +46,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this);
-            // public properties:
             this.type = 3 /* DISPLAYOBJECT */;
-            /**
-             * The alpha (transparency) for this display object. 0 is fully transparent, 1 is fully opaque.
-             * @property alpha
-             * @type {Number}
-             * @default 1
-             **/
-            this.alpha = 1;
             /**
              * If a cache is active, this returns the canvas that holds the cached version of this display object. See {{#crossLink "cache"}}{{/crossLink}}
              * for more information.
@@ -106,6 +98,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
              * A reference to the {{#crossLink "Container"}}{{/crossLink}} or {{#crossLink "Stage"}}{{/crossLink}} object that
              * contains this display object, or null if it has not been added
              * to one.
+             *
              * @property parent
              * @final
              * @type {Container}
@@ -114,21 +107,55 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
              **/
             this.parent = null;
             /**
-             * The left offset for this display object's registration point. For example, to make a 100x100px Bitmap rotate
-             * around its center, you would set regX and {{#crossLink "DisplayObject/regY:property"}}{{/crossLink}} to 50.
-             * @property regX
-             * @type {Number}
-             * @default 0
+             * Indicates whether this display object should be rendered to the canvas and included when running the Stage
+             * {{#crossLink "Stage/getObjectsUnderPoint"}}{{/crossLink}} method.
+             * @property visible
+             * @type {Boolean}
+             * @default true
              **/
-            this.regX = 0;
+            this.visible = true;
             /**
-             * The y offset for this display object's registration point. For example, to make a 100x100px Bitmap rotate around
-             * its center, you would set {{#crossLink "DisplayObject/regX:property"}}{{/crossLink}} and regY to 50.
-             * @property regY
+             * The alpha (transparency) for this display object. 0 is fully transparent, 1 is fully opaque.
+             * @property alpha
+             * @type {Number}
+             * @default 1
+             **/
+            this.alpha = 1;
+            /**
+             * @property isDirty
+             * @type {boolean}
+             * @description is set by Container, setWidth setHeight, setX, setY, setRegX, setRegY. When set true onTick will trigger a onResize event.
+             *  this is a better way to check if its been added to the stage because onTick is only triggerd when added to the stage.
+             */
+            this.isDirty = false;
+            /**
+             * The x (horizontal) position of the display object, relative to its parent.
+             * @property x
              * @type {Number}
              * @default 0
              **/
+            this.x = 0;
+            this._x_type = 2 /* STATIC */;
+            this._x_percent = .0;
+            /** The y (vertical) position of the display object, relative to its parent.
+             * @property y
+             * @type {Number}
+             * @default 0
+             **/
+            this.y = 0;
+            this._y_percent = .0;
+            this.width = 0;
+            this._width_type = 2 /* STATIC */;
+            this._width_percent = .0;
+            this.height = 0;
+            this._height_type = 2 /* STATIC */;
+            this._height_percent = .0;
+            this.regX = 0;
+            this._regX_type = 2 /* STATIC */;
+            this._regX_percent = .0;
             this.regY = 0;
+            this._regY_type = 2 /* STATIC */;
+            this._regY_percent = .0;
             /**
              * The rotation in degrees for this display object.
              * @property rotation
@@ -175,27 +202,6 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
              **/
             this.shadow = null;
             /**
-             * Indicates whether this display object should be rendered to the canvas and included when running the Stage
-             * {{#crossLink "Stage/getObjectsUnderPoint"}}{{/crossLink}} method.
-             * @property visible
-             * @type {Boolean}
-             * @default true
-             **/
-            this.visible = true;
-            /**
-             * The x (horizontal) position of the display object, relative to its parent.
-             * @property x
-             * @type {Number}
-             * @default 0
-             **/
-            this.x = 0;
-            /** The y (vertical) position of the display object, relative to its parent.
-             * @property y
-             * @type {Number}
-             * @default 0
-             **/
-            this.y = 0;
-            /**
              * The Stage instance that the display object is a descendent of. null if the DisplayObject has not
              * been added to a Stage.
              * @property stage
@@ -203,30 +209,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
              * @default null
              **/
             this.stage = null;
-            /** When true the geom of this object will be updated when its parent resizes.
-             *
-             * @property updateGeomOnResize
-             * @type {Boolean}
-             * @default true
-             **/
-            this.updateGeomOnResize = true;
-            this.width = 0;
-            this.height = 0;
-            this._x_type = 2 /* STATIC */;
-            this._x_percent = .0;
-            this._y_percent = .0;
-            this._width_type = 2 /* STATIC */;
-            this._width_percent = .0;
-            this._height_type = 2 /* STATIC */;
-            this._height_percent = .0;
-            this._regX_type = 2 /* STATIC */;
-            this._regX_percent = .0;
-            this._regY_type = 2 /* STATIC */;
-            this._regY_percent = .0;
             this._behaviorList = null;
-            this._parentSizeIsKnown = false;
-            this.minimumContainerSize = null;
-            this.maximumContainerSize = null;
             /**
              * The composite operation indicates how the pixels of this display object will be composited with the elements
              * behind it. If `null`, this property is inherited from the parent container. For more information, read the
@@ -296,7 +279,6 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
              * @default null
              */
             this.cursor = null;
-            // private properties:
             /**
              * @property _cacheOffsetX
              * @protected
@@ -360,6 +342,16 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
             this.DisplayObject_getBounds = this._getBounds;
             this.setGeomTransform(width, height, x, y, regX, regY);
         }
+        Object.defineProperty(DisplayObject.prototype, "resizeSignal", {
+            get: function () {
+                if (this._resizeSignal === void 0) {
+                    this._resizeSignal = new Signal2();
+                }
+                return this._resizeSignal;
+            },
+            enumerable: true,
+            configurable: true
+        });
         DisplayObject.prototype.initialize = function () {
             // has something to do with the createjs toolkit needing to call initialize.
         };
@@ -371,31 +363,43 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
         DisplayObject.prototype.dot = function (v) {
             return this.x * v.x + this.y * v.y;
         };
+        /**
+         * @method distanceToSquared
+         * @param v
+         * @returns {number}
+         */
         DisplayObject.prototype.distanceToSquared = function (v) {
             var dx = this.x - v.x, dy = this.y - v.y;
             return dx * dx + dy * dy;
         };
+        /**
+         * distanceTo
+         * @param {IVector2} v
+         * @returns {any}
+         */
         DisplayObject.prototype.distanceTo = function (v) {
             return Math.sqrt(this.distanceToSquared(v));
         };
-        DisplayObject.prototype.setWidth = function (width) {
-            if (typeof (width) == 'string') {
-                if (width.substr(-1) == '%') {
-                    this._width_percent = parseFloat(width.substr(0, width.length - 1)) / 100;
+        /**
+         * @method setWidth
+         * @param {string|number} width
+         */
+        DisplayObject.prototype.setWidth = function (value) {
+            if (typeof (value) == 'string') {
+                if (value.substr(-1) == '%') {
+                    this._width_percent = parseFloat(value.substr(0, value.length - 1)) / 100;
                     this._width_type = 1 /* PERCENT */;
                 }
                 else {
-                    this._width_calc = FluidCalculation.dissolveCalcElements(width);
+                    this._width_calc = FluidCalculation.dissolveCalcElements(value);
                     this._width_type = 3 /* CALC */;
                 }
             }
             else {
-                this.width = width;
+                this.width = value;
                 this._width_type = 2 /* STATIC */;
             }
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
-            }
+            this.isDirty = true;
             return this;
         };
         /**
@@ -405,123 +409,153 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
         DisplayObject.prototype.getWidth = function () {
             return this.width;
         };
-        DisplayObject.prototype.setHeight = function (height) {
-            if (typeof (height) == 'string') {
-                // @todo check if only percent unit.
-                if (height.substr(-1) == '%') {
-                    this._height_percent = parseFloat(height.substr(0, height.length - 1)) / 100;
+        /**
+         * @method setHeight
+         * @param {string|number} height
+         * @result DisplayObject
+         */
+        DisplayObject.prototype.setHeight = function (value) {
+            if (typeof (value) == 'string') {
+                if (value.substr(-1) == '%') {
+                    this._height_percent = parseFloat(value.substr(0, value.length - 1)) / 100;
                     this._height_type = 1 /* PERCENT */;
                 }
                 else {
-                    this._height_calc = FluidCalculation.dissolveCalcElements(height);
+                    this._height_calc = FluidCalculation.dissolveCalcElements(value);
                     this._height_type = 3 /* CALC */;
                 }
             }
             else {
-                this.height = height;
+                this.height = value;
                 this._height_type = 2 /* STATIC */;
             }
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
-            }
+            this.isDirty = true;
             return this;
         };
         /**
          * @method getHeight
-         * @param {number} height
+         * @returns {number}
          */
         DisplayObject.prototype.getHeight = function () {
             return this.height;
         };
-        DisplayObject.prototype.setX = function (x) {
-            if (typeof (x) == 'string') {
-                if (x.substr(-1) == '%') {
-                    this._x_percent = parseFloat(x.substr(0, x.length - 1)) / 100;
+        /**
+         * @method setX
+         * @param {string|number} x
+         * @return DisplayObject
+         */
+        DisplayObject.prototype.setX = function (value) {
+            if (typeof (value) == 'string') {
+                if (value.substr(-1) == '%') {
+                    this._x_percent = parseFloat(value.substr(0, value.length - 1)) / 100;
                     this._x_type = 1 /* PERCENT */;
                 }
                 else {
-                    this._x_calc = FluidCalculation.dissolveCalcElements(x);
+                    this._x_calc = FluidCalculation.dissolveCalcElements(value);
                     this._x_type = 3 /* CALC */;
                 }
             }
             else {
-                this.x = x;
+                this.x = value;
                 this._x_type = 2 /* STATIC */;
             }
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
-            }
+            this.isDirty = true;
             return this;
         };
+        /**
+         * @method getX
+         * @return {Number}
+         */
         DisplayObject.prototype.getX = function () {
             return this.x;
         };
-        DisplayObject.prototype.setY = function (y) {
-            if (typeof (y) == 'string') {
-                if (y.substr(-1) == '%') {
-                    this._y_percent = parseFloat(y.substr(0, y.length - 1)) / 100;
+        /**
+         * @method setY
+         * @param {number|string} y
+         * @returns {DisplayObject}
+         */
+        DisplayObject.prototype.setY = function (value) {
+            this.isDirty = true;
+            if (typeof (value) == 'string') {
+                if (value.substr(-1) == '%') {
+                    this._y_percent = parseFloat(value.substr(0, value.length - 1)) / 100;
                     this._y_type = 1 /* PERCENT */;
                 }
                 else {
-                    this._y_calc = FluidCalculation.dissolveCalcElements(y);
+                    this._y_calc = FluidCalculation.dissolveCalcElements(value);
                     this._y_type = 3 /* CALC */;
                 }
             }
             else {
-                this.y = y;
+                this.y = value;
                 this._y_type = 2 /* STATIC */;
-            }
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
             }
             return this;
         };
+        /**
+         * @method getY
+         * @returns {number}
+         */
         DisplayObject.prototype.getY = function () {
             return this.y;
         };
-        DisplayObject.prototype.setRegX = function (x) {
-            if (typeof (x) == 'string') {
-                if (x.substr(-1) == '%') {
-                    this._regX_percent = parseFloat(x.substr(0, x.length - 1)) / 100;
+        /**
+         * @method setRegX
+         * @param {number|string} value
+         * @returns {DisplayObject}
+         */
+        DisplayObject.prototype.setRegX = function (value) {
+            this.isDirty = true;
+            if (typeof (value) == 'string') {
+                if (value.substr(-1) == '%') {
+                    this._regX_percent = parseFloat(value.substr(0, value.length - 1)) / 100;
                     this._regX_type = 1 /* PERCENT */;
                 }
                 else {
-                    this._regX_calc = FluidCalculation.dissolveCalcElements(x);
+                    this._regX_calc = FluidCalculation.dissolveCalcElements(value);
                     this._regX_type = 3 /* CALC */;
                 }
             }
             else {
-                this.regX = x;
+                this.regX = value;
                 this._regX_type = 2 /* STATIC */;
-            }
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
             }
             return this;
         };
+        /**
+         * @method getRegX
+         * @returns {number}
+         */
         DisplayObject.prototype.getRegX = function () {
             return this.regX;
         };
-        DisplayObject.prototype.setRegY = function (y) {
-            if (typeof (y) == 'string') {
-                if (y.substr(-1) == '%') {
-                    this._regY_percent = parseFloat(y.substr(0, y.length - 1)) / 100;
+        /**
+         * @method setRegY
+         * @param {number|string} value
+         * @returns {DisplayObject}
+         */
+        DisplayObject.prototype.setRegY = function (value) {
+            this.isDirty = true;
+            if (typeof (value) == 'string') {
+                if (value.substr(-1) == '%') {
+                    this._regY_percent = parseFloat(value.substr(0, value.length - 1)) / 100;
                     this._regY_type = 1 /* PERCENT */;
                 }
                 else {
-                    this._regY_calc = FluidCalculation.dissolveCalcElements(y);
+                    this._regY_calc = FluidCalculation.dissolveCalcElements(value);
                     this._regY_type = 3 /* CALC */;
                 }
             }
             else {
-                this.regY = y;
+                this.regY = value;
                 this._regY_type = 2 /* STATIC */;
-            }
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
             }
             return this;
         };
+        /**
+         * @method getRegY
+         * @returns {number}
+         */
         DisplayObject.prototype.getRegY = function () {
             return this.regY;
         };
@@ -533,7 +567,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
             behavior.initialize(this);
             return this;
         };
-        DisplayObject.prototype.removeBehavior = function (behavior) {
+        DisplayObject.prototype.destructBehavior = function (behavior) {
             var behaviorList = this._behaviorList;
             if (behaviorList) {
                 for (var i = behaviorList.length - 1; i >= 0; i--) {
@@ -545,26 +579,15 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
             return this;
         };
         /**
-         * Removes all behaviors
-         *
-         * @method removeAllBehaviors
-         * @return void
-         */
-        DisplayObject.prototype.removeAllBehaviors = function () {
-            if (this._behaviorList) {
-                this._behaviorList.length = 0;
-            }
-        };
-        /**
          * Destructs all behaviors
          *
-         * @method destructAllBehaviors
+         * @method removeAllBehaviors
          * @return void
          */
         DisplayObject.prototype.destructAllBehaviors = function () {
             if (this._behaviorList) {
                 while (this._behaviorList.length) {
-                    this._behaviorList.pop().destruct();
+                    this._behaviorList.shift().destruct();
                 }
                 this._behaviorList = null;
             }
@@ -900,8 +923,6 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
             if (y === void 0) { y = null; }
             if (rx === void 0) { rx = null; }
             if (ry === void 0) { ry = null; }
-            var parentIsKnown = this._parentSizeIsKnown;
-            this._parentSizeIsKnown = false;
             if (x != null) {
                 this.setX(x);
             }
@@ -919,10 +940,6 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
             }
             if (ry != null) {
                 this.setRegY(ry);
-            }
-            this._parentSizeIsKnown = parentIsKnown;
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
             }
             return this;
         };
@@ -1175,12 +1192,13 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
         };
         /**
          * @method _tick
-         * @param {Object} props Props to copy to the tick event object. This will usually include the
-         * properties from the {{#crossLink "Ticker"}}{{/crossLink}} "tick" event, such as `delta` and `paused`, but may
-         * be undefined or contain other values depending on the usage by the application.
+         * @param {number} delta
          * @protected
          **/
         DisplayObject.prototype.onTick = function (delta) {
+            if (this.isDirty && this.parent) {
+                this.onResize(this.parent.width, this.parent.height);
+            }
         };
         /**
          * @method _testHit
@@ -1335,51 +1353,47 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../util/U
         };
         DisplayObject.prototype.onStageSet = function () {
         };
-        DisplayObject.prototype.onResize = function (size) {
-            this._parentSizeIsKnown = true;
-            if (this.updateGeomOnResize) {
-                if (this.minimumContainerSize || this.maximumContainerSize) {
-                    // size object is cloned because we are going to change the value.
-                    // and this object is used by multiple display objects.
-                    var mincs = this.minimumContainerSize;
-                    this.scaleX = this.scaleY = Math.min(1, size.width / mincs.width, size.height / mincs.height);
-                }
-                if (this._width_type == 1 /* PERCENT */) {
-                    this.width = this._width_percent * size.width;
-                }
-                else if (this._width_type == 3 /* CALC */) {
-                    this.width = FluidCalculation.calcUnit(size.width, this._width_calc);
-                }
-                if (this._height_type == 1 /* PERCENT */) {
-                    this.height = this._height_percent * size.height;
-                }
-                else if (this._height_type == 3 /* CALC */) {
-                    this.height = FluidCalculation.calcUnit(size.height, this._height_calc);
-                }
-                if (this._regX_type == 1 /* PERCENT */) {
-                    this.regX = this._regX_percent * this.width;
-                }
-                else if (this._regX_type == 3 /* CALC */) {
-                    this.regX = FluidCalculation.calcUnit(this.width, this._regX_calc);
-                }
-                if (this._regY_type == 1 /* PERCENT */) {
-                    this.regY = this._regY_percent * this.height;
-                }
-                else if (this._regY_type == 3 /* CALC */) {
-                    this.regY = FluidCalculation.calcUnit(this.height, this._height_calc);
-                }
-                if (this._x_type == 1 /* PERCENT */) {
-                    this.x = Math.round(this._x_percent * size.width);
-                }
-                else if (this._x_type == 3 /* CALC */) {
-                    this.x = Math.round(FluidCalculation.calcUnit(size.width, this._x_calc));
-                }
-                if (this._y_type == 1 /* PERCENT */) {
-                    this.y = Math.round(this._y_percent * size.height);
-                }
-                else if (this._y_type == 3 /* CALC */) {
-                    this.y = Math.round(FluidCalculation.calcUnit(size.height, this._y_calc));
-                }
+        DisplayObject.prototype.onResize = function (width, height) {
+            // is no longer dirty
+            this.isDirty = false;
+            if (this._width_type == 1 /* PERCENT */) {
+                this.width = this._width_percent * width;
+            }
+            else if (this._width_type == 3 /* CALC */) {
+                this.width = FluidCalculation.calcUnit(width, this._width_calc);
+            }
+            if (this._height_type == 1 /* PERCENT */) {
+                this.height = this._height_percent * height;
+            }
+            else if (this._height_type == 3 /* CALC */) {
+                this.height = FluidCalculation.calcUnit(height, this._height_calc);
+            }
+            if (this._regX_type == 1 /* PERCENT */) {
+                this.regX = this._regX_percent * this.width;
+            }
+            else if (this._regX_type == 3 /* CALC */) {
+                this.regX = FluidCalculation.calcUnit(this.width, this._regX_calc);
+            }
+            if (this._regY_type == 1 /* PERCENT */) {
+                this.regY = this._regY_percent * this.height;
+            }
+            else if (this._regY_type == 3 /* CALC */) {
+                this.regY = FluidCalculation.calcUnit(this.height, this._height_calc);
+            }
+            if (this._x_type == 1 /* PERCENT */) {
+                this.x = Math.round(this._x_percent * width);
+            }
+            else if (this._x_type == 3 /* CALC */) {
+                this.x = Math.round(FluidCalculation.calcUnit(width, this._x_calc));
+            }
+            if (this._y_type == 1 /* PERCENT */) {
+                this.y = Math.round(this._y_percent * height);
+            }
+            else if (this._y_type == 3 /* CALC */) {
+                this.y = Math.round(FluidCalculation.calcUnit(height, this._y_calc));
+            }
+            if (this._resizeSignal && this._resizeSignal.hasListeners()) {
+                this._resizeSignal.emit(width, height);
             }
         };
         DisplayObject.prototype.destruct = function () {

@@ -220,7 +220,7 @@ class Text extends DisplayObject
 	 * "#F00", "red", or "#FF0000").
 	 * @protected
 	 */
-	constructor(text:string, font:string, color:string)
+	constructor(text:string, font:string = '12px Arial', color:string = '#000000')
 	{
 		super(1, 1, 0, 0, 0, 0);
 

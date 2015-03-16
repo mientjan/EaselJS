@@ -172,9 +172,10 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
          * @protected
          */
         DOMElement.prototype.onTick = function (delta) {
+            // Do nothing, prevent super class from having onTick called
+        };
+        DOMElement.prototype.onStageSet = function () {
             this._drawEndConnection = this.stage.drawendSignal.connect(this._handleDrawEnd.bind(this));
-            _super.prototype.onTick.call(this, delta);
-            //stage && stage.on("drawend", this._handleDrawEnd, this, true);
         };
         /**
          * @method _handleDrawEnd

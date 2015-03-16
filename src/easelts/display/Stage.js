@@ -61,6 +61,12 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
      **/
     var Stage = (function (_super) {
         __extends(Stage, _super);
+        /**
+         * @class Stage
+         * @constructor
+         * @param {HTMLCanvasElement|HTMLBlockElement} element A canvas or div element. If it's a div element, a canvas object will be created and appended to the div.
+         * @param {boolean} [triggerResizeOnWindowResize=false] Indicates whether onResize should be called when the window is resized
+         **/
         function Stage(element, triggerResizeOnWindowResize) {
             var _this = this;
             if (triggerResizeOnWindowResize === void 0) { triggerResizeOnWindowResize = false; }
@@ -315,38 +321,31 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
                 //		console.timeEnd('stage:update');
             };
             this.triggerResizeOnWindowResize = triggerResizeOnWindowResize;
+            var size;
             switch (element.tagName) {
                 case 'CANVAS':
                     {
                         this.canvas = element;
                         this.holder = element.parentElement;
-                        break;
-                    }
-                case 'DIV':
-                    {
-                        var canvas = document.createElement('canvas');
-                        element.appendChild(canvas);
-                        this.canvas = canvas;
-                        this.holder = element;
+                        size = new Size(this.canvas.width, this.canvas.height);
                         break;
                     }
                 default:
                     {
-                        throw new Error('unsupported element used "' + element.tagName + '"');
+                        var canvas = document.createElement('canvas');
+                        this.canvas = canvas;
+                        this.holder = element;
+                        this.holder.appendChild(canvas);
+                        size = new Size(this.holder.offsetWidth, this.holder.offsetHeight);
                         break;
                     }
             }
             this.enableDOMEvents(true);
             this.setFps(this._fps);
             this.ctx = this.canvas.getContext('2d');
-            this.setQuality(0 /* NORMAL */);
+            this.setQuality(1 /* LOW */);
             this.stage = this;
-            if (this.triggerResizeOnWindowResize || element.tagName == "DIV") {
-                this.onResize(new Size(this.holder.offsetWidth, this.holder.offsetHeight));
-            }
-            else {
-                this.onResize(new Size(this.canvas.width, this.canvas.height));
-            }
+            this.onResize(size.width, size.height);
         }
         Object.defineProperty(Stage.prototype, "nextStage", {
             // getter / setters:
@@ -910,7 +909,7 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
          **/
         Stage.prototype._handleWindowResize = function (e) {
             if (this.triggerResizeOnWindowResize) {
-                this.onResize(new Size(this.holder.offsetWidth, this.holder.offsetHeight));
+                this.onResize(this.holder.offsetWidth, this.holder.offsetHeight);
             }
         };
         /**
@@ -969,6 +968,7 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
             if (!this._isRunning) {
                 this.update(0);
                 this._tickSignalConnection = Ticker.getInstance().addTickListener(this.update);
+                Ticker.getInstance().start();
                 this._isRunning = true;
                 return true;
             }
@@ -985,6 +985,7 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
                 // remove Signal connection
                 this._tickSignalConnection.dispose();
                 this._tickSignalConnection = null;
+                Ticker.getInstance().stop();
                 // update stage for a last tick, solves rendering
                 // issues when having slowdown. Last frame is sometimes not rendered. When using createjsAnimations
                 setTimeout(this.update, 1000 / this._fps);
@@ -1009,14 +1010,14 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
          * @method onResize
          * @param {Size} size
          */
-        Stage.prototype.onResize = function (size) {
+        Stage.prototype.onResize = function (width, height) {
             // anti-half pixel fix
-            size.width = size.width + 1 >> 1 << 1;
-            size.height = size.height + 1 >> 1 << 1;
-            if (this.width != size.width || this.height != size.height) {
-                this.canvas.width = size.width;
-                this.canvas.height = size.height;
-                _super.prototype.onResize.call(this, size);
+            width = width + 1 >> 1 << 1;
+            height = height + 1 >> 1 << 1;
+            if (this.width != width || this.height != height) {
+                this.canvas.width = width;
+                this.canvas.height = height;
+                _super.prototype.onResize.call(this, width, height);
                 if (!this._isRunning) {
                     this.update(0);
                 }

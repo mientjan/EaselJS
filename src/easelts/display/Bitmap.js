@@ -31,7 +31,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", './DisplayObject', '../enum/DisplayType', '../enum/BitmapType', '../geom/Size'], function (require, exports, DisplayObject, DisplayType, BitmapType, Size) {
+define(["require", "exports", './DisplayObject', '../enum/DisplayType', '../enum/BitmapType'], function (require, exports, DisplayObject, DisplayType, BitmapType) {
     /**
      * A Bitmap represents an Image, Canvas, or Video in the display list. A Bitmap can be instantiated using an existing
      * HTML element, or a string.
@@ -152,9 +152,7 @@ define(["require", "exports", './DisplayObject', '../enum/DisplayType', '../enum
             if (!this.height) {
                 this.height = this.image.height;
             }
-            if (this._parentSizeIsKnown) {
-                this.onResize(new Size(this.parent.width, this.parent.height));
-            }
+            this.isDirty = true;
             this.dispatchEvent(Bitmap.EVENT_ONLOAD);
         };
         /**

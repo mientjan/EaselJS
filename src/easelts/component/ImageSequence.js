@@ -4,7 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", '../display/Bitmap'], function (require, exports, Bitmap) {
+define(["require", "exports", '../display/Bitmap', '../util/Methods'], function (require, exports, Bitmap, Methods) {
     /**
      * @class ImageSequence
      */
@@ -35,6 +35,9 @@ define(["require", "exports", '../display/Bitmap'], function (require, exports, 
             this._images = [];
             this._onComplete = null;
             this._times = 1;
+            this.imageBackup0 = Methods.createImage();
+            this.imageBackup1 = Methods.createImage();
+            this.imageBackup2 = Methods.createImage();
             for (var i = 0; i < images.length; i++) {
                 this._images.push(images[i]);
             }
@@ -42,7 +45,19 @@ define(["require", "exports", '../display/Bitmap'], function (require, exports, 
             this._length = images.length;
         }
         ImageSequence.prototype.draw = function (ctx, ignoreCache) {
-            ctx.drawImage(this.image, 0, 0);
+            var image = this.image;
+            if (!image.complete) {
+                if (this.imageBackup0 && this.imageBackup0.complete) {
+                    image = this.imageBackup0;
+                }
+                else if (this.imageBackup1 && this.imageBackup1.complete) {
+                    image = this.imageBackup1;
+                }
+                else if (this.imageBackup2 && this.imageBackup2.complete) {
+                    image = this.imageBackup2;
+                }
+            }
+            ctx.drawImage(image, 0, 0);
             return true;
         };
         ImageSequence.prototype.play = function (times, onComplete) {
@@ -80,7 +95,10 @@ define(["require", "exports", '../display/Bitmap'], function (require, exports, 
                     frame %= length;
                     if (currentFrame != frame) {
                         this._frame = frame;
-                        this.image = this._images[frame];
+                        this.imageBackup2.src = this.imageBackup1.src;
+                        this.imageBackup1.src = this.imageBackup0.src;
+                        this.imageBackup0.src = this.image.src;
+                        this.image.src = this._images[frame];
                     }
                 }
             }

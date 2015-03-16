@@ -41,9 +41,9 @@ class SquareColor extends Shape
 		this.graphics.clear().beginFill(this._color).drawRect(0, 0, this.width, this.height);
 	}
 
-	public onResize(size:Size):void
+	public onResize(width:number, height:number):void
 	{
-		super.onResize(size);
+		super.onResize(width, height);
 		this.setColor();
 	}
 }

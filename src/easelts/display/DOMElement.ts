@@ -111,7 +111,7 @@ class DOMElement extends DisplayObject
 	 * into itself).
 	 * @return {Boolean}
 	 */
-	public draw(ctx, ignoreCache)
+	public draw(ctx, ignoreCache):boolean
 	{
 		// this relies on the _tick method because draw isn't called if a parent is not visible.
 		// the actual update happens in _handleDrawEnd
@@ -205,11 +205,12 @@ class DOMElement extends DisplayObject
 	 */
 	public onTick(delta:number)
 	{
+		// Do nothing, prevent super class from having onTick called
+	}
+
+	public onStageSet():void
+	{
 		this._drawEndConnection = this.stage.drawendSignal.connect(this._handleDrawEnd.bind(this));
-
-		super.onTick(delta);
-
-		//stage && stage.on("drawend", this._handleDrawEnd, this, true);
 	}
 
 	/**

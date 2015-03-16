@@ -77,6 +77,8 @@ define(["require", "exports", './DisplayObject', '../util/Methods', '../geom/Bou
          * @protected
          */
         function Text(text, font, color) {
+            if (font === void 0) { font = '12px Arial'; }
+            if (color === void 0) { color = '#000000'; }
             _super.call(this, 1, 1, 0, 0, 0, 0);
             this._text = "";
             /**

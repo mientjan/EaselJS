@@ -23,6 +23,13 @@ define(["require", "exports", './FluidMeasurementsUnit', '../enum/CalculationUni
             }
             return calculationElements;
         };
+        /**
+         * @method dissolveElement
+         * @param {String} val
+         * @return ( FluidMeasurementsUnit | CalculationUnitType )
+         * @public
+         * @static
+         */
         FluidCalculation.dissolveElement = function (val) {
             var index = FluidCalculation._calculationUnitypeString.indexOf(val);
             if (index >= 0) {

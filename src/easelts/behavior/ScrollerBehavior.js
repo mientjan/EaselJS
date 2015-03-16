@@ -8,10 +8,36 @@ define(["require", "exports", './AbstractBehavior', '../display/Container', '../
     var ScrollerBehavior = (function (_super) {
         __extends(ScrollerBehavior, _super);
         function ScrollerBehavior(options) {
+            var _this = this;
             if (options === void 0) { options = {}; }
             _super.call(this);
             this._scroller = null;
             this._mousedown = false;
+            this.onMouseDown = function (e) {
+                _this._scroller.doTouchStart([{
+                    pageX: e.stageX,
+                    pageY: e.stageY
+                }], e.timeStamp);
+                _this._mousedown = true;
+            };
+            this.onMouseMove = function (e) {
+                if (!_this._mousedown) {
+                    return;
+                }
+                _this._scroller.doTouchMove([{
+                    pageX: e.stageX,
+                    pageY: e.stageY
+                }], e.timeStamp);
+                _this._mousedown = true;
+            };
+            this.onMouseUp = function (e) {
+                if (!_this._mousedown) {
+                    return;
+                }
+                //console.log('onMouseUp', e.timeStamp, e.pageX, e.pageY);
+                _this._scroller.doTouchEnd(e.timeStamp);
+                _this._mousedown = false;
+            };
             this.options = options;
         }
         ScrollerBehavior.prototype.initialize = function (container) {
@@ -34,38 +60,13 @@ define(["require", "exports", './AbstractBehavior', '../display/Container', '../
             //if( this.owner._parentSizeIsKnown){
             //	this.onResize(new Size(this.owner.parent.width, this.owner.parent.height));
             //}
-            this.owner.addEventListener(Container.EVENT_MOUSE_DOWN, this.onMouseDown.bind(this));
-            this.owner.addEventListener(Container.EVENT_PRESS_MOVE, this.onMouseMove.bind(this));
-            this.owner.addEventListener(Container.EVENT_PRESS_UP, this.onMouseUp.bind(this));
+            this.owner.addEventListener(Container.EVENT_MOUSE_DOWN, this.onMouseDown);
+            this.owner.addEventListener(Container.EVENT_PRESS_MOVE, this.onMouseMove);
+            this.owner.addEventListener(Container.EVENT_PRESS_UP, this.onMouseUp);
             //container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" :  "mousewheel", function(e) {
             //	scroller.doMouseZoom(e.detail ? (e.detail * -120) : e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
             //}, false);
             //console.log('initialize', container);
-        };
-        ScrollerBehavior.prototype.onMouseDown = function (e) {
-            this._scroller.doTouchStart([{
-                pageX: e.stageX,
-                pageY: e.stageY
-            }], e.timeStamp);
-            this._mousedown = true;
-        };
-        ScrollerBehavior.prototype.onMouseMove = function (e) {
-            if (!this._mousedown) {
-                return;
-            }
-            this._scroller.doTouchMove([{
-                pageX: e.stageX,
-                pageY: e.stageY
-            }], e.timeStamp);
-            this._mousedown = true;
-        };
-        ScrollerBehavior.prototype.onMouseUp = function (e) {
-            if (!this._mousedown) {
-                return;
-            }
-            //console.log('onMouseUp', e.timeStamp, e.pageX, e.pageY);
-            this._scroller.doTouchEnd(e.timeStamp);
-            this._mousedown = false;
         };
         ScrollerBehavior.prototype.setDimensions = function (containerWidth, containerHeight, contentWidth, contentHeight) {
             this._scroller.setDimensions(containerWidth, containerHeight, contentWidth, contentHeight);
@@ -81,6 +82,12 @@ define(["require", "exports", './AbstractBehavior', '../display/Container', '../
             this.holder.x = -left;
             this.holder.y = -top;
             // zoom?;
+        };
+        ScrollerBehavior.prototype.destruct = function () {
+            this.owner.removeEventListener(Container.EVENT_MOUSE_DOWN, this.onMouseDown);
+            this.owner.removeEventListener(Container.EVENT_PRESS_UP, this.onMouseUp);
+            this.owner.removeEventListener(Container.EVENT_PRESS_MOVE, this.onMouseMove);
+            _super.prototype.destruct.call(this);
         };
         return ScrollerBehavior;
     })(AbstractBehavior);

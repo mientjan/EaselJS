@@ -92,7 +92,7 @@ class ImageButton extends DisplayObject
 		}
 	}
 
-	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):void
+	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):boolean
 	{
 		this._bitmap.draw(ctx, ignoreCache);
 

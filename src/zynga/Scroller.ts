@@ -303,7 +303,7 @@ class Scroller
 	 * @param contentWidth {Integer ? null} Outer width of inner element
 	 * @param contentHeight {Integer ? null} Outer height of inner element
 	 */
-	setDimensions(clientWidth?:number, clientHeight?:number, contentWidth?:number, contentHeight?:number)
+	public setDimensions(clientWidth?:number, clientHeight?:number, contentWidth?:number, contentHeight?:number)
 	{
 
 		var self = this;
@@ -344,7 +344,7 @@ class Scroller
 	 * @param left {Integer ? 0} Left position of outer element
 	 * @param top {Integer ? 0} Top position of outer element
 	 */
-	setPosition(left, top)
+	public setPosition(left, top)
 	{
 
 		var self = this;
@@ -379,7 +379,7 @@ class Scroller
 	 * @param deactivateCallback {Function} Callback to execute on deactivation. This is for signalling the user about the refresh being cancelled.
 	 * @param startCallback {Function} Callback to execute to start the real async refresh action. Call {@link #finishPullToRefresh} after finish of refresh.
 	 */
-	activatePullToRefresh(height, activateCallback, deactivateCallback, startCallback)
+	public activatePullToRefresh(height, activateCallback, deactivateCallback, startCallback)
 	{
 
 		var self = this;
@@ -395,7 +395,7 @@ class Scroller
 	/**
 	 * Starts pull-to-refresh manually.
 	 */
-	triggerPullToRefresh()
+	public triggerPullToRefresh()
 	{
 		// Use publish instead of scrollTo to allow scrolling to out of boundary position
 		// We don't need to normalize scrollLeft, zoomLevel, etc. here because we only y-scrolling when pull-to-refresh is enabled
@@ -411,7 +411,7 @@ class Scroller
 	/**
 	 * Signalizes that pull-to-refresh is finished.
 	 */
-	finishPullToRefresh()
+	public finishPullToRefresh()
 	{
 
 		var self = this;
@@ -432,7 +432,7 @@ class Scroller
 	 *
 	 * @return {Map} `left` and `top` scroll position and `zoom` level
 	 */
-	getValues()
+	public getValues()
 	{
 
 		var self = this;
@@ -451,7 +451,7 @@ class Scroller
 	 *
 	 * @return {Map} `left` and `top` maximum scroll values
 	 */
-	getScrollMax()
+	public getScrollMax()
 	{
 
 		var self = this;
@@ -474,7 +474,7 @@ class Scroller
 	 * @param originTop {Number ? null} Zoom in at given top coordinate
 	 * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
 	 */
-	zoomTo(level, animate, originLeft, originTop, callback?:Function)
+	public zoomTo(level, animate, originLeft, originTop, callback?:Function)
 	{
 
 		var self = this;
@@ -555,7 +555,7 @@ class Scroller
 	 * @param originTop {Number ? 0} Zoom in at given top coordinate
 	 * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
 	 */
-	zoomBy(factor, animate, originLeft, originTop, callback)
+	public zoomBy(factor, animate, originLeft, originTop, callback)
 	{
 
 		var self = this;
@@ -654,7 +654,7 @@ class Scroller
 	 * @param top {Number ? 0} Scroll x-axis by given offset
 	 * @param animate {Boolean ? false} Whether to animate the given change
 	 */
-	scrollBy(left, top, animate)
+	public scrollBy(left, top, animate)
 	{
 
 		var self = this;
@@ -676,7 +676,7 @@ class Scroller
 	/**
 	 * Mouse wheel handler for zooming support
 	 */
-	doMouseZoom(wheelDelta, timeStamp, pageX, pageY)
+	public doMouseZoom(wheelDelta, timeStamp, pageX, pageY)
 	{
 
 		var self = this;
@@ -690,7 +690,7 @@ class Scroller
 	/**
 	 * Touch start handler for scrolling support
 	 */
-	doTouchStart(touches, timeStamp)
+	public doTouchStart(touches, timeStamp)
 	{
 
 		// Array-like check is enough here
@@ -786,7 +786,7 @@ class Scroller
 	/**
 	 * Touch move handler for scrolling support
 	 */
-	doTouchMove(touches:any[], timeStamp:any, scale = null)
+	public doTouchMove(touches:any[], timeStamp:any, scale = null)
 	{
 
 		// Array-like check is enough here
@@ -1013,7 +1013,7 @@ class Scroller
 	/**
 	 * Touch end handler for scrolling support
 	 */
-	doTouchEnd(timeStamp:number)
+	public doTouchEnd(timeStamp:number)
 	{
 
 		//if(timeStamp instanceof Date)
@@ -1164,7 +1164,7 @@ class Scroller
 	 * @param top {Number} Top scroll position
 	 * @param animate {Boolean?false} Whether animation should be used to move to the new coordinates
 	 */
-	__publish(left:number, top:number, zoom:number, animate:boolean = false)
+	public __publish(left:number, top:number, zoom:number, animate:boolean = false)
 	{
 
 		var self = this;
@@ -1278,7 +1278,7 @@ class Scroller
 	/**
 	 * Recomputes scroll minimum values based on client dimensions and content dimensions.
 	 */
-	__computeScrollMax(zoomLevel:number = this.__zoomLevel)
+	public __computeScrollMax(zoomLevel:number = this.__zoomLevel)
 	{
 
 		var self = this;
@@ -1299,7 +1299,7 @@ class Scroller
 	 * Called when a touch sequence end and the speed of the finger was high enough
 	 * to switch into deceleration mode.
 	 */
-	__startDeceleration(timeStamp)
+	public __startDeceleration(timeStamp)
 	{
 
 		var self = this;
@@ -1374,7 +1374,7 @@ class Scroller
 	 *
 	 * @param inMemory {Boolean?false} Whether to not render the current step, but keep it in memory only. Used internally only!
 	 */
-	__stepThroughDeceleration(render)
+	public __stepThroughDeceleration(render)
 	{
 
 		var self = this;
