@@ -3,6 +3,8 @@
  * Visit http://createjs.com/ for documentation, updates and examples.
  *
  * Copyright (c) 2010 gskinner.com, inc.
+ * Copyright (c) 2014-2015 Mient-jan Stelling.
+ * Copyright (c) 2015 mediamonks.com
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -71,6 +73,10 @@ class Bitmap extends DisplayObject
 	public type:DisplayType = DisplayType.BITMAP;
 	public bitmapType:BitmapType = BitmapType.UNKNOWN;
 
+	/**
+	 * is Bitmap Loaded
+	 * @type {boolean}
+	 */
 	public loaded:boolean = false;
 
 	/**
@@ -80,6 +86,9 @@ class Bitmap extends DisplayObject
 	 **/
 	public image:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement = null;
 
+	protected _imageNaturalWidth:number = null;
+	protected _imageNaturalHeight:number = null;
+
 	/**
 	 * Specifies an area of the source image to draw. If omitted, the whole image will be drawn.
 	 * @property sourceRect
@@ -87,21 +96,21 @@ class Bitmap extends DisplayObject
 	 * @default null
 	 */
 	public sourceRect:Rectangle = null;
-	public destinationRect:Rectangle = null;
 
 	/**
-	 * Initialization method.
-	 * @method initialize
-	 * @param {Image | HTMLCanvasElement | HTMLVideoElement | String} imageOrUri The source object or URI to an image to
-	 * display. This can be either an Image, Canvas, or Video object, or a string URI to an image file to load and use.
-	 * If it is a URI, a new Image object will be constructed and assigned to the `.image` property.
-	 * @protected
-	 **/
+	 * Specifies an area of the destination wil be drawn to.
+	 * @property destinationRect
+	 * @type Rectangle
+	 * @default null
+	 */
+	public destinationRect:Rectangle = null;
 
 	/**
 	 * @class Bitmap
 	 * @constructor
-	 * @param {string|HTMLImageElement} imageOrUri
+	 * @param {string|HTMLImageElement} imageOrUri The source object or URI to an image to
+	 * display. This can be either an Image, Canvas, or Video object, or a string URI to an image file to load and use.
+	 * If it is a URI, a new Image object will be constructed and assigned to the `.image` property.
 	 * @param {string|number} width
 	 * @param {string|number} height
 	 * @param {string|number} x
@@ -109,9 +118,7 @@ class Bitmap extends DisplayObject
 	 * @param {string|number} regX
 	 * @param {string|number} regY
 	 */
-	//constructor(imageOrUri:string, width?:any, height?:any, x?:any, y?:any, regX?:any, regY?:any);
-	//constructor(imageOrUri:HTMLImageElement, width?:any, height?:any, x?:any, y?:any, regX?:any, regY?:any);
-	constructor(imageOrUri:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement|string, width:any = 0, height:any = 0, x?:any, y?:any, regX?:any, regY?:any)
+	constructor(imageOrUri?:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement|string, width:any = 0, height:any = 0, x?:any, y?:any, regX?:any, regY?:any)
 	{
 		super(width, height, x, y, regX, regY);
 
@@ -125,7 +132,14 @@ class Bitmap extends DisplayObject
 			image = imageOrUri;
 		}
 
-		var tagName:string = image.tagName.toLowerCase();
+
+		var tagName:string = '';
+
+		if( image ){
+			tagName = image.tagName.toLowerCase();
+		}
+
+
 
 		switch(tagName)
 		{
@@ -134,10 +148,10 @@ class Bitmap extends DisplayObject
 				this.image = <HTMLImageElement> image;
 				this.bitmapType = BitmapType.IMAGE;
 
-				if( ( <HTMLImageElement> this.image).complete ){
+				if( this.image && (this.image['complete'] || this.image['getContext'] || this.image.readyState >= 2) ){
 					this.onLoad();
 				} else {
-					( <HTMLImageElement> this.image).addEventListener('load', this.onLoad.bind(this) );
+					( <HTMLImageElement> this.image).addEventListener('load', this.onLoad );
 				}
 				break;
 			}
@@ -146,6 +160,10 @@ class Bitmap extends DisplayObject
 			{
 				this.image = <HTMLVideoElement> image;
 				this.bitmapType = BitmapType.VIDEO;
+
+				if( this.width == 0 || this.height == 0 ){
+					throw new Error('width and height must be set when using canvas / video');
+				}
 
 				this.onLoad();
 				break;
@@ -156,33 +174,49 @@ class Bitmap extends DisplayObject
 				this.image = <HTMLCanvasElement> image;
 				this.bitmapType = BitmapType.IMAGE;
 
+				if( this.width == 0 || this.height == 0 ){
+					throw new Error('width and height must be set when using canvas / video');
+				}
+
 				this.onLoad();
 				break;
 			}
 		}
+
 	}
 
-	public onLoad():void
+	public onLoad = ():void =>
 	{
-		this.loaded = true;
-
-		if(!this.width)
+		if(this.bitmapType == BitmapType.IMAGE )
 		{
-			this.width = this.image.width;
+			this._imageNaturalWidth = (<HTMLImageElement>this.image).naturalWidth;
+			this._imageNaturalHeight = (<HTMLImageElement>this.image).naturalHeight;
+
+			if(!this.width)
+			{
+				this.width = this._imageNaturalWidth;
+			}
+
+			if(!this.height)
+			{
+				this.height = this._imageNaturalHeight;
+			}
+		} else {
+			if(!this.width)
+			{
+				this.width = this.image.width;
+			}
+
+			if(!this.height)
+			{
+				this.height = this.image.height;
+			}
 		}
 
-		if(!this.height)
-		{
-			this.height = this.image.height;
-		}
-
-
-		if(this._parentSizeIsKnown)
-		{
-			this.onResize(new Size(this.parent.width, this.parent.height));
-		}
-
+		this.isDirty = true;
 		this.dispatchEvent(Bitmap.EVENT_ONLOAD);
+
+		this.loaded = true;
 	}
 
 	/**
@@ -210,16 +244,15 @@ class Bitmap extends DisplayObject
 	 * into itself).
 	 * @return {Boolean}
 	 **/
-	public draw(ctx, ignoreCache):boolean
+	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):boolean
 	{
-
-		if(super.draw(ctx, ignoreCache))
+		if(this.isVisible())
 		{
-			return true;
-		}
+			if(super.draw(ctx, ignoreCache))
+			{
+				return true;
+			}
 
-		if(this.loaded)
-		{
 			var sourceRect = this.sourceRect;
 			var destRect = this.destinationRect;
 
@@ -237,42 +270,18 @@ class Bitmap extends DisplayObject
 			}
 			else
 			{
-				ctx.drawImage(this.image, 0, 0);
+				if( this.bitmapType == BitmapType.IMAGE ){
+					ctx.drawImage(this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, this.width, this.height);
+				} else {
+					ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, this.width, this.height );
+				}
 			}
+
+
 		}
 
 		return true;
 	}
-
-	/**
-	 * Because the content of a Bitmap is already in a simple format, cache is unnecessary for Bitmap instances.
-	 * You should <b>not</b> cache Bitmap instances as it can degrade performance.
-	 *
-	 * <strong>However: If you want to use a filter on a Bitmap, you <em>MUST</em> cache it, or it will not work.</strong>
-	 * To see the API for caching, please visit the DisplayObject {{#crossLink "DisplayObject/cache"}}{{/crossLink}}
-	 * method.
-	 * @method cache
-	 **/
-
-	/**
-	 * Because the content of a Bitmap is already in a simple format, cache is unnecessary for Bitmap instances.
-	 * You should <b>not</b> cache Bitmap instances as it can degrade performance.
-	 *
-	 * <strong>However: If you want to use a filter on a Bitmap, you <em>MUST</em> cache it, or it will not work.</strong>
-	 * To see the API for caching, please visit the DisplayObject {{#crossLink "DisplayObject/cache"}}{{/crossLink}}
-	 * method.
-	 * @method updateCache
-	 **/
-
-	/**
-	 * Because the content of a Bitmap is already in a simple format, cache is unnecessary for Bitmap instances.
-	 * You should <b>not</b> cache Bitmap instances as it can degrade performance.
-	 *
-	 * <strong>However: If you want to use a filter on a Bitmap, you <em>MUST</em> cache it, or it will not work.</strong>
-	 * To see the API for caching, please visit the DisplayObject {{#crossLink "DisplayObject/cache"}}{{/crossLink}}
-	 * method.
-	 * @method uncache
-	 **/
 
 	/**
 	 * Docced in superclass.
@@ -320,6 +329,7 @@ class Bitmap extends DisplayObject
 		this.image = null;
 		this.sourceRect = null;
 		this.destinationRect = null;
+
 		super.destruct();
 	}
 

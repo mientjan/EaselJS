@@ -153,6 +153,52 @@ class RoundRect
 	}
 }
 
+class Oval
+{
+	x:number;
+	y:number;
+	xRadius:number;
+	yRadius:number;
+	rotationAngle:number;
+	startAngle:number;
+	endAngle:number;
+
+	constructor(x:number, y:number, xRadius:number, yRadius:number, rotationAngle:number, startAngle:number, endAngle:number)
+	{
+		this.x = x; // 39
+		this.y = y; // 50
+		this.xRadius = xRadius; // 39
+		this.yRadius = yRadius; // 50
+		this.rotationAngle = rotationAngle; // 0.23
+		this.startAngle = startAngle; // 0.17
+		this.endAngle = endAngle; // 1.49
+	}
+
+	public exec(ctx)
+	{
+		var x = this.x;
+		var y = this.y;
+		//ctx.beginPath();
+		for(var i = this.startAngle * Math.PI; i < this.endAngle * Math.PI; i += 0.01)
+		{
+			var xPos = x - (this.xRadius * Math.sin(i)) * Math.sin(this.rotationAngle * Math.PI) + (this.yRadius * Math.cos(i)) * Math.cos(this.rotationAngle * Math.PI);
+			var yPos = y + (this.yRadius * Math.cos(i)) * Math.sin(this.rotationAngle * Math.PI) + (this.xRadius * Math.sin(i)) * Math.cos(this.rotationAngle * Math.PI);
+
+			if(i == 0)
+			{
+				ctx.moveTo(xPos, yPos);
+			}
+			else
+			{
+				ctx.lineTo(xPos, yPos);
+			}
+		}
+
+		//ctx.closePath();
+		//ctx.stroke();
+	}
+}
+
 /**
  * Graphics command object. See {{#crossLink "Graphics"}}{{/crossLink}} and {{#crossLink "Graphics/append"}}{{/crossLink}} and {{#crossLink "Graphics/append"}}{{/crossLink}} for more information. See {{#crossLink "Graphics"}}{{/crossLink}} and {{#crossLink "Graphics/append"}}{{/crossLink}} for more information.
  * @class MoveTo
@@ -933,6 +979,7 @@ class Graphics
 	public static Fill = Fill;
 	public static Stroke = Stroke;
 	public static StrokeStyle = StrokeStyle;
+	public static Oval = Oval;
 
 	public static Circle = Circle;
 	public static Ellipse = Ellipse;
@@ -1134,7 +1181,72 @@ class Graphics
 	 * @readonly
 	 * @type {Object}
 	 **/
-	public static BASE_64 = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5, "G": 6, "H": 7, "I": 8, "J": 9, "K": 10, "L": 11, "M": 12, "N": 13, "O": 14, "P": 15, "Q": 16, "R": 17, "S": 18, "T": 19, "U": 20, "V": 21, "W": 22, "X": 23, "Y": 24, "Z": 25, "a": 26, "b": 27, "c": 28, "d": 29, "e": 30, "f": 31, "g": 32, "h": 33, "i": 34, "j": 35, "k": 36, "l": 37, "m": 38, "n": 39, "o": 40, "p": 41, "q": 42, "r": 43, "s": 44, "t": 45, "u": 46, "v": 47, "w": 48, "x": 49, "y": 50, "z": 51, "0": 52, "1": 53, "2": 54, "3": 55, "4": 56, "5": 57, "6": 58, "7": 59, "8": 60, "9": 61, "+": 62, "/": 63};
+	public static BASE_64 = {
+		"A": 0,
+		"B": 1,
+		"C": 2,
+		"D": 3,
+		"E": 4,
+		"F": 5,
+		"G": 6,
+		"H": 7,
+		"I": 8,
+		"J": 9,
+		"K": 10,
+		"L": 11,
+		"M": 12,
+		"N": 13,
+		"O": 14,
+		"P": 15,
+		"Q": 16,
+		"R": 17,
+		"S": 18,
+		"T": 19,
+		"U": 20,
+		"V": 21,
+		"W": 22,
+		"X": 23,
+		"Y": 24,
+		"Z": 25,
+		"a": 26,
+		"b": 27,
+		"c": 28,
+		"d": 29,
+		"e": 30,
+		"f": 31,
+		"g": 32,
+		"h": 33,
+		"i": 34,
+		"j": 35,
+		"k": 36,
+		"l": 37,
+		"m": 38,
+		"n": 39,
+		"o": 40,
+		"p": 41,
+		"q": 42,
+		"r": 43,
+		"s": 44,
+		"t": 45,
+		"u": 46,
+		"v": 47,
+		"w": 48,
+		"x": 49,
+		"y": 50,
+		"z": 51,
+		"0": 52,
+		"1": 53,
+		"2": 54,
+		"3": 55,
+		"4": 56,
+		"5": 57,
+		"6": 58,
+		"7": 59,
+		"8": 60,
+		"9": 61,
+		"+": 62,
+		"/": 63
+	};
 
 
 	/**
@@ -1257,7 +1369,7 @@ class Graphics
 	/**
 	 * @constructor
 	 **/
-		constructor()
+	constructor()
 	{
 		this.clear();
 
@@ -1340,6 +1452,22 @@ class Graphics
 	public lineTo(x, y)
 	{
 		return this.append(new Graphics.LineTo(x, y));
+	}
+
+	/**
+	 * Draws a oval
+	 *
+	 * @method oval
+	 * @param {number} xRadius
+	 * @param {number} yRadius
+	 * @param {number} rotationAngle
+	 * @param {number} startAngle
+	 * @param {number} endAngle
+	 * @returns {Graphics}
+	 */
+	public oval(x:number, y:number, xRadius:number, yRadius:number, rotationAngle:number, startAngle:number, endAngle:number)
+	{
+		return this.append(new Graphics.Oval(x, y, xRadius, yRadius, rotationAngle, startAngle, endAngle));
 	}
 
 	/**
@@ -1536,7 +1664,9 @@ class Graphics
 	 * will be applied relative to the parent transform.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginBitmapFill(image:HTMLImageElement|HTMLCanvasElement, repetition:string = 'repeat', matrix?:m2.Matrix2)
+	public beginBitmapFill(image:HTMLImageElement, repetition:string, matrix?:m2.Matrix2);
+	public beginBitmapFill(image:HTMLCanvasElement, repetition:string, matrix?:m2.Matrix2);
+	public beginBitmapFill(image:any, repetition:string = 'repeat', matrix?:m2.Matrix2)
 	{
 		return this._setFill(new Graphics.Fill(null, matrix).bitmap(<HTMLImageElement>image, repetition));
 	}

@@ -1,11 +1,9 @@
 /**
  * @enum QualityType
  */
-enum QualityType {
+const enum QualityType {
 	NORMAL,
 	LOW
 }
-
-window['QualityType'] = QualityType;
 
 export = QualityType;

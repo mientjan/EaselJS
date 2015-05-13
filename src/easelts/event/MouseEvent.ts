@@ -175,6 +175,9 @@ class MouseEvent extends Event
 		return this.currentTarget.globalToLocal(this.rawX, this.rawY).y;
 	}
 
+	public getLocalX = this._get_localX;
+	public getLocalY = this._get_localY;
+
 	//	try {
 	//		Object.defineProperties(p, {
 	//			localX: { get: p._get_localX },

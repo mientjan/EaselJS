@@ -1,157 +1,26 @@
-/*
- * Timeline
- * Visit http://createjs.com/ for documentation, updates and examples.
- *
- * Copyright (c) 2010 gskinner.com, inc.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", './Tween'], function (require, exports, Tween) {
-    /**
-     * @module TweenJS
-     */
-    /**
-     * The Timeline class synchronizes multiple tweens and allows them to be controlled as a group. Please note that if a
-     * timeline is looping, the tweens on it may appear to loop even if the "loop" property of the tween is false.
-     * @class Timeline
-     * @param {Array} tweens An array of Tweens to add to this timeline. See addTween for more info.
-     * @param {Object} labels An object defining labels for using {{#crossLink "Timeline/gotoAndPlay"}}{{/crossLink}}/{{#crossLink "Timeline/gotoAndStop"}}{{/crossLink}}.
-     * See {{#crossLink "Timeline/setLabels"}}{{/crossLink}}
-     * for details.
-     * @param {Object} props The configuration properties to apply to this tween instance (ex. `{loop:true}`). All properties
-     * default to false. Supported props are:<UL>
-     *    <LI> loop: sets the loop property on this tween.</LI>
-     *    <LI> useTicks: uses ticks for all durations instead of milliseconds.</LI>
-     *    <LI> ignoreGlobalPause: sets the ignoreGlobalPause property on this tween.</LI>
-     *    <LI> paused: indicates whether to start the tween paused.</LI>
-     *    <LI> position: indicates the initial position for this timeline.</LI>
-     *    <LI> onChange: specifies a listener to add for the {{#crossLink "Timeline/change:event"}}{{/crossLink}} event.</LI>
-     * </UL>
-     * @extends EventDispatcher
-     * @constructor
-     **/
+define(["require", "exports", '../createts/event/EventDispatcher', './Tween'], function (require, exports, EventDispatcher, Tween) {
     var Timeline = (function (_super) {
         __extends(Timeline, _super);
-        /**
-         *
-         * @class Timeline
-         * @constructor
-         * @protected
-         **/
         function Timeline(tweens, labels, props) {
-            _super.call(this, tweens, props, null);
-            // public properties:
-            /**
-             * Causes this timeline to continue playing when a global pause is active.
-             * @property ignoreGlobalPause
-             * @type Boolean
-             **/
+            _super.call(this);
             this.ignoreGlobalPause = false;
-            /**
-             * Read-only property specifying the total duration of this timeline in milliseconds (or ticks if useTicks is true).
-             * This value is usually automatically updated as you modify the timeline. See updateDuration for more information.
-             * @property duration
-             * @type Number
-             **/
             this.duration = 0;
-            /**
-             * If true, the timeline will loop when it reaches the end. Can be set via the props param.
-             * @property loop
-             * @type Boolean
-             **/
             this.loop = false;
-            // TODO: deprecated.
-            /**
-             * REMOVED. Use {{#crossLink "EventDispatcher/addEventListener"}}{{/crossLink}} and the {{#crossLink "Timeline/change:event"}}{{/crossLink}}
-             * event.
-             * @property onChange
-             * @type Function
-             * @deprecated Use addEventListener and the "change" event.
-             **/
-            /**
-             * Read-only. The current normalized position of the timeline. This will always be a value between 0 and duration.
-             * Changing this property directly will have no effect.
-             * @property position
-             * @type Object
-             **/
             this.position = null;
-            // events:
-            /**
-             * Called whenever the timeline's position changes.
-             * @event change
-             * @since 0.5.0
-             **/
-            // private properties:
-            /**
-             * @property _paused
-             * @type Boolean
-             * @protected
-             **/
             this._paused = false;
-            /**
-             * @property _tweens
-             * @type Array[Tween]
-             * @protected
-             **/
             this._tweens = [];
-            /**
-             * @property _labels
-             * @type Object
-             * @protected
-             **/
             this._labels = null;
-            /**
-             * @property _labelList
-             * @type Array[Object]
-             * @protected
-             **/
             this._labelList = null;
-            /**
-             * @property _prevPosition
-             * @type Number
-             * @default 0
-             * @protected
-             **/
             this._prevPosition = 0;
-            /**
-             * @property _prevPos
-             * @type Number
-             * @default -1
-             * @protected
-             **/
             this._prevPos = -1;
-            /**
-             * @property _useTicks
-             * @type Boolean
-             * @default false
-             * @protected
-             **/
             this._useTicks = false;
+            this._registered = false;
             if (props) {
                 this._useTicks = props.useTicks;
                 this.loop = props.loop;
@@ -172,14 +41,6 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
                 this.setPosition(props.position, Tween.NONE);
             }
         }
-        // public methods:
-        /**
-         * Adds one or more tweens (or timelines) to this timeline. The tweens will be paused (to remove them from the normal ticking system)
-         * and managed by this timeline. Adding a tween to multiple timelines will result in unexpected behaviour.
-         * @method addTween
-         * @param tween The tween(s) to add. Accepts multiple arguments.
-         * @return Tween The first tween that was passed in.
-         **/
         Timeline.prototype.addTween = function (tween) {
             var l = arguments.length;
             if (l > 1) {
@@ -204,12 +65,6 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             }
             return tween;
         };
-        /**
-         * Removes one or more tweens from this timeline.
-         * @method removeTween
-         * @param tween The tween(s) to remove. Accepts multiple arguments.
-         * @return Boolean Returns true if all of the tweens were successfully removed.
-         **/
         Timeline.prototype.removeTween = function (tween) {
             var l = arguments.length;
             if (l > 1) {
@@ -235,12 +90,6 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             }
             return false;
         };
-        /**
-         * Adds a label that can be used with {{#crossLink "Timeline/gotoAndPlay"}}{{/crossLink}}/{{#crossLink "Timeline/gotoAndStop"}}{{/crossLink}}.
-         * @method addLabel
-         * @param {String} label The label name.
-         * @param {Number} position The position this label represents.
-         **/
         Timeline.prototype.addLabel = function (label, position) {
             this._labels[label] = position;
             var list = this._labelList;
@@ -253,21 +102,9 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
                 list.splice(i, 0, { label: label, position: position });
             }
         };
-        /**
-         * Defines labels for use with gotoAndPlay/Stop. Overwrites any previously set labels.
-         * @method setLabels
-         * @param {Object} o An object defining labels for using gotoAndPlay/Stop in the form `{labelName:time}` where time is in
-         * milliseconds (or ticks if `useTicks` is true).
-         **/
         Timeline.prototype.setLabels = function (o) {
-            if (o === void 0) { o = {}; }
-            this._labels = o;
+            this._labels = o ? o : {};
         };
-        /**
-         * Returns a sorted list of the labels defined on this timeline.
-         * @method getLabels
-         * @return {Array[Object]} A sorted array of objects with label and position properties.
-         **/
         Timeline.prototype.getLabels = function () {
             var list = this._labelList;
             if (!list) {
@@ -282,16 +119,6 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             }
             return list;
         };
-        /**
-         * Returns the name of the label on or immediately before the current position. For example, given a timeline with
-         * two labels, "first" on frame index 4, and "second" on frame 8, getCurrentLabel would return:<UL>
-         * <LI>null if the current position is 2.</LI>
-         * <LI>"first" if the current position is 4.</LI>
-         * <LI>"first" if the current position is 7.</LI>
-         * <LI>"second" if the current position is 15.</LI></UL>
-         * @method getCurrentLabel
-         * @return {String} The name of the current label or null if there is no label
-         **/
         Timeline.prototype.getCurrentLabel = function () {
             var labels = this.getLabels();
             var pos = this.position;
@@ -306,33 +133,14 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             }
             return null;
         };
-        /**
-         * Unpauses this timeline and jumps to the specified position or label.
-         * @method gotoAndPlay
-         * @param {String|Number} positionOrLabel The position in milliseconds (or ticks if `useTicks` is true) or label to jump to.
-         **/
         Timeline.prototype.gotoAndPlay = function (positionOrLabel) {
             this.setPaused(false);
             this._goto(positionOrLabel);
-            return this;
         };
-        /**
-         * Pauses this timeline and jumps to the specified position or label.
-         * @method gotoAndStop
-         * @param {String|Number} positionOrLabel The position in milliseconds (or ticks if `useTicks` is true) or label to jump to.
-         **/
         Timeline.prototype.gotoAndStop = function (positionOrLabel) {
             this.setPaused(true);
             this._goto(positionOrLabel);
         };
-        /**
-         * Advances the timeline to the specified position.
-         * @method setPosition
-         * @param {Number} value The position to seek to in milliseconds (or ticks if `useTicks` is true).
-         * @param {Number} [actionsMode] parameter specifying how actions are handled. See the Tween {{#crossLink "Tween/setPosition"}}{{/crossLink}}
-         * method for more details.
-         * @return {Boolean} Returns true if the timeline is complete (ie. the full timeline has run & loop is false).
-         **/
         Timeline.prototype.setPosition = function (value, actionsMode) {
             if (value < 0) {
                 value = 0;
@@ -343,12 +151,12 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
                 return end;
             }
             this._prevPosition = value;
-            this.position = this._prevPos = t; // in case an action changes the current frame.
+            this.position = this._prevPos = t;
             for (var i = 0, l = this._tweens.length; i < l; i++) {
                 this._tweens[i].setPosition(t, actionsMode);
                 if (t != this._prevPos) {
                     return false;
-                } // an action changed this timeline's position.
+                }
             }
             if (end) {
                 this.setPaused(true);
@@ -356,22 +164,10 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             this.dispatchEvent("change");
             return end;
         };
-        /**
-         * Pauses or plays this timeline.
-         * @method setPaused
-         * @param {Boolean} value Indicates whether the tween should be paused (true) or played (false).
-         **/
-        //	public setPaused(value)
-        //	{
-        //		this._paused = !!value;
-        //		Tween._register(this, !value);
-        //	}
-        /**
-         * Recalculates the duration of the timeline.
-         * The duration is automatically updated when tweens are added or removed, but this method is useful
-         * if you modify a tween after it was added to the timeline.
-         * @method updateDuration
-         **/
+        Timeline.prototype.setPaused = function (value) {
+            this._paused = !!value;
+            Tween._register(this, !value);
+        };
         Timeline.prototype.updateDuration = function () {
             this.duration = 0;
             for (var i = 0, l = this._tweens.length; i < l; i++) {
@@ -381,49 +177,22 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
                 }
             }
         };
-        /**
-         * Advances this timeline by the specified amount of time in milliseconds (or ticks if useTicks is true).
-         * This is normally called automatically by the Tween engine (via Tween.tick), but is exposed for advanced uses.
-         * @method tick
-         * @param {Number} delta The time to advance in milliseconds (or ticks if useTicks is true).
-         **/
-        //	public tick(delta)
-        //	{
-        //		this.setPosition(this._prevPosition + delta);
-        //	}
-        /**
-         * If a numeric position is passed, it is returned unchanged. If a string is passed, the position of the
-         * corresponding frame label will be returned, or null if a matching label is not defined.
-         * @method resolve
-         * @param {String|Number} positionOrLabel A numeric position value or label string.
-         **/
+        Timeline.prototype.onTick = function (delta) {
+            this.setPosition(this._prevPosition + delta);
+        };
         Timeline.prototype.resolve = function (positionOrLabel) {
-            var pos = parseFloat(positionOrLabel);
+            var pos = Number(positionOrLabel);
             if (isNaN(pos)) {
                 pos = this._labels[positionOrLabel];
             }
             return pos;
         };
-        /**
-         * Returns a string representation of this object.
-         * @method toString
-         * @return {String} a string representation of the instance.
-         **/
         Timeline.prototype.toString = function () {
             return "[Timeline]";
         };
-        /**
-         * @method clone
-         * @protected
-         **/
         Timeline.prototype.clone = function () {
             throw ("Timeline can not be cloned.");
         };
-        // private methods:
-        /**
-         * @method _goto
-         * @protected
-         **/
         Timeline.prototype._goto = function (positionOrLabel) {
             var pos = this.resolve(positionOrLabel);
             if (pos != null) {
@@ -431,6 +200,6 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             }
         };
         return Timeline;
-    })(Tween);
+    })(EventDispatcher);
     return Timeline;
 });

@@ -3,6 +3,8 @@
  * Visit http://createjs.com/ for documentation, updates and examples.
  *
  * Copyright (c) 2010 gskinner.com, inc.
+ * Copyright (c) 2014-2015 Mient-jan Stelling.
+ * Copyright (c) 2015 mediamonks.com
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -136,6 +138,8 @@ class Stage extends Container
 	 * @event tickstart
 	 * @since 0.7.0
 	 */
+//	protected _ticker:Ticker = new Ticker();
+
 	public tickstartSignal:Signal = new Signal();
 
 	/**
@@ -175,6 +179,8 @@ class Stage extends Container
 		}
 	} = null;
 
+	public _onResizeEventListener:Function = null;
+
 	/**
 	 * Indicates whether the stage should automatically clear the canvas before each render. You can set this to <code>false</code>
 	 * to manually control clearing (for generative art, or when pointing multiple stages at the same canvas for
@@ -182,7 +188,7 @@ class Stage extends Container
 	 *
 	 * <h4>Example</h4>
 	 *
-	 *      var stage = new createjs.Stage("canvasId");
+	 *      var stage = new Stage("canvasId");
 	 *      stage.autoClear = false;
 	 *
 	 * @property autoClear
@@ -394,39 +400,37 @@ class Stage extends Container
 	/**
 	 * @class Stage
 	 * @constructor
-	 * @param {HTMLCanvasElement|HTMLDivElement} element A canvas or div element. If it's a div element, a canvas object will be created and appended to the div.
+	 * @param {HTMLCanvasElement|HTMLBlockElement} element A canvas or div element. If it's a div element, a canvas object will be created and appended to the div.
 	 * @param {boolean} [triggerResizeOnWindowResize=false] Indicates whether onResize should be called when the window is resized
 	 **/
-	constructor(element:HTMLDivElement, triggerResizeOnWindowResize?:boolean);
-	constructor(element:HTMLCanvasElement, triggerResizeOnWindowResize?:boolean);
-	constructor(element:any, triggerResizeOnWindowResize:any = false)
+
+	constructor(element:HTMLBlockElement|HTMLDivElement|HTMLCanvasElement, triggerResizeOnWindowResize:any = false)
 	{
 		super('100%', '100%', 0, 0, 0, 0);
 
 		this.triggerResizeOnWindowResize = triggerResizeOnWindowResize;
+		var size:Size;
 
 		switch(element.tagName)
 		{
 			case 'CANVAS':
 			{
-				this.canvas = element;
-				this.holder = element.parentElement;
-				break;
-			}
+				this.canvas = <HTMLCanvasElement> element;
+				this.holder = <HTMLBlockElement> element.parentElement;
 
-			case 'DIV':
-			{
-				var canvas = document.createElement('canvas');
-				element.appendChild(canvas);
-
-				this.canvas = canvas;
-				this.holder = element;
+				size = new Size(this.canvas.width, this.canvas.height);
 				break;
 			}
 
 			default:
 			{
-				throw new Error('unsupported element used "' + element.tagName + '"');
+				var canvas = document.createElement('canvas');
+
+				this.canvas = <HTMLCanvasElement> canvas;
+				this.holder = <HTMLBlockElement> element;
+				this.holder.appendChild(canvas);
+
+				size = new Size(this.holder.offsetWidth, this.holder.offsetHeight);
 				break;
 			}
 		}
@@ -434,17 +438,14 @@ class Stage extends Container
 		this.enableDOMEvents(true);
 		this.setFps(this._fps);
 		this.ctx = this.canvas.getContext('2d');
-		this.setQuality(QualityType.NORMAL);
+		this.setQuality(QualityType.LOW);
 		this.stage = this;
 
-		if (this.triggerResizeOnWindowResize || element.tagName == "DIV")
-		{
-			this.onResize(new Size(this.holder.offsetWidth, this.holder.offsetHeight));
+		if( triggerResizeOnWindowResize ){
+			this.enableAutoResize();
 		}
-		else
-		{
-			this.onResize(new Size(this.canvas.width, this.canvas.height));
-		}
+
+		this.onResize(size.width, size.height);
 	}
 
 
@@ -453,7 +454,7 @@ class Stage extends Container
 	 * @param {QualityType} value
 	 * @public
 	 */
-	public setQuality(value:QualityType)
+	public setQuality(value:QualityType):void
 	{
 
 		switch(value)
@@ -484,9 +485,9 @@ class Stage extends Container
 	 * and then render the display list to the canvas.
 	 *
 	 * @method update
-	 * @param {TimeEvent} timeEvent
+	 * @param {TimeEvent} [timeEvent=0]
 	 **/
-	public update = (delta:number) =>
+	public update = (delta:number):void =>
 	{
 		if(!this.canvas)
 		{
@@ -498,11 +499,6 @@ class Stage extends Container
 			// update this logic in SpriteStage when necessary
 			this.onTick.call(this, delta);
 		}
-		//
-		//		if(this.dispatchEvent("drawstart"))
-		//		{
-		//			return;
-		//		}
 
 		this.drawstartSignal.emit();
 
@@ -512,7 +508,12 @@ class Stage extends Container
 			ctx = this.ctx;
 
 
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		/**
+		 *
+		 */
+		ctx.setTransform(1, 0, 0, 1, 0.5, 0.5);
+		//ctx.translate(0.5, 0.5);
+
 		if(this.autoClear)
 		{
 			if(r)
@@ -538,8 +539,6 @@ class Stage extends Container
 		ctx.restore();
 
 		this.drawendSignal.emit();
-		//		this.dispatchEvent("drawend");
-		//		console.timeEnd('stage:update');
 	}
 
 	/**
@@ -573,7 +572,7 @@ class Stage extends Container
 	 * @method onTick
 	 * @param {*} [params]* Params to include when ticking descendants. The first param should usually be a tick event.
 	 **/
-	public tick(delta:number)
+	public tick(delta:number):void
 	{
 		if(!this.tickEnabled)
 		{
@@ -589,7 +588,7 @@ class Stage extends Container
 	 * Clears the target canvas. Useful if {{#crossLink "Stage/autoClear:property"}}{{/crossLink}} is set to `false`.
 	 * @method clear
 	 **/
-	public clear()
+	public clear():void
 	{
 		if(!this.canvas)
 		{
@@ -672,7 +671,7 @@ class Stage extends Container
 	 * responsive, but uses less CPU.
 	 * @todo remove setInterval
 	 **/
-	public enableMouseOver(frequency:number = null)
+	public enableMouseOver(frequency:number = null):void
 	{
 		if(this._mouseOverIntervalID)
 		{
@@ -717,7 +716,7 @@ class Stage extends Container
 	 * @method enableDOMEvents
 	 * @param {Boolean} [enable=true] Indicates whether to enable or disable the events. Default is true.
 	 **/
-	public enableDOMEvents(enable:boolean = true)
+	public enableDOMEvents(enable:boolean = true):void
 	{
 		var name, o, eventListeners = this._eventListeners;
 		if(!enable && eventListeners)
@@ -758,11 +757,6 @@ class Stage extends Container
 			//				}
 			//			};
 
-			eventListeners["resize"] = {
-				window: windowsObject,
-				fn: e => this._handleWindowResize(e)
-			};
-
 
 			for(name in eventListeners)
 			{
@@ -777,7 +771,7 @@ class Stage extends Container
 	 * @method clone
 	 * @return {Stage} A clone of the current Container instance.
 	 **/
-	public clone()
+	public clone():Stage
 	{
 		var o = new Stage(null, this.triggerResizeOnWindowResize);
 		this.cloneProps(o);
@@ -786,29 +780,28 @@ class Stage extends Container
 
 	/**
 	 * Returns a string representation of this object.
+	 *
 	 * @method toString
 	 * @return {String} a string representation of the instance.
 	 **/
-	public toString()
+	public toString():string
 	{
 		return "[Stage (name=" + this.name + ")]";
 	}
 
-	// private methods:
-
-
+	public tryCatch
 
 	/**
 	 * @method _getElementRect
 	 * @protected
-	 * @param {HTMLElement} e
+	 * @param {HTMLElement} element
 	 **/
-	public _getElementRect(e)
+	public _getElementRect(element:HTMLElement)
 	{
 		var bounds;
 		//		try
 		//		{
-		bounds = e.getBoundingClientRect();
+		bounds = element.getBoundingClientRect();
 		//		} // this can fail on disconnected DOM elements in IE9
 		//		catch(err)
 		//		{
@@ -818,7 +811,7 @@ class Stage extends Container
 		var offX = (window.pageXOffset || document['scrollLeft'] || 0) - (document['clientLeft'] || document.body.clientLeft || 0);
 		var offY = (window.pageYOffset || document['scrollTop'] || 0) - (document['clientTop'] || document.body.clientTop || 0);
 
-		var styles = window.getComputedStyle ? getComputedStyle(e, null) : e.currentStyle; // IE <9 compatibility.
+		var styles = window.getComputedStyle ? getComputedStyle(element, null) : element.currentStyle; // IE <9 compatibility.
 		var padL = parseInt(styles.paddingLeft) + parseInt(styles.borderLeftWidth);
 		var padT = parseInt(styles.paddingTop) + parseInt(styles.borderTopWidth);
 		var padR = parseInt(styles.paddingRight) + parseInt(styles.borderRightWidth);
@@ -895,6 +888,7 @@ class Stage extends Container
 		{
 			return;
 		}
+
 
 		var nextStage = this._nextStage;
 		var pointerData = this._getPointerData(id);
@@ -1034,8 +1028,6 @@ class Stage extends Container
 	 **/
 	public _handlePointerDown(id, e, pageX, pageY, owner?:Stage):void
 	{
-
-		
 		if(pageY != null)
 		{
 			this._updatePointerPosition(id, e, pageX, pageY);
@@ -1054,6 +1046,7 @@ class Stage extends Container
 		if(!owner)
 		{
 			target = pointerData.target = this._getObjectsUnderPoint(pointerData.x, pointerData.y, null, true);
+
 			this._dispatchMouseEvent(pointerData.target, "mousedown", true, id, pointerData, e);
 		}
 
@@ -1178,14 +1171,10 @@ class Stage extends Container
 	/**
 	 * @method _handleWindowResize
 	 * @protected
-	 * @param {Event} e
 	 **/
 	public _handleWindowResize(e)
 	{
-		if (this.triggerResizeOnWindowResize)
-		{
-			this.onResize(new Size(this.holder.offsetWidth, this.holder.offsetHeight));
-		}
+		this.onResize(this.holder.offsetWidth, this.holder.offsetHeight);
 	}
 
 	/**
@@ -1245,6 +1234,17 @@ class Stage extends Container
 		return this._fps;
 	}
 
+	public enableAutoResize()
+	{
+		this._onResizeEventListener = (e) => this._handleWindowResize(e)
+		window.addEventListener('resize', <any> this._onResizeEventListener);
+	}
+
+	public disableAutoResize()
+	{
+		window.removeEventListener('resize', <any> this._onResizeEventListener);
+	}
+
 	/**
 	 * Start the update loop.
 	 *
@@ -1257,6 +1257,8 @@ class Stage extends Container
 		{
 			this.update(0);
 			this._tickSignalConnection = Ticker.getInstance().addTickListener(<any> this.update);
+			Ticker.getInstance().start();
+
 			this._isRunning = true;
 			return true;
 		}
@@ -1301,24 +1303,24 @@ class Stage extends Container
 	}
 
 	/**
-	 * Is triggerd when the stage (canvas) is resized.
+	 * Is triggered when the stage (canvas) is resized.
 	 * Will give this new information to all children.
 	 *
 	 * @method onResize
 	 * @param {Size} size
 	 */
-	public onResize(size:Size):void
+	public onResize(width:number, height:number):void
 	{
 		// anti-half pixel fix
-		size.width = size.width + 1 >> 1 << 1;
-		size.height = size.height + 1 >> 1 << 1;
+		width = width + 1 >> 1 << 1;
+		height = height + 1 >> 1 << 1;
 
-		if(this.width != size.width || this.height != size.height)
+		if(this.width != width || this.height != height)
 		{
-			this.canvas.width = size.width;
-			this.canvas.height = size.height;
+			this.canvas.width = width;
+			this.canvas.height = height;
 
-			super.onResize(size);
+			super.onResize(width, height);
 
 			if(!this._isRunning)
 			{

@@ -1,97 +1,19 @@
-/// <reference path="./Filter.ts" />
-/*
- * ColorMatrix
- * Visit http://createjs.com/ for documentation, updates and examples.
- *
- * Copyright (c) 2010 gskinner.com, inc.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
 var createts;
 (function (createts) {
-    /**
-     * Provides helper functions for assembling a matrix for use with the {{#crossLink "ColorMatrixFilter"}}{{/crossLink}},
-     * or can be used directly as the matrix for a ColorMatrixFilter. Most methods return the instance to facilitate
-     * chained calls.
-     *
-     * <h4>Example</h4>
-     *
-     *      myColorMatrix.adjustHue(20).adjustBrightness(50);
-     *
-     * See {{#crossLink "Filter"}}{{/crossLink}} for an example of how to apply filters, or {{#crossLink "ColorMatrixFilter"}}{{/crossLink}}
-     * for an example of how to use ColorMatrix to change a DisplayObject's color.
-     * @class ColorMatrix
-     * @param {Number} brightness
-     * @param {Number} contrast
-     * @param {Number} saturation
-     * @param {Number} hue
-     * @constructor
-     **/
     var ColorMatrix = (function () {
-        /**
-         * Initialization method.
-         * @method initialize
-         * @param {Number} brightness
-         * @param {Number} contrast
-         * @param {Number} saturation
-         * @param {Number} hue
-         * @protected
-         */
         function ColorMatrix(brightness, contrast, saturation, hue) {
             this.reset();
             this.adjustColor(brightness, contrast, saturation, hue);
         }
-        /**
-         * Resets the matrix to identity values.
-         * @method reset
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         */
         ColorMatrix.prototype.reset = function () {
             return this.copyMatrix(ColorMatrix.IDENTITY_MATRIX);
         };
-        /**
-         * Shortcut method to adjust brightness, contrast, saturation and hue.
-         * Equivalent to calling adjustHue(hue), adjustContrast(contrast),
-         * adjustBrightness(brightness), adjustSaturation(saturation), in that order.
-         * @method adjustColor
-         * @param {Number} brightness
-         * @param {Number} contrast
-         * @param {Number} saturation
-         * @param {Number} hue
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         **/
         ColorMatrix.prototype.adjustColor = function (brightness, contrast, saturation, hue) {
             this.adjustHue(hue);
             this.adjustContrast(contrast);
             this.adjustBrightness(brightness);
             return this.adjustSaturation(saturation);
         };
-        /**
-         * Adjusts the brightness of pixel color by adding the specified value to the red, green and blue channels.
-         * Positive values will make the image brighter, negative values will make it darker.
-         * @method adjustBrightness
-         * @param {Number} value A value between -255 & 255 that will be added to the RGB channels.
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         **/
         ColorMatrix.prototype.adjustBrightness = function (value) {
             if (value == 0 || isNaN(value)) {
                 return this;
@@ -126,13 +48,6 @@ var createts;
             ]);
             return this;
         };
-        /**
-         * Adjusts the contrast of pixel color.
-         * Positive values will increase contrast, negative values will decrease contrast.
-         * @method adjustContrast
-         * @param {Number} value A value between -100 & 100.
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         **/
         ColorMatrix.prototype.adjustContrast = function (value) {
             if (value == 0 || isNaN(value)) {
                 return this;
@@ -148,7 +63,7 @@ var createts;
                     x = ColorMatrix.DELTA_INDEX[value];
                 }
                 else {
-                    x = ColorMatrix.DELTA_INDEX[(value << 0)] * (1 - x) + ColorMatrix.DELTA_INDEX[(value << 0) + 1] * x; // use linear interpolation for more granularity.
+                    x = ColorMatrix.DELTA_INDEX[(value << 0)] * (1 - x) + ColorMatrix.DELTA_INDEX[(value << 0) + 1] * x;
                 }
                 x = x * 127 + 127;
             }
@@ -181,13 +96,6 @@ var createts;
             ]);
             return this;
         };
-        /**
-         * Adjusts the color saturation of the pixel.
-         * Positive values will increase saturation, negative values will decrease saturation (trend towards greyscale).
-         * @method adjustSaturation
-         * @param {Number} value A value between -100 & 100.
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         **/
         ColorMatrix.prototype.adjustSaturation = function (value) {
             if (value == 0 || isNaN(value)) {
                 return this;
@@ -226,12 +134,6 @@ var createts;
             ]);
             return this;
         };
-        /**
-         * Adjusts the hue of the pixel color.
-         * @method adjustHue
-         * @param {Number} value A value between -180 & 180.
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         **/
         ColorMatrix.prototype.adjustHue = function (value) {
             if (value == 0 || isNaN(value)) {
                 return this;
@@ -271,12 +173,6 @@ var createts;
             ]);
             return this;
         };
-        /**
-         * Concatenates (multiplies) the specified matrix with this one.
-         * @method concat
-         * @param {Array} matrix An array or ColorMatrix instance.
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         **/
         ColorMatrix.prototype.concat = function (matrix) {
             matrix = this._fixMatrix(matrix);
             if (matrix.length != ColorMatrix.LENGTH) {
@@ -285,19 +181,9 @@ var createts;
             this._multiplyMatrix(matrix);
             return this;
         };
-        /**
-         * Returns a clone of this ColorMatrix.
-         * @method clone
-         * @return {ColorMatrix} A clone of this ColorMatrix.
-         **/
         ColorMatrix.prototype.clone = function () {
             return (new ColorMatrix(0, 0, 0, 0)).copyMatrix(this);
         };
-        /**
-         * Return a length 25 (5x5) array instance containing this matrix's values.
-         * @method toArray
-         * @return {Array} An array holding this matrix's values.
-         **/
         ColorMatrix.prototype.toArray = function () {
             var arr = [];
             for (var i = 0, l = ColorMatrix.LENGTH; i < l; i++) {
@@ -305,12 +191,6 @@ var createts;
             }
             return arr;
         };
-        /**
-         * Copy the specified matrix's values to this matrix.
-         * @method copyMatrix
-         * @param {Array} matrix An array or ColorMatrix instance.
-         * @return {ColorMatrix} The ColorMatrix instance the method is called on (useful for chaining calls.)
-         **/
         ColorMatrix.prototype.copyMatrix = function (matrix) {
             var l = ColorMatrix.LENGTH;
             for (var i = 0; i < l; i++) {
@@ -318,20 +198,9 @@ var createts;
             }
             return this;
         };
-        /**
-         * Returns a string representation of this object.
-         * @method toString
-         * @return {String} a string representation of the instance.
-         **/
         ColorMatrix.prototype.toString = function () {
             return "[ColorMatrix]";
         };
-        // private methods:
-        /**
-         * @method _multiplyMatrix
-         * @param {Array} matrix
-         * @protected
-         **/
         ColorMatrix.prototype._multiplyMatrix = function (matrix) {
             var col = [];
             for (var i = 0; i < 5; i++) {
@@ -347,23 +216,9 @@ var createts;
                 }
             }
         };
-        /**
-         * Make sure values are within the specified range, hue has a limit of 180, brightness is 255, others are 100.
-         * @method _cleanValue
-         * @param {Number} value The raw number
-         * @param {Number} limit The maximum that the number can be. The minimum is the limit * -1.
-         * @protected
-         **/
         ColorMatrix.prototype._cleanValue = function (value, limit) {
             return Math.min(limit, Math.max(-limit, value));
         };
-        //
-        /**
-         * Makes sure matrixes are 5x5 (25 long).
-         * @method _fixMatrix
-         * @param {Array} matrix
-         * @protected
-         **/
         ColorMatrix.prototype._fixMatrix = function (matrix) {
             if (matrix instanceof ColorMatrix) {
                 matrix = matrix.toArray();
@@ -376,13 +231,6 @@ var createts;
             }
             return matrix;
         };
-        /**
-         * Array of delta values for contrast calculations.
-         * @property DELTA_INDEX
-         * @type Array
-         * @protected
-         * @static
-         **/
         ColorMatrix.DELTA_INDEX = [
             0,
             0.01,
@@ -486,13 +334,6 @@ var createts;
             9.8,
             10.0
         ];
-        /**
-         * Identity matrix values.
-         * @property IDENTITY_MATRIX
-         * @type Array
-         * @protected
-         * @static
-         **/
         ColorMatrix.IDENTITY_MATRIX = [
             1,
             0,
@@ -520,13 +361,6 @@ var createts;
             0,
             1
         ];
-        /**
-         * The constant length of a color matrix.
-         * @property LENGTH
-         * @type Number
-         * @protected
-         * @static
-         **/
         ColorMatrix.LENGTH = ColorMatrix.IDENTITY_MATRIX.length;
         return ColorMatrix;
     })();

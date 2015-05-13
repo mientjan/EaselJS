@@ -82,24 +82,27 @@ class Touch
 	 * @return {Boolean} Returns `true` if touch was successfully enabled on the target stage.
 	 * @static
 	 **/
-	public static enable(stage:Stage, singleTouch = true, allowDefault = true)
+	public static enable(stage:Stage, singleTouch = true, allowDefault = false):boolean
 	{
 		if(!stage || !stage.canvas || !Touch.isSupported())
 		{
 			return false;
 		}
 
+
+
 		// inject required properties on stage:
 		stage.__touch = new TouchInjectProperties();
 
 		stage.__touch.multitouch = singleTouch;
-		stage.__touch.preventDefault = allowDefault;
+		stage.__touch.preventDefault = !allowDefault;
 		stage.__touch.count = 0;
 
 		// note that in the future we may need to disable the standard mouse event model before adding
 		// these to prevent duplicate calls. It doesn't seem to be an issue with iOS devices though.
 		if('ontouchstart' in window)
 		{
+			stage.enableDOMEvents(false);
 			Touch._IOS_enable(stage);
 		}
 		else if(window.navigator['msPointerEnabled'] || window.navigator["pointerEnabled"])
@@ -150,6 +153,8 @@ class Touch
 		canvas.addEventListener("touchmove", f, false);
 		canvas.addEventListener("touchend", f, false);
 		canvas.addEventListener("touchcancel", f, false);
+
+
 	}
 
 	/**
@@ -185,6 +190,9 @@ class Touch
 		{
 			return;
 		}
+
+
+
 		if(stage.__touch.preventDefault)
 		{
 			e.preventDefault && e.preventDefault();

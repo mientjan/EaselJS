@@ -1,7 +1,7 @@
 /**
  * @enum ValueType
  */
-enum DisplayType {
+const enum DisplayType {
 	UNKNOWN,
 	STAGE,
 	CONTAINER,
@@ -10,7 +10,7 @@ enum DisplayType {
 	GRAPHICS,
 	MOVIECLIP,
 	BITMAP,
-	BITMAPVIDEO,
+	BITMAPVIDEO
 }
 
 export = DisplayType;

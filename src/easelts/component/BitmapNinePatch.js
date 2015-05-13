@@ -4,7 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", '../display/Bitmap', '../display/DisplayObject', '../enum/DisplayType'], function (require, exports, Bitmap, DisplayObject, DisplayType) {
+define(["require", "exports", '../display/Bitmap', '../display/DisplayObject'], function (require, exports, Bitmap, DisplayObject) {
     var BitmapNinePatch = (function (_super) {
         __extends(BitmapNinePatch, _super);
         function BitmapNinePatch(ninePatch, width, height, x, y, regX, regY) {
@@ -42,23 +42,14 @@ define(["require", "exports", '../display/Bitmap', '../display/DisplayObject', '
             var destColumn = coordinates.destColumn;
             var destRow = coordinates.destRow;
             ctx.save();
-            // left top
             ctx.drawImage(image, sourceColumn[0], sourceRow[0], sourceColumn[1], sourceRow[1], destColumn[0], destRow[0], destColumn[1], destRow[1]);
-            // center top
             ctx.drawImage(image, sourceColumn[1], sourceRow[0], sourceColumn[2] - sourceColumn[1], sourceRow[1], destColumn[1], destRow[0], destColumn[2] - destColumn[1], destRow[1]);
-            // right top
             ctx.drawImage(image, sourceColumn[2], sourceRow[0], sourceColumn[3] - sourceColumn[2], sourceRow[1], destColumn[2], destRow[0], destColumn[3] - destColumn[2], destRow[1]);
-            // left middle
             ctx.drawImage(image, sourceColumn[0], sourceRow[1], sourceColumn[1], sourceRow[2] - sourceRow[1], destColumn[0], destRow[1], destColumn[1], destRow[2] - destRow[1]);
-            // center middle
             ctx.drawImage(image, sourceColumn[1], sourceRow[1], sourceColumn[2] - sourceColumn[1], sourceRow[2] - sourceRow[1], destColumn[1], destRow[1], destColumn[2] - destColumn[1], destRow[2] - destRow[1]);
-            // right middle
             ctx.drawImage(image, sourceColumn[2], sourceRow[1], sourceColumn[3] - sourceColumn[2], sourceRow[2] - sourceRow[1], destColumn[2], destRow[1], destColumn[3] - destColumn[2], destRow[2] - destRow[1]);
-            // left bottom
             ctx.drawImage(image, sourceColumn[0], sourceRow[2], sourceColumn[1], sourceRow[3] - sourceRow[2], destColumn[0], destRow[2], destColumn[1], destRow[3] - destRow[2]);
-            // center bottom
             ctx.drawImage(image, sourceColumn[1], sourceRow[2], sourceColumn[2] - sourceColumn[1], sourceRow[3] - sourceRow[2], destColumn[1], destRow[2], destColumn[2] - destColumn[1], destRow[3] - destRow[2]);
-            // right bottom
             ctx.drawImage(image, sourceColumn[2], sourceRow[2], sourceColumn[3] - sourceColumn[2], sourceRow[3] - sourceRow[2], destColumn[2], destRow[2], destColumn[3] - destColumn[2], destRow[3] - destRow[2]);
             ctx.restore();
             return true;

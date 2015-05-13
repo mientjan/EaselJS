@@ -1,7 +1,4 @@
 define(["require", "exports", '../../display/Bitmap', './NinePatchCoordinates'], function (require, exports, Bitmap, NinePatchCoordinates) {
-    /**
-     *
-     */
     var NinePatch = (function () {
         function NinePatch(imageOrString, rectangle) {
             this.bitmap = new Bitmap(imageOrString);

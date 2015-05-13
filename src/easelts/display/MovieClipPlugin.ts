@@ -1,7 +1,7 @@
 import Tween = require('../../tweents/Tween');
 import MovieClip = require('./MovieClip');
 
-
+// MovieClipPlugin for TweenJS:
 /**
  * This plugin works with <a href="http://tweenjs.com" target="_blank">TweenJS</a> to prevent the startPosition
  * property from tweening.
@@ -11,12 +11,6 @@ import MovieClip = require('./MovieClip');
  **/
 class MovieClipPlugin
 {
-	constructor()
-	{
-		throw("MovieClipPlugin cannot be instantiated.");
-	}
-
-
 	/**
 	 * @method priority
 	 * @private
@@ -27,7 +21,7 @@ class MovieClipPlugin
 	 * @method install
 	 * @private
 	 **/
-	public static install()
+	public static install ()
 	{
 		Tween.installPlugin(MovieClipPlugin, ["startPosition"]);
 	}
@@ -39,7 +33,7 @@ class MovieClipPlugin
 	 * @param {String|Number|Boolean} value
 	 * @private
 	 **/
-	public static init(tween, prop, value)
+	public static init (tween, prop, value)
 	{
 		return value;
 	}
@@ -48,7 +42,7 @@ class MovieClipPlugin
 	 * @method step
 	 * @private
 	 **/
-	public static step()
+	public static step ()
 	{
 		// unused.
 	}
@@ -73,9 +67,12 @@ class MovieClipPlugin
 		}
 		return (ratio == 1 ? endValues[prop] : startValues[prop]);
 	}
+
+	constructor()
+	{
+		throw("MovieClipPlugin cannot be instantiated.")
+	}
+
 }
-
-
-MovieClipPlugin.install();
 
 export = MovieClipPlugin;

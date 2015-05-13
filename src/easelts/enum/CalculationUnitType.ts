@@ -1,7 +1,7 @@
 /**
  * @enum CalculationUnitType
  */
-enum CalculationUnitType {
+const enum CalculationUnitType {
 	ADDITION,
 	SUBSTRACTION,
 	MULTIPLICATION,

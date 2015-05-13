@@ -1,8 +1,12 @@
+import Container = require('./Container');
+import Timeline = require('../../tweents/Timeline');
+import Tween = require('../../tweents/Tween');
+import TimeEvent = require('../../createts/event/TimeEvent');
+import DisplayObject = require('./DisplayObject');
+//import MovieClipPlugin = require('./MovieClipPlugin');
 /*
- * MovieClip
- * Visit http://createjs.com/ for documentation, updates and examples.
- *
  * Copyright (c) 2010 gskinner.com, inc.
+ * Copyright (c) 2015 Mient-jan Stelling.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,12 +29,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-import Container = require('./Container');
-import Timeline = require('../../tweents/Timeline');
-import Tween = require('../../tweents/Tween');
-import TimeEvent = require('../../createts/event/TimeEvent');
-import DisplayObject = require('./DisplayObject');
 
+// constructor:
 /**
  * The MovieClip class associates a TweenJS Timeline with an EaselJS {{#crossLink "Container"}}{{/crossLink}}. It allows
  * you to create objects which encapsulate timeline animations, state changes, and synched actions. Due to the
@@ -83,6 +83,9 @@ import DisplayObject = require('./DisplayObject');
  **/
 class MovieClip extends Container
 {
+
+
+	// constants:
 	/**
 	 * The MovieClip will advance independently of its parent, even if its parent is paused.
 	 * This is the default mode.
@@ -115,8 +118,24 @@ class MovieClip extends Container
 	 **/
 	public static SYNCHED = "synched";
 
-	// public properties:
 
+	// static properties:
+	public static inited = false;
+
+
+	// static methods:
+	public static init()
+	{
+		if(MovieClip.inited)
+		{
+			return;
+		}
+		// plugins introduce some overhead to Tween, so we only install this if an MC is instantiated.
+		MovieClipPlugin.install();
+		MovieClip.inited = true;
+	}
+
+	// public properties:
 	/**
 	 * Controls how this MovieClip advances its time. Must be one of 0 (INDEPENDENT), 1 (SINGLE_FRAME), or 2 (SYNCHED).
 	 * See each constant for a description of the behaviour.
@@ -124,7 +143,7 @@ class MovieClip extends Container
 	 * @type String
 	 * @default null
 	 **/
-	public mode:string;
+	mode = MovieClip.INDEPENDENT;
 
 	/**
 	 * Specifies what the first frame to play in this movieclip, or the only frame to display if mode is SINGLE_FRAME.
@@ -134,13 +153,16 @@ class MovieClip extends Container
 	 */
 	startPosition = 0;
 
+	_framerate;
+
+
 	/**
 	 * Indicates whether this MovieClip should loop when it reaches the end of its timeline.
 	 * @property loop
 	 * @type Boolean
 	 * @default true
 	 */
-	loop = true;
+	loop = false;
 
 	/**
 	 * The current frame of the movieclip.
@@ -213,7 +235,7 @@ class MovieClip extends Container
 	 * @type Array
 	 * @default null
 	 */
-	frameBounds = null;
+	frameBounds = this.frameBounds || null; // TODO: Deprecated. This is for backwards support of FlashCC
 
 	/**
 	 * By default MovieClip instances advance one frame per tick. Specifying a framerate for the MovieClip
@@ -230,8 +252,7 @@ class MovieClip extends Container
 	 * @type {Number}
 	 * @default 0
 	 **/
-	framerate:number = null;
-	_framerate:number = null;
+	framerate = null;
 
 
 	// private properties:
@@ -273,41 +294,93 @@ class MovieClip extends Container
 	 * @type Object
 	 * @private
 	 */
-	_managed;
+	_managed = {};
 
-	/**
-	 * ???
-	 */
-	_off:boolean;
-
-	parent = null;
-
-	// constructor:
-
-	/**
-	 * Initialization method called by the constructor.
-	 * @method initialize
-	 * @param {String} [mode=independent] Initial value for the mode property. One of MovieClip.INDEPENDENT,
-	 * MovieClip.SINGLE_FRAME, or MovieClip.SYNCHED. The default is MovieClip.INDEPENDENT.
-	 * @param {Number} [startPosition=0] Initial value for the startPosition property.
-	 * @param {Boolean} [loop=true] Initial value for the loop property. The default is true.
-	 * @param {Object} [labels=null] A hash of labels to pass to the timeline instance associated with this MovieClip.
-	 * Labels only need to be passed if they need to be used.
-	 * @protected
-	 **/
-	constructor(mode:string = MovieClip.INDEPENDENT, startPosition = 0, loop = false, labels?)
+	constructor(mode = MovieClip.INDEPENDENT, startPosition = 0, loop = true, labels?)
 	{
 		super();
 
-		this.mode = mode;
-		this.startPosition = startPosition || 0;
-		this.loop = loop;
-		var props = {paused: true, position: startPosition, useTicks: true};
+		!MovieClip.inited && MovieClip.init(); // static init
 
-		this.timeline = new Timeline(null, labels, props);
-		this._managed = {};
+		this.mode = mode;
+		this.startPosition = startPosition;
+		this.loop = loop;
+
+		this.timeline = new Timeline(null, labels, {paused: true, position: startPosition, useTicks: true});
 	}
 
+
+	// getter / setters:
+	/**
+	 * Use the {{#crossLink "MovieClip/labels:property"}}{{/crossLink}} property instead.
+	 * @method getLabels
+	 * @return {Array}
+	 * @deprecated
+	 **/
+	public getLabels()
+	{
+		return this.timeline.getLabels();
+	}
+
+	/**
+	 * Use the {{#crossLink "MovieClip/currentLabel:property"}}{{/crossLink}} property instead.
+	 * @method getCurrentLabel
+	 * @return {String}
+	 * @deprecated
+	 **/
+	public getCurrentLabel()
+	{
+		this._updateTimeline();
+		return this.timeline.getCurrentLabel();
+	}
+
+	/**
+	 * Returns an array of objects with label and position (aka frame) properties, sorted by position.
+	 * Shortcut to TweenJS: Timeline.getLabels();
+	 * @property labels
+	 * @type {Array}
+	 * @readonly
+	 **/
+
+	/**
+	 * Returns the name of the label on or immediately before the current frame. See TweenJS: Timeline.getCurrentLabel()
+	 * for more information.
+	 * @property currentLabel
+	 * @type {String}
+	 * @readonly
+	 **/
+	public get labels()
+	{
+		return this.getLabels();
+	}
+
+	public get currentLabel()
+	{
+		return this.getCurrentLabel();
+	}
+
+
+	// public methods:
+	/**
+	 * Constructor alias for backwards compatibility. This method will be removed in future versions.
+	 * Subclasses should be updated to use {{#crossLink "Utility Methods/extends"}}{{/crossLink}}.
+	 * @method initialize
+	 * @deprecated in favour of `createjs.promote()`
+	 **/
+	//public initialize = MovieClip; // TODO: Deprecated. This is for backwards support of FlashCC
+
+	/**
+	 * Returns true or false indicating whether the display object would be visible if drawn to a canvas.
+	 * This does not account for whether it would be visible within the boundaries of the stage.
+	 * NOTE: This method is mainly for internal use, though it may be useful for advanced uses.
+	 * @method isVisible
+	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
+	 **/
+	public isVisible()
+	{
+		// children are placed in draw, so we can't determine if we have content.
+		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0);
+	}
 
 	/**
 	 * Draws the display object into the specified context ignoring its visible, alpha, shadow, and transform.
@@ -319,19 +392,17 @@ class MovieClip extends Container
 	 * For example, used for drawing the cache (to prevent it from simply drawing an existing cache back
 	 * into itself).
 	 **/
-	public draw(ctx:CanvasRenderingContext2D, ignoreCache?:boolean)
+	public draw(ctx, ignoreCache)
 	{
 		// draw to cache first:
-		if(this.DisplayObject_draw(ctx, ignoreCache))
-		{
-			return true;
-		}
-
+		//if(super.draw(ctx, ignoreCache))
+		//{
+		//	return true;
+		//}
 		this._updateTimeline();
 		super.draw(ctx, ignoreCache);
 		return true;
 	}
-
 
 	/**
 	 * Sets paused to false.
@@ -378,9 +449,8 @@ class MovieClip extends Container
 	 * @param [time] {Number} The amount of time in ms to advance by. Only applicable if framerate is set.
 	 * @method advance
 	 */
-	public advance(delta:number)
+	public advance(time)
 	{
-
 		// TODO: should we worry at all about clips who change their own modes via frame scripts?
 		var independent = MovieClip.INDEPENDENT;
 		if(this.mode != independent)
@@ -388,7 +458,7 @@ class MovieClip extends Container
 			return;
 		}
 
-		var o = <MovieClip> this, fps = o.framerate;
+		var o:any = this, fps = o.framerate;
 		while((o = o.parent) && fps == null)
 		{
 			if(o.mode == independent)
@@ -398,50 +468,26 @@ class MovieClip extends Container
 		}
 		this._framerate = fps;
 
-		var t = (fps != null && fps != -1 && delta != null) ? delta / (1000 / fps) + this._t : 1;
+		var t = (fps != null && fps != -1 && time != null) ? time / (1000 / fps) + this._t : 1;
 		var frames = t | 0;
-		this._t = t - frames;
+		this._t = t - frames; // leftover time
 
-		while(frames--)
+		while(!this.paused && frames--)
 		{
-			if(!this.paused)
-			{
-				this._prevPosition = (this._prevPos < 0) ? 0 : this._prevPosition + 1;
-				this._updateTimeline();
-			}
+			this._prevPosition = (this._prevPos < 0) ? 0 : this._prevPosition + 1;
+			this._updateTimeline();
 		}
-	}
-
-	/**
-	 * Returns a sorted list of the labels defined on this MovieClip. Shortcut to TweenJS: Timeline.getLabels();
-	 * @method getLabels
-	 * @return {Array[Object]} A sorted array of objects with label and position (aka frame) properties.
-	 **/
-	public getLabels()
-	{
-		return this.timeline.getLabels();
-	}
-
-	/**
-	 * Returns the name of the label on or immediately before the current frame. See TweenJS: Timeline.getCurrentLabel()
-	 * for more information.
-	 * @method getCurrentLabel
-	 * @return {String} The name of the current label or null if there is no label.
-	 **/
-	public getCurrentLabel()
-	{
-		this._updateTimeline();
-		return this.timeline.getCurrentLabel();
 	}
 
 	/**
 	 * MovieClip instances cannot be cloned.
 	 * @method clone
 	 **/
-	public clone(recursive:boolean):any
+	public clone():MovieClip
 	{
 		// TODO: add support for this? Need to clone the Timeline & retarget tweens - pretty complex.
 		throw("MovieClip cannot be cloned.")
+		return this;
 	}
 
 	/**
@@ -449,30 +495,30 @@ class MovieClip extends Container
 	 * @method toString
 	 * @return {String} a string representation of the instance.
 	 **/
-		toString()
+	public toString()
 	{
 		return "[MovieClip (name=" + this.name + ")]";
 	}
 
+
 	// private methods:
-
-	/**
-	 * @property Container__tick
-	 * @type Function
-	 * @protected
-	 **/
-	//	p.Container__tick = p._tick;
-
 	/**
 	 * @method _tick
-	 * @param {Object} props Properties to copy to the DisplayObject {{#crossLink "DisplayObject/tick"}}{{/crossLink}} event object.
+	 * @param {Object} evtObj An event object that will be dispatched to all tick listeners. This object is reused between dispatchers to reduce construction & GC costs.
 	 * function.
 	 * @protected
 	 **/
-	public onTick(delta:number)
+	public _tick(evtObj)
 	{
+		debugger;
+		this.advance(evtObj && evtObj.delta);
+		this.onTick(evtObj);
+	}
+
+	public onTick(delta:number){
 		this.advance(delta);
 		super.onTick(delta);
+
 	}
 
 	/**
@@ -480,7 +526,7 @@ class MovieClip extends Container
 	 * @param {String|Number} positionOrLabel The animation name or frame number to go to.
 	 * @protected
 	 **/
-		_goto(positionOrLabel)
+	public _goto(positionOrLabel)
 	{
 		var pos = this.timeline.resolve(positionOrLabel);
 		if(pos == null)
@@ -501,18 +547,18 @@ class MovieClip extends Container
 	 * @method _reset
 	 * @private
 	 **/
-		_reset()
+	public _reset()
 	{
 		this._prevPos = -1;
-		this._t = 0;
-		this.currentFrame = 0;
+		this._t = this.currentFrame = 0;
+		this.paused = false;
 	}
 
 	/**
 	 * @method _updateTimeline
 	 * @protected
 	 **/
-		_updateTimeline()
+	public _updateTimeline()
 	{
 		var tl = this.timeline;
 		var synched = this.mode != MovieClip.INDEPENDENT;
@@ -581,7 +627,7 @@ class MovieClip extends Container
 	 * @param {Number} offset
 	 * @protected
 	 **/
-		_setState(state, offset)
+	public _setState(state, offset)
 	{
 		if(!state)
 		{
@@ -607,13 +653,12 @@ class MovieClip extends Container
 	 * @param {Number} offset
 	 * @private
 	 **/
-	private _addManagedChild(child:MovieClip, offset:number)
+	public _addManagedChild(child, offset)
 	{
 		if(child._off)
 		{
 			return;
 		}
-
 		this.addChildAt(child, 0);
 
 		if(child instanceof MovieClip)
@@ -627,15 +672,6 @@ class MovieClip extends Container
 		}
 		this._managed[child.id] = 2;
 	}
-
-	/**
-	 * @method Container__getBounds
-	 * @param {Matrix2D} matrix
-	 * @param {Boolean} ignoreTransform
-	 * @return {Rectangle}
-	 * @protected
-	 **/
-	//	Container__getBounds = p._getBounds;
 
 	/**
 	 * @method _getBounds
@@ -660,6 +696,80 @@ class MovieClip extends Container
 			return this._transformBounds(bounds, matrix, ignoreTransform);
 		}
 		return super._getBounds(matrix, ignoreTransform);
+	}
+}
+
+
+// MovieClipPlugin for TweenJS:
+/**
+ * This plugin works with <a href="http://tweenjs.com" target="_blank">TweenJS</a> to prevent the startPosition
+ * property from tweening.
+ * @private
+ * @class MovieClipPlugin
+ * @constructor
+ **/
+class MovieClipPlugin
+{
+	/**
+	 * @method priority
+	 * @private
+	 **/
+	public static priority = 100; // very high priority, should run first
+
+	/**
+	 * @method install
+	 * @private
+	 **/
+	public static install ()
+	{
+		Tween.installPlugin(MovieClipPlugin, ["startPosition"]);
+	}
+
+	/**
+	 * @method init
+	 * @param {Tween} tween
+	 * @param {String} prop
+	 * @param {String|Number|Boolean} value
+	 * @private
+	 **/
+	public static init (tween, prop, value)
+	{
+		return value;
+	}
+
+	/**
+	 * @method step
+	 * @private
+	 **/
+	public static step ()
+	{
+		// unused.
+	}
+
+	/**
+	 * @method tween
+	 * @param {Tween} tween
+	 * @param {String} prop
+	 * @param {String | Number | Boolean} value
+	 * @param {Array} startValues
+	 * @param {Array} endValues
+	 * @param {Number} ratio
+	 * @param {Object} wait
+	 * @param {Object} end
+	 * @return {*}
+	 */
+	public static tween(tween, prop, value, startValues, endValues, ratio, wait, end)
+	{
+		if(!(tween.target instanceof MovieClip))
+		{
+			return value;
+		}
+		return (ratio == 1 ? endValues[prop] : startValues[prop]);
+	}
+
+	constructor()
+	{
+		throw("MovieClipPlugin cannot be instantiated.")
 	}
 
 }

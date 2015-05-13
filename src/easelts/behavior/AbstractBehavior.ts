@@ -1,4 +1,5 @@
 import DisplayObject = require('../display/DisplayObject');
+import IBehavior = require('./IBehavior');
 
 /**
  * AbstractBehaviour
@@ -7,7 +8,7 @@ import DisplayObject = require('../display/DisplayObject');
  * @method AbstractBehavior
  * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
  */
-class AbstractBehaviour
+class AbstractBehavior implements IBehavior
 {
 	/**
 	 * @property owner
@@ -34,4 +35,4 @@ class AbstractBehaviour
 	}
 }
 
-export = AbstractBehaviour;
+export = AbstractBehavior;

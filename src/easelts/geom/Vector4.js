@@ -1,13 +1,4 @@
 define(["require", "exports"], function (require, exports) {
-    /**
-     * @author supereggbert / http://www.paulbrunt.co.uk/
-     * @author philogb / http://blog.thejit.org/
-     * @author mikael emtinger / http://gomo.se/
-     * @author egraether / http://egraether.com/
-     * @author WestLangley / http://github.com/WestLangley
-     * @author Mient-jan Stelling
-     * @class Vector4
-     */
     var Vector4 = (function () {
         function Vector4(x, y, z, w) {
             if (x === void 0) { x = 0; }
@@ -162,8 +153,6 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.setAxisAngleFromQuaternion = function (q) {
-            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
-            // q is assumed to be normalized
             this.w = 2 * Math.acos(q.w);
             var s = Math.sqrt(1 - q.w * q.w);
             if (s < 0.0001) {
@@ -179,19 +168,12 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.setAxisAngleFromRotationMatrix = function (m) {
-            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
-            // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
             var angle, x, y, z, epsilon = 0.01, epsilon2 = 0.1, te = m.elements, m11 = te[0], m12 = te[4], m13 = te[8], m21 = te[1], m22 = te[5], m23 = te[9], m31 = te[2], m32 = te[6], m33 = te[10];
             if ((Math.abs(m12 - m21) < epsilon) && (Math.abs(m13 - m31) < epsilon) && (Math.abs(m23 - m32) < epsilon)) {
-                // singularity found
-                // first check for identity matrix which must have +1 for all terms
-                // in leading diagonal and zero in other terms
                 if ((Math.abs(m12 + m21) < epsilon2) && (Math.abs(m13 + m31) < epsilon2) && (Math.abs(m23 + m32) < epsilon2) && (Math.abs(m11 + m22 + m33 - 3) < epsilon2)) {
-                    // this singularity is identity matrix so angle = 0
                     this.set(1, 0, 0, 0);
-                    return this; // zero angle, arbitrary axis
+                    return this;
                 }
-                // otherwise this singularity is angle = 180
                 angle = Math.PI;
                 var xx = (m11 + 1) / 2;
                 var yy = (m22 + 1) / 2;
@@ -236,15 +218,12 @@ define(["require", "exports"], function (require, exports) {
                     }
                 }
                 this.set(x, y, z, angle);
-                return this; // return 180 deg rotation
+                return this;
             }
-            // as we have reached here there are no singularities so we can handle normally
-            var s = Math.sqrt((m32 - m23) * (m32 - m23) + (m13 - m31) * (m13 - m31) + (m21 - m12) * (m21 - m12)); // used to normalize
+            var s = Math.sqrt((m32 - m23) * (m32 - m23) + (m13 - m31) * (m13 - m31) + (m21 - m12) * (m21 - m12));
             if (Math.abs(s) < 0.001) {
                 s = 1;
             }
-            // prevent divide by zero, should not happen if matrix is orthogonal and should be
-            // caught by singularity test above, but I've left it in just in case
             this.x = (m32 - m23) / s;
             this.y = (m13 - m31) / s;
             this.z = (m21 - m12) / s;
@@ -282,7 +261,6 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.clamp = function (min, max) {
-            // This function assumes min < max, if this assumption isn't true it will not operate correctly
             if (this.x < min.x) {
                 this.x = min.x;
             }

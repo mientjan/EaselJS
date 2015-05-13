@@ -5,10 +5,6 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 define(["require", "exports", './AbstractBehavior', '../display/DisplayObject'], function (require, exports, AbstractBehavior, DisplayObject) {
-    /**
-     * @method ButtonBehavior
-     * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
-     */
     var ButtonBehavior = (function (_super) {
         __extends(ButtonBehavior, _super);
         function ButtonBehavior() {
@@ -17,10 +13,6 @@ define(["require", "exports", './AbstractBehavior', '../display/DisplayObject'],
             this._onPointerOverInstance = null;
             this._onPointerOutInstance = null;
         }
-        /**
-         * @method initialize
-         * @param displayObject
-         */
         ButtonBehavior.prototype.initialize = function (displayObject) {
             _super.prototype.initialize.call(this, displayObject);
             this.owner.enableMouseInteraction();

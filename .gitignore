@@ -8,6 +8,8 @@ node_modules/
 *.sublime-workspace
 config.local.json
 
+tools/tasks/.tscache/
+
 #-----------------------------
 # INVALID FILES
 # (for cross OS compatibility)

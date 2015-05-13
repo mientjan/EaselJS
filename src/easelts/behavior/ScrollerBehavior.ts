@@ -17,6 +17,7 @@ class ScrollerBehavior extends AbstractBehavior
 
 	public owner:Container;
 	public holder:Container;
+
 	public options:IScrollerOptions;
 
 	constructor(options:IScrollerOptions = {})
@@ -55,9 +56,9 @@ class ScrollerBehavior extends AbstractBehavior
 		//	this.onResize(new Size(this.owner.parent.width, this.owner.parent.height));
 		//}
 
-		this.owner.addEventListener(Container.EVENT_MOUSE_DOWN, this.onMouseDown.bind(this));
-		this.owner.addEventListener(Container.EVENT_PRESS_MOVE, this.onMouseMove.bind(this));
-		this.owner.addEventListener(Container.EVENT_PRESS_UP, this.onMouseUp.bind(this));
+		this.owner.addEventListener(Container.EVENT_MOUSE_DOWN, this.onMouseDown );
+		this.owner.addEventListener(Container.EVENT_PRESS_MOVE, this.onMouseMove );
+		this.owner.addEventListener(Container.EVENT_PRESS_UP, this.onMouseUp );
 
 		//container.addEventListener(navigator.userAgent.indexOf("Firefox") > -1 ? "DOMMouseScroll" :  "mousewheel", function(e) {
 		//	scroller.doMouseZoom(e.detail ? (e.detail * -120) : e.wheelDelta, e.timeStamp, e.pageX, e.pageY);
@@ -68,7 +69,7 @@ class ScrollerBehavior extends AbstractBehavior
 
 	}
 
-	protected onMouseDown(e:MouseEvent)
+	protected onMouseDown = (e:MouseEvent) =>
 	{
 
 		this._scroller.doTouchStart([{
@@ -80,7 +81,7 @@ class ScrollerBehavior extends AbstractBehavior
 		this._mousedown = true;
 	}
 
-	protected onMouseMove(e:MouseEvent)
+	protected onMouseMove = (e:MouseEvent) =>
 	{
 		if(!this._mousedown)
 		{
@@ -95,7 +96,7 @@ class ScrollerBehavior extends AbstractBehavior
 		this._mousedown = true;
 	}
 
-	protected onMouseUp(e:MouseEvent)
+	protected onMouseUp = (e:MouseEvent) =>
 	{
 		if(!this._mousedown)
 		{
@@ -127,7 +128,17 @@ class ScrollerBehavior extends AbstractBehavior
 	{
 		this.holder.x = -left;
 		this.holder.y = -top;
+
 		// zoom?;
+	}
+
+	public destruct(){
+
+		this.owner.removeEventListener(Container.EVENT_MOUSE_DOWN, this.onMouseDown );
+		this.owner.removeEventListener(Container.EVENT_PRESS_UP, this.onMouseUp );
+		this.owner.removeEventListener(Container.EVENT_PRESS_MOVE, this.onMouseMove );
+
+		super.destruct();
 	}
 }
 

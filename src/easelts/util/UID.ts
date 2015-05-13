@@ -48,7 +48,7 @@ class UID
 	 * @return {Number} The next unique id
 	 * @static
 	 **/
-	public static get()
+	public static get():number
 	{
 		return UID._nextID++;
 	}

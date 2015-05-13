@@ -27,10 +27,10 @@
  * @module easelts
  */
 
-class ISize
+interface ISize
 {
-	public width:number;
-	public height:number;
+	width:number;
+	height:number;
 }
 
 export = ISize;

@@ -16,11 +16,9 @@ class MathUtil
 	 * @param {number} b
 	 * @returns {number}
 	 */
-	public static clamp(x:number, a:number, b:number)
+	public static clamp(x:number, a:number, b:number):number
 	{
-
 		return ( x < a ) ? a : ( ( x > b ) ? b : x );
-
 	}
 
 	/**
@@ -62,7 +60,6 @@ class MathUtil
 	 */
 	public static smoothStep(x:number, min:number, max:number):number
 	{
-
 		if(x <= min)
 		{
 			return 0;
@@ -75,7 +72,6 @@ class MathUtil
 		x = ( x - min ) / ( max - min );
 
 		return x * x * ( 3 - 2 * x );
-
 	}
 
 	/**
@@ -87,7 +83,6 @@ class MathUtil
 	 */
 	public static smootherStep(x:number, min:number, max:number):number
 	{
-
 		if(x <= min)
 		{
 			return 0;
@@ -100,10 +95,14 @@ class MathUtil
 		x = ( x - min ) / ( max - min );
 
 		return x * x * x * ( x * ( x * 6 - 15 ) + 10 );
-
 	}
 
 
+	public static lerp(fromValue:number, toValue:number, alpha:number):number
+	{
+		fromValue += ( toValue - fromValue ) * alpha;
+		return fromValue;
+	}
 
 	/**
 	 * 	Random float from <0, 1> with 16 bits of randomness
@@ -114,9 +113,7 @@ class MathUtil
 	 */
 	public static random16():number
 	{
-
 		return ( 65280 * Math.random() + 255 * Math.random() ) / 65535;
-
 	}
 
 	/**
@@ -127,9 +124,7 @@ class MathUtil
 	 */
 	public static randInt(low:number, high:number):number
 	{
-
 		return low + Math.floor(Math.random() * ( high - low + 1 ));
-
 	}
 
 	/**
@@ -141,9 +136,7 @@ class MathUtil
 	 */
 	public static randFloat(low:number, high:number)
 	{
-
 		return low + Math.random() * ( high - low );
-
 	}
 
 	/**
@@ -154,9 +147,7 @@ class MathUtil
 	 */
 	public static randFloatSpread(range:number)
 	{
-
 		return range * ( 0.5 - Math.random() );
-
 	}
 
 	/**
@@ -166,9 +157,7 @@ class MathUtil
 	 */
 	public static degToRad(degrees:number)
 	{
-
 		return degrees * MathUtil.degreeToRadiansFactor;
-
 	}
 
 	/**

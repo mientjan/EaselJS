@@ -4,23 +4,9 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", '../display/DisplayObject', '../enum/DisplayType', '../behavior/ButtonBehavior'], function (require, exports, DisplayObject, DisplayType, ButtonBehavior) {
-    /**
-     * @class ImageSequence
-     */
+define(["require", "exports", '../display/DisplayObject', '../behavior/ButtonBehavior'], function (require, exports, DisplayObject, ButtonBehavior) {
     var ImageButton = (function (_super) {
         __extends(ImageButton, _super);
-        /**
-         * idle, mouseover, mousedown, disabled
-         * @param {string[]} images
-         * @param {number} fps
-         * @param {string|number} width
-         * @param {string|number} height
-         * @param {string|number} x
-         * @param {string|number} y
-         * @param {string|number} regX
-         * @param {string|number} regY
-         */
         function ImageButton(data, width, height, x, y, regX, regY) {
             var _this = this;
             if (x === void 0) { x = 0; }
@@ -37,14 +23,14 @@ define(["require", "exports", '../display/DisplayObject', '../enum/DisplayType',
             };
             this._bitmap = null;
             this.addBehavior(new ButtonBehavior());
-            if (data.idle)
-                this._bitmaps.idle = data.idle;
+            this._bitmaps.idle = data.idle;
             if (data.over)
                 this._bitmaps.over = data.over;
             if (data.down)
                 this._bitmaps.down = data.down;
             if (data.disabled)
                 this._bitmaps.disabled = data.disabled;
+            this._bitmap = this._bitmaps.idle;
             this.addEventListener(ImageButton.EVENT_MOUSE_CLICK, function (e) {
                 _this._bitmap = _this._bitmaps.idle;
             });
@@ -54,7 +40,7 @@ define(["require", "exports", '../display/DisplayObject', '../enum/DisplayType',
                 });
             }
             if (this._bitmaps.down) {
-                this.addEventListener(ImageButton.EVENT_DISABLED, function (e) {
+                this.addEventListener(ImageButton.EVENT_MOUSE_DOWN, function (e) {
                     _this._bitmap = _this._bitmaps.down;
                 });
             }

@@ -21,10 +21,8 @@ define(["require", "exports", "../geom/Bounds", "../geom/Vector2"], function (re
         SortUtil.random = function (list) {
             var currentIndex = list.length, temporaryValue, randomIndex;
             while (0 !== currentIndex) {
-                // Pick a remaining element...
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex -= 1;
-                // And swap it with the current element.
                 temporaryValue = list[currentIndex];
                 list[currentIndex] = list[randomIndex];
                 list[randomIndex] = temporaryValue;

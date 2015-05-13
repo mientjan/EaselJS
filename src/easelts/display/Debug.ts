@@ -66,9 +66,9 @@ class Debug extends Container
 		}
 	}
 
-	public onResize(size:Size):void
+	public onResize(width:number, height:number):void
 	{
-		super.onResize(size);
+		super.onResize(width, height);
 		this.update();
 	}
 }

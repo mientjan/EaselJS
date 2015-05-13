@@ -1,7 +1,7 @@
 /**
  * @enum BitmapType
  */
-enum BitmapType {
+const enum BitmapType {
 	UNKNOWN,
 	IMAGE,
 	VIDEO,

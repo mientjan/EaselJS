@@ -1,0 +1,32 @@
+define(["require", "exports", '../../src/easelts/display/Stage', '../../src/easelts/display/Bitmap', '../../src/easelts/geom/Matrix4', '../../src/easelts/geom/Vector3', '../../src/easelts/geom/Quaternion', '../../src/easelts/util/MathUtil', '../../src/createts/util/Ticker'], function (require, exports, Stage, Bitmap, m4, v3, q, MathUtil, Ticker) {
+    var holder = document.getElementById('holder');
+    var stage = new Stage(holder, true);
+    var image = new Bitmap('../assets/image/ninepatch_red.png', 0, 0, '50%', '50%', '50%', '50%');
+    stage.addChild(image);
+    var m = new m4.Matrix4();
+    var x = new m4.Matrix4();
+    var y = new m4.Matrix4();
+    var z = new m4.Matrix4();
+    var alpha = 0;
+    var beta = Math.PI;
+    var gamma = Math.PI / 2;
+    var position = new v3.Vector3();
+    var rotation = new q.Quaternion();
+    var scale = new v3.Vector3();
+    var test = function () {
+        alpha += .01;
+        beta += .01;
+        x.makeRotationX(alpha);
+        y.makeRotationY(beta);
+        z.makeRotationZ(gamma);
+        m.multiplyMatrices(x, y);
+        m.multiply(z);
+        m.setPosition(new v3.Vector3(300, 250, 10));
+        m.decompose(position, rotation, scale);
+        image.x = position.x;
+        image.y = position.y;
+        image.rotation = MathUtil.radToDeg(rotation.z);
+    };
+    var signal = Ticker.getInstance().addTickListener(test);
+    stage.start();
+});

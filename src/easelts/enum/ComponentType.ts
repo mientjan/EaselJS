@@ -1,7 +1,7 @@
 /**
  * @enum ComponentType
  */
-enum ComponentType {
+const enum ComponentType {
 	UNKNOWN,
 	STAGE,
 	CONTAINER,

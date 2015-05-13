@@ -45,13 +45,12 @@ class ImageButton extends DisplayObject
 
 		this.addBehavior( new ButtonBehavior() );
 
+		this._bitmaps.idle = data.idle;
+		if(data.over) this._bitmaps.over = data.over;
+		if(data.down) this._bitmaps.down = data.down;
+		if(data.disabled) this._bitmaps.disabled = data.disabled;
 
-
-			if(data.idle) this._bitmaps.idle = data.idle;
-			if(data.over) this._bitmaps.over = data.over;
-			if(data.down) this._bitmaps.down = data.down;
-			if(data.disabled) this._bitmaps.disabled = data.disabled;
-
+		this._bitmap = this._bitmaps.idle;
 
 		this.addEventListener(ImageButton.EVENT_MOUSE_CLICK, (e) => {
 			this._bitmap = this._bitmaps.idle;
@@ -64,7 +63,7 @@ class ImageButton extends DisplayObject
 		}
 
 		if(this._bitmaps.down){
-			this.addEventListener(ImageButton.EVENT_DISABLED, (e) => {
+			this.addEventListener(ImageButton.EVENT_MOUSE_DOWN, (e) => {
 				this._bitmap = this._bitmaps.down;
 			});
 		}
@@ -80,7 +79,7 @@ class ImageButton extends DisplayObject
 	{
 		if(this._bitmaps.disabled)
 		{
-			this._bitmap = this._bitmaps.disabled;
+			this._bitmap = this._bitmaps.disabled; 
 		}
 	}
 
@@ -92,7 +91,7 @@ class ImageButton extends DisplayObject
 		}
 	}
 
-	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):void
+	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):boolean
 	{
 		this._bitmap.draw(ctx, ignoreCache);
 

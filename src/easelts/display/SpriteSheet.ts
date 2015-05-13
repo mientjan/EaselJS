@@ -160,7 +160,6 @@ class SpriteSheet extends EventDispatcher
 	 **/
 	public complete = true;
 
-
 	/**
 	 * Specifies the framerate to use by default for Sprite instances using the SpriteSheet. See
 	 * Sprite.framerate for more information.
@@ -169,43 +168,40 @@ class SpriteSheet extends EventDispatcher
 	 **/
 	public framerate = 0;
 
-	// TODO: deprecated.
-	/**
-	 * REMOVED. Use {{#crossLink "EventDispatcher/addEventListener"}}{{/crossLink}} and the {{#crossLink "SpriteSheet/complete:event"}}{{/crossLink}}
-	 * event.
-	 * @property onComplete
-	 * @type Function
-	 * @deprecated Use addEventListener and the "complete" event.
-	 **/
 
 	// private properties:
 	/**
 	 * @property _animations
 	 * @protected
+	 * @type Array
 	 **/
 	public _animations = null;
 
 	/**
 	 * @property _frames
 	 * @protected
+	 * @type Array
 	 **/
-	public _frames:any[] = [];
+	public _frames = null;
 
 	/**
 	 * @property _images
 	 * @protected
+	 * @type Array
 	 **/
-	public _images:any[] = [];
+	public _images = null;
 
 	/**
 	 * @property _data
 	 * @protected
+	 * @type Object
 	 **/
 	public _data = null;
 
 	/**
 	 * @property _loadCount
 	 * @protected
+	 * @type Number
 	 **/
 	public _loadCount = 0;
 
@@ -516,38 +512,38 @@ class SpriteSheet extends EventDispatcher
 	 * @method _calculateFrames
 	 * @protected
 	 **/
-	public _calculateFrames()
-	{
-		if(this._frames || this._frameWidth == 0)
-		{
-			return;
-		}
+	public _calculateFrames(){
+		if (this._frames || this._frameWidth == 0) { return; }
+
 		this._frames = [];
-		var ttlFrames = 0;
-		var fw = this._frameWidth;
-		var fh = this._frameHeight;
-		for(var i = 0, imgs = this._images; i < imgs.length; i++)
-		{
-			var img = imgs[i];
-			var cols = img.width / fw | 0;
-			var rows = img.height / fh | 0;
-			var ttl = this._numFrames > 0 ? Math.min(this._numFrames - ttlFrames, cols * rows) : cols * rows;
-			for(var j = 0; j < ttl; j++)
-			{
-				this._frames.push({
-					image: img,
-					rect: new Rectangle(
-						j % cols * fw,
-						(j / cols | 0) * fh,
-						fw, fh
-					),
-					regX: this._regX,
-					regY: this._regY
-				});
+
+		var maxFrames = this._numFrames || 100000; // if we go over this, something is wrong.
+		var frameCount = 0, frameWidth = this._frameWidth, frameHeight = this._frameHeight;
+		var spacing = 0;//this._spacing
+		var margin = 0; //this._margin;
+
+		imgLoop:
+			for (var i=0, imgs=this._images; i<imgs.length; i++) {
+				var img = imgs[i], imgW = img.width, imgH = img.height;
+
+				var y = margin;
+				while (y <= imgH-margin-frameHeight) {
+					var x = margin;
+					while (x <= imgW-margin-frameWidth) {
+						if (frameCount >= maxFrames) { break imgLoop; }
+						frameCount++;
+						this._frames.push({
+							image: img,
+							rect: new Rectangle(x, y, frameWidth, frameHeight),
+							regX: this._regX,
+							regY: this._regY
+						});
+						x += frameWidth+spacing;
+					}
+					y += frameHeight+spacing;
+				}
 			}
-			ttlFrames += ttl;
-		}
-		this._numFrames = ttlFrames;
+		this._numFrames = frameCount;
 	}
 }
 

@@ -1,43 +1,8 @@
-/*
- * CSSPlugin
- * Visit http://createjs.com/ for documentation, updates and examples.
- *
- * Copyright (c) 2010 gskinner.com, inc.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
 define(["require", "exports", './Tween'], function (require, exports, Tween) {
-    /**
-     * @module tweents
-     */
     var CSSPlugin = (function () {
         function CSSPlugin() {
             throw ("CSSPlugin cannot be instantiated.");
         }
-        /**
-         * Installs this plugin for use with TweenJS. Call this once after TweenJS is loaded to enable this plugin.
-         * @method install
-         * @static
-         **/
         CSSPlugin.install = function () {
             var arr = [], map = CSSPlugin.cssSuffixMap;
             for (var n in map) {
@@ -45,20 +10,6 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             }
             Tween.installPlugin(CSSPlugin, arr);
         };
-        /**
-         * @method init
-         * @protected
-         * @static
-         **/
-        /**
-         * @todo find out what prop and value for type are
-         *
-         * @method init
-         * @param tween
-         * @param prop
-         * @param value
-         * @returns {*}
-         */
         CSSPlugin.init = function (tween, prop, value) {
             var sfx0, sfx1, style, map = CSSPlugin.cssSuffixMap;
             if ((sfx0 = map[prop]) == null || !(style = tween.target.style)) {
@@ -67,7 +18,7 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             var str = style[prop];
             if (!str) {
                 return 0;
-            } // no style set.
+            }
             var i = str.length - sfx0.length;
             if ((sfx1 = str.substr(i)) != sfx0) {
                 throw ("CSSPlugin Error: Suffixes do not match. (" + sfx0 + ":" + sfx1 + ")");
@@ -76,19 +27,8 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
                 return parseInt(str.substr(0, i));
             }
         };
-        /**
-         * @method step
-         * @protected
-         * @static
-         **/
         CSSPlugin.step = function (tween, prop, startValue, endValue, injectProps) {
-            // unused
         };
-        /**
-         * @method tween
-         * @protected
-         * @static
-         **/
         CSSPlugin.tween = function (tween, prop, value, startValues, endValues, ratio, wait, end) {
             var style, map = CSSPlugin.cssSuffixMap;
             if (map[prop] == null || !(style = tween.target.style)) {
@@ -97,16 +37,6 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             style[prop] = value + map[prop];
             return Tween.IGNORE;
         };
-        /**
-         * Defines the default suffix map for CSS tweens. This can be overridden on a per tween basis by specifying a
-         * cssSuffixMap value for the individual tween. The object maps CSS property names to the suffix to use when
-         * reading or setting those properties. For example a map in the form {top:"px"} specifies that when tweening
-         * the "top" CSS property, it should use the "px" suffix (ex. target.style.top = "20.5px"). This only applies
-         * to tweens with the "css" config property set to true.
-         * @property cssSuffixMap
-         * @type Object
-         * @static
-         **/
         CSSPlugin.cssSuffixMap = {
             top: "px",
             left: "px",
@@ -116,12 +46,7 @@ define(["require", "exports", './Tween'], function (require, exports, Tween) {
             height: "px",
             opacity: ""
         };
-        /**
-         * @property priority
-         * @protected
-         * @static
-         **/
-        CSSPlugin.priority = -100; // very low priority, should run last
+        CSSPlugin.priority = -100;
         return CSSPlugin;
     })();
     return CSSPlugin;

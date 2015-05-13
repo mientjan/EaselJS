@@ -1,7 +1,7 @@
 /**
  * @enum TimingMode
  */
-enum TimingMode {
+const enum TimingMode {
 	TIMEOUT,
 	RAF,
 	RAF_SYNCHED

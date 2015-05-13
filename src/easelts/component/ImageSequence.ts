@@ -1,4 +1,5 @@
 import Bitmap = require('../display/Bitmap');
+import Methods = require('../util/Methods');
 import TimeEvent = require('../../createts/event/TimeEvent');
 import Signal = require('../../createts/event/Signal');
 import SignalConnection = require('../../createts/event/SignalConnection');
@@ -13,10 +14,16 @@ class ImageSequence extends Bitmap
 	public _frame:number = -1;
 	public _fps:number = 0;
 	public _length:number = 0;
-	public _images:HTMLImageElement[] = [];
+	public _images:string[] = [];
 
 	private _onComplete:Function = null;
 	private _times:number = 1;
+
+	private imageBackup0:HTMLImageElement = Methods.createImage();
+	private imageBackup1:HTMLImageElement = Methods.createImage();
+	private imageBackup2:HTMLImageElement = Methods.createImage();
+
+	public image:HTMLImageElement;
 
 	/**
 	 *
@@ -29,7 +36,7 @@ class ImageSequence extends Bitmap
 	 * @param {string|number} regX
 	 * @param {string|number} regY
 	 */
-	constructor(images:HTMLImageElement[], fps:number, width:any, height:any, x:any = 0, y:any = 0, regX:any = 0, regY:any = 0)
+	constructor(images:string[], fps:number, width:any, height:any, x:any = 0, y:any = 0, regX:any = 0, regY:any = 0)
 	{
 		super(images[0], width, height, x, y, regX, regY);
 
@@ -44,7 +51,19 @@ class ImageSequence extends Bitmap
 
 	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):boolean
 	{
-		ctx.drawImage(this.image, 0, 0);
+		var image = this.image;
+
+		if( !image.complete ){
+			if( this.imageBackup0 && this.imageBackup0.complete ){
+				image = this.imageBackup0;
+			} else if( this.imageBackup1 && this.imageBackup1.complete ){
+				image = this.imageBackup1;
+			} else if( this.imageBackup2 && this.imageBackup2.complete ){
+				image = this.imageBackup2;
+			}
+		}
+
+		ctx.drawImage(image, 0, 0);
 
 		return true;
 	}
@@ -99,7 +118,11 @@ class ImageSequence extends Bitmap
 				if(currentFrame != frame)
 				{
 					this._frame = frame;
-					this.image = this._images[frame];
+
+					this.imageBackup2.src = this.imageBackup1.src;
+					this.imageBackup1.src = this.imageBackup0.src;
+					this.imageBackup0.src = this.image.src;
+					this.image.src = this._images[frame];
 				}
 			}
 

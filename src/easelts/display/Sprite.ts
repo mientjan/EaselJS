@@ -234,11 +234,13 @@ class Sprite extends DisplayObject
 			return true;
 		}
 		this._normalizeFrame();
+
 		var o = this.spriteSheet.getFrame(this._currentFrame | 0);
 		if(!o)
 		{
 			return false;
 		}
+
 		var rect = o.rect;
 		this.sourceRect = rect;
 		if(rect.width && rect.height)

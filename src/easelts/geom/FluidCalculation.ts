@@ -40,7 +40,7 @@ class FluidCalculation
 	 * @param {string[]} statement
 	 * @returns {Array}
 	 */
-	public static dissolveCalcElements(statement:string):any[]
+	public static dissolveCalcElements(statement:string):Array<FluidMeasurementsUnit|CalculationUnitType>
 	{
 		statement = statement.replace('*', ' * ').replace('/', ' / ');
 		var arr = statement.split(FluidCalculation._spaceSplit);
@@ -61,11 +61,7 @@ class FluidCalculation
 	 * @public
 	 * @static
 	 */
-	public static dissolveElement(val:string):FluidMeasurementsUnit
-
-	public static dissolveElement(val:string):CalculationUnitType
-
-	public static dissolveElement(val:string):any
+	public static dissolveElement(val:string):FluidMeasurementsUnit|CalculationUnitType
 	{
 		var index = FluidCalculation._calculationUnitypeString.indexOf(val);
 		if(index >= 0)
@@ -98,16 +94,16 @@ class FluidCalculation
 	 * @param data
 	 * @returns {number}
 	 */
-	public static calcUnit(size:number, data:FluidMeasurementsUnit[]):number
+	public static calcUnit(size:number, data:Array<FluidMeasurementsUnit|CalculationUnitType>):number
 	{
-		var sizea = FluidCalculation.getCalcUnitSize(size, data[0]);
+		var sizea = FluidCalculation.getCalcUnitSize(size, <FluidMeasurementsUnit> data[0]);
 
 		for(var i = 2, l = data.length; i < l; i = i + 2)
 		{
 			sizea = FluidCalculation.getCalcUnit(
 				sizea,
-				<any> data[i - 1],
-				FluidCalculation.getCalcUnitSize(size, data[i])
+				<CalculationUnitType> data[i - 1],
+				FluidCalculation.getCalcUnitSize(size, <FluidMeasurementsUnit> data[i])
 			);
 		}
 
@@ -157,6 +153,44 @@ class FluidCalculation
 				break;
 			}
 		}
+	}
+
+	/**
+	 * @author Mient-jan Stelling
+	 * @method getCalculationTypeByValue
+	 * @param value {number|string}
+	 * @returns {CalculationType}
+	 * @public
+	 * @static
+	 */
+	public static getCalculationTypeByValue(value:number|string):CalculationType
+	{
+		if(typeof(value) == 'string')
+		{
+			if((<string> value).substr(-1) == '%')
+			{
+				return CalculationType.PERCENT;
+			}
+			else
+			{
+				return CalculationType.CALC;
+			}
+		}
+
+		return CalculationType.STATIC;
+	}
+
+	/**
+	 * @author Mient-jan Stelling
+	 * @method getCalculationTypeByValue
+	 * @param value {number|string}
+	 * @returns {CalculationType}
+	 * @public
+	 * @static
+	 */
+	public static getPercentageParcedValue(value:string):number
+	{
+		return parseFloat(value.substr(0, value.length - 1)) / 100;
 	}
 
 	/**

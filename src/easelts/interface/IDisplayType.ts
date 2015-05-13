@@ -25,9 +25,9 @@
 
 import DisplayType = require('../enum/DisplayType');
 
-class IDisplayType
+interface IDisplayType
 {
-	public type:DisplayType;
+	type:DisplayType;
 }
 
 

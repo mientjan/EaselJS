@@ -1,9 +1,13 @@
-import Vector3 = require('./Vector3');
-import Quaternion = require('./Quaternion');
-import Euler = require('./Euler');
 import MathUtil = require('../util/MathUtil');
+import m4 = require('./Matrix4');
+import v3 = require('./Vector3');
+import q = require('./Quaternion');
+
 
 /**
+ * All credit should go to everyone at Threejs
+ *
+ * @class Matrix4
  * @author mrdoob / http://mrdoob.com/
  * @author supereggbert / http://www.paulbrunt.co.uk/
  * @author philogb / http://blog.thejit.org/
@@ -15,44 +19,51 @@ import MathUtil = require('../util/MathUtil');
  * @author bhouston / http://exocortex.com
  * @author WestLangley / http://github.com/WestLangley
  */
-
 export class Matrix4
 {
+	private _quaternion:{[index:string]:q.Quaternion} = {};
+	private _vector3:{[index:string]:v3.Vector3} = {};
+	private _matrix4:{[index:string]:Matrix4} = {};
 
-	public elements:Float32Array;
+	protected getQuaternion(value:string):q.Quaternion
+	{
+		if(!this._quaternion[value])
+		{
+			this._quaternion[value] = new q.Quaternion();
+		}
+		return this._quaternion[value];
+	}
+
+	protected getVector3(value:string):v3.Vector3
+	{
+		if(!this._vector3[value])
+		{
+			this._vector3[value] = new v3.Vector3();
+		}
+		return this._vector3[value];
+	}
+
+	protected getMatrix4(value:string):Matrix4
+	{
+		if(!this._matrix4[value])
+		{
+			this._matrix4[value] = new Matrix4();
+		}
+		return this._matrix4[value];
+	}
+
+
+	public elements:Float32Array = new Float32Array([
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	]);
 
 	constructor()
 	{
-		this.elements = new Float32Array([
-
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1
-
-		]);
 	}
 
-	/**
-	 *
-	 * @param n11
-	 * @param n12
-	 * @param n13
-	 * @param n14
-	 * @param n21
-	 * @param n22
-	 * @param n23
-	 * @param n24
-	 * @param n31
-	 * @param n32
-	 * @param n33
-	 * @param n34
-	 * @param n41
-	 * @param n42
-	 * @param n43
-	 * @param n44
-	 * @returns {Matrix4}
-	 */
 	public set(n11:number, n12:number, n13:number, n14:number, n21:number, n22:number, n23:number, n24:number, n31:number, n32:number, n33:number, n34:number, n41:number, n42:number, n43:number, n44:number):Matrix4
 	{
 		var te = this.elements;
@@ -75,45 +86,28 @@ export class Matrix4
 		te[ 15 ] = n44;
 
 		return this;
-
 	}
 
-	public identity()
+	public identity():Matrix4
 	{
-
 		this.set(
-
 			1, 0, 0, 0,
 			0, 1, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1
-
 		);
 
 		return this;
-
 	}
 
-	public copy(m)
+	public copy(m:Matrix4):Matrix4
 	{
-
 		this.elements.set(m.elements);
-
 		return this;
-
 	}
 
-	public extractPosition(m)
+	public copyPosition(m:Matrix4):Matrix4
 	{
-
-		console.warn('THREE.Matrix4: .extractPosition() has been renamed to .copyPosition().');
-		return this.copyPosition(m);
-
-	}
-
-	public copyPosition(m)
-	{
-
 		var te = this.elements;
 		var me = m.elements;
 
@@ -122,19 +116,34 @@ export class Matrix4
 		te[ 14 ] = me[ 14 ];
 
 		return this;
-
 	}
 
-	private __extractRotation_v1:Vector3 = null;
+	public extractBasis(xAxis:v3.Vector3, yAxis:v3.Vector3, zAxis:v3.Vector3):Matrix4
+	{
+		var te = this.elements;
+
+		xAxis.set(te[ 0 ], te[ 1 ], te[ 2 ]);
+		yAxis.set(te[ 4 ], te[ 5 ], te[ 6 ]);
+		zAxis.set(te[ 8 ], te[ 9 ], te[ 10 ]);
+
+		return this;
+	}
+
+	public makeBasis(xAxis:v3.Vector3, yAxis:v3.Vector3, zAxis:v3.Vector3):Matrix4
+	{
+		this.set(
+			xAxis.x, yAxis.x, zAxis.x, 0,
+			xAxis.y, yAxis.y, zAxis.y, 0,
+			xAxis.z, yAxis.z, zAxis.z, 0,
+			0, 0, 0, 1
+		);
+
+		return this;
+	}
 
 	public extractRotation(m:Matrix4):Matrix4
 	{
-		if(!this.__extractRotation_v1){
-			this.__extractRotation_v1 = new Vector3(0, 0, 0);
-		}
-
-
-		var v1 = this.__extractRotation_v1;
+		var v1 = this.getVector3('v1ExtractRotation');
 		var te = this.elements;
 		var me = m.elements;
 
@@ -155,20 +164,10 @@ export class Matrix4
 		te[ 10 ] = me[ 10 ] * scaleZ;
 
 		return this;
-
 	}
 
-
-	public makeRotationFromEuler(euler)
+	public makeRotationFromEuler(euler:any):Matrix4
 	{
-
-		if(euler instanceof Euler === false)
-		{
-
-			console.error('THREE.Matrix: .makeRotationFromEuler() now expects a Euler rotation rather than a Vector3 and order.');
-
-		}
-
 		var te = this.elements;
 
 		var x = euler.x, y = euler.y, z = euler.z;
@@ -178,7 +177,6 @@ export class Matrix4
 
 		if(euler.order === 'XYZ')
 		{
-
 			var ae = a * e, af = a * f, be = b * e, bf = b * f;
 
 			te[ 0 ] = c * e;
@@ -192,11 +190,9 @@ export class Matrix4
 			te[ 2 ] = bf - ae * d;
 			te[ 6 ] = be + af * d;
 			te[ 10 ] = a * c;
-
 		}
 		else if(euler.order === 'YXZ')
 		{
-
 			var ce = c * e, cf = c * f, de = d * e, df = d * f;
 
 			te[ 0 ] = ce + df * b;
@@ -210,7 +206,6 @@ export class Matrix4
 			te[ 2 ] = cf * b - de;
 			te[ 6 ] = df + ce * b;
 			te[ 10 ] = a * c;
-
 		}
 		else if(euler.order === 'ZXY')
 		{
@@ -250,7 +245,6 @@ export class Matrix4
 		}
 		else if(euler.order === 'YZX')
 		{
-
 			var ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
 			te[ 0 ] = c * e;
@@ -264,11 +258,9 @@ export class Matrix4
 			te[ 2 ] = -d * e;
 			te[ 6 ] = ad * f + bc;
 			te[ 10 ] = ac - bd * f;
-
 		}
 		else if(euler.order === 'XZY')
 		{
-
 			var ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
 			te[ 0 ] = c * e;
@@ -282,7 +274,6 @@ export class Matrix4
 			te[ 2 ] = bc * f - ad;
 			te[ 6 ] = b * e;
 			te[ 10 ] = bd * f + ac;
-
 		}
 
 		// last column
@@ -297,18 +288,10 @@ export class Matrix4
 		te[ 15 ] = 1;
 
 		return this;
-
 	}
 
-	public setRotationFromQuaternion(q:Quaternion)
+	public makeRotationFromQuaternion(q:any):Matrix4
 	{
-		console.warn('THREE.Matrix4: .setRotationFromQuaternion() has been renamed to .makeRotationFromQuaternion().');
-		return this.makeRotationFromQuaternion(q);
-	}
-
-	public makeRotationFromQuaternion(q:Quaternion)
-	{
-
 		var te = this.elements;
 
 		var x = q.x, y = q.y, z = q.z, w = q.w;
@@ -344,60 +327,40 @@ export class Matrix4
 
 	}
 
-	private __lookAt_x:Vector3 = null;
-	private __lookAt_y:Vector3 = null;
-	private __lookAt_z:Vector3 = null;
-
-	public lookAt(eye, target, up)
+	public lookAt(eye:v3.Vector3, target:v3.Vector3, up:v3.Vector3):Matrix4
 	{
-		if(!this.__lookAt_x){
-			this.__lookAt_x = new Vector3(0, 0, 0);
-		}
+		var xLookAt = this.getVector3('xLookAt');
+		var yLookAt = this.getVector3('yLookAt');
+		var zLookAt = this.getVector3('zLookAt');
 
-		if(!this.__lookAt_y){
-			this.__lookAt_y = new Vector3(0, 0, 0);
-		}
-
-		if(!this.__lookAt_z){
-			this.__lookAt_z = new Vector3(0, 0, 0);
-		}
-
-		var x = this.__lookAt_x;
-		var y = this.__lookAt_y;
-		var z = this.__lookAt_z;
 		var te = this.elements;
 
-		z.subVectors(eye, target).normalize();
+		zLookAt.subVectors(eye, target).normalize();
 
-		if(z.length() === 0)
+		if(zLookAt.length() === 0)
 		{
-
-			z.z = 1;
-
+			zLookAt.z = 1;
 		}
 
-		x.crossVectors(up, z).normalize();
+		xLookAt.crossVectors(up, zLookAt).normalize();
 
-		if(x.length() === 0)
+		if(xLookAt.length() === 0)
 		{
-
-			z.x += 0.0001;
-			x.crossVectors(up, z).normalize();
-
+			zLookAt.x += 0.0001;
+			xLookAt.crossVectors(up, zLookAt).normalize();
 		}
 
-		y.crossVectors(z, x);
+		yLookAt.crossVectors(zLookAt, xLookAt);
 
-
-		te[ 0 ] = x.x;
-		te[ 4 ] = y.x;
-		te[ 8 ] = z.x;
-		te[ 1 ] = x.y;
-		te[ 5 ] = y.y;
-		te[ 9 ] = z.y;
-		te[ 2 ] = x.z;
-		te[ 6 ] = y.z;
-		te[ 10 ] = z.z;
+		te[ 0 ] = xLookAt.x;
+		te[ 4 ] = yLookAt.x;
+		te[ 8 ] = zLookAt.x;
+		te[ 1 ] = xLookAt.y;
+		te[ 5 ] = yLookAt.y;
+		te[ 9 ] = zLookAt.y;
+		te[ 2 ] = xLookAt.z;
+		te[ 6 ] = yLookAt.z;
+		te[ 10 ] = zLookAt.z;
 
 		return this;
 
@@ -410,7 +373,6 @@ export class Matrix4
 
 	public multiplyMatrices(a:Matrix4, b:Matrix4):Matrix4
 	{
-
 		var ae = a.elements;
 		var be = b.elements;
 		var te = this.elements;
@@ -446,12 +408,12 @@ export class Matrix4
 		te[ 15 ] = a41 * b14 + a42 * b24 + a43 * b34 + a44 * b44;
 
 		return this;
-
 	}
 
-	public multiplyToArray(a:Matrix4, b:Matrix4, r:number[]):Matrix4
+	public multiplyToArray(a:Matrix4, b:Matrix4, r:Matrix4):Matrix4
 	{
 		var te = this.elements;
+
 		this.multiplyMatrices(a, b);
 
 		r[ 0 ] = te[ 0 ];
@@ -498,50 +460,12 @@ export class Matrix4
 		return this;
 	}
 
-	//	public multiplyVector3(vector)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .multiplyVector3() has been removed. Use vector.applyMatrix4( matrix ) or vector.applyProjection( matrix ) instead.');
-	//		return vector.applyProjection(this);
-	//
-	//	}
-	//
-	//	public multiplyVector4(vector)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .multiplyVector4() has been removed. Use vector.applyMatrix4( matrix ) instead.');
-	//		return vector.applyMatrix4(this);
-	//
-	//	}
-	//
-	//	public multiplyVector3Array(a)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .multiplyVector3Array() has been renamed. Use matrix.applyToVector3Array( array ) instead.');
-	//		return this.applyToVector3Array(a);
-	//
-	//	}
-
-	private __applyToVector3Array_v1:Vector3 = null;
-
-	public applyToVector3Array(array, offset, length)
+	public applyToVector3Array(array:number[], offset:number = 0, length:number = array.length):Array<number>
 	{
-		if(!this.__applyToVector3Array_v1){
-			this.__applyToVector3Array_v1 = new Vector3(0,0,0);
-		}
-		var v1 = this.__applyToVector3Array_v1;
-		if(offset === undefined)
-		{
-			offset = 0;
-		}
-		if(length === undefined)
-		{
-			length = array.length;
-		}
+		var v1 = this.getVector3('v1ApplyToVector3Array');
 
-		for(var i = 0, j = offset, il; i < length; i += 3, j += 3)
+		for(var i = 0, j = offset; i < length; i += 3, j += 3)
 		{
-
 			v1.x = array[ j ];
 			v1.y = array[ j + 1 ];
 			v1.z = array[ j + 2 ];
@@ -551,29 +475,10 @@ export class Matrix4
 			array[ j ] = v1.x;
 			array[ j + 1 ] = v1.y;
 			array[ j + 2 ] = v1.z;
-
 		}
 
 		return array;
-
 	}
-
-	//	public rotateAxis(v)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .rotateAxis() has been removed. Use Vector3.transformDirection( matrix ) instead.');
-	//
-	//		v.transformDirection(this);
-	//
-	//	}
-	//
-	//	public crossVector(vector)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .crossVector() has been removed. Use vector.applyMatrix4( matrix ) instead.');
-	//		return vector.applyMatrix4(this);
-	//
-	//	}
 
 	public determinant():number
 	{
@@ -622,12 +527,10 @@ export class Matrix4
 					)
 
 			);
-
 	}
 
 	public transpose():Matrix4
 	{
-
 		var te = this.elements;
 		var tmp;
 
@@ -652,12 +555,10 @@ export class Matrix4
 		te[ 14 ] = tmp;
 
 		return this;
-
 	}
 
-	public flattenToArrayOffset(array:number[], offset:number):number[]
+	public flattenToArrayOffset(array:Array<number>, offset:number):Array<number>
 	{
-
 		var te = this.elements;
 
 		array[ offset     ] = te[ 0 ];
@@ -681,28 +582,10 @@ export class Matrix4
 		array[ offset + 15 ] = te[ 15 ];
 
 		return array;
-
 	}
 
-	//	public getPosition()
-	//	{
-	//
-	//		var v1 = new THREE.Vector3();
-	//
-	//		return function()
-	//		{
-	//
-	//			console.warn('THREE.Matrix4: .getPosition() has been removed. Use Vector3.setFromMatrixPosition( matrix ) instead.');
-	//
-	//			var te = this.elements;
-	//			return v1.set(te[ 12 ], te[ 13 ], te[ 14 ]);
-	//
-	//		};
-	//	}
-
-	public setPosition(v:Vector3):Matrix4
+	public setPosition(v:v3.Vector3):Matrix4
 	{
-
 		var te = this.elements;
 
 		te[ 12 ] = v.x;
@@ -710,12 +593,10 @@ export class Matrix4
 		te[ 14 ] = v.z;
 
 		return this;
-
 	}
 
-	public getInverse(m, throwOnInvertible:boolean = false):Matrix4
+	public getInverse(m:Matrix4, throwOnInvertible:boolean = false):Matrix4
 	{
-
 		// based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
 		var te = this.elements;
 		var me = m.elements;
@@ -758,7 +639,7 @@ export class Matrix4
 			else
 			{
 
-				console.warn(msg);
+				// THREE.warn( msg );
 
 			}
 
@@ -770,48 +651,10 @@ export class Matrix4
 		this.multiplyScalar(1 / det);
 
 		return this;
-
 	}
 
-	//
-	//	public translate(v)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .translate() has been removed.');
-	//
-	//	}
-	//
-	//	public rotateX(angle)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .rotateX() has been removed.');
-	//
-	//	}
-	//
-	//	public rotateY(angle)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .rotateY() has been removed.');
-	//
-	//	}
-	//
-	//	public rotateZ(angle)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .rotateZ() has been removed.');
-	//
-	//	}
-	//
-	//	public rotateByAxis(axis, angle)
-	//	{
-	//
-	//		console.warn('THREE.Matrix4: .rotateByAxis() has been removed.');
-	//
-	//	}
-
-	public scale(v)
+	public scale(v:v3.Vector3):Matrix4
 	{
-
 		var te = this.elements;
 		var x = v.x, y = v.y, z = v.z;
 
@@ -829,12 +672,10 @@ export class Matrix4
 		te[ 11 ] *= z;
 
 		return this;
-
 	}
 
-	public getMaxScaleOnAxis()
+	public getMaxScaleOnAxis():number
 	{
-
 		var te = this.elements;
 
 		var scaleXSq = te[ 0 ] * te[ 0 ] + te[ 1 ] * te[ 1 ] + te[ 2 ] * te[ 2 ];
@@ -842,84 +683,71 @@ export class Matrix4
 		var scaleZSq = te[ 8 ] * te[ 8 ] + te[ 9 ] * te[ 9 ] + te[ 10 ] * te[ 10 ];
 
 		return Math.sqrt(Math.max(scaleXSq, Math.max(scaleYSq, scaleZSq)));
-
 	}
 
 	public makeTranslation(x:number, y:number, z:number):Matrix4
 	{
-
 		this.set(
-
 			1, 0, 0, x,
 			0, 1, 0, y,
 			0, 0, 1, z,
 			0, 0, 0, 1
-
 		);
 
 		return this;
-
 	}
 
+	/**
+	 * theta — Rotation angle in radians.
+	 * Sets this matrix as rotation transform around x axis by theta radians.
+	 * @param theta
+	 * @returns {Matrix4}
+	 */
 	public makeRotationX(theta:number):Matrix4
 	{
-
 		var c = Math.cos(theta), s = Math.sin(theta);
 
 		this.set(
-
 			1, 0, 0, 0,
 			0, c, -s, 0,
 			0, s, c, 0,
 			0, 0, 0, 1
-
 		);
 
 		return this;
-
 	}
 
-	public makeRotationY(theta:number)
+	public makeRotationY(theta:number):Matrix4
 	{
-
 		var c = Math.cos(theta), s = Math.sin(theta);
 
 		this.set(
-
 			c, 0, s, 0,
 			0, 1, 0, 0,
 			-s, 0, c, 0,
 			0, 0, 0, 1
-
 		);
 
 		return this;
-
 	}
 
-	public makeRotationZ(theta:number)
+	public makeRotationZ(theta:number):Matrix4
 	{
-
 		var c = Math.cos(theta), s = Math.sin(theta);
 
 		this.set(
-
 			c, -s, 0, 0,
 			s, c, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1
-
 		);
 
 		return this;
-
 	}
 
-	public makeRotationAxis(axis:Vector3, angle:number)
+	public makeRotationAxis(axis:v3.Vector3, angle:number):Matrix4
 	{
-
 		// Based on http://www.gamedev.net/reference/articles/article1199.asp
-
 		var c = Math.cos(angle);
 		var s = Math.sin(angle);
 		var t = 1 - c;
@@ -927,35 +755,28 @@ export class Matrix4
 		var tx = t * x, ty = t * y;
 
 		this.set(
-
 			tx * x + c, tx * y - s * z, tx * z + s * y, 0,
 			tx * y + s * z, ty * y + c, ty * z - s * x, 0,
 			tx * z - s * y, ty * z + s * x, t * z * z + c, 0,
 			0, 0, 0, 1
-
 		);
 
 		return this;
-
 	}
 
-	public makeScale(x:number, y:number, z:number)
+	public makeScale(x:number, y:number, z:number):Matrix4
 	{
-
 		this.set(
-
 			x, 0, 0, 0,
 			0, y, 0, 0,
 			0, 0, z, 0,
 			0, 0, 0, 1
-
 		);
 
 		return this;
-
 	}
 
-	public compose(position, quaternion:Quaternion, scale)
+	public compose(position, quaternion, scale):Matrix4
 	{
 		this.makeRotationFromQuaternion(quaternion);
 		this.scale(scale);
@@ -964,27 +785,16 @@ export class Matrix4
 		return this;
 	}
 
-	private __decompose_vector = null;
-	private __decompose_matrix = null;
-
-	public decompose(position, quaternion:Quaternion, scale)
+	public decompose(position:v3.Vector3, quaternion:any, scale:v3.Vector3):Matrix4
 	{
-		if(!this.__decompose_vector){
-			this.__decompose_vector = new Vector3(0, 0, 0);
-		}
-
-		if(!this.__decompose_matrix){
-			this.__decompose_matrix = new Matrix4();
-		}
-
-		var vector = this.__decompose_vector;
-		var matrix = this.__decompose_matrix;
+		var decomposeVector = this.getVector3('decomposeVector');
+		var decomposeMatrix = this.getMatrix4('decomposeMatrix');
 
 		var te = this.elements;
 
-		var sx = vector.set(te[ 0 ], te[ 1 ], te[ 2 ]).length();
-		var sy = vector.set(te[ 4 ], te[ 5 ], te[ 6 ]).length();
-		var sz = vector.set(te[ 8 ], te[ 9 ], te[ 10 ]).length();
+		var sx = decomposeVector.set(te[ 0 ], te[ 1 ], te[ 2 ]).length();
+		var sy = decomposeVector.set(te[ 4 ], te[ 5 ], te[ 6 ]).length();
+		var sz = decomposeVector.set(te[ 8 ], te[ 9 ], te[ 10 ]).length();
 
 		// if determine is negative, we need to invert one scale
 		var det = this.determinant();
@@ -999,47 +809,35 @@ export class Matrix4
 
 		// scale the rotation part
 
-		matrix.elements.set(this.elements); // at this point matrix is incomplete so we can't use .copy()
+		decomposeMatrix.elements.set(this.elements); // at this point matrix is incomplete so we can't use .copy()
 
 		var invSX = 1 / sx;
 		var invSY = 1 / sy;
 		var invSZ = 1 / sz;
 
-		matrix.elements[ 0 ] *= invSX;
-		matrix.elements[ 1 ] *= invSX;
-		matrix.elements[ 2 ] *= invSX;
+		decomposeMatrix.elements[ 0 ] *= invSX;
+		decomposeMatrix.elements[ 1 ] *= invSX;
+		decomposeMatrix.elements[ 2 ] *= invSX;
 
-		matrix.elements[ 4 ] *= invSY;
-		matrix.elements[ 5 ] *= invSY;
-		matrix.elements[ 6 ] *= invSY;
+		decomposeMatrix.elements[ 4 ] *= invSY;
+		decomposeMatrix.elements[ 5 ] *= invSY;
+		decomposeMatrix.elements[ 6 ] *= invSY;
 
-		matrix.elements[ 8 ] *= invSZ;
-		matrix.elements[ 9 ] *= invSZ;
-		matrix.elements[ 10 ] *= invSZ;
+		decomposeMatrix.elements[ 8 ] *= invSZ;
+		decomposeMatrix.elements[ 9 ] *= invSZ;
+		decomposeMatrix.elements[ 10 ] *= invSZ;
 
-		quaternion.setFromRotationMatrix(matrix);
+		quaternion.setFromRotationMatrix(decomposeMatrix);
 
 		scale.x = sx;
 		scale.y = sy;
 		scale.z = sz;
 
 		return this;
-
 	}
 
-	/**
-	 *
-	 * @param left
-	 * @param right
-	 * @param bottom
-	 * @param top
-	 * @param near
-	 * @param far
-	 * @returns {Matrix4}
-	 */
 	public makeFrustum(left:number, right:number, bottom:number, top:number, near:number, far:number):Matrix4
 	{
-
 		var te = this.elements;
 		var x = 2 * near / ( right - left );
 		var y = 2 * near / ( top - bottom );
@@ -1070,21 +868,18 @@ export class Matrix4
 
 	}
 
-	public makePerspective(fov:number, aspect:number, near:number, far:number)
+	public makePerspective(fov, aspect, near, far):Matrix4
 	{
-
 		var ymax = near * Math.tan(MathUtil.degToRad(fov * 0.5));
 		var ymin = -ymax;
 		var xmin = ymin * aspect;
 		var xmax = ymax * aspect;
 
 		return this.makeFrustum(xmin, xmax, ymin, ymax, near, far);
-
 	}
 
-	public makeOrthographic(left:number, right:number, top:number, bottom:number, near:number, far:number)
+	public makeOrthographic(left, right, top, bottom, near, far):Matrix4
 	{
-
 		var te = this.elements;
 		var w = right - left;
 		var h = top - bottom;
@@ -1112,21 +907,16 @@ export class Matrix4
 		te[ 15 ] = 1;
 
 		return this;
-
 	}
 
-	public fromArray(array:Float32Array)
+	public fromArray(array:Float32Array):Matrix4
 	{
-
 		this.elements.set(array);
-
 		return this;
-
 	}
 
-	public toArray():number[]
+	public toArray():Array<number>
 	{
-
 		var te = this.elements;
 
 		return [
@@ -1135,13 +925,10 @@ export class Matrix4
 			te[ 8 ], te[ 9 ], te[ 10 ], te[ 11 ],
 			te[ 12 ], te[ 13 ], te[ 14 ], te[ 15 ]
 		];
-
 	}
 
-	public clone()
+	public clone():Matrix4
 	{
 		return new Matrix4().fromArray(this.elements);
 	}
-
 }
-

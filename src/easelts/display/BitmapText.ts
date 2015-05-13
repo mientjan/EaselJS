@@ -140,7 +140,7 @@ class BitmapText extends Container
 	 * @param {String} [text=""] The text to display.
 	 * @param {SpriteSheet} [spriteSheet=null] The spritesheet that defines the character glyphs.
 	 **/
-		constructor(text:string, spriteSheet:SpriteSheet)
+	constructor(text:string, spriteSheet:SpriteSheet)
 	{
 		super();
 

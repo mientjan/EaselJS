@@ -1,8 +1,10 @@
+import EventDispatcher = require('../createts/event/EventDispatcher')
+import Tween = require('./Tween')
+
 /*
- * Timeline
- * Visit http://createjs.com/ for documentation, updates and examples.
- *
  * Copyright (c) 2010 gskinner.com, inc.
+ * Copyright (c) 2015 Mient-jan Stelling
+ * Copyright (c) 2015 MediaMonks B.V
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,18 +28,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Tween = require('./Tween');
-import EventDispatcher = require('../createts/event/EventDispatcher');
-
-/**
- * @module TweenJS
- */
 
 /**
  * The Timeline class synchronizes multiple tweens and allows them to be controlled as a group. Please note that if a
  * timeline is looping, the tweens on it may appear to loop even if the "loop" property of the tween is false.
  * @class Timeline
- * @param {Array} tweens An array of Tweens to add to this timeline. See addTween for more info.
+ * @param {Array} tweens An array of Tweens to add to this timeline. See {{#crossLink "Timeline/addTween"}}{{/crossLink}}
+ * for more info.
  * @param {Object} labels An object defining labels for using {{#crossLink "Timeline/gotoAndPlay"}}{{/crossLink}}/{{#crossLink "Timeline/gotoAndStop"}}{{/crossLink}}.
  * See {{#crossLink "Timeline/setLabels"}}{{/crossLink}}
  * for details.
@@ -53,12 +50,10 @@ import EventDispatcher = require('../createts/event/EventDispatcher');
  * @extends EventDispatcher
  * @constructor
  **/
-class Timeline extends Tween
+class Timeline extends EventDispatcher
 {
 
-
 	// public properties:
-
 	/**
 	 * Causes this timeline to continue playing when a global pause is active.
 	 * @property ignoreGlobalPause
@@ -67,10 +62,13 @@ class Timeline extends Tween
 	ignoreGlobalPause = false;
 
 	/**
-	 * Read-only property specifying the total duration of this timeline in milliseconds (or ticks if useTicks is true).
-	 * This value is usually automatically updated as you modify the timeline. See updateDuration for more information.
+	 * The total duration of this timeline in milliseconds (or ticks if `useTicks `is `true`). This value is usually
+	 * automatically updated as you modify the timeline. See {{#crossLink "Timeline/updateDuration"}}{{/crossLink}}
+	 * for more information.
 	 * @property duration
 	 * @type Number
+	 * @default 0
+	 * @readonly
 	 **/
 	duration = 0;
 
@@ -81,32 +79,17 @@ class Timeline extends Tween
 	 **/
 	loop = false;
 
-	// TODO: deprecated.
 	/**
-	 * REMOVED. Use {{#crossLink "EventDispatcher/addEventListener"}}{{/crossLink}} and the {{#crossLink "Timeline/change:event"}}{{/crossLink}}
-	 * event.
-	 * @property onChange
-	 * @type Function
-	 * @deprecated Use addEventListener and the "change" event.
-	 **/
-
-	/**
-	 * Read-only. The current normalized position of the timeline. This will always be a value between 0 and duration.
+	 * The current normalized position of the timeline. This will always be a value between 0 and
+	 * {{#crossLink "Timeline/duration:property"}}{{/crossLink}}.
 	 * Changing this property directly will have no effect.
 	 * @property position
 	 * @type Object
+	 * @readonly
 	 **/
 	position = null;
 
-	// events:
-	/**
-	 * Called whenever the timeline's position changes.
-	 * @event change
-	 * @since 0.5.0
-	 **/
-
 	// private properties:
-
 	/**
 	 * @property _paused
 	 * @type Boolean
@@ -160,14 +143,18 @@ class Timeline extends Tween
 	_useTicks = false;
 
 	/**
-	 *
-	 * @class Timeline
-	 * @constructor
+	 * Indicates whether the timeline is currently registered with Tween.
+	 * @property _registered
+	 * @type {boolean}
+	 * @default false
 	 * @protected
-	 **/
+	 */
+	_registered = false;
+
 	constructor(tweens, labels, props)
 	{
-		super(tweens, props, null);
+		super();
+
 
 		if(props)
 		{
@@ -187,21 +174,24 @@ class Timeline extends Tween
 		}
 		else
 		{
-			Tween._register((<Tween> this), true);
+			Tween._register(this, true);
 		}
 		if(props && props.position != null)
 		{
 			this.setPosition(props.position, Tween.NONE);
 		}
+
 	}
+
 
 	// public methods:
 	/**
-	 * Adds one or more tweens (or timelines) to this timeline. The tweens will be paused (to remove them from the normal ticking system)
-	 * and managed by this timeline. Adding a tween to multiple timelines will result in unexpected behaviour.
+	 * Adds one or more tweens (or timelines) to this timeline. The tweens will be paused (to remove them from the
+	 * normal ticking system) and managed by this timeline. Adding a tween to multiple timelines will result in
+	 * unexpected behaviour.
 	 * @method addTween
-	 * @param tween The tween(s) to add. Accepts multiple arguments.
-	 * @return Tween The first tween that was passed in.
+	 * @param {Tween} ...tween The tween(s) to add. Accepts multiple arguments.
+	 * @return {Tween} The first tween that was passed in.
 	 **/
 	public addTween(tween)
 	{
@@ -237,10 +227,10 @@ class Timeline extends Tween
 	/**
 	 * Removes one or more tweens from this timeline.
 	 * @method removeTween
-	 * @param tween The tween(s) to remove. Accepts multiple arguments.
-	 * @return Boolean Returns true if all of the tweens were successfully removed.
+	 * @param {Tween} ...tween The tween(s) to remove. Accepts multiple arguments.
+	 * @return Boolean Returns `true` if all of the tweens were successfully removed.
 	 **/
-	public removeTween(tween:any):boolean
+	public removeTween(tween)
 	{
 		var l = arguments.length;
 		if(l > 1)
@@ -280,7 +270,7 @@ class Timeline extends Tween
 	 * @param {String} label The label name.
 	 * @param {Number} position The position this label represents.
 	 **/
-	public addLabel(label:string, position:number)
+	public addLabel(label, position)
 	{
 		this._labels[label] = position;
 		var list = this._labelList;
@@ -300,12 +290,12 @@ class Timeline extends Tween
 	/**
 	 * Defines labels for use with gotoAndPlay/Stop. Overwrites any previously set labels.
 	 * @method setLabels
-	 * @param {Object} o An object defining labels for using gotoAndPlay/Stop in the form `{labelName:time}` where time is in
-	 * milliseconds (or ticks if `useTicks` is true).
+	 * @param {Object} o An object defining labels for using {{#crossLink "Timeline/gotoAndPlay"}}{{/crossLink}}/{{#crossLink "Timeline/gotoAndStop"}}{{/crossLink}}
+	 * in the form `{labelName:time}` where time is in milliseconds (or ticks if `useTicks` is `true`).
 	 **/
-	public setLabels(o = {})
+	public setLabels(o)
 	{
-		this._labels = o;
+		this._labels = o ? o : {};
 	}
 
 	/**
@@ -334,11 +324,13 @@ class Timeline extends Tween
 
 	/**
 	 * Returns the name of the label on or immediately before the current position. For example, given a timeline with
-	 * two labels, "first" on frame index 4, and "second" on frame 8, getCurrentLabel would return:<UL>
-	 * <LI>null if the current position is 2.</LI>
-	 * <LI>"first" if the current position is 4.</LI>
-	 * <LI>"first" if the current position is 7.</LI>
-	 * <LI>"second" if the current position is 15.</LI></UL>
+	 * two labels, "first" on frame index 4, and "second" on frame 8, getCurrentLabel would return:
+	 * <UL>
+	 *        <LI>null if the current position is 2.</LI>
+	 *        <LI>"first" if the current position is 4.</LI>
+	 *        <LI>"first" if the current position is 7.</LI>
+	 *        <LI>"second" if the current position is 15.</LI>
+	 * </UL>
 	 * @method getCurrentLabel
 	 * @return {String} The name of the current label or null if there is no label
 	 **/
@@ -364,19 +356,20 @@ class Timeline extends Tween
 	/**
 	 * Unpauses this timeline and jumps to the specified position or label.
 	 * @method gotoAndPlay
-	 * @param {String|Number} positionOrLabel The position in milliseconds (or ticks if `useTicks` is true) or label to jump to.
+	 * @param {String|Number} positionOrLabel The position in milliseconds (or ticks if `useTicks` is `true`)
+	 * or label to jump to.
 	 **/
 	public gotoAndPlay(positionOrLabel)
 	{
 		this.setPaused(false);
 		this._goto(positionOrLabel);
-		return this
 	}
 
 	/**
 	 * Pauses this timeline and jumps to the specified position or label.
 	 * @method gotoAndStop
-	 * @param {String|Number} positionOrLabel The position in milliseconds (or ticks if `useTicks` is true) or label to jump to.
+	 * @param {String|Number} positionOrLabel The position in milliseconds (or ticks if `useTicks` is `true`) or label
+	 * to jump to.
 	 **/
 	public gotoAndStop(positionOrLabel)
 	{
@@ -387,12 +380,13 @@ class Timeline extends Tween
 	/**
 	 * Advances the timeline to the specified position.
 	 * @method setPosition
-	 * @param {Number} value The position to seek to in milliseconds (or ticks if `useTicks` is true).
+	 * @param {Number} value The position to seek to in milliseconds (or ticks if `useTicks` is `true`).
 	 * @param {Number} [actionsMode] parameter specifying how actions are handled. See the Tween {{#crossLink "Tween/setPosition"}}{{/crossLink}}
 	 * method for more details.
-	 * @return {Boolean} Returns true if the timeline is complete (ie. the full timeline has run & loop is false).
+	 * @return {Boolean} Returns `true` if the timeline is complete (ie. the full timeline has run & {{#crossLink "Timeline/loop:property"}}{{/crossLink}}
+	 * is `false`).
 	 **/
-	public setPosition(value:number, actionsMode?:number)
+	public setPosition(value, actionsMode?)
 	{
 		if(value < 0)
 		{
@@ -406,7 +400,6 @@ class Timeline extends Tween
 		}
 		this._prevPosition = value;
 		this.position = this._prevPos = t; // in case an action changes the current frame.
-
 		for(var i = 0, l = this._tweens.length; i < l; i++)
 		{
 			this._tweens[i].setPosition(t, actionsMode);
@@ -419,7 +412,6 @@ class Timeline extends Tween
 		{
 			this.setPaused(true);
 		}
-
 		this.dispatchEvent("change");
 		return end;
 	}
@@ -427,18 +419,17 @@ class Timeline extends Tween
 	/**
 	 * Pauses or plays this timeline.
 	 * @method setPaused
-	 * @param {Boolean} value Indicates whether the tween should be paused (true) or played (false).
+	 * @param {Boolean} value Indicates whether the tween should be paused (`true`) or played (`false`).
 	 **/
-	//	public setPaused(value)
-	//	{
-	//		this._paused = !!value;
-	//		Tween._register(this, !value);
-	//	}
+	public setPaused(value)
+	{
+		this._paused = !!value;
+		Tween._register(this, !value);
+	}
 
 	/**
-	 * Recalculates the duration of the timeline.
-	 * The duration is automatically updated when tweens are added or removed, but this method is useful
-	 * if you modify a tween after it was added to the timeline.
+	 * Recalculates the duration of the timeline. The duration is automatically updated when tweens are added or removed,
+	 * but this method is useful if you modify a tween after it was added to the timeline.
 	 * @method updateDuration
 	 **/
 	public updateDuration()
@@ -455,30 +446,30 @@ class Timeline extends Tween
 	}
 
 	/**
-	 * Advances this timeline by the specified amount of time in milliseconds (or ticks if useTicks is true).
-	 * This is normally called automatically by the Tween engine (via Tween.tick), but is exposed for advanced uses.
+	 * Advances this timeline by the specified amount of time in milliseconds (or ticks if `useTicks` is `true`).
+	 * This is normally called automatically by the Tween engine (via the {{#crossLink "Tween/tick:event"}}{{/crossLink}}
+	 * event), but is exposed for advanced uses.
 	 * @method tick
 	 * @param {Number} delta The time to advance in milliseconds (or ticks if useTicks is true).
 	 **/
-	//	public tick(delta)
-	//	{
-	//		this.setPosition(this._prevPosition + delta);
-	//	}
+	public onTick(delta)
+	{
+		this.setPosition(this._prevPosition + delta);
+	}
 
 	/**
 	 * If a numeric position is passed, it is returned unchanged. If a string is passed, the position of the
-	 * corresponding frame label will be returned, or null if a matching label is not defined.
+	 * corresponding frame label will be returned, or `null` if a matching label is not defined.
 	 * @method resolve
 	 * @param {String|Number} positionOrLabel A numeric position value or label string.
 	 **/
-	public resolve(positionOrLabel):number
+	public resolve(positionOrLabel)
 	{
-		var pos = parseFloat(positionOrLabel);
+		var pos = Number(positionOrLabel);
 		if(isNaN(pos))
 		{
 			pos = this._labels[positionOrLabel];
 		}
-
 		return pos;
 	}
 

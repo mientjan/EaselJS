@@ -51,7 +51,7 @@ class BitmapVideo extends DisplayObject
 	 * @type Rectangle
 	 * @default null
 	 */
-	sourceRect:Rectangle = null;
+	public sourceRect:Rectangle = null;
 
 	/**
 	 * Initialization method.

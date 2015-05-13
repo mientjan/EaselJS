@@ -1,11 +1,11 @@
 /**
  * @enum ValueType
  */
-enum ValueType {
+const enum ValueType {
 	NUMBER,
 	ARRAY,
 	STRING,
-	OBJECT
+	OBJECT 
 }
 
 export = ValueType;

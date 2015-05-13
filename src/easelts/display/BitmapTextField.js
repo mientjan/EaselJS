@@ -1,30 +1,3 @@
-/*
- * BitmapTextField
- *
- * Copyright (c) 2015 Mient-jan Stelling
- * Copyright (c) 2015 MediaMonks B.V.
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -44,19 +17,6 @@ define(["require", "exports", './Container', './Shape', './Graphics', './bitmapf
     function cutHex(h) {
         return (h.charAt(0) == "#") ? h.substring(1, 7) : h;
     }
-    /**
-     *
-     * @param    width: width of the text field
-     * @param    height: height of the text field
-     * @param    text: text to be displayed
-     * @param    fontName: name of the font give while registering the font.
-     * @param    fontSize: size of the font, -1 to keep the font size as exported
-     * @param    horizantalLetterSpacing: Horizantal letter space
-     * @param    verticalLetterSpacing: line spacing
-     * @param    hAlign: Horizantal alignment: accepted parameters: "left","right","center", default:"center"
-     * @param    vAlign: Verticle alignment: accepter parameters: "top","center",""bottom", default:"center"
-     * @param    autoScale: true, scales the text to fit in the space, default: true
-     */
     var BitmapTextField = (function (_super) {
         __extends(BitmapTextField, _super);
         function BitmapTextField(width, height, textDisplay, fontName, fontSize, horizantalLetterSpacing, verticalLetterSpacing, hAlign, vAlign, autoScale) {
@@ -96,12 +56,6 @@ define(["require", "exports", './Container', './Shape', './Graphics', './bitmapf
                 throw new Error("BitmapTextField: Font is not registered " + fontName);
             }
         }
-        //One must register bitmapfont before creating a textfield..
-        /**
-         *
-         * @param    bitmapFont: BitmapFont instance
-         * @param    fontName: name of the font, this will be used later while creating the text field.
-         */
         BitmapTextField.registerBitmapFont = function (bitmapFont, fontName) {
             if (BitmapTextField.bitmapFonts[fontName] == null) {
                 BitmapTextField.bitmapFonts[fontName] = bitmapFont;
@@ -125,15 +79,12 @@ define(["require", "exports", './Container', './Shape', './Graphics', './bitmapf
         BitmapTextField.prototype.getWidth = function () {
             return this.containerWidth;
         };
-        //height of the container, the width given while creating text field
         BitmapTextField.prototype.getHeight = function () {
             return this.containerHeight;
         };
-        //actual text width.
         BitmapTextField.prototype.getActualWidth = function () {
             return this.actualWidth;
         };
-        //shows a red colored bounding box, useful for debugging.
         BitmapTextField.prototype.showBorder = function (visible) {
             if (visible == null) {
                 visible = true;

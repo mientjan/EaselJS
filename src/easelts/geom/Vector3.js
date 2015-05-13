@@ -1,84 +1,35 @@
-/*
- * The MIT License (MIT)
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
-define(["require", "exports", './Matrix4', '../util/MathUtil'], function (require, exports, m4, MathUtil) {
-    /**
-     * @module easelts
-     */
-    /**
-     * @author mrdoob / http://mrdoob.com/
-     * @author *kile / http://kile.stravaganza.org/
-     * @author philogb / http://blog.thejit.org/
-     * @author mikael emtinger / http://gomo.se/
-     * @author egraether / http://egraether.com/
-     * @author WestLangley / http://github.com/WestLangley
-     * @author Mient-jan Stelling
-     *
-     * @class Vector3
-     */
+define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], function (require, exports, m4, q, MathUtil) {
     var Vector3 = (function () {
-        /**
-         * X position.
-         * @property x
-         * @type Number
-         **/
-        /**
-         * Y position.
-         * @property y
-         * @type Number
-         **/
-        /**
-         * Z position.
-         * @property z
-         * @type Number
-         **/
-        /**
-         *
-         * @param {number} x
-         * @param {number} y
-         * @param {number} z
-         */
         function Vector3(x, y, z) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            if (z === void 0) { z = 0; }
+            this._quaternion = {};
+            this._vector3 = {};
+            this._matrix4 = {};
+            this._dotProjectOnVector = null;
             this.x = x;
             this.y = y;
             this.z = z;
-            this.__projectMatrix = null;
-            this.__unprojectMatrix = null;
-            this.__clampScalarMin = null;
-            this.__clampScalarMax = null;
-            this.__projectOnVector_v1 = null;
-            this.__projectOnVector_dot = null;
-            this.__projectOnPlane_v1 = null;
-            /**
-             * reflect incident vector off plane orthogonal to normal
-             * normal is assumed to have unit length
-             *
-             * @param {Vector3} normal
-             * @returns {Vector3}
-             */
-            this.__reflect_v1 = null;
         }
+        Vector3.prototype.getQuaternion = function (value) {
+            if (!this._quaternion[value]) {
+                this._quaternion[value] = new q.Quaternion();
+            }
+            return this._quaternion[value];
+        };
+        Vector3.prototype.getVector3 = function (value) {
+            if (!this._vector3[value]) {
+                this._vector3[value] = new Vector3();
+            }
+            return this._vector3[value];
+        };
+        Vector3.prototype.getMatrix4 = function (value) {
+            if (!this._matrix4[value]) {
+                this._matrix4[value] = new m4.Matrix4();
+            }
+            return this._matrix4[value];
+        };
         Vector3.prototype.set = function (x, y, z) {
             this.x = x;
             this.y = y;
@@ -130,11 +81,7 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             this.z = v.z;
             return this;
         };
-        Vector3.prototype.add = function (v, w) {
-            if (w !== undefined) {
-                console.warn('THREE.Vector3: .add() now only accepts one argument. Use .addVectors( a, b ) instead.');
-                return this.addVectors(v, w);
-            }
+        Vector3.prototype.add = function (v) {
             this.x += v.x;
             this.y += v.y;
             this.z += v.z;
@@ -156,6 +103,12 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             this.x -= v.x;
             this.y -= v.y;
             this.z -= v.z;
+            return this;
+        };
+        Vector3.prototype.subScalar = function (s) {
+            this.x -= s;
+            this.y -= s;
+            this.z -= s;
             return this;
         };
         Vector3.prototype.subVectors = function (a, b) {
@@ -182,32 +135,16 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             this.z = a.z * b.z;
             return this;
         };
-        //	private __quaternion0:Quaternion;
-        //	public applyEuler ( euler ) {
-        //
-        //			if ( euler instanceof Euler === false ) {
-        //
-        //				console.error( 'THREE.Vector3: .applyEuler() now expects a Euler rotation rather than a Vector3 and order.' );
-        //
-        //			}
-        //
-        //			if ( this.__quaternion0 === void 0 ) this.__quaternion0 = new THREE.Quaternion();
-        //
-        //			this.applyQuaternion( this.__quaternion0.setFromEuler( euler ) );
-        //
-        //			return this;
-        //
-        //		}
-        //	private __quaternion1:Quaternion;
-        //	public applyAxisAngle ( axis, angle ) {
-        //
-        //		if ( this.__quaternion1 === undefined ) this.__quaternion1 = new Quaternion();
-        //
-        //		this.applyQuaternion( this.__quaternion1.setFromAxisAngle( axis, angle ) );
-        //
-        //		return this;
-        //
-        //	}
+        Vector3.prototype.applyEuler = function (euler) {
+            var v = this.getQuaternion('_quaternionApplyEuler');
+            this.applyQuaternion(v.setFromEuler(euler));
+            return this;
+        };
+        Vector3.prototype.applyAxisAngle = function (axis, angle) {
+            var q1 = this.getQuaternion('quaternionApplyAxisAngle');
+            this.applyQuaternion(q1.setFromAxisAngle(axis, angle));
+            return this;
+        };
         Vector3.prototype.applyMatrix3 = function (m) {
             var x = this.x;
             var y = this.y;
@@ -219,7 +156,6 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             return this;
         };
         Vector3.prototype.applyMatrix4 = function (m) {
-            // input: THREE.Matrix4 affine matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z + e[12];
@@ -228,10 +164,9 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             return this;
         };
         Vector3.prototype.applyProjection = function (m) {
-            // input: THREE.Matrix4 projection matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
-            var d = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]); // perspective divide
+            var d = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]);
             this.x = (e[0] * x + e[4] * y + e[8] * z + e[12]) * d;
             this.y = (e[1] * x + e[5] * y + e[9] * z + e[13]) * d;
             this.z = (e[2] * x + e[6] * y + e[10] * z + e[14]) * d;
@@ -245,36 +180,26 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             var qy = q.y;
             var qz = q.z;
             var qw = q.w;
-            // calculate quat * vector
             var ix = qw * x + qy * z - qz * y;
             var iy = qw * y + qz * x - qx * z;
             var iz = qw * z + qx * y - qy * x;
             var iw = -qx * x - qy * y - qz * z;
-            // calculate result * inverse quat
             this.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
             this.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
             this.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
             return this;
         };
         Vector3.prototype.project = function (camera) {
-            if (!this.__projectMatrix) {
-                this.__projectMatrix = new m4.Matrix4();
-            }
-            var matrix = this.__projectMatrix;
-            matrix.multiplyMatrices(camera.projectionMatrix, matrix.getInverse(camera.matrixWorld));
-            return this.applyProjection(matrix);
+            var m1 = this.getMatrix4('_projectMatrix');
+            m1.multiplyMatrices(camera.projectionMatrix, m1.getInverse(camera.matrixWorld));
+            return this.applyProjection(m1);
         };
         Vector3.prototype.unproject = function (camera) {
-            if (!this.__unprojectMatrix) {
-                this.__unprojectMatrix = new m4.Matrix4();
-            }
-            var matrix = this.__unprojectMatrix;
-            matrix.multiplyMatrices(camera.matrixWorld, matrix.getInverse(camera.projectionMatrix));
-            return this.applyProjection(matrix);
+            var m1 = this.getMatrix4('_unprojectMatrix');
+            m1.multiplyMatrices(camera.matrixWorld, m1.getInverse(camera.projectionMatrix));
+            return this.applyProjection(m1);
         };
         Vector3.prototype.transformDirection = function (m) {
-            // input: THREE.Matrix4 affine matrix
-            // vector interpreted as a direction
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z;
@@ -328,7 +253,6 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             return this;
         };
         Vector3.prototype.clamp = function (min, max) {
-            // This function assumes min < max, if this assumption isn't true it will not operate correctly
             if (this.x < min.x) {
                 this.x = min.x;
             }
@@ -350,14 +274,8 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             return this;
         };
         Vector3.prototype.clampScalar = function (minVal, maxVal) {
-            if (!this.__clampScalarMin) {
-                this.__clampScalarMin = new Vector3(0, 0, 0);
-            }
-            if (!this.__clampScalarMax) {
-                this.__clampScalarMax = new Vector3(0, 0, 0);
-            }
-            var min = this.__clampScalarMin;
-            var max = this.__clampScalarMax;
+            var min = this.getVector3('_minClampScalar');
+            var max = this.getVector3('_maxClampScalar');
             min.set(minVal, minVal, minVal);
             max.set(maxVal, maxVal, maxVal);
             return this.clamp(min, max);
@@ -420,6 +338,10 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             this.z += (v.z - this.z) * alpha;
             return this;
         };
+        Vector3.prototype.lerpVectors = function (v1, v2, alpha) {
+            this.subVectors(v2, v1).multiplyScalar(alpha).add(v1);
+            return this;
+        };
         Vector3.prototype.cross = function (v) {
             var x = this.x, y = this.y, z = this.z;
             this.x = y * v.z - z * v.y;
@@ -435,36 +357,23 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             this.z = ax * by - ay * bx;
             return this;
         };
-        Vector3.prototype.projectOnVector = function (vector) {
-            if (!this.__projectOnVector_v1) {
-                this.__projectOnVector_v1 = new Vector3(0, 0, 0);
-            }
-            if (!this.__projectOnVector_dot) {
-                this.__projectOnVector_dot = new Vector3(0, 0, 0);
-            }
-            var v1 = this.__projectOnVector_v1;
-            v1.copy(vector).normalize();
-            var dot = this.dot(v1);
-            return this.copy(v1).multiplyScalar(dot);
+        Vector3.prototype.projectOnVector = function (v) {
+            var v1 = this.getVector3('_v1ProjectOnVector');
+            v1.copy(v).normalize();
+            this._dotProjectOnVector = this.dot(v1);
+            return this.copy(v1).multiplyScalar(this._dotProjectOnVector);
         };
         Vector3.prototype.projectOnPlane = function (planeNormal) {
-            if (!this.__projectOnPlane_v1) {
-                this.__projectOnPlane_v1 = new Vector3(0, 0, 0);
-            }
-            var v1 = this.__projectOnPlane_v1;
+            var v1 = this.getVector3('_v1ProjectOnPlane');
             v1.copy(this).projectOnVector(planeNormal);
             return this.sub(v1);
         };
         Vector3.prototype.reflect = function (normal) {
-            if (!this.__reflect_v1) {
-                this.__reflect_v1 = new Vector3(0, 0, 0);
-            }
-            var v1 = this.__reflect_v1;
+            var v1 = this.getVector3('_v1Reflect');
             return this.sub(v1.copy(normal).multiplyScalar(2 * this.dot(normal)));
         };
         Vector3.prototype.angleTo = function (v) {
             var theta = this.dot(v) / (this.length() * v.length());
-            // clamp, to handle numerical problems
             return Math.acos(MathUtil.clamp(theta, -1, 1));
         };
         Vector3.prototype.distanceTo = function (v) {
@@ -476,39 +385,6 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             var dz = this.z - v.z;
             return dx * dx + dy * dy + dz * dz;
         };
-        //
-        //	public setEulerFromRotationMatrix ( m:Vector3, order):Vector3 {
-        //
-        //		console.error( 'THREE.Vector3: .setEulerFromRotationMatrix() has been removed. Use Euler.setFromRotationMatrix() instead.' );
-        //
-        //	}
-        //
-        //	public setEulerFromQuaternion ( q, order):Vector3 {
-        //
-        //		console.error( 'THREE.Vector3: .setEulerFromQuaternion() has been removed. Use Euler.setFromQuaternion() instead.' );
-        //
-        //	}
-        //	public getPositionFromMatrix ( m):Vector3 {
-        //
-        //		console.warn( 'THREE.Vector3: .getPositionFromMatrix() has been renamed to .setFromMatrixPosition().' );
-        //
-        //		return this.setFromMatrixPosition( m );
-        //
-        //	}
-        //	public getScaleFromMatrix ( m):Vector3 {
-        //
-        //		console.warn( 'THREE.Vector3: .getScaleFromMatrix() has been renamed to .setFromMatrixScale().' );
-        //
-        //		return this.setFromMatrixScale( m );
-        //	}
-        //
-        //	public getColumnFromMatrix ( index, matrix):Vector3 {
-        //
-        //		console.warn( 'THREE.Vector3: .getColumnFromMatrix() has been renamed to .setFromMatrixColumn().' );
-        //
-        //		return this.setFromMatrixColumn( index, matrix );
-        //
-        //	}
         Vector3.prototype.setFromMatrixPosition = function (m) {
             this.x = m.elements[12];
             this.y = m.elements[13];
@@ -536,7 +412,9 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
             return ((v.x === this.x) && (v.y === this.y) && (v.z === this.z));
         };
         Vector3.prototype.fromArray = function (array, offset) {
-            if (offset === void 0) { offset = 0; }
+            if (offset === undefined) {
+                offset = 0;
+            }
             this.x = array[offset];
             this.y = array[offset + 1];
             this.z = array[offset + 2];
@@ -553,15 +431,7 @@ define(["require", "exports", './Matrix4', '../util/MathUtil'], function (requir
         Vector3.prototype.clone = function () {
             return new Vector3(this.x, this.y, this.z);
         };
-        /**
-         * Returns a string representation of this object.
-         * @method toString
-         * @return {String} a string representation of the instance.
-         **/
-        Vector3.prototype.toString = function () {
-            return "[Vector3 (x=" + this.x + " y=" + this.y + "  z=" + this.z + ")]";
-        };
         return Vector3;
     })();
-    return Vector3;
+    exports.Vector3 = Vector3;
 });
