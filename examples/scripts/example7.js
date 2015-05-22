@@ -19,17 +19,3 @@ define(["require", "exports", '../../src/easelts/display/Stage', '../../src/ease
     stage.addChild(bottom);
     stage.start();
 });
-//
-//
-//var container:createjs.Container = new createjs.Container();
-//container.name = country;
-//var circle = new createjs.Shape();
-//circle.graphics.beginFill(this.colorMap[country].color).drawCircle(0, 0, 50);
-//circle.name = 'circle';
-//var mask = new createjs.Bitmap(this.colorMap[country].img);
-//mask.name = 'mask';
-//circle.compositeOperation = 'source-over';
-//mask.compositeOperation = 'destination-in';
-//container.addChild(circle);
-//container.addChild(mask);
-//this._stage.addChild(container); 

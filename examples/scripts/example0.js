@@ -14,7 +14,6 @@ define(["require", "exports", '../../src/easelts/display/Stage', '../../src/ease
     console.log(cx, cy);
     spiral.graphics.moveTo(cx, cy);
     spiral.graphics.beginStroke('#000');
-    //spiral.graphics.strokeStyle = "#000";
     spiral.graphics.setStrokeStyle(2);
     var x = 0;
     var y = 0;

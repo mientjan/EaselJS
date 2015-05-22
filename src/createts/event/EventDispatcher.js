@@ -94,7 +94,7 @@ define(["require", "exports", './Event'], function (require, exports, Event) {
                 }
                 var i, l = list.length;
                 for (i = l - 1; i >= 0 && !eventObj.propagationStopped; i--) {
-                    list[i]._dispatchEvent(eventObj, 1 + ((i == 0) ? 1 : i));
+                    list[i]._dispatchEvent(eventObj, 1 + ((i == 0) ? 1 : 0));
                 }
                 for (i = 1; i < l && !eventObj.propagationStopped; i++) {
                     list[i]._dispatchEvent(eventObj, 3);

@@ -362,7 +362,7 @@ define(["require", "exports", '../util/Methods'], function (require, exports, Me
             this.rs = this.beginRadialGradientStroke;
             this.bs = this.beginBitmapStroke;
             this.es = this.endStroke;
-            this.dr = this.drawRect;
+            this.dr = this.rect;
             this.rr = this.drawRoundRect;
             this.rc = this.drawRoundRectComplex;
             this.dc = this.drawCircle;
@@ -434,8 +434,8 @@ define(["require", "exports", '../util/Methods'], function (require, exports, Me
         Graphics.prototype.bezierCurveTo = function (cp1x, cp1y, cp2x, cp2y, x, y) {
             return this.append(new Graphics.BezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
         };
-        Graphics.prototype.rect = function (x, y, w, h) {
-            return this.append(new Graphics.Rect(x, y, w, h));
+        Graphics.prototype.rect = function (x, y, width, height) {
+            return this.append(new Graphics.Rect(x, y, width, height));
         };
         Graphics.prototype.closePath = function () {
             return this._activeInstructions.length ? this.append(new Graphics.ClosePath()) : this;
