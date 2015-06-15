@@ -20,30 +20,6 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
             this._imageNaturalHeight = null;
             this.sourceRect = null;
             this.destinationRect = null;
-            this.loadDirect = false;
-            this.onLoad = function () {
-                if (_this.bitmapType == 1 /* IMAGE */) {
-                    _this._imageNaturalWidth = _this.image.naturalWidth;
-                    _this._imageNaturalHeight = _this.image.naturalHeight;
-                    if (!_this.width) {
-                        _this.width = _this._imageNaturalWidth;
-                    }
-                    if (!_this.height) {
-                        _this.height = _this._imageNaturalHeight;
-                    }
-                }
-                else {
-                    if (!_this.width) {
-                        _this.width = _this.image.width;
-                    }
-                    if (!_this.height) {
-                        _this.height = _this.image.height;
-                    }
-                }
-                _this.isDirty = true;
-                _this.dispatchEvent(Bitmap.EVENT_ONLOAD);
-                _this.loaded = true;
-            };
             var image;
             if (typeof imageOrUri == "string") {
                 image = document.createElement("img");
@@ -61,11 +37,11 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
                     {
                         this.image = image;
                         this.bitmapType = 1 /* IMAGE */;
-                        if (this.image && (this.image['complete'] || this.image['getContext'] || this.image.readyState >= 2)) {
+                        if (this.image && (this.image['complete'] || this.image['getContext'] || this.image['readyState'] >= 2)) {
                             this.onLoad();
                         }
                         else {
-                            this.image.addEventListener('load', this.onLoad);
+                            this.image.addEventListener('load', function () { return _this.onLoad(); });
                         }
                         break;
                     }
@@ -82,7 +58,7 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
                 case 'canvas':
                     {
                         this.image = image;
-                        this.bitmapType = 1 /* IMAGE */;
+                        this.bitmapType = 3 /* CANVAS */;
                         if (this.width == 0 || this.height == 0) {
                             throw new Error('width and height must be set when using canvas / video');
                         }
@@ -91,32 +67,69 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
                     }
             }
         }
+        Bitmap.prototype.onLoad = function () {
+            if (this.bitmapType == 1 /* IMAGE */) {
+                this._imageNaturalWidth = this.image.naturalWidth;
+                this._imageNaturalHeight = this.image.naturalHeight;
+                if (!this.width) {
+                    this.width = this._imageNaturalWidth;
+                }
+                if (!this.height) {
+                    this.height = this._imageNaturalHeight;
+                }
+            }
+            else {
+                if (!this.width) {
+                    this.width = this.image.width;
+                }
+                if (!this.height) {
+                    this.height = this.image.height;
+                }
+            }
+            this.isDirty = true;
+            this.dispatchEvent(Bitmap.EVENT_ONLOAD);
+            this.loaded = true;
+        };
         Bitmap.prototype.isVisible = function () {
             var hasContent = this.cacheCanvas || this.loaded;
             return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && hasContent);
         };
         Bitmap.prototype.draw = function (ctx, ignoreCache) {
+            if (_super.prototype.draw.call(this, ctx, ignoreCache)) {
+                return true;
+            }
             if (this.isVisible()) {
-                if (_super.prototype.draw.call(this, ctx, ignoreCache)) {
-                    return true;
-                }
                 var sourceRect = this.sourceRect;
                 var destRect = this.destinationRect;
+                var width = this.width;
+                var height = this.height;
                 if (sourceRect && !destRect) {
-                    ctx.drawImage(this.image, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, this.width, this.height);
+                    ctx.drawImage(this.image, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, width, height);
                 }
                 else if (!sourceRect && destRect) {
-                    ctx.drawImage(this.image, 0, 0, this.width, this.height, destRect.x, destRect.y, destRect.width, destRect.height);
+                    ctx.drawImage(this.image, 0, 0, width, height, destRect.x, destRect.y, destRect.width, destRect.height);
                 }
                 else if (sourceRect && destRect) {
                     ctx.drawImage(this.image, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, destRect.x, destRect.y, destRect.width, destRect.height);
                 }
                 else {
                     if (this.bitmapType == 1 /* IMAGE */) {
-                        ctx.drawImage(this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, this.width, this.height);
+                        if (this._imageNaturalWidth == 0 || this._imageNaturalHeight == 0) {
+                            this._imageNaturalWidth = this.image.naturalWidth;
+                            this._imageNaturalHeight = this.image.naturalHeight;
+                        }
+                        if (this._imageNaturalWidth != 0 && this._imageNaturalHeight != 0) {
+                            if (width == 0) {
+                                this.width = width = this._imageNaturalWidth;
+                            }
+                            if (height == 0) {
+                                this.height = height = this._imageNaturalHeight;
+                            }
+                            ctx.drawImage(this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, width, height);
+                        }
                     }
                     else {
-                        ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, this.width, this.height);
+                        ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, width, height);
                     }
                 }
             }
@@ -146,6 +159,8 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
             this.image = null;
             this.sourceRect = null;
             this.destinationRect = null;
+            this._imageNaturalWidth = null;
+            this._imageNaturalHeight = null;
             _super.prototype.destruct.call(this);
         };
         Bitmap.EVENT_ONLOAD = 'onload';

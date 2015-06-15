@@ -111,7 +111,7 @@ class Ticker
 	 * @static
 	 * @protected
 	 **/
-	public static now = window.performance && (performance.now || performance['mozNow'] || performance['msNow'] || performance['oNow'] || performance['webkitNow']);
+	public static now = window.performance && (window.performance.now || window.performance['mozNow'] || window.performance['msNow'] || window.performance['oNow'] || window.performance['webkitNow']);
 
 	public static _getTime()
 	{
@@ -257,7 +257,7 @@ class Ticker
 			clearTimeout(this._timerId);
 		}
 
-		this._timerId = null;
+		this._timerId = -1;
 		this._isRunning = false;
 
 		if (this.signals.stopped)

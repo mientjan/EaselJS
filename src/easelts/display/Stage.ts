@@ -138,6 +138,8 @@ class Stage extends Container
 	 * @event tickstart
 	 * @since 0.7.0
 	 */
+//	protected _ticker:Ticker = new Ticker();
+
 	public tickstartSignal:Signal = new Signal();
 
 	/**
@@ -452,7 +454,7 @@ class Stage extends Container
 	 * @param {QualityType} value
 	 * @public
 	 */
-	public setQuality(value:QualityType)
+	public setQuality(value:QualityType):void
 	{
 
 		switch(value)
@@ -485,7 +487,7 @@ class Stage extends Container
 	 * @method update
 	 * @param {TimeEvent} [timeEvent=0]
 	 **/
-	public update = (delta:number = 0) =>
+	public update = (delta:number):void =>
 	{
 		if(!this.canvas)
 		{
@@ -506,7 +508,15 @@ class Stage extends Container
 			ctx = this.ctx;
 
 
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		/**
+		 *
+		 */
+		ctx.setTransform(
+			1, 0, 0,
+			1, 0.5, 0.5
+		);
+		//ctx.translate(0.5, 0.5);
+
 		if(this.autoClear)
 		{
 			if(r)
@@ -565,7 +575,7 @@ class Stage extends Container
 	 * @method onTick
 	 * @param {*} [params]* Params to include when ticking descendants. The first param should usually be a tick event.
 	 **/
-	public tick(delta:number)
+	public tick(delta:number):void
 	{
 		if(!this.tickEnabled)
 		{
@@ -581,7 +591,7 @@ class Stage extends Container
 	 * Clears the target canvas. Useful if {{#crossLink "Stage/autoClear:property"}}{{/crossLink}} is set to `false`.
 	 * @method clear
 	 **/
-	public clear()
+	public clear():void
 	{
 		if(!this.canvas)
 		{
@@ -664,7 +674,7 @@ class Stage extends Container
 	 * responsive, but uses less CPU.
 	 * @todo remove setInterval
 	 **/
-	public enableMouseOver(frequency:number = null)
+	public enableMouseOver(frequency:number = null):void
 	{
 		if(this._mouseOverIntervalID)
 		{
@@ -709,7 +719,7 @@ class Stage extends Container
 	 * @method enableDOMEvents
 	 * @param {Boolean} [enable=true] Indicates whether to enable or disable the events. Default is true.
 	 **/
-	public enableDOMEvents(enable:boolean = true)
+	public enableDOMEvents(enable:boolean = true):void
 	{
 		var name, o, eventListeners = this._eventListeners;
 		if(!enable && eventListeners)
@@ -764,7 +774,7 @@ class Stage extends Container
 	 * @method clone
 	 * @return {Stage} A clone of the current Container instance.
 	 **/
-	public clone()
+	public clone():Stage
 	{
 		var o = new Stage(null, this.triggerResizeOnWindowResize);
 		this.cloneProps(o);
@@ -773,28 +783,28 @@ class Stage extends Container
 
 	/**
 	 * Returns a string representation of this object.
+	 *
 	 * @method toString
 	 * @return {String} a string representation of the instance.
 	 **/
-	public toString()
+	public toString():string
 	{
 		return "[Stage (name=" + this.name + ")]";
 	}
 
-	// private methods:
-
+	public tryCatch
 
 	/**
 	 * @method _getElementRect
 	 * @protected
-	 * @param {HTMLElement} e
+	 * @param {HTMLElement} element
 	 **/
-	public _getElementRect(e)
+	public _getElementRect(element:HTMLElement)
 	{
 		var bounds;
 		//		try
 		//		{
-		bounds = e.getBoundingClientRect();
+		bounds = element.getBoundingClientRect();
 		//		} // this can fail on disconnected DOM elements in IE9
 		//		catch(err)
 		//		{
@@ -804,7 +814,7 @@ class Stage extends Container
 		var offX = (window.pageXOffset || document['scrollLeft'] || 0) - (document['clientLeft'] || document.body.clientLeft || 0);
 		var offY = (window.pageYOffset || document['scrollTop'] || 0) - (document['clientTop'] || document.body.clientTop || 0);
 
-		var styles = window.getComputedStyle ? getComputedStyle(e, null) : e.currentStyle; // IE <9 compatibility.
+		var styles = window.getComputedStyle ? getComputedStyle(element, null) : element.currentStyle; // IE <9 compatibility.
 		var padL = parseInt(styles.paddingLeft) + parseInt(styles.borderLeftWidth);
 		var padT = parseInt(styles.paddingTop) + parseInt(styles.borderTopWidth);
 		var padR = parseInt(styles.paddingRight) + parseInt(styles.borderRightWidth);
@@ -1251,6 +1261,7 @@ class Stage extends Container
 			this.update(0);
 			this._tickSignalConnection = Ticker.getInstance().addTickListener(<any> this.update);
 			Ticker.getInstance().start();
+
 			this._isRunning = true;
 			return true;
 		}
@@ -1271,7 +1282,6 @@ class Stage extends Container
 			// remove Signal connection
 			this._tickSignalConnection.dispose();
 			this._tickSignalConnection = null;
-			Ticker.getInstance().stop();
 
 			// update stage for a last tick, solves rendering
 			// issues when having slowdown. Last frame is sometimes not rendered. When using createjsAnimations

@@ -1,5 +1,5 @@
 /** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 2.1.10 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved.
+ * @license RequireJS 2.1.17 Copyright (c) 2010-2015, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
@@ -12,7 +12,7 @@ var requirejs, require, define;
 (function (global) {
 	var req, s, head, baseElement, dataMain, src,
 		interactiveScript, currentlyAddingScript, mainScript, subPath,
-		version = '2.1.10',
+		version = '2.1.17',
 		commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
 		cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
 		jsSuffixRegExp = /\.js$/,
@@ -141,7 +141,7 @@ var requirejs, require, define;
 		throw err;
 	}
 
-	//Allow getting a global that expressed in
+	//Allow getting a global that is expressed in
 	//dot notation, like 'a.b.c'.
 	function getGlobal(value) {
 		if (!value) {
@@ -163,7 +163,7 @@ var requirejs, require, define;
 	 * @returns {Error}
 	 */
 	function makeError(id, msg, err, requireModules) {
-		var e = new Error(msg + '\nhttp://requirejs.org/docs/errors.html#' + id + ' modules: ' + (requireModules ? requireModules.join(',') : requireModules));
+		var e = new Error(msg + '\nhttp://requirejs.org/docs/errors.html#' + id);
 		e.requireType = id;
 		e.requireModules = requireModules;
 		if (err) {
@@ -180,7 +180,7 @@ var requirejs, require, define;
 
 	if (typeof requirejs !== 'undefined') {
 		if (isFunction(requirejs)) {
-			//Do not overwrite and existing requirejs instance.
+			//Do not overwrite an existing requirejs instance.
 			return;
 		}
 		cfg = requirejs;
@@ -232,21 +232,20 @@ var requirejs, require, define;
 		 * @param {Array} ary the array of path segments.
 		 */
 		function trimDots(ary) {
-			var i, part, length = ary.length;
-			for (i = 0; i < length; i++) {
+			var i, part;
+			for (i = 0; i < ary.length; i++) {
 				part = ary[i];
 				if (part === '.') {
 					ary.splice(i, 1);
 					i -= 1;
 				} else if (part === '..') {
-					if (i === 1 && (ary[2] === '..' || ary[0] === '..')) {
-						//End of the line. Keep at least one non-dot
-						//path segment at the front so it can be mapped
-						//correctly to disk. Otherwise, there is likely
-						//no path mapping for a path starting with '..'.
-						//This can still fail, but catches the most reasonable
-						//uses of ..
-						break;
+					// If at the start, or previous value is still ..,
+					// keep them so that when converted to a path it may
+					// still work when converted to a path, even though
+					// as an ID it is less than ideal. In larger point
+					// releases, may be better to just kick out an error.
+					if (i === 0 || (i === 1 && ary[2] === '..') || ary[i - 1] === '..') {
+						continue;
 					} else if (i > 0) {
 						ary.splice(i - 1, 2);
 						i -= 2;
@@ -267,43 +266,37 @@ var requirejs, require, define;
 		 */
 		function normalize(name, baseName, applyMap) {
 			var pkgMain, mapValue, nameParts, i, j, nameSegment, lastIndex,
-				foundMap, foundI, foundStarMap, starI,
-				baseParts = baseName && baseName.split('/'),
-				normalizedBaseParts = baseParts,
+				foundMap, foundI, foundStarMap, starI, normalizedBaseParts,
+				baseParts = (baseName && baseName.split('/')),
 				map = config.map,
 				starMap = map && map['*'];
 
 			//Adjust any relative paths.
-			if (name && name.charAt(0) === '.') {
-				//If have a base name, try to normalize against it,
-				//otherwise, assume it is a top-level require that will
-				//be relative to baseUrl in the end.
-				if (baseName) {
+			if (name) {
+				name = name.split('/');
+				lastIndex = name.length - 1;
+
+				// If wanting node ID compatibility, strip .js from end
+				// of IDs. Have to do this here, and not in nameToUrl
+				// because node allows either .js or non .js to map
+				// to same file.
+				if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
+					name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '');
+				}
+
+				// Starts with a '.' so need the baseName
+				if (name[0].charAt(0) === '.' && baseParts) {
 					//Convert baseName to array, and lop off the last part,
 					//so that . matches that 'directory' and not name of the baseName's
 					//module. For instance, baseName of 'one/two/three', maps to
 					//'one/two/three.js', but we want the directory, 'one/two' for
 					//this normalization.
 					normalizedBaseParts = baseParts.slice(0, baseParts.length - 1);
-					name = name.split('/');
-					lastIndex = name.length - 1;
-
-					// If wanting node ID compatibility, strip .js from end
-					// of IDs. Have to do this here, and not in nameToUrl
-					// because node allows either .js or non .js to map
-					// to same file.
-					if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
-						name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '');
-					}
-
 					name = normalizedBaseParts.concat(name);
-					trimDots(name);
-					name = name.join('/');
-				} else if (name.indexOf('./') === 0) {
-					// No baseName, so this is ID is resolved relative
-					// to baseUrl, pull off the leading dot.
-					name = name.substring(2);
 				}
+
+				trimDots(name);
+				name = name.join('/');
 			}
 
 			//Apply map config if available.
@@ -379,7 +372,13 @@ var requirejs, require, define;
 				//retry
 				pathConfig.shift();
 				context.require.undef(id);
-				context.require([id]);
+
+				//Custom require that does not do map translation, since
+				//ID is "absolute", already mapped/resolved.
+				context.makeRequire(null, {
+					skipMap: true
+				})([id]);
+
 				return true;
 			}
 		}
@@ -445,7 +444,16 @@ var requirejs, require, define;
 							return normalize(name, parentName, applyMap);
 						});
 					} else {
-						normalizedName = normalize(name, parentName, applyMap);
+						// If nested plugin references, then do not try to
+						// normalize, as it will not normalize correctly. This
+						// places a restriction on resourceIds, and the longer
+						// term solution is not to normalize until plugins are
+						// loaded and all normalizations to allow for async
+						// loading of a loader plugin. But for now, fixes the
+						// common uses. Details in #1131
+						normalizedName = name.indexOf('!') === -1 ?
+							normalize(name, parentName, applyMap) :
+							name;
 					}
 				} else {
 					//A regular module.
@@ -467,7 +475,7 @@ var requirejs, require, define;
 			//normalization, stamp it with a unique ID so two matching relative
 			//ids that may conflict can be separate.
 			suffix = prefix && !pluginModule && !isNormalized ?
-				'_unnormalized' + (unnormalizedCounter += 1) :
+			'_unnormalized' + (unnormalizedCounter += 1) :
 				'';
 
 			return {
@@ -479,7 +487,7 @@ var requirejs, require, define;
 				originalName: originalName,
 				isDefine: isDefine,
 				id: (prefix ?
-					prefix + '!' + normalizedName :
+				prefix + '!' + normalizedName :
 					normalizedName) + suffix
 			};
 		}
@@ -567,7 +575,7 @@ var requirejs, require, define;
 				mod.usingExports = true;
 				if (mod.map.isDefine) {
 					if (mod.exports) {
-						return mod.exports;
+						return (defined[mod.map.id] = mod.exports);
 					} else {
 						return (mod.exports = defined[mod.map.id] = {});
 					}
@@ -583,7 +591,7 @@ var requirejs, require, define;
 						config: function () {
 							return  getOwn(config.config, mod.map.id) || {};
 						},
-						exports: handlers.exports(mod)
+						exports: mod.exports || (mod.exports = {})
 					});
 				}
 			}
@@ -803,8 +811,8 @@ var requirejs, require, define;
 					context.makeRequire(this.map, {
 						enableBuildCallback: true
 					})(this.shim.deps || [], bind(this, function () {
-							return map.prefix ? this.callPlugin() : this.load();
-						}));
+						return map.prefix ? this.callPlugin() : this.load();
+					}));
 				} else {
 					//Regular dependency.
 					return map.prefix ? this.callPlugin() : this.load();
@@ -946,8 +954,8 @@ var requirejs, require, define;
 						//Normalize the ID if the plugin allows it.
 						if (plugin.normalize) {
 							name = plugin.normalize(name, function (name) {
-								return normalize(name, parentName, true);
-							}) || '';
+									return normalize(name, parentName, true);
+								}) || '';
 						}
 
 						//prefix and name should already be normalized, no need
@@ -1045,7 +1053,7 @@ var requirejs, require, define;
 						} catch (e) {
 							return onError(makeError('fromtexteval',
 								'fromText eval for ' + id +
-									' failed: ' + e,
+								' failed: ' + e,
 								e,
 								[id]));
 						}
@@ -1115,6 +1123,13 @@ var requirejs, require, define;
 
 						if (this.errback) {
 							on(depMap, 'error', bind(this, this.errback));
+						} else if (this.events.error) {
+							// No direct errback on this module, but something
+							// else is listening for errors, so be sure to
+							// propagate the error correctly.
+							on(depMap, 'error', bind(this, function(err) {
+								this.emit('error', err);
+							}));
 						}
 					}
 
@@ -1319,8 +1334,8 @@ var requirejs, require, define;
 						//envs have different conventions: some use a module name,
 						//some use a file name.
 						config.pkgs[name] = pkgObj.name + '/' + (pkgObj.main || 'main')
-							.replace(currDirRegExp, '')
-							.replace(jsSuffixRegExp, '');
+								.replace(currDirRegExp, '')
+								.replace(jsSuffixRegExp, '');
 					});
 				}
 
@@ -1502,7 +1517,7 @@ var requirejs, require, define;
 			/**
 			 * Called to enable a module if it is still in the registry
 			 * awaiting enablement. A second arg, parent, the parent module,
-			 * is passed in for context, when this method is overriden by
+			 * is passed in for context, when this method is overridden by
 			 * the optimizer. Not shown here to keep code compact.
 			 */
 			enable: function (depMap) {
@@ -1629,8 +1644,8 @@ var requirejs, require, define;
 				}
 
 				return config.urlArgs ? url +
-					((url.indexOf('?') === -1 ? '?' : '&') +
-						config.urlArgs) : url;
+				((url.indexOf('?') === -1 ? '?' : '&') +
+				config.urlArgs) : url;
 			},
 
 			//Delegates to req.load. Broken out as a separate function to
@@ -1850,13 +1865,13 @@ var requirejs, require, define;
 			//UNFORTUNATELY Opera implements attachEvent but does not follow the script
 			//script execution mode.
 			if (node.attachEvent &&
-				//Check if node.attachEvent is artificially added by custom script or
-				//natively supported by browser
-				//read https://github.com/jrburke/requirejs/issues/187
-				//if we can NOT find [native code] then it must NOT natively supported.
-				//in IE8, node.attachEvent does not have toString()
-				//Note the test for "[native code" with no closing brace, see:
-				//https://github.com/jrburke/requirejs/issues/273
+					//Check if node.attachEvent is artificially added by custom script or
+					//natively supported by browser
+					//read https://github.com/jrburke/requirejs/issues/187
+					//if we can NOT find [native code] then it must NOT natively supported.
+					//in IE8, node.attachEvent does not have toString()
+					//Note the test for "[native code" with no closing brace, see:
+					//https://github.com/jrburke/requirejs/issues/273
 				!(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0) &&
 				!isOpera) {
 				//Probably IE. IE (at least 6-8) do not fire
@@ -1912,7 +1927,7 @@ var requirejs, require, define;
 			} catch (e) {
 				context.onError(makeError('importscripts',
 					'importScripts failed for ' +
-						moduleName + ' at ' + url,
+					moduleName + ' at ' + url,
 					e,
 					[moduleName]));
 			}

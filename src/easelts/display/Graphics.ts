@@ -963,6 +963,101 @@ class PolyStar
 	}
 }
 
+/**
+ * The Graphics class exposes an easy to use API for generating vector drawing instructions and drawing them to a
+ * specified context. Note that you can use Graphics without any dependency on the Easel framework by calling {{#crossLink "Graphics/draw"}}{{/crossLink}}
+ * directly, or it can be used with the {{#crossLink "Shape"}}{{/crossLink}} object to draw vector graphics within the
+ * context of an EaselJS display list.
+ *
+ * There are two approaches to working with Graphics object: calling methods on a Graphics instance (the "Graphics API"), or
+ * instantiating Graphics command objects and adding them to the graphics queue via {{#crossLink "Graphics/append"}}{{/crossLink}}.
+ * The former abstracts the latter, simplifying beginning and ending paths, fills, and strokes.
+ *
+ *      var g = new createjs.Graphics();
+ *      g.setStrokeStyle(1);
+ *      g.beginStroke("#000000");
+ *      g.beginFill("red");
+ *      g.drawCircle(0,0,30);
+ *
+ * All drawing methods in Graphics return the Graphics instance, so they can be chained together. For example,
+ * the following line of code would generate the instructions to draw a rectangle with a red stroke and blue fill:
+ *
+ *      myGraphics.beginStroke("red").beginFill("blue").drawRect(20, 20, 100, 50);
+ *
+ * Each graphics API call generates a command object (see below). The last command to be created can be accessed via
+ * {{#crossLink "Graphics/command:property"}}{{/crossLink}}:
+ *
+ *      var fillCommand = myGraphics.beginFill("red").command;
+ *      // ... later, update the fill style/color:
+ *      fillCommand.style = "blue";
+ *      // or change it to a bitmap fill:
+ *      fillCommand.bitmap(myImage);
+ *
+ * For more direct control of rendering, you can instantiate and append command objects to the graphics queue directly. In this case, you
+ * need to manage path creation manually, and ensure that fill/stroke is applied to a defined path:
+ *
+ *      // start a new path. Graphics.beginPath is a reusable BeginPath instance:
+ *      myGraphics.append(Graphics.beginPath);
+ *      // we need to define the path before applying the fill:
+ *      var circle = new Graphics.Circle(0,0,30);
+ *      myGraphics.append(circle);
+ *      // fill the path we just defined:
+ *      var fill = new Graphics.Fill("red");
+ *      myGraphics.append(fill);
+ *
+ * These approaches can be used together, for example to insert a custom command:
+ *
+ *      myGraphics.beginFill("red");
+ *      var customCommand = new CustomSpiralCommand(etc);
+ *      myGraphics.append(customCommand);
+ *      myGraphics.beginFill("blue");
+ *      myGraphics.drawCircle(0, 0, 30);
+ *
+ * See {{#crossLink "Graphics/append"}}{{/crossLink}} for more info on creating custom commands.
+ *
+ * <h4>Tiny API</h4>
+ * The Graphics class also includes a "tiny API", which is one or two-letter methods that are shortcuts for all of the
+ * Graphics methods. These methods are great for creating compact instructions, and is used by the Toolkit for CreateJS
+ * to generate readable code. All tiny methods are marked as protected, so you can view them by enabling protected
+ * descriptions in the docs.
+ *
+ * <table>
+ *     <tr><td><b>Tiny</b></td><td><b>Method</b></td><td><b>Tiny</b></td><td><b>Method</b></td></tr>
+ *     <tr><td>mt</td><td>{{#crossLink "Graphics/moveTo"}}{{/crossLink}} </td>
+ *     <td>lt</td> <td>{{#crossLink "Graphics/lineTo"}}{{/crossLink}}</td></tr>
+ *     <tr><td>a/at</td><td>{{#crossLink "Graphics/arc"}}{{/crossLink}} / {{#crossLink "Graphics/arcTo"}}{{/crossLink}} </td>
+ *     <td>bt</td><td>{{#crossLink "Graphics/bezierCurveTo"}}{{/crossLink}} </td></tr>
+ *     <tr><td>qt</td><td>{{#crossLink "Graphics/quadraticCurveTo"}}{{/crossLink}} (also curveTo)</td>
+ *     <td>r</td><td>{{#crossLink "Graphics/rect"}}{{/crossLink}} </td></tr>
+ *     <tr><td>cp</td><td>{{#crossLink "Graphics/closePath"}}{{/crossLink}} </td>
+ *     <td>c</td><td>{{#crossLink "Graphics/clear"}}{{/crossLink}} </td></tr>
+ *     <tr><td>f</td><td>{{#crossLink "Graphics/beginFill"}}{{/crossLink}} </td>
+ *     <td>lf</td><td>{{#crossLink "Graphics/beginLinearGradientFill"}}{{/crossLink}} </td></tr>
+ *     <tr><td>rf</td><td>{{#crossLink "Graphics/beginRadialGradientFill"}}{{/crossLink}} </td>
+ *     <td>bf</td><td>{{#crossLink "Graphics/beginBitmapFill"}}{{/crossLink}} </td></tr>
+ *     <tr><td>ef</td><td>{{#crossLink "Graphics/endFill"}}{{/crossLink}} </td>
+ *     <td>ss</td><td>{{#crossLink "Graphics/setStrokeStyle"}}{{/crossLink}} </td></tr>
+ *     <tr><td>s</td><td>{{#crossLink "Graphics/beginStroke"}}{{/crossLink}} </td>
+ *     <td>ls</td><td>{{#crossLink "Graphics/beginLinearGradientStroke"}}{{/crossLink}} </td></tr>
+ *     <tr><td>rs</td><td>{{#crossLink "Graphics/beginRadialGradientStroke"}}{{/crossLink}} </td>
+ *     <td>bs</td><td>{{#crossLink "Graphics/beginBitmapStroke"}}{{/crossLink}} </td></tr>
+ *     <tr><td>es</td><td>{{#crossLink "Graphics/endStroke"}}{{/crossLink}} </td>
+ *     <td>dr</td><td>{{#crossLink "Graphics/drawRect"}}{{/crossLink}} </td></tr>
+ *     <tr><td>rr</td><td>{{#crossLink "Graphics/drawRoundRect"}}{{/crossLink}} </td>
+ *     <td>rc</td><td>{{#crossLink "Graphics/drawRoundRectComplex"}}{{/crossLink}} </td></tr>
+ *     <tr><td>dc</td><td>{{#crossLink "Graphics/drawCircle"}}{{/crossLink}} </td>
+ *     <td>de</td><td>{{#crossLink "Graphics/drawEllipse"}}{{/crossLink}} </td></tr>
+ *     <tr><td>dp</td><td>{{#crossLink "Graphics/drawPolyStar"}}{{/crossLink}} </td>
+ *     <td>p</td><td>{{#crossLink "Graphics/decodePath"}}{{/crossLink}} </td></tr>
+ * </table>
+ *
+ * Here is the above example, using the tiny API instead.
+ *
+ *      myGraphics.s("red").f("blue").r(20, 20, 100, 50);
+ *
+ * @class Graphics
+ * @constructor
+ **/
 class Graphics
 {
 
@@ -985,112 +1080,10 @@ class Graphics
 	public static Ellipse = Ellipse;
 	public static PolyStar = PolyStar;
 
-	// docced above.
+	// above.
 	public static beginCmd = new BeginPath(); // so we don't have to instantiate multiples.
 
-	/**
-	 * The Graphics class exposes an easy to use API for generating vector drawing instructions and drawing them to a
-	 * specified context. Note that you can use Graphics without any dependency on the Easel framework by calling {{#crossLink "Graphics/draw"}}{{/crossLink}}
-	 * directly, or it can be used with the {{#crossLink "Shape"}}{{/crossLink}} object to draw vector graphics within the
-	 * context of an EaselJS display list.
-	 *
-	 * There are two approaches to working with Graphics object: calling methods on a Graphics instance (the "Graphics API"), or
-	 * instantiating Graphics command objects and adding them to the graphics queue via {{#crossLink "Graphics/append"}}{{/crossLink}}.
-	 * The former abstracts the latter, simplifying beginning and ending paths, fills, and strokes.
-	 *
-	 *      var g = new createjs.Graphics();
-	 *      g.setStrokeStyle(1);
-	 *      g.beginStroke("#000000");
-	 *      g.beginFill("red");
-	 *      g.drawCircle(0,0,30);
-	 *
-	 * All drawing methods in Graphics return the Graphics instance, so they can be chained together. For example,
-	 * the following line of code would generate the instructions to draw a rectangle with a red stroke and blue fill:
-	 *
-	 *      myGraphics.beginStroke("red").beginFill("blue").drawRect(20, 20, 100, 50);
-	 *
-	 * Each graphics API call generates a command object (see below). The last command to be created can be accessed via
-	 * {{#crossLink "Graphics/command:property"}}{{/crossLink}}:
-	 *
-	 *      var fillCommand = myGraphics.beginFill("red").command;
-	 *      // ... later, update the fill style/color:
-	 *      fillCommand.style = "blue";
-	 *      // or change it to a bitmap fill:
-	 *      fillCommand.bitmap(myImage);
-	 *
-	 * For more direct control of rendering, you can instantiate and append command objects to the graphics queue directly. In this case, you
-	 * need to manage path creation manually, and ensure that fill/stroke is applied to a defined path:
-	 *
-	 *      // start a new path. Graphics.beginPath is a reusable BeginPath instance:
-	 *      myGraphics.append(Graphics.beginPath);
-	 *      // we need to define the path before applying the fill:
-	 *      var circle = new Graphics.Circle(0,0,30);
-	 *      myGraphics.append(circle);
-	 *      // fill the path we just defined:
-	 *      var fill = new Graphics.Fill("red");
-	 *      myGraphics.append(fill);
-	 *
-	 * These approaches can be used together, for example to insert a custom command:
-	 *
-	 *      myGraphics.beginFill("red");
-	 *      var customCommand = new CustomSpiralCommand(etc);
-	 *      myGraphics.append(customCommand);
-	 *      myGraphics.beginFill("blue");
-	 *      myGraphics.drawCircle(0, 0, 30);
-	 *
-	 * See {{#crossLink "Graphics/append"}}{{/crossLink}} for more info on creating custom commands.
-	 *
-	 * <h4>Tiny API</h4>
-	 * The Graphics class also includes a "tiny API", which is one or two-letter methods that are shortcuts for all of the
-	 * Graphics methods. These methods are great for creating compact instructions, and is used by the Toolkit for CreateJS
-	 * to generate readable code. All tiny methods are marked as protected, so you can view them by enabling protected
-	 * descriptions in the docs.
-	 *
-	 * <table>
-	 *     <tr><td><b>Tiny</b></td><td><b>Method</b></td><td><b>Tiny</b></td><td><b>Method</b></td></tr>
-	 *     <tr><td>mt</td><td>{{#crossLink "Graphics/moveTo"}}{{/crossLink}} </td>
-	 *     <td>lt</td> <td>{{#crossLink "Graphics/lineTo"}}{{/crossLink}}</td></tr>
-	 *     <tr><td>a/at</td><td>{{#crossLink "Graphics/arc"}}{{/crossLink}} / {{#crossLink "Graphics/arcTo"}}{{/crossLink}} </td>
-	 *     <td>bt</td><td>{{#crossLink "Graphics/bezierCurveTo"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>qt</td><td>{{#crossLink "Graphics/quadraticCurveTo"}}{{/crossLink}} (also curveTo)</td>
-	 *     <td>r</td><td>{{#crossLink "Graphics/rect"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>cp</td><td>{{#crossLink "Graphics/closePath"}}{{/crossLink}} </td>
-	 *     <td>c</td><td>{{#crossLink "Graphics/clear"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>f</td><td>{{#crossLink "Graphics/beginFill"}}{{/crossLink}} </td>
-	 *     <td>lf</td><td>{{#crossLink "Graphics/beginLinearGradientFill"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>rf</td><td>{{#crossLink "Graphics/beginRadialGradientFill"}}{{/crossLink}} </td>
-	 *     <td>bf</td><td>{{#crossLink "Graphics/beginBitmapFill"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>ef</td><td>{{#crossLink "Graphics/endFill"}}{{/crossLink}} </td>
-	 *     <td>ss</td><td>{{#crossLink "Graphics/setStrokeStyle"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>s</td><td>{{#crossLink "Graphics/beginStroke"}}{{/crossLink}} </td>
-	 *     <td>ls</td><td>{{#crossLink "Graphics/beginLinearGradientStroke"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>rs</td><td>{{#crossLink "Graphics/beginRadialGradientStroke"}}{{/crossLink}} </td>
-	 *     <td>bs</td><td>{{#crossLink "Graphics/beginBitmapStroke"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>es</td><td>{{#crossLink "Graphics/endStroke"}}{{/crossLink}} </td>
-	 *     <td>dr</td><td>{{#crossLink "Graphics/drawRect"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>rr</td><td>{{#crossLink "Graphics/drawRoundRect"}}{{/crossLink}} </td>
-	 *     <td>rc</td><td>{{#crossLink "Graphics/drawRoundRectComplex"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>dc</td><td>{{#crossLink "Graphics/drawCircle"}}{{/crossLink}} </td>
-	 *     <td>de</td><td>{{#crossLink "Graphics/drawEllipse"}}{{/crossLink}} </td></tr>
-	 *     <tr><td>dp</td><td>{{#crossLink "Graphics/drawPolyStar"}}{{/crossLink}} </td>
-	 *     <td>p</td><td>{{#crossLink "Graphics/decodePath"}}{{/crossLink}} </td></tr>
-	 * </table>
-	 *
-	 * Here is the above example, using the tiny API instead.
-	 *
-	 *      myGraphics.s("red").f("blue").r(20, 20, 100, 50);
-	 *
-	 * @class Graphics
-	 * @constructor
-	 **/
-	//var Graphics = function() {
-	//	this.initialize();
-	//};
-	//var p = Graphics.prototype;
-	//var G = Graphics;
-
 	// static public methods:
-
 
 	/**
 	 * Returns a CSS compatible color string based on the specified RGB numeric color values in the format
@@ -1114,7 +1107,7 @@ class Graphics
 	 * @return {String} A CSS compatible color string based on the specified RGB numeric color values in the format
 	 * "rgba(255,255,255,1.0)", or if alpha is null then in the format "rgb(255,255,255)".
 	 **/
-	public static getRGB(r, g, b, alpha = null)
+	public static getRGB(r:number, g:number, b:number, alpha = null)
 	{
 		if(r != null && b == null)
 		{
@@ -1149,7 +1142,7 @@ class Graphics
 	 * @return {String} A CSS compatible color string based on the specified HSL numeric color values in the format
 	 * "hsla(360,100,100,1.0)", or if alpha is null then in the format "hsl(360,100,100)".
 	 **/
-	public static getHSL(hue, saturation, lightness, alpha)
+	public static getHSL(hue:number, saturation:number, lightness:number, alpha:number)
 	{
 		if(alpha == null)
 		{
@@ -1288,7 +1281,7 @@ class Graphics
 	 * @type {CanvasRenderingContext2D}
 	 **/
 	public static _canvas:HTMLCanvasElement = Methods.createCanvas();
-	public static _ctx:CanvasRenderingContext2D = Graphics._canvas.getContext('2d');
+	public static _ctx:CanvasRenderingContext2D = <CanvasRenderingContext2D> Graphics._canvas.getContext('2d');
 
 	// public properties
 	/**
@@ -1300,7 +1293,7 @@ class Graphics
 	 * @property command
 	 * @type Object
 	 **/
-	command = null;
+	public command = null;
 
 	// private properties
 	/**
@@ -1308,35 +1301,35 @@ class Graphics
 	 * @protected
 	 * @type {Array}
 	 **/
-	_stroke = null;
+	protected _stroke = null;
 
 	/**
 	 * @property _strokeStyle
 	 * @protected
 	 * @type {Array}
 	 **/
-	_strokeStyle = null;
+	protected _strokeStyle = null;
 
 	/**
 	 * @property _strokeIgnoreScale
 	 * @protected
 	 * @type Boolean
 	 **/
-	_strokeIgnoreScale = false;
+	protected _strokeIgnoreScale = false;
 
 	/**
 	 * @property _fill
 	 * @protected
 	 * @type {Array}
 	 **/
-	_fill = null;
+	protected _fill = null;
 
 	/**
 	 * @property _instructions
 	 * @protected
 	 * @type {Array}
 	 **/
-	_instructions:any[] = null;
+	protected _instructions:any[] = null;
 
 	/**
 	 * Indicates the last instruction index that was committed.
@@ -1344,7 +1337,7 @@ class Graphics
 	 * @protected
 	 * @type {Number}
 	 **/
-	_commitIndex = 0;
+	protected _commitIndex = 0;
 
 	/**
 	 * Uncommitted instructions.
@@ -1352,7 +1345,7 @@ class Graphics
 	 * @protected
 	 * @type {Array}
 	 **/
-	_activeInstructions = null;
+	protected _activeInstructions:Array<any> = null;
 
 	/**
 	 * This indicates that there have been changes to the activeInstruction list since the last updateInstructions call.
@@ -1361,15 +1354,14 @@ class Graphics
 	 * @type {Boolean}
 	 * @default false
 	 **/
-	_dirty = false;
+	protected _dirty = false;
 
-
-	public _ctx:CanvasRenderingContext2D = Graphics._ctx;
+	protected _ctx:CanvasRenderingContext2D = Graphics._ctx;
 
 	/**
 	 * @constructor
 	 **/
-	constructor()
+		constructor()
 	{
 		this.clear();
 
@@ -1432,7 +1424,7 @@ class Graphics
 	 * @param {Number} y The y coordinate the drawing point should move to.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls).
 	 **/
-	public moveTo(x, y)
+	public moveTo(x:number, y:number)
 	{
 		return this.append(new Graphics.MoveTo(x, y), true);
 	}
@@ -1449,7 +1441,7 @@ class Graphics
 	 * @param {Number} y The y coordinate the drawing point should draw to.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public lineTo(x, y)
+	public lineTo(x:number, y:number)
 	{
 		return this.append(new Graphics.LineTo(x, y));
 	}
@@ -1482,7 +1474,7 @@ class Graphics
 	 * @param {Number} radius
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public arcTo(x1, y1, x2, y2, radius)
+	public arcTo(x1:number, y1:number, x2:number, y2:number, radius:number):Graphics
 	{
 		return this.append(new Graphics.ArcTo(x1, y1, x2, y2, radius));
 	}
@@ -1505,7 +1497,7 @@ class Graphics
 	 * @param {Boolean} anticlockwise
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public arc(x, y, radius, startAngle, endAngle, anticlockwise)
+	public arc(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise:boolean):Graphics
 	{
 		return this.append(new Graphics.Arc(x, y, radius, startAngle, endAngle, anticlockwise));
 	}
@@ -1521,7 +1513,7 @@ class Graphics
 	 * @param {Number} y
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public quadraticCurveTo(cpx, cpy, x, y)
+	public quadraticCurveTo(cpx:number, cpy:number, x:number, y:number):Graphics
 	{
 		return this.append(new Graphics.QuadraticCurveTo(cpx, cpy, x, y));
 	}
@@ -1540,7 +1532,7 @@ class Graphics
 	 * @param {Number} y
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+	public bezierCurveTo(cp1x:number, cp1y:number, cp2x:number, cp2y:number, x:number, y:number):Graphics
 	{
 		return this.append(new Graphics.BezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
 	}
@@ -1557,9 +1549,9 @@ class Graphics
 	 * @param {Number} h Height of the rectangle
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public rect(x, y, w, h)
+	public rect(x:number, y:number, width:number, height:number):Graphics
 	{
-		return this.append(new Graphics.Rect(x, y, w, h));
+		return this.append(new Graphics.Rect(x, y, width, height));
 	}
 
 	/**
@@ -1568,7 +1560,7 @@ class Graphics
 	 * @method closePath
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public closePath()
+	public closePath():Graphics
 	{
 		return this._activeInstructions.length ? this.append(new Graphics.ClosePath()) : this;
 	}
@@ -1597,7 +1589,7 @@ class Graphics
 	 * null will result in no fill.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginFill(color?:string)
+	public beginFill(color?:string):Graphics
 	{
 		return this._setFill(color ? new Graphics.Fill(color) : null);
 	}
@@ -1621,7 +1613,7 @@ class Graphics
 	 * @param {Number} y1 The position of the second point defining the line that defines the gradient direction and size.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginLinearGradientFill(colors, ratios, x0, y0, x1, y1)
+	public beginLinearGradientFill(colors:Array<string>, ratios:Array<number>, x0:number, y0:number, x1:number, y1:number):Graphics
 	{
 		return this._setFill(new Graphics.Fill().linearGradient(colors, ratios, x0, y0, x1, y1));
 	}
@@ -1646,7 +1638,7 @@ class Graphics
 	 * @param {Number} r1 Radius of the outer circle that defines the gradient.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginRadialGradientFill(colors, ratios, x0, y0, r0, x1, y1, r1)
+	public beginRadialGradientFill(colors:Array<string>, ratios:Array<number>, x0:number, y0:number, r0:number, x1:number, y1:number, r1:number):Graphics
 	{
 		return this._setFill(new Graphics.Fill().radialGradient(colors, ratios, x0, y0, r0, x1, y1, r1));
 	}
@@ -1664,9 +1656,9 @@ class Graphics
 	 * will be applied relative to the parent transform.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginBitmapFill(image:HTMLImageElement, repetition:string, matrix?:m2.Matrix2);
-	public beginBitmapFill(image:HTMLCanvasElement, repetition:string, matrix?:m2.Matrix2);
-	public beginBitmapFill(image:any, repetition:string = 'repeat', matrix?:m2.Matrix2)
+	public beginBitmapFill(image:HTMLImageElement, repetition:string, matrix?:m2.Matrix2):Graphics;
+	public beginBitmapFill(image:HTMLCanvasElement, repetition:string, matrix?:m2.Matrix2):Graphics;
+	public beginBitmapFill(image:any, repetition:string = 'repeat', matrix?:m2.Matrix2):Graphics
 	{
 		return this._setFill(new Graphics.Fill(null, matrix).bitmap(<HTMLImageElement>image, repetition));
 	}
@@ -1677,7 +1669,7 @@ class Graphics
 	 * @method endFill
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public endFill()
+	public endFill():Graphics
 	{
 		return this.beginFill();
 	}
@@ -1703,7 +1695,7 @@ class Graphics
 	 * of active transformations.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public setStrokeStyle(thickness:number, caps:any = null, joints:any = null, miterLimit:number = null, ignoreScale:boolean = false)
+	public setStrokeStyle(thickness:number, caps:any = null, joints:any = null, miterLimit:number = null, ignoreScale:boolean = false):Graphics
 	{
 		this._updateInstructions(true);
 		this._strokeStyle = this.command = new Graphics.StrokeStyle(thickness, caps, joints, miterLimit);
@@ -1724,7 +1716,7 @@ class Graphics
 	 * null will result in no stroke.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginStroke(color?:string)
+	public beginStroke(color?:string):Graphics
 	{
 		return this._setStroke(color ? new Graphics.Stroke(color, null) : null);
 	}
@@ -1749,7 +1741,7 @@ class Graphics
 	 * @param {Number} y1 The position of the second point defining the line that defines the gradient direction and size.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginLinearGradientStroke(colors, ratios, x0, y0, x1, y1)
+	public beginLinearGradientStroke(colors:Array<string>, ratios:Array<string>, x0:number, y0:number, x1:number, y1:number):Graphics
 	{
 		return this._setStroke(new Graphics.Stroke(null, null).linearGradient(colors, ratios, x0, y0, x1, y1));
 	}
@@ -1777,7 +1769,7 @@ class Graphics
 	 * @param {Number} r1 Radius of the outer circle that defines the gradient.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginRadialGradientStroke(colors, ratios, x0, y0, r0, x1, y1, r1)
+	public beginRadialGradientStroke(colors:Array<string>, ratios:Array<string>, x0:number, y0:number, r0:number, x1:number, y1:number, r1:number):Graphics
 	{
 		return this._setStroke(new Graphics.Stroke(null, null).radialGradient(colors, ratios, x0, y0, r0, x1, y1, r1));
 	}
@@ -1793,7 +1785,7 @@ class Graphics
 	 * "repeat", "repeat-x", "repeat-y", or "no-repeat". Defaults to "repeat".
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public beginBitmapStroke(image, repetition)
+	public beginBitmapStroke(image:any, repetition:string):Graphics
 	{
 		// NOTE: matrix is not supported for stroke because transforms on strokes also affect the drawn stroke width.
 		return this._setStroke(new Graphics.Stroke(null, null).bitmap(image, repetition));
@@ -1805,7 +1797,7 @@ class Graphics
 	 * @method endStroke
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public endStroke()
+	public endStroke():Graphics
 	{
 		return this.beginStroke(null);
 	}
@@ -1816,7 +1808,7 @@ class Graphics
 	 * @method curveTo
 	 * @type {Function}
 	 **/
-	curveTo = this.quadraticCurveTo;
+	public curveTo:(cpx:number, cpy:number, x:number, y:number) => Graphics = this.quadraticCurveTo;
 
 	/**
 	 * Maps the familiar ActionScript <code>drawRect()</code> method to the functionally similar {{#crossLink "Graphics/rect"}}{{/crossLink}}
@@ -1824,7 +1816,7 @@ class Graphics
 	 * @method drawRect
 	 * @type {Function}
 	 **/
-	drawRect = this.rect;
+	public drawRect:(x:number, y:number, width:number, height:number) => Graphics = this.rect;
 
 	/**
 	 * Draws a rounded rectangle with all corners with the specified radius.
@@ -1836,7 +1828,7 @@ class Graphics
 	 * @param {Number} radius Corner radius.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public drawRoundRect(x, y, w, h, radius)
+	public drawRoundRect(x:number, y:number, w:number, h:number, radius:number):Graphics
 	{
 		return this.drawRoundRectComplex(x, y, w, h, radius, radius, radius, radius);
 	}
@@ -1855,7 +1847,7 @@ class Graphics
 	 * @param {Number} radiusBL Bottom left corner radius.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public drawRoundRectComplex(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL)
+	public drawRoundRectComplex(x:number, y:number, w:number, h:number, radiusTL:number, radiusTR:number, radiusBR:number, radiusBL:number):Graphics
 	{
 		return this.append(new Graphics.RoundRect(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL));
 	}
@@ -1883,7 +1875,7 @@ class Graphics
 	 * @param {Number} radius Radius of circle.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public drawCircle(x, y, radius)
+	public drawCircle(x:number, y:number, radius:number):Graphics
 	{
 		return this.append(new Graphics.Circle(x, y, radius));
 	}
@@ -1901,7 +1893,7 @@ class Graphics
 	 * @param {Number} h The width (vertical diameter) of the ellipse. The vertical radius will be half of this number.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public drawEllipse(x:number, y:number, w:number, h:number)
+	public drawEllipse(x:number, y:number, w:number, h:number):Graphics
 	{
 		return this.append(new Graphics.Ellipse(x, y, w, h));
 	}
@@ -1927,7 +1919,7 @@ class Graphics
 	 * directly to the right of the center.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public drawPolyStar(x, y, radius, sides, pointSize, angle)
+	public drawPolyStar(x:number, y:number, radius:number, sides:number, pointSize:number, angle:number):Graphics
 	{
 		return this.append(new Graphics.PolyStar(x, y, radius, sides, pointSize, angle));
 	}
@@ -1964,7 +1956,7 @@ class Graphics
 	 * @param {boolean} clean The clean param is primarily for internal use. A value of true indicates that a command does not generate a path that should be stroked or filled.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public append(command, clean?:boolean)
+	public append(command, clean?:boolean):Graphics
 	{
 		this._activeInstructions.push(command);
 		this.command = command;
@@ -2010,7 +2002,7 @@ class Graphics
 	 * @param {String} str The path string to decode.
 	 * @return {Graphics} The Graphics instance the method is called on (useful for chaining calls.)
 	 **/
-	public decodePath(str)
+	public decodePath(str:string):Graphics
 	{
 		var instructions = [this.moveTo, this.lineTo, this.quadraticCurveTo, this.bezierCurveTo, this.closePath];
 		var paramCount = [2, 2, 4, 6, 0];
@@ -2102,7 +2094,7 @@ class Graphics
 	 * @method toString
 	 * @return {String} a string representation of the instance.
 	 **/
-	public toString()
+	public toString():string
 	{
 		return "[Graphics]";
 	}
@@ -2113,189 +2105,189 @@ class Graphics
 	 * @protected
 	 * @type {Function}
 	 **/
-	public mt = this.moveTo;
+	public mt:(x:number, y:number) => Graphics = this.moveTo;
 
 	/** Shortcut to lineTo.
 	 * @method lt
 	 * @protected
 	 * @type {Function}
 	 **/
-	public lt = this.lineTo;
+	public lt:(x:number, y:number) => Graphics = this.lineTo;
 
 	/** Shortcut to arcTo.
 	 * @method at
 	 * @protected
 	 * @type {Function}
 	 **/
-	public at = this.arcTo;
+	public at:(x1:number, y1:number, x2:number, y2:number, radius:number) => Graphics = this.arcTo;
 
 	/** Shortcut to bezierCurveTo.
 	 * @method bt
 	 * @protected
 	 * @type {Function}
 	 **/
-	public bt = this.bezierCurveTo;
+	public bt:(cp1x:number, cp1y:number, cp2x:number, cp2y:number, x:number, y:number) => Graphics = this.bezierCurveTo;
 
 	/** Shortcut to quadraticCurveTo / curveTo.
 	 * @method qt
 	 * @protected
 	 * @type {Function}
 	 **/
-	public qt = this.quadraticCurveTo;
+	public qt:(cpx:number, cpy:number, x:number, y:number) => Graphics = this.quadraticCurveTo;
 
 	/** Shortcut to arc.
 	 * @method a
 	 * @protected
 	 * @type {Function}
 	 **/
-	public a = this.arc;
+	public a:(x:number, y:number, radius:number, startAngle:number, endAngle:number, anticlockwise:boolean) => Graphics = this.arc;
 
 	/** Shortcut to rect.
 	 * @method r
 	 * @protected
 	 * @type {Function}
 	 **/
-	public r = this.rect;
+	public r:(x:number, y:number, width:number, height:number) => Graphics = this.rect;
 
 	/** Shortcut to closePath.
 	 * @method cp
 	 * @protected
 	 * @type {Function}
 	 **/
-	public cp = this.closePath;
+	public cp:() => Graphics = this.closePath;
 
 	/** Shortcut to clear.
 	 * @method c
 	 * @protected
 	 * @type {Function}
 	 **/
-	public c = this.clear;
+	public c:() => Graphics = this.clear;
 
 	/** Shortcut to beginFill.
 	 * @method f
 	 * @protected
 	 * @type {Function}
 	 **/
-	public f = this.beginFill;
+	public f:(color?:string) => Graphics = this.beginFill;
 
 	/** Shortcut to beginLinearGradientFill.
 	 * @method lf
 	 * @protected
 	 * @type {Function}
 	 **/
-	public lf = this.beginLinearGradientFill;
+	public lf:(colors:Array<string>, ratios:Array<number>, x0:number, y0:number, r0:number, x1:number, y1:number, r1:number) => Graphics = this.beginLinearGradientFill;
 
 	/** Shortcut to beginRadialGradientFill.
 	 * @method rf
 	 * @protected
 	 * @type {Function}
 	 **/
-	public rf = this.beginRadialGradientFill;
+	public rf:(colors:Array<string>, ratios:Array<number>, x0:number, y0:number, r0:number, x1:number, y1:number, r1:number) => Graphics = this.beginRadialGradientFill;
 
 	/** Shortcut to beginBitmapFill.
 	 * @method bf
 	 * @protected
 	 * @type {Function}
 	 **/
-	public bf = this.beginBitmapFill;
+	public bf:(image:any, repetition?:string, matrix?:m2.Matrix2) => Graphics = this.beginBitmapFill;
 
 	/** Shortcut to endFill.
 	 * @method ef
 	 * @protected
 	 * @type {Function}
 	 **/
-	public ef = this.endFill;
+	public ef:() => Graphics = this.endFill;
 
 	/** Shortcut to setStrokeStyle.
 	 * @method ss
 	 * @protected
 	 * @type {Function}
 	 **/
-	public ss = this.setStrokeStyle;
+	public ss:(thickness:number, caps?:any, joints?:any, miterLimit?:number, ignoreScale?:boolean) => Graphics = this.setStrokeStyle;
 
 	/** Shortcut to beginStroke.
 	 * @method s
 	 * @protected
 	 * @type {Function}
 	 **/
-	public s = this.beginStroke;
+	public s:(color?:string) => Graphics = this.beginStroke;
 
 	/** Shortcut to beginLinearGradientStroke.
 	 * @method ls
 	 * @protected
 	 * @type {Function}
 	 **/
-	public ls = this.beginLinearGradientStroke;
+	public ls:(colors:Array<string>, ratios:Array<string>, x0:number, y0:number, x1:number, y1:number) => Graphics = this.beginLinearGradientStroke;
 
 	/** Shortcut to beginRadialGradientStroke.
 	 * @method rs
 	 * @protected
 	 * @type {Function}
 	 **/
-	public rs = this.beginRadialGradientStroke;
+	public rs:(colors:Array<string>, ratios:Array<string>, x0:number, y0:number, r0:number, x1:number, y1:number, r1:number) => Graphics = this.beginRadialGradientStroke;
 
 	/** Shortcut to beginBitmapStroke.
 	 * @method bs
 	 * @protected
 	 * @type {Function}
 	 **/
-	public bs = this.beginBitmapStroke;
+	public bs:(image:any, repetition:string) => Graphics = this.beginBitmapStroke;
 
 	/** Shortcut to endStroke.
 	 * @method es
 	 * @protected
 	 * @type {Function}
 	 **/
-	public es = this.endStroke;
+	public es:() => Graphics = this.endStroke;
 
 	/** Shortcut to drawRect.
 	 * @method dr
 	 * @protected
 	 * @type {Function}
 	 **/
-	public dr = this.drawRect;
+	public dr:(x:number, y:number, width:number, height:number) => Graphics = this.rect;
 
 	/** Shortcut to drawRoundRect.
 	 * @method rr
 	 * @protected
 	 * @type {Function}
 	 **/
-	public rr = this.drawRoundRect;
+	public rr:(x:number, y:number, w:number, h:number, radius:number) => Graphics = this.drawRoundRect;
 
 	/** Shortcut to drawRoundRectComplex.
 	 * @method rc
 	 * @protected
 	 * @type {Function}
 	 **/
-	public rc = this.drawRoundRectComplex;
+	public rc:(x:number, y:number, w:number, h:number, radiusTL:number, radiusTR:number, radiusBR:number, radiusBL:number) => Graphics = this.drawRoundRectComplex;
 
 	/** Shortcut to drawCircle.
 	 * @method dc
 	 * @protected
 	 * @type {Function}
 	 **/
-	public dc = this.drawCircle;
+	public dc:(x:number, y:number, radius:number) => Graphics = this.drawCircle;
 
 	/** Shortcut to drawEllipse.
 	 * @method de
 	 * @protected
 	 * @type {Function}
 	 **/
-	public de = this.drawEllipse;
+	public de:(x:number, y:number, w:number, h:number) => Graphics = this.drawEllipse;
 
 	/** Shortcut to drawPolyStar.
 	 * @method dp
 	 * @protected
 	 * @type {Function}
 	 **/
-	public dp = this.drawPolyStar;
+	public dp:(x:number, y:number, radius:number, sides:number, pointSize:number, angle:number) => Graphics = this.drawPolyStar;
 
 	/** Shortcut to decodePath.
 	 * @method p
 	 * @protected
 	 * @type Function
 	 **/
-	public p = this.decodePath;
+	public p:(str:string) => Graphics = this.decodePath;
 
 
 	// private methods:
@@ -2303,7 +2295,7 @@ class Graphics
 	 * @method _updateInstructions
 	 * @protected
 	 **/
-	public _updateInstructions(commit?:boolean)
+	public _updateInstructions(commit?:boolean):void
 	{
 		var instr = this._instructions,
 			active = this._activeInstructions,
@@ -2344,7 +2336,7 @@ class Graphics
 	 * @method _setFill
 	 * @protected
 	 **/
-	public _setFill(fill)
+	public _setFill(fill):Graphics
 	{
 		this._updateInstructions(true);
 		if(this._fill = fill)
@@ -2358,7 +2350,7 @@ class Graphics
 	 * @method _setStroke
 	 * @protected
 	 **/
-	public _setStroke(stroke)
+	public _setStroke(stroke):Graphics
 	{
 		this._updateInstructions(true);
 		if(this._stroke = stroke)

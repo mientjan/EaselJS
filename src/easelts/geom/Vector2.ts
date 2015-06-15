@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-import IVertex2 = require('./../interface/IVector2');
+import IVector2 = require('./../interface/IVector2');
 import NumberUtil = require('./../util/NumberUtil');
 
 /**
@@ -38,8 +38,21 @@ import NumberUtil = require('./../util/NumberUtil');
  * @author zz85 / http://www.lab4games.net/zz85/blog
  * @author Mient-jan Stelling
  */
-class Vector2 implements IVertex2
+class Vector2 implements IVector2
 {
+	public static radToDegree = 180 / Math.PI;
+	public static degreeToRad = Math.PI / 180;
+
+	public static getRadiansFromDegree(value:number):number
+	{
+		return value * Vector2.degreeToRad;
+	}
+
+	public static getDegreeFromRadians(value:number):number
+	{
+		return value * Vector2.radToDegree;
+	}
+
 	/**
 	 * X position.
 	 * @property x
@@ -52,8 +65,13 @@ class Vector2 implements IVertex2
 	 * @type Number
 	 **/
 
-	constructor(public x:number, public y:number)
+	public x:number;
+	public y:number;
+
+	constructor(x:number, y:number)
 	{
+		this.x = x;
+		this.y = y;
 	}
 
 	public pair():number
@@ -75,7 +93,6 @@ class Vector2 implements IVertex2
 
 	public set(x:number, y:number)
 	{
-
 		this.x = x;
 		this.y = y;
 
@@ -124,226 +141,216 @@ class Vector2 implements IVertex2
 		}
 	}
 
-	public copy(v:Vector2):Vector2
+	public copy(a:IVector2):Vector2
 	{
+		var v = this.clone();
+		v.x = a.x;
+		v.y = a.y;
 
-		this.x = v.x;
-		this.y = v.y;
-
-		return this;
-
+		return v;
 	}
 
-	public add(v:Vector2):Vector2
+	public add(a:IVector2):Vector2
 	{
+		var v = this.clone();
+		v.x += a.x;
+		v.y += a.y;
 
-		this.x += v.x;
-		this.y += v.y;
-
-		return this;
-
+		return v;
 	}
 
-	public addVectors(a:Vector2, b:Vector2):Vector2
+	public addVectors(a:IVector2, b:IVector2):Vector2
 	{
-		this.x = a.x + b.x;
-		this.y = a.y + b.y;
+		var v = this.clone();
+		v.x = a.x + b.x;
+		v.y = a.y + b.y;
 
-		return this;
+		return v;
 	}
 
 	public addScalar(s:number):Vector2
 	{
-
-		this.x += s;
-		this.y += s;
+		var v = this.clone();
+		v.x += s;
+		v.y += s;
 
 		return this;
-
 	}
 
-	public sub(v:Vector2)
+	public diff(a:IVector2):Vector2
 	{
-		this.x -= v.x;
-		this.y -= v.y;
+		var v = this.clone();
+		v.x = (this.x + a.x) / 2;
+		v.y = (this.y + a.y) / 2;
 
-		return this;
-
+		return v;
 	}
 
-	public subVectors(a:Vector2, b:Vector2)
+	public rotateByVector2(a:Vector2, radians:number):Vector2
 	{
+		var v = this.clone();
 
-		this.x = a.x - b.x;
-		this.y = a.y - b.y;
+		//		radians = 1;
+		//		console.log(radians);
 
-		return this;
 
+		v.x = a.x + (( (this.x - a.x) * Math.cos(radians)) - ((this.y - a.y) * Math.sin(radians)) );
+		v.y = a.y + (( (this.x - a.x) * Math.sin(radians)) + ((this.y - a.y) * Math.cos(radians)) );
+
+		return v;
 	}
 
-	public multiply(v:Vector2)
+	public sub(a:Vector2)
 	{
+		var v = this.clone();
+		v.x -= a.x;
+		v.y -= a.y;
+		return v;
+	}
 
-		this.x *= v.x;
-		this.y *= v.y;
+	public subVectors(a:IVector2, b:IVector2)
+	{
+		var v = this.clone();
+		v.x = a.x - b.x;
+		v.y = a.y - b.y;
 
 		return this;
+	}
 
+	public multiply(a:IVector2):Vector2
+	{
+		var v = this.clone();
+		v.x *= a.x;
+		v.y *= a.y;
+
+		return v;
 	}
 
 	public multiplyScalar(s:number)
 	{
-
-		this.x *= s;
-		this.y *= s;
-
-		return this;
-
+		var v = this.clone();
+		v.x *= s;
+		v.y *= s;
+		return v;
 	}
 
-	public divide(v:Vector2)
+	public divide(a:IVector2):Vector2
 	{
-
-		this.x /= v.x;
-		this.y /= v.y;
+		var v = this.clone();
+		this.x /= a.x;
+		this.y /= a.y;
 
 		return this;
-
 	}
 
-	public divideScalar(scalar:number)
+	public divideScalar(s:number):Vector2
 	{
-
-		if(scalar !== 0)
+		var v = this.clone();
+		if(s !== 0)
 		{
+			var invScalar = 1 / s;
 
-			var invScalar = 1 / scalar;
-
-			this.x *= invScalar;
-			this.y *= invScalar;
-
+			v.x *= invScalar;
+			v.y *= invScalar;
 		}
 		else
 		{
-
-			this.x = 0;
-			this.y = 0;
-
+			v.x = 0;
+			v.y = 0;
 		}
 
-		return this;
+		return v;
 	}
 
-	public    min(v:Vector2)
+	public min(a:IVector2):Vector2
 	{
-
-		if(this.x > v.x)
+		var v = this.clone();
+		if(v.x > a.x)
 		{
-
-			this.x = v.x;
-
+			v.x = a.x;
 		}
 
-		if(this.y > v.y)
+		if(v.y > a.y)
 		{
-
-			this.y = v.y;
-
+			v.y = a.y;
 		}
 
-		return this;
+		return v;
 
 	}
 
-	public max(v:Vector2)
+	public max(a:IVector2):Vector2
 	{
-
-		if(this.x < v.x)
+		var v = this.clone();
+		if(v.x < a.x)
 		{
-
-			this.x = v.x;
-
+			v.x = a.x;
 		}
 
-		if(this.y < v.y)
+		if(v.y < a.y)
 		{
-
-			this.y = v.y;
-
+			v.y = a.y;
 		}
 
-		return this;
-
+		return v;
 	}
 
-	public clamp(min:Vector2, max:Vector2)
+	public clamp(min:IVector2, max:IVector2)
 	{
-
+		var v = this.clone();
 		// This function assumes min < max, if this assumption isn't true it will not operate correctly
-
-		if(this.x < min.x)
+		if(v.x < min.x)
 		{
-
-			this.x = min.x;
-
+			v.x = min.x;
 		}
-		else if(this.x > max.x)
+		else if(v.x > max.x)
 		{
-
-			this.x = max.x;
-
+			v.x = max.x;
 		}
 
-		if(this.y < min.y)
+		if(v.y < min.y)
 		{
-
-			this.y = min.y;
-
+			v.y = min.y;
 		}
-		else if(this.y > max.y)
+		else if(v.y > max.y)
 		{
-
-			this.y = max.y;
-
+			v.y = max.y;
 		}
 
-		return this;
+		return v;
 	}
 
 	private __min:Vector2;
 	private __max:Vector2;
 
-	public clampScalar(minVal:number, maxVal:number)
+	public clampScalar(minVal:number, maxVal:number):Vector2
 	{
-
 		if(this.__min === void 0)
 		{
-
 			this.__min = new Vector2(0, 0);
 			this.__max = new Vector2(0, 0);
-
 		}
 
 		this.__min.set(minVal, minVal);
 		this.__max.set(maxVal, maxVal);
 
 		return this.clamp(this.__min, this.__max);
-
 	}
 
 	public floor():Vector2
 	{
-		this.x = Math.floor(this.x);
-		this.y = Math.floor(this.y);
+		var v = this.clone();
+		v.x = Math.floor(this.x);
+		v.y = Math.floor(this.y);
 
-		return this;
+		return v;
 	}
 
 	public ceil():Vector2
 	{
-
-		this.x = Math.ceil(this.x);
-		this.y = Math.ceil(this.y);
+		var v = this.clone();
+		v.x = Math.ceil(this.x);
+		v.y = Math.ceil(this.y);
 
 		return this;
 
@@ -351,80 +358,63 @@ class Vector2 implements IVertex2
 
 	public round():Vector2
 	{
+		var v = this.clone();
+		v.x = Math.round(this.x);
+		v.y = Math.round(this.y);
 
-		this.x = Math.round(this.x);
-		this.y = Math.round(this.y);
-
-		return this;
-
+		return v;
 	}
 
 	public roundToZero():Vector2
 	{
+		var v = this.clone();
+		v.x = ( this.x < 0 ) ? Math.ceil(this.x) : Math.floor(this.x);
+		v.y = ( this.y < 0 ) ? Math.ceil(this.y) : Math.floor(this.y);
 
-		this.x = ( this.x < 0 ) ? Math.ceil(this.x) : Math.floor(this.x);
-		this.y = ( this.y < 0 ) ? Math.ceil(this.y) : Math.floor(this.y);
-
-		return this;
-
+		return v;
 	}
 
 	public negate():Vector2
 	{
-
 		this.x = -this.x;
 		this.y = -this.y;
 
 		return this;
-
 	}
 
 	public dot(v):number
 	{
-
 		return this.x * v.x + this.y * v.y;
-
 	}
 
 	public lengthSq():number
 	{
-
 		return this.x * this.x + this.y * this.y;
-
 	}
 
 	public length():number
 	{
-
 		return Math.sqrt(this.x * this.x + this.y * this.y);
-
 	}
 
 	public normalize():Vector2
 	{
-
 		return this.divideScalar(this.length());
-
 	}
 
 	public distanceTo(v:Vector2):number
 	{
-
 		return Math.sqrt(this.distanceToSquared(v));
-
 	}
 
 	public distanceToSquared(v:Vector2):number
 	{
-
 		var dx = this.x - v.x, dy = this.y - v.y;
 		return dx * dx + dy * dy;
-
 	}
 
-	public setLength(l):Vector2
+	public setLength(l:number):Vector2
 	{
-
 		var oldLength = this.length();
 
 		if(oldLength !== 0 && l !== oldLength)
@@ -439,59 +429,51 @@ class Vector2 implements IVertex2
 
 	public lerp(v:Vector2, alpha:number):Vector2
 	{
-
 		this.x += ( v.x - this.x ) * alpha;
 		this.y += ( v.y - this.y ) * alpha;
 
 		return this;
-
 	}
 
 	public equals(v:Vector2):boolean
 	{
-
 		return ( ( v.x === this.x ) && ( v.y === this.y ) );
-
 	}
 
-	public fromArray(array:number[], offset:number):Vector2
+	public getAngleInRadians(v:Vector2):number
 	{
+		return Math.atan2(v.y - this.y, v.x - this.x)
+	}
 
-		if(offset === undefined)
-		{
-			offset = 0;
-		}
+	public getAngleInDegrees(v:Vector2):number
+	{
+		return this.getAngleInRadians(v) * 180 / Math.PI;
+	}
 
+	public setFromArray(array:number[], offset:number = 0):Vector2
+	{
 		this.x = array[ offset ];
 		this.y = array[ offset + 1 ];
 
 		return this;
 	}
 
-	public toArray(array:number[], offset:number):number[]
+	public toArray(array:number[] = [], offset:number = 0):number[]
 	{
-
-		if(array === undefined)
-		{
-			array = [];
-		}
-		if(offset === undefined)
-		{
-			offset = 0;
-		}
-
 		array[ offset ] = this.x;
 		array[ offset + 1 ] = this.y;
 
 		return array;
+	}
 
+	public toString():string
+	{
+		return '[Vector2(x='+this.x+', y='+this.y+')]';
 	}
 
 	public clone():Vector2
 	{
-
 		return new Vector2(this.x, this.y);
-
 	}
 
 }
