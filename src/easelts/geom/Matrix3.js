@@ -1,4 +1,10 @@
 define(["require", "exports", './Vector3'], function (require, exports, v3) {
+    /**
+     * @method Matrix3
+     * @author alteredq / http://alteredqualia.com/
+     * @author WestLangley / http://github.com/WestLangley
+     * @author bhouston / http://exocortex.com
+     */
     var Matrix3 = (function () {
         function Matrix3() {
             this.__v0 = null;
@@ -77,6 +83,8 @@ define(["require", "exports", './Vector3'], function (require, exports, v3) {
             return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
         };
         Matrix3.prototype.getInverse = function (matrix, throwOnInvertible) {
+            // input: THREE.Matrix4
+            // ( based on http://code.google.com/p/webgl-mjs/ )
             if (throwOnInvertible === void 0) { throwOnInvertible = false; }
             var me = matrix.elements;
             var te = this.elements;
@@ -90,6 +98,7 @@ define(["require", "exports", './Vector3'], function (require, exports, v3) {
             te[7] = -me[9] * me[0] + me[1] * me[8];
             te[8] = me[5] * me[0] - me[1] * me[4];
             var det = me[0] * te[0] + me[1] * te[3] + me[2] * te[6];
+            // no inverse
             if (det === 0) {
                 var msg = "Matrix3.getInverse(): can't invert matrix, determinant is 0";
                 if (throwOnInvertible || false) {
@@ -131,6 +140,7 @@ define(["require", "exports", './Vector3'], function (require, exports, v3) {
             return array;
         };
         Matrix3.prototype.getNormalMatrix = function (m) {
+            // input: THREE.Matrix4
             this.getInverse(m).transpose();
             return this;
         };

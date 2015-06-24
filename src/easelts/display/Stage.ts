@@ -168,6 +168,11 @@ class Stage extends Container
 	// public properties:
 	public type:DisplayType = DisplayType.STAGE;
 
+	/**
+	 *
+	 * @type {boolean}
+	 * @private
+	 */
 	public _isRunning:boolean = false;
 	public _tickSignalConnection:SignalConnection = null;
 	public _fps:number = 60;
@@ -456,7 +461,6 @@ class Stage extends Container
 	 */
 	public setQuality(value:QualityType):void
 	{
-
 		switch(value)
 		{
 			case QualityType.LOW:

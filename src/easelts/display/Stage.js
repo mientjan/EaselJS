@@ -136,6 +136,11 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
             this.drawendSignal = new Signal();
             // public properties:
             this.type = 1 /* STAGE */;
+            /**
+             *
+             * @type {boolean}
+             * @private
+             */
             this._isRunning = false;
             this._tickSignalConnection = null;
             this._fps = 60;
