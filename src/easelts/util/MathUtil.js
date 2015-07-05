@@ -60,5 +60,5 @@ define(["require", "exports"], function (require, exports) {
         MathUtil.radianToDegreesFactor = 180 / Math.PI;
         return MathUtil;
     })();
-    exports.default = MathUtil;
+    exports.MathUtil = MathUtil;
 });

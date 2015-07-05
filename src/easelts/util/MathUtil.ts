@@ -1,7 +1,7 @@
 /**
  * @class MathUtil
  */
-export default class MathUtil
+class MathUtil
 {
 
 	private static degreeToRadiansFactor = Math.PI / 180;
@@ -180,3 +180,7 @@ export default class MathUtil
 		return ( value & ( value - 1 ) ) === 0 && value !== 0;
 	}
 }
+
+export {
+	MathUtil
+};
