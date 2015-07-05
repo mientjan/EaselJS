@@ -122,7 +122,7 @@ class EventDispatcher
 	 * @param {Object} target The target object to inject EventDispatcher methods into. This can be an instance or a
 	 * prototype.
 	 **/
-	constructor(target?)
+		constructor(target?)
 	{
 		//			target.addEventListener = p.addEventListener;
 		//			target.on = p.on;
@@ -338,8 +338,9 @@ class EventDispatcher
 			// capture & atTarget
 			for(i = l - 1; i >= 0 && !eventObj.propagationStopped; i--)
 			{
-				list[i]._dispatchEvent(eventObj, 1 + ((i == 0) ? 1 : i ));
+				list[i]._dispatchEvent(eventObj, 1 + ((i == 0) ? 1 : 0 ));
 			}
+
 			// bubbling
 			for(i = 1; i < l && !eventObj.propagationStopped; i++)
 			{

@@ -13,6 +13,7 @@ class AutoScaleBehavior extends AbstractBehavior
 	private _downScaleLimit:Size = null;
 	private _upScaleBreakPoint:Size = null;
 	private _upScaleLimit:Size = null;
+
 	private _alwaysCover:boolean = false;
 	private _alwaysVisible:boolean = false;
 

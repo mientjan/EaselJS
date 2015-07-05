@@ -1,54 +1,48 @@
-/*
- * The MIT License (MIT)
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
-
+import am3 = require('./math3d/AbstractMath3d');
 import m4 = require('./Matrix4');
-import m3 = require('./Matrix3');
-import Vector4 = require('./Vector4');
-import Quaternion = require('./Quaternion');
+import q = require('./Quaternion');
 import MathUtil = require('../util/MathUtil');
 
-// interface
-import IVertex3 = require('../interface/IVector3');
-/**
- * @author mrdoob / http://mrdoob.com/
- * @author *kile / http://kile.stravaganza.org/
- * @author philogb / http://blog.thejit.org/
- * @author mikael emtinger / http://gomo.se/
- * @author egraether / http://egraether.com/
- * @author WestLangley / http://github.com/WestLangley
- */
 
-class Vector3
+export class Vector3
 {
+	private _quaternion:{[index:string]:q.Quaternion} = {};
+	private _vector3:{[index:string]:Vector3} = {};
+	private _matrix4:{[index:string]:m4.Matrix4} = {};
+
+	protected getQuaternion(value:string):q.Quaternion
+	{
+		if(!this._quaternion[value])
+		{
+			this._quaternion[value] = new q.Quaternion();
+		}
+		return this._quaternion[value];
+	}
+
+	protected getVector3(value:string):Vector3
+	{
+		if(!this._vector3[value])
+		{
+			this._vector3[value] = new Vector3();
+		}
+		return this._vector3[value];
+	}
+
+	protected getMatrix4(value:string):m4.Matrix4
+	{
+		if(!this._matrix4[value])
+		{
+			this._matrix4[value] = new m4.Matrix4();
+		}
+		return this._matrix4[value];
+	}
+
 	public x:number;
 	public y:number;
 	public z:number;
 
 	constructor(x:number = 0, y:number = 0, z:number = 0)
 	{
-
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -235,19 +229,20 @@ class Vector3
 
 	}
 
-	private _quaternionApplyEuler = new Quaternion();
+
 
 	public applyEuler(euler)
 	{
-		this.applyQuaternion(this._quaternionApplyEuler.setFromEuler(euler));
+		var v = this.getQuaternion('_quaternionApplyEuler');
+
+		this.applyQuaternion(v.setFromEuler(euler));
 		return this;
 	}
 
-	private _quaternionApplyAxisAngle = new Quaternion();
-
-	public applyAxisAngle(axis:Vector4, angle:number):Vector3
+	public applyAxisAngle(axis:any, angle:number):Vector3
 	{
-		this.applyQuaternion(this._quaternionApplyAxisAngle.setFromAxisAngle(axis, angle));
+		var q1 = this.getQuaternion('quaternionApplyAxisAngle');
+		this.applyQuaternion(q1.setFromAxisAngle(axis, angle));
 		return this;
 	}
 
@@ -332,18 +327,18 @@ class Vector3
 
 	}
 
-	private _projectMatrix:m4.Matrix4 = new m4.Matrix4();
 	public project(camera:any):Vector3
 	{
-		this._projectMatrix.multiplyMatrices(<m4.Matrix4> camera.projectionMatrix, <m4.Matrix4> this._projectMatrix.getInverse(camera.matrixWorld));
-		return this.applyProjection(this._projectMatrix);
+		var m1 = this.getMatrix4('_projectMatrix');
+		m1.multiplyMatrices(<m4.Matrix4> camera.projectionMatrix, <m4.Matrix4> m1.getInverse(camera.matrixWorld));
+		return this.applyProjection(m1);
 	}
 
-	private _unprojectMatrix:m4.Matrix4 = new m4.Matrix4();
 	public unproject(camera:any):Vector3
 	{
-		this._unprojectMatrix.multiplyMatrices(<m4.Matrix4> camera.matrixWorld, <m4.Matrix4> this._unprojectMatrix.getInverse(camera.projectionMatrix));
-		return this.applyProjection(this._unprojectMatrix);
+		var m1 = this.getMatrix4('_unprojectMatrix');
+		m1.multiplyMatrices(<m4.Matrix4> camera.matrixWorld, <m4.Matrix4> m1.getInverse(camera.projectionMatrix));
+		return this.applyProjection(m1);
 
 	}
 
@@ -512,16 +507,15 @@ class Vector3
 		return this;
 	}
 
-
-	private _minClampScalar = new Vector3();
-	private _maxClampScalar = new Vector3();
-
-	public clampScalar(minVal:number, maxVal)
+	public clampScalar(minVal:number, maxVal:number)
 	{
-		this._minClampScalar.set(minVal, minVal, minVal);
-		this._maxClampScalar.set(maxVal, maxVal, maxVal);
+		var min = this.getVector3('_minClampScalar');
+		var max = this.getVector3('_maxClampScalar');
 
-		return this.clamp(this._minClampScalar, this._maxClampScalar);
+		min.set(minVal, minVal, minVal);
+		max.set(maxVal, maxVal, maxVal);
+
+		return this.clamp(min, max);
 	}
 
 	public floor():Vector3
@@ -675,27 +669,25 @@ class Vector3
 	}
 
 
-	private _v1ProjectOnVector:Vector3 = new Vector3();
 	private _dotProjectOnVector:number = null;
 
 	public projectOnVector(v:Vector3):Vector3
-		{
-			this._v1ProjectOnVector.copy(v).normalize();
-
-			this._dotProjectOnVector = this.dot(this._v1ProjectOnVector);
-
-			return this.copy(this._v1ProjectOnVector).multiplyScalar(this._dotProjectOnVector);
-
-		}
-
-	private _v1ProjectOnPlane = new Vector3();
-	public projectOnPlane(planeNormal:Vector3)
 	{
-		this._v1ProjectOnPlane.copy(this).projectOnVector(planeNormal);
-		return this.sub(this._v1ProjectOnPlane);
+		var v1 = this.getVector3('_v1ProjectOnVector');
+		v1.copy(v).normalize();
+
+		this._dotProjectOnVector = this.dot(v1);
+
+		return this.copy(v1).multiplyScalar(this._dotProjectOnVector);
+
 	}
 
-	private _v1Reflect = new Vector3();
+	public projectOnPlane(planeNormal:Vector3)
+	{
+		var v1 = this.getVector3('_v1ProjectOnPlane');
+		v1.copy(this).projectOnVector(planeNormal);
+		return this.sub(v1);
+	}
 
 	/**
 	 * reflect incident vector off plane orthogonal to normal
@@ -705,8 +697,8 @@ class Vector3
 	 */
 	public reflect(normal:Vector3):Vector3
 	{
-
-		return this.sub(this._v1Reflect.copy(normal).multiplyScalar(2 * this.dot(normal)));
+		var v1 = this.getVector3('_v1Reflect');
+		return this.sub(v1.copy(normal).multiplyScalar(2 * this.dot(normal)));
 
 	}
 
@@ -831,22 +823,19 @@ class Vector3
 		return array;
 	}
 
-//	public fromAttribute(attribute, index, offset:number = 0):Vector3
-//	{
-//		index = index * attribute.itemSize + offset;
-//
-//		this.x = attribute.array[ index ];
-//		this.y = attribute.array[ index + 1 ];
-//		this.z = attribute.array[ index + 2 ];
-//
-//		return this;
-//	}
+	//	public fromAttribute(attribute, index, offset:number = 0):Vector3
+	//	{
+	//		index = index * attribute.itemSize + offset;
+	//
+	//		this.x = attribute.array[ index ];
+	//		this.y = attribute.array[ index + 1 ];
+	//		this.z = attribute.array[ index + 2 ];
+	//
+	//		return this;
+	//	}
 
 	public clone():Vector3
 	{
 		return new Vector3(this.x, this.y, this.z);
 	}
-
 }
-
-export = Vector3;

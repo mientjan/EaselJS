@@ -12,7 +12,6 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
             this.htmlElement = null;
             this._oldMtx = null;
             this._visible = false;
-            this._drawEndConnection = null;
             var htmlDomElement;
             if (typeof htmlElement == 'string') {
                 htmlDomElement = document.getElementById(htmlElement);
@@ -30,38 +29,6 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
             return this.htmlElement != null;
         };
         DOMElement.prototype.draw = function (ctx, ignoreCache) {
-            return true;
-        };
-        DOMElement.prototype.cache = function () {
-        };
-        DOMElement.prototype.uncache = function () {
-        };
-        DOMElement.prototype.updateCache = function () {
-        };
-        DOMElement.prototype.hitTest = function (x, y) {
-            throw 'hitTest Not applicable to DOMElement.';
-        };
-        DOMElement.prototype.localToGlobal = function (x, y) {
-            throw 'localToGlobal Not applicable to DOMElement.';
-        };
-        DOMElement.prototype.globalToLocal = function (x, y) {
-            throw 'globalToLocal Not applicable to DOMElement.';
-        };
-        DOMElement.prototype.localToLocal = function (x, y) {
-            throw 'localToLocal Not applicable to DOMElement.';
-        };
-        DOMElement.prototype.clone = function () {
-            throw ("DOMElement cannot be cloned.");
-        };
-        DOMElement.prototype.toString = function () {
-            return "[DOMElement (name=" + this.name + ")]";
-        };
-        DOMElement.prototype.onTick = function (delta) {
-        };
-        DOMElement.prototype.onStageSet = function () {
-            this._drawEndConnection = this.stage.drawendSignal.connect(this._handleDrawEnd.bind(this));
-        };
-        DOMElement.prototype._handleDrawEnd = function () {
             var o = this.htmlElement;
             if (!o) {
                 return;
@@ -89,10 +56,33 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
                 style['MozTransform'] = str + "px," + (mtx.ty + 0.5 | 0) + "px)";
                 this._oldMtx = oMtx ? oMtx.copy(mtx) : mtx.clone();
             }
-            if (this._drawEndConnection) {
-                this._drawEndConnection.dispose();
-                this._drawEndConnection = null;
-            }
+            return true;
+        };
+        DOMElement.prototype.cache = function () {
+        };
+        DOMElement.prototype.uncache = function () {
+        };
+        DOMElement.prototype.updateCache = function () {
+        };
+        DOMElement.prototype.hitTest = function (x, y) {
+            throw 'hitTest Not applicable to DOMElement.';
+        };
+        DOMElement.prototype.localToGlobal = function (x, y) {
+            throw 'localToGlobal Not applicable to DOMElement.';
+        };
+        DOMElement.prototype.globalToLocal = function (x, y) {
+            throw 'globalToLocal Not applicable to DOMElement.';
+        };
+        DOMElement.prototype.localToLocal = function (x, y) {
+            throw 'localToLocal Not applicable to DOMElement.';
+        };
+        DOMElement.prototype.clone = function () {
+            throw ("DOMElement cannot be cloned.");
+        };
+        DOMElement.prototype.toString = function () {
+            return "[DOMElement (name=" + this.name + ")]";
+        };
+        DOMElement.prototype.onTick = function (delta) {
         };
         return DOMElement;
     })(DisplayObject);

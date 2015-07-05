@@ -225,7 +225,7 @@ class Tween extends EventDispatcher
 	 * will ignore this, but all others will pause if this is `true`.
 	 * @static
 	 */
-	public static onTick(delta, paused)
+	public static onTick(delta:number, paused:boolean)
 	{
 		var tweens = Tween._tweens.slice(); // to avoid race conditions.
 		for(var i = tweens.length - 1; i >= 0; i--)
@@ -599,6 +599,7 @@ class Tween extends EventDispatcher
 		{
 			Tween._register(this, true);
 		}
+
 		if(props && props.position != null)
 		{
 			this.setPosition(props.position, Tween.NONE);
@@ -849,7 +850,7 @@ class Tween extends EventDispatcher
 	 * @method tick
 	 * @param {Number} delta The time to advance in milliseconds (or ticks if `useTicks` is `true`).
 	 */
-	onTick(delta)
+	public onTick(delta)
 	{
 		if(this._paused)
 		{
@@ -865,7 +866,7 @@ class Tween extends EventDispatcher
 	 * @param {Boolean} [value=true] Indicates whether the tween should be paused (`true`) or played (`false`).
 	 * @return {Tween} This tween instance (for chaining calls)
 	 */
-	setPaused(value)
+	public setPaused(value:boolean):Tween
 	{
 		if(this._paused === !!value)
 		{
@@ -877,17 +878,17 @@ class Tween extends EventDispatcher
 	}
 
 	// tiny api (primarily for tool output):
-	w = this.wait;
-	t = this.to;
-	c = this.call;
-	s = this.set;
+	public w = this.wait;
+	public t = this.to;
+	public c = this.call;
+	public s = this.set;
 
 	/**
 	 * Returns a string representation of this object.
 	 * @method toString
 	 * @return {String} a string representation of the instance.
 	 */
-	toString()
+	public toString():string
 	{
 		return "[Tween]";
 	}
@@ -896,7 +897,7 @@ class Tween extends EventDispatcher
 	 * @method clone
 	 * @protected
 	 */
-	clone()
+	public clone()
 	{
 		throw("Tween can not be cloned.")
 	}

@@ -1,4 +1,6 @@
-import Bitmap = require('../display/Bitmap');
+import DisplayObject = require('../display/DisplayObject');
+import SpriteSheet = require('../display/SpriteSheet');
+import DisplayType = require('../enum/DisplayType');
 import Methods = require('../util/Methods');
 import TimeEvent = require('../../createts/event/TimeEvent');
 import Signal = require('../../createts/event/Signal');
@@ -7,23 +9,22 @@ import SignalConnection = require('../../createts/event/SignalConnection');
 /**
  * @class ImageSequence
  */
-class ImageSequence extends Bitmap
+class ImageSequence extends DisplayObject
 {
+	public type:DisplayType = DisplayType.BITMAP;
+
 	public _playing = false;
 	public _timeIndex:number = -1;
-	public _frame:number = -1;
+	public _frame:number = 0;
 	public _fps:number = 0;
 	public _length:number = 0;
-	public _images:string[] = [];
+	private _times:number = 1;
+	private _loopInfinite:boolean = false;
 
 	private _onComplete:Function = null;
-	private _times:number = 1;
 
-	private imageBackup0:HTMLImageElement = Methods.createImage();
-	private imageBackup1:HTMLImageElement = Methods.createImage();
-	private imageBackup2:HTMLImageElement = Methods.createImage();
-
-	public image:HTMLImageElement;
+	public images:Array<HTMLImageElement> = null;
+	public spriteSheet:SpriteSheet = null;
 
 	/**
 	 *
@@ -36,34 +37,88 @@ class ImageSequence extends Bitmap
 	 * @param {string|number} regX
 	 * @param {string|number} regY
 	 */
-	constructor(images:string[], fps:number, width:any, height:any, x:any = 0, y:any = 0, regX:any = 0, regY:any = 0)
+	constructor(images:string[]|SpriteSheet, fps:number, width:any, height:any, x:any = 0, y:any = 0, regX:any = 0, regY:any = 0)
 	{
-		super(images[0], width, height, x, y, regX, regY);
+		super(width, height, x, y, regX, regY);
 
-		for(var i = 0; i < images.length; i++)
+		if( images instanceof Array )
 		{
-			this._images.push( images[i] );
+			var imageList = <string[]> images;
+			this.images = [];
+			for(var i = 0; i < imageList.length; i++)
+			{
+				var image = document.createElement('img');
+				image.src = images[i];
+
+				//			this._images.push( images[i] );
+				this.images.push( image );
+			}
+
+			this._length = this.images.length;
+		}
+		else if( images instanceof SpriteSheet )
+		{
+			var spriteSheet = <SpriteSheet> images;
+			var animations = spriteSheet.getAnimations();
+
+			if( animations.length > 1 )
+			{
+				throw new Error('SpriteSheet not compatible with ImageSequence, has multiple animations. Only supports one')
+			}
+
+			this._length = spriteSheet.getNumFrames(animations[0]);
+			this.spriteSheet = spriteSheet;
 		}
 
 		this._fps = 1000 / fps;
-		this._length = images.length;
 	}
 
 	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):boolean
 	{
-		var image = this.image;
+		if( this._frame > -1 )
+		{
+			var frame = this._frame;
 
-		if( !image.complete ){
-			if( this.imageBackup0 && this.imageBackup0.complete ){
-				image = this.imageBackup0;
-			} else if( this.imageBackup1 && this.imageBackup1.complete ){
-				image = this.imageBackup1;
-			} else if( this.imageBackup2 && this.imageBackup2.complete ){
-				image = this.imageBackup2;
+			if(this.images)
+			{
+				var images = this.images;
+				var image = images[frame];
+
+				if( !image.complete ){
+					if( images[frame - 1] && images[frame - 1].complete ){
+						image = images[frame - 1];
+					} else if( images[frame - 2] && images[frame - 2].complete ){
+						image = images[frame - 2];
+					} else if( images[frame - 3] && images[frame - 3].complete ){
+						image = images[frame - 3];
+					}
+				}
+
+				var width = image.naturalWidth;
+				var height = image.naturalHeight;
+
+				if( width > 0 && height > 0 )
+				{
+					ctx.drawImage(image, 0, 0, width, height, 0, 0, this.width, this.height);
+				}
+			}
+			else if(this.spriteSheet)
+			{
+				var frameObject = this.spriteSheet.getFrame(this._frame);
+
+				if(!frameObject)
+				{
+					return false;
+				}
+
+				var rect = frameObject.rect;
+
+				if(rect.width && rect.height)
+				{
+					ctx.drawImage(frameObject.image, rect.x, rect.y, rect.width, rect.height, 0, 0, this.width, this.height);
+				}
 			}
 		}
-
-		ctx.drawImage(image, 0, 0);
 
 		return true;
 	}
@@ -72,21 +127,23 @@ class ImageSequence extends Bitmap
 	{
 		this._frame = 0;
 		this._times = times;
+		this._loopInfinite = times == -1 ? true : false;
 		this._onComplete = onComplete;
 		this._playing = true;
 	}
 
-	public stop():void
+	public stop(triggerOnComplete:boolean = true):void
 	{
 		this._playing = false;
+		this._loopInfinite = false;
 		this._timeIndex = -1;
-		this._frame = -1;
 
-		if(this._onComplete)
+		if(this._onComplete && triggerOnComplete)
 		{
 			this._onComplete.call(null);
-			//			this._onComplete = null;
 		}
+
+		this._onComplete = null;
 	}
 
 	public onTick(delta:number):void
@@ -106,8 +163,9 @@ class ImageSequence extends Bitmap
 			var times = this._times;
 			var frame = Math.floor(time / fps);
 			var currentFrame = this._frame;
+			var playedLeft = times - Math.floor(frame / length);
 
-			if(times > -1 && !(times - Math.floor(frame / length)))
+			if(!this._loopInfinite && playedLeft <= 0)
 			{
 				this.stop();
 			}
@@ -118,11 +176,6 @@ class ImageSequence extends Bitmap
 				if(currentFrame != frame)
 				{
 					this._frame = frame;
-
-					this.imageBackup2.src = this.imageBackup1.src;
-					this.imageBackup1.src = this.imageBackup0.src;
-					this.imageBackup0.src = this.image.src;
-					this.image.src = this._images[frame];
 				}
 			}
 

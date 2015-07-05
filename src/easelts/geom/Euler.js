@@ -1,11 +1,16 @@
-define(["require", "exports", './Quaternion', '../util/MathUtil'], function (require, exports, Quaternion, MathUtil) {
+/**
+ * @author mrdoob / http://mrdoob.com/
+ * @author WestLangley / http://github.com/WestLangley
+ * @author bhouston / http://exocortex.com
+ */
+define(["require", "exports", './Quaternion', '../util/MathUtil'], function (require, exports, q, MathUtil) {
     var Euler = (function () {
         function Euler(x, y, z, order) {
             this._x = 0;
             this._y = 0;
             this._z = 0;
             this._order = Euler.DefaultOrder;
-            this._reorder_q = new Quaternion(0, 0, 0);
+            this._reorder_q = new q.Quaternion(0, 0, 0);
             this._x = x || 0;
             this._y = y || 0;
             this._z = z || 0;
@@ -73,6 +78,7 @@ define(["require", "exports", './Quaternion', '../util/MathUtil'], function (req
         };
         Euler.prototype.setFromRotationMatrix = function (m, order) {
             var clamp = MathUtil.clamp;
+            // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
             var te = m.elements;
             var m11 = te[0], m12 = te[4], m13 = te[8];
             var m21 = te[1], m22 = te[5], m23 = te[9];
@@ -155,6 +161,8 @@ define(["require", "exports", './Quaternion', '../util/MathUtil'], function (req
             if (order === void 0) { order = this._order; }
             if (update === void 0) { update = false; }
             var clamp = MathUtil.clamp;
+            // q is assumed to be normalized
+            // http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m
             var sqx = q.x * q.x;
             var sqy = q.y * q.y;
             var sqz = q.z * q.z;
@@ -198,6 +206,7 @@ define(["require", "exports", './Quaternion', '../util/MathUtil'], function (req
             return this;
         };
         Euler.prototype.reorder = function (newOrder) {
+            // WARNING: this discards revolution information -bhouston
             var q = this._reorder_q;
             q.setFromEuler(this);
             this.setFromQuaternion(q, newOrder);

@@ -79,7 +79,7 @@ class SignalAbstract
 		{
 			this.defer(function()
 			{
-				_g.listAdd(conn, prioritize);
+				_g.listAdd(conn, prioritize); 
 			});
 		}
 		else

@@ -1,23 +1,35 @@
-define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], function (require, exports, m4, Quaternion, MathUtil) {
+define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], function (require, exports, m4, q, MathUtil) {
     var Vector3 = (function () {
         function Vector3(x, y, z) {
             if (x === void 0) { x = 0; }
             if (y === void 0) { y = 0; }
             if (z === void 0) { z = 0; }
-            this._quaternionApplyEuler = new Quaternion();
-            this._quaternionApplyAxisAngle = new Quaternion();
-            this._projectMatrix = new m4.Matrix4();
-            this._unprojectMatrix = new m4.Matrix4();
-            this._minClampScalar = new Vector3();
-            this._maxClampScalar = new Vector3();
-            this._v1ProjectOnVector = new Vector3();
+            this._quaternion = {};
+            this._vector3 = {};
+            this._matrix4 = {};
             this._dotProjectOnVector = null;
-            this._v1ProjectOnPlane = new Vector3();
-            this._v1Reflect = new Vector3();
             this.x = x;
             this.y = y;
             this.z = z;
         }
+        Vector3.prototype.getQuaternion = function (value) {
+            if (!this._quaternion[value]) {
+                this._quaternion[value] = new q.Quaternion();
+            }
+            return this._quaternion[value];
+        };
+        Vector3.prototype.getVector3 = function (value) {
+            if (!this._vector3[value]) {
+                this._vector3[value] = new Vector3();
+            }
+            return this._vector3[value];
+        };
+        Vector3.prototype.getMatrix4 = function (value) {
+            if (!this._matrix4[value]) {
+                this._matrix4[value] = new m4.Matrix4();
+            }
+            return this._matrix4[value];
+        };
         Vector3.prototype.set = function (x, y, z) {
             this.x = x;
             this.y = y;
@@ -124,11 +136,13 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.applyEuler = function (euler) {
-            this.applyQuaternion(this._quaternionApplyEuler.setFromEuler(euler));
+            var v = this.getQuaternion('_quaternionApplyEuler');
+            this.applyQuaternion(v.setFromEuler(euler));
             return this;
         };
         Vector3.prototype.applyAxisAngle = function (axis, angle) {
-            this.applyQuaternion(this._quaternionApplyAxisAngle.setFromAxisAngle(axis, angle));
+            var q1 = this.getQuaternion('quaternionApplyAxisAngle');
+            this.applyQuaternion(q1.setFromAxisAngle(axis, angle));
             return this;
         };
         Vector3.prototype.applyMatrix3 = function (m) {
@@ -176,12 +190,14 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.project = function (camera) {
-            this._projectMatrix.multiplyMatrices(camera.projectionMatrix, this._projectMatrix.getInverse(camera.matrixWorld));
-            return this.applyProjection(this._projectMatrix);
+            var m1 = this.getMatrix4('_projectMatrix');
+            m1.multiplyMatrices(camera.projectionMatrix, m1.getInverse(camera.matrixWorld));
+            return this.applyProjection(m1);
         };
         Vector3.prototype.unproject = function (camera) {
-            this._unprojectMatrix.multiplyMatrices(camera.matrixWorld, this._unprojectMatrix.getInverse(camera.projectionMatrix));
-            return this.applyProjection(this._unprojectMatrix);
+            var m1 = this.getMatrix4('_unprojectMatrix');
+            m1.multiplyMatrices(camera.matrixWorld, m1.getInverse(camera.projectionMatrix));
+            return this.applyProjection(m1);
         };
         Vector3.prototype.transformDirection = function (m) {
             var x = this.x, y = this.y, z = this.z;
@@ -258,9 +274,11 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.clampScalar = function (minVal, maxVal) {
-            this._minClampScalar.set(minVal, minVal, minVal);
-            this._maxClampScalar.set(maxVal, maxVal, maxVal);
-            return this.clamp(this._minClampScalar, this._maxClampScalar);
+            var min = this.getVector3('_minClampScalar');
+            var max = this.getVector3('_maxClampScalar');
+            min.set(minVal, minVal, minVal);
+            max.set(maxVal, maxVal, maxVal);
+            return this.clamp(min, max);
         };
         Vector3.prototype.floor = function () {
             this.x = Math.floor(this.x);
@@ -340,16 +358,19 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.projectOnVector = function (v) {
-            this._v1ProjectOnVector.copy(v).normalize();
-            this._dotProjectOnVector = this.dot(this._v1ProjectOnVector);
-            return this.copy(this._v1ProjectOnVector).multiplyScalar(this._dotProjectOnVector);
+            var v1 = this.getVector3('_v1ProjectOnVector');
+            v1.copy(v).normalize();
+            this._dotProjectOnVector = this.dot(v1);
+            return this.copy(v1).multiplyScalar(this._dotProjectOnVector);
         };
         Vector3.prototype.projectOnPlane = function (planeNormal) {
-            this._v1ProjectOnPlane.copy(this).projectOnVector(planeNormal);
-            return this.sub(this._v1ProjectOnPlane);
+            var v1 = this.getVector3('_v1ProjectOnPlane');
+            v1.copy(this).projectOnVector(planeNormal);
+            return this.sub(v1);
         };
         Vector3.prototype.reflect = function (normal) {
-            return this.sub(this._v1Reflect.copy(normal).multiplyScalar(2 * this.dot(normal)));
+            var v1 = this.getVector3('_v1Reflect');
+            return this.sub(v1.copy(normal).multiplyScalar(2 * this.dot(normal)));
         };
         Vector3.prototype.angleTo = function (v) {
             var theta = this.dot(v) / (this.length() * v.length());
@@ -412,5 +433,5 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
         };
         return Vector3;
     })();
-    return Vector3;
+    exports.Vector3 = Vector3;
 });

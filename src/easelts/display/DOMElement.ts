@@ -27,7 +27,6 @@
  */
 
 import DisplayObject = require('./DisplayObject');
-import SignalConnection = require('../../createts/event/SignalConnection');
 import Point = require('../geom/Point');
 import TimeEvent = require('../../createts/event/TimeEvent');
 
@@ -56,8 +55,6 @@ class DOMElement extends DisplayObject
 	 * @protected
 	 */
 	public _visible = false;
-
-	public _drawEndConnection:SignalConnection = null;
 
 	/**
 	 * Initialization method.
@@ -111,10 +108,48 @@ class DOMElement extends DisplayObject
 	 * into itself).
 	 * @return {Boolean}
 	 */
-	public draw(ctx, ignoreCache):boolean
+	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):boolean
 	{
 		// this relies on the _tick method because draw isn't called if a parent is not visible.
 		// the actual update happens in _handleDrawEnd
+
+		var o = this.htmlElement;
+		if(!o)
+		{
+			return;
+		}
+		var style = o.style;
+
+		var mtx = this.getConcatenatedMatrix(this._matrix);
+
+		var visibility = mtx.visible ? "visible" : "hidden";
+		if(visibility != style.visibility)
+		{
+			style.visibility = visibility;
+		}
+		if(!mtx.visible)
+		{
+			return;
+		}
+
+		var oMtx = this._oldMtx;
+		var n = 10000; // precision
+		if(!oMtx || oMtx.alpha != mtx.alpha)
+		{
+			style.opacity = "" + (mtx.alpha * n | 0) / n;
+			if(oMtx)
+			{
+				oMtx.alpha = mtx.alpha;
+			}
+		}
+		if(!oMtx || oMtx.tx != mtx.tx || oMtx.ty != mtx.ty || oMtx.a != mtx.a || oMtx.b != mtx.b || oMtx.c != mtx.c || oMtx.d != mtx.d)
+		{
+			var str = "matrix(" + (mtx.a * n | 0) / n + "," + (mtx.b * n | 0) / n + "," + (mtx.c * n | 0) / n + "," + (mtx.d * n | 0) / n + "," + (mtx.tx + 0.5 | 0);
+			style.transform = style['WebkitTransform'] = style['OTransform'] = style['msTransform'] = str + "," + (mtx.ty + 0.5 | 0) + ")";
+			style['MozTransform'] = str + "px," + (mtx.ty + 0.5 | 0) + "px)";
+			this._oldMtx = oMtx ? oMtx.copy(mtx) : mtx.clone();
+		}
+
 		return true;
 	}
 
@@ -208,17 +243,17 @@ class DOMElement extends DisplayObject
 		// Do nothing, prevent super class from having onTick called
 	}
 
-	public onStageSet():void
-	{
-		this._drawEndConnection = this.stage.drawendSignal.connect(this._handleDrawEnd.bind(this));
-	}
+//	public onStageSet():void
+//	{
+//		this._drawEndConnection = this.stage.drawendSignal.connect(this._handleDrawEnd.bind(this));
+//	}
 
 	/**
 	 * @method _handleDrawEnd
 	 * @param {Event} evt
 	 * @protected
 	 */
-	public _handleDrawEnd()
+	/*public _handleDrawEnd()
 	{
 		var o = this.htmlElement;
 		if(!o)
@@ -262,7 +297,7 @@ class DOMElement extends DisplayObject
 			this._drawEndConnection.dispose();
 			this._drawEndConnection = null;
 		}
-	}
+	}*/
 
 }
 export = DOMElement;

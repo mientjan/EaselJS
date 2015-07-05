@@ -938,16 +938,41 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		var offX = this._cacheOffsetX;
 		var offY = this._cacheOffsetY;
 		var fBounds;
+
 		if(fBounds = this._applyFilterBounds(offX, offY, 0, 0))
 		{
 			offX = fBounds.x;
 			offY = fBounds.y;
 		}
+
 		ctx.drawImage(cacheCanvas, offX, offY, cacheCanvas.width / scale, cacheCanvas.height / scale);
+
 		return true;
 	}
 
-	public DisplayObject_draw:(ctx:CanvasRenderingContext2D, ignoreCache?:boolean) => boolean = this.draw;
+	public DisplayObject_draw(ctx:CanvasRenderingContext2D, ignoreCache?:boolean):boolean
+	{
+		var cacheCanvas = this.cacheCanvas;
+		if(ignoreCache || !cacheCanvas)
+		{
+			return false;
+		}
+
+		var scale = this._cacheScale;
+		var offX = this._cacheOffsetX;
+		var offY = this._cacheOffsetY;
+		var fBounds;
+
+		if(fBounds = this._applyFilterBounds(offX, offY, 0, 0))
+		{
+			offX = fBounds.x;
+			offY = fBounds.y;
+		}
+
+		ctx.drawImage(cacheCanvas, offX, offY, cacheCanvas.width / scale, cacheCanvas.height / scale);
+
+		return true;
+	}
 
 	/**
 	 * Applies this display object's transformation, alpha, globalCompositeOperation, clipping path (mask), and shadow
@@ -1184,7 +1209,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Point} A Point instance with x and y properties correlating to the transformed position in the
 	 * display object's coordinate space.
 	 **/
-	public globalToLocal(x:number, y:number)
+	public globalToLocal(x:number, y:number):Point
 	{
 		var mtx = this.getConcatenatedMatrix(this._matrix);
 		if(mtx == null)
@@ -1212,7 +1237,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Point} Returns a Point instance with x and y properties correlating to the transformed position
 	 * in the target's coordinate space.
 	 **/
-	public localToLocal(x, y, target)
+	public localToLocal(x:number, y:number, target:DisplayObject):Point
 	{
 		var pt = this.localToGlobal(x, y);
 		return target.globalToLocal(pt.x, pt.y);
@@ -1600,7 +1625,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @param {CanvasRenderingContext2D} ctx
 	 * @return {Boolean}
 	 **/
-	protected _testHit(ctx)
+	protected _testHit(ctx:CanvasRenderingContext2D):boolean
 	{
 		var hit = false;
 		if(this.isHitable){

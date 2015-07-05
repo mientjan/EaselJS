@@ -1,4 +1,4 @@
-import Vector3 = require('./Vector3');
+import v3 = require('./Vector3');
 import m4 = require('./Matrix4');
 
 /**
@@ -69,12 +69,12 @@ export class Matrix3
 
 	}
 
-	private __v0:Vector3 = null;
+	private __v0:v3.Vector3 = null;
 
 	public applyToVector3Array(array:number[], offset:number, length:number):number[]
 	{
 		if(!this.__v0){
-			this.__v0 = new Vector3(0, 0, 0);
+			this.__v0 = new v3.Vector3(0, 0, 0);
 		}
 		var v1 = this.__v0;
 

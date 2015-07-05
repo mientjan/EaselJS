@@ -1,17 +1,37 @@
-define(["require", "exports", './Vector3'], function (require, exports, Vector3) {
+define(["require", "exports", './Matrix4', './Vector3'], function (require, exports, m4, v3) {
     var Quaternion = (function () {
         function Quaternion(x, y, z, w) {
             if (x === void 0) { x = 0; }
             if (y === void 0) { y = 0; }
             if (z === void 0) { z = 0; }
             if (w === void 0) { w = 1; }
-            this._setFromUnitVectors_v1 = new Vector3(0, 0, 0);
+            this._quaternion = {};
+            this._vector3 = {};
+            this._matrix4 = {};
             this._setFromUnitVectors_r = 0;
             this._x = x;
             this._y = y;
             this._z = z;
             this._w = w;
         }
+        Quaternion.prototype.getQuaternion = function (value) {
+            if (!this._quaternion[value]) {
+                this._quaternion[value] = new Quaternion();
+            }
+            return this._quaternion[value];
+        };
+        Quaternion.prototype.getVector3 = function (value) {
+            if (!this._vector3[value]) {
+                this._vector3[value] = new v3.Vector3();
+            }
+            return this._vector3[value];
+        };
+        Quaternion.prototype.getMatrix4 = function (value) {
+            if (!this._matrix4[value]) {
+                this._matrix4[value] = new m4.Matrix4();
+            }
+            return this._matrix4[value];
+        };
         Quaternion.slerp = function (qa, qb, qm, t) {
             return qm.copy(qa).slerp(qb, t);
         };
@@ -167,7 +187,7 @@ define(["require", "exports", './Vector3'], function (require, exports, Vector3)
             return this;
         };
         Quaternion.prototype.setFromUnitVectors = function (vFrom, vTo) {
-            var v1 = this._setFromUnitVectors_v1, r = this._setFromUnitVectors_r;
+            var v1 = this.getVector3('_setFromUnitVectors_v1'), r = this._setFromUnitVectors_r;
             var EPS = 0.000001;
             r = vFrom.dot(vTo) + 1;
             if (r < EPS) {
@@ -227,11 +247,7 @@ define(["require", "exports", './Vector3'], function (require, exports, Vector3)
             this.onChangeCallback();
             return this;
         };
-        Quaternion.prototype.multiply = function (q, p) {
-            if (p !== undefined) {
-                console.warn('THREE.Quaternion: .multiply() now only accepts one argument. Use .multiplyQuaternions( a, b ) instead.');
-                return this.multiplyQuaternions(q, p);
-            }
+        Quaternion.prototype.multiply = function (q) {
             return this.multiplyQuaternions(this, q);
         };
         Quaternion.prototype.multiplyQuaternions = function (a, b) {
@@ -325,5 +341,5 @@ define(["require", "exports", './Vector3'], function (require, exports, Vector3)
         };
         return Quaternion;
     })();
-    return Quaternion;
+    exports.Quaternion = Quaternion;
 });
