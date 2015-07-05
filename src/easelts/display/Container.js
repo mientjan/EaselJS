@@ -306,9 +306,6 @@ define(["require", "exports", './DisplayObject', '../util/Methods'], function (r
             var objects = this._getObjectsUnderPoint(pt.x, pt.y);
             return objects[0];
         };
-        Container.prototype.getBounds = function () {
-            return this._getBounds(null, true);
-        };
         Container.prototype.getTransformedBounds = function () {
             return this._getBounds(null, true);
         };
@@ -380,7 +377,9 @@ define(["require", "exports", './DisplayObject', '../util/Methods'], function (r
                 }
             }
         };
-        Container.prototype._getBounds = function (matrix, ignoreTransform) {
+        Container.prototype.getBounds = function (matrix, ignoreTransform) {
+            if (matrix === void 0) { matrix = null; }
+            if (ignoreTransform === void 0) { ignoreTransform = true; }
             var bounds = _super.prototype.getBounds.call(this);
             if (bounds) {
                 return this._transformBounds(bounds, matrix, ignoreTransform);
@@ -393,7 +392,7 @@ define(["require", "exports", './DisplayObject', '../util/Methods'], function (r
             var l = this.children.length;
             for (var i = 0; i < l; i++) {
                 var child = this.children[i];
-                if (!child.visible || !(bounds = child._getBounds(mtx))) {
+                if (!child.visible || !(bounds = child.getBounds(mtx))) {
                     continue;
                 }
                 var x1 = bounds.x, y1 = bounds.y, x2 = x1 + bounds.width, y2 = y1 + bounds.height;

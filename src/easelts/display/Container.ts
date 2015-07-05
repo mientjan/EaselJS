@@ -730,10 +730,10 @@ class Container extends DisplayObject
 	/**
 	 * Docced in superclass.
 	 */
-	public getBounds()
-	{
-		return this._getBounds(null, true);
-	}
+//	public getBounds()
+//	{
+//		return this._getBounds(null, true);
+//	}
 
 	/**
 	 * Docced in superclass.
@@ -1016,7 +1016,7 @@ class Container extends DisplayObject
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	public _getBounds(matrix:Matrix4, ignoreTransform:boolean):Rectangle
+	public getBounds(matrix:Matrix4 = null, ignoreTransform:boolean = true):Rectangle
 	{
 		var bounds = super.getBounds();
 		if(bounds)
@@ -1035,7 +1035,7 @@ class Container extends DisplayObject
 		for(var i = 0; i < l; i++)
 		{
 			var child = this.children[i];
-			if(!child.visible || !(bounds = child._getBounds(mtx)))
+			if(!child.visible || !(bounds = child.getBounds(mtx)))
 			{
 				continue;
 			}

@@ -480,7 +480,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
         };
         DisplayObject.prototype.getMatrix = function (matrix) {
             var o = this;
-            return (matrix ? matrix.identity() : new m2.Matrix2(0, 0, 0, 0, 0, 0))
+            return (matrix ? matrix.identity() : new Matrix4_1.Matrix4())
                 .appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY)
                 .appendProperties(o.alpha, o.shadow, o.compositeOperation, 1);
         };

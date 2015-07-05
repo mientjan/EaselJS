@@ -291,7 +291,7 @@ export class Matrix4
 		return this;
 	}
 
-	public makeRotationFromQuaternion(q:any):Matrix4
+	public makeRotationFromQuaternion(q:Quaternion):Matrix4
 	{
 		var te = this.elements;
 

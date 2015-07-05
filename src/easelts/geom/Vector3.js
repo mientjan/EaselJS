@@ -1,4 +1,4 @@
-define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], function (require, exports, m4, q, MathUtil) {
+define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], function (require, exports, Matrix4_1, Quaternion_1, MathUtil_1) {
     var Vector3 = (function () {
         function Vector3(x, y, z) {
             if (x === void 0) { x = 0; }
@@ -14,7 +14,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
         }
         Vector3.prototype.getQuaternion = function (value) {
             if (!this._quaternion[value]) {
-                this._quaternion[value] = new q.Quaternion();
+                this._quaternion[value] = new Quaternion_1.Quaternion();
             }
             return this._quaternion[value];
         };
@@ -26,7 +26,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
         };
         Vector3.prototype.getMatrix4 = function (value) {
             if (!this._matrix4[value]) {
-                this._matrix4[value] = new m4.Matrix4();
+                this._matrix4[value] = new Matrix4_1.Matrix4();
             }
             return this._matrix4[value];
         };
@@ -379,7 +379,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
         };
         Vector3.prototype.angleTo = function (v) {
             var theta = this.dot(v) / (this.length() * v.length());
-            return Math.acos(MathUtil.clamp(theta, -1, 1));
+            return Math.acos(MathUtil_1.MathUtil.clamp(theta, -1, 1));
         };
         Vector3.prototype.distanceTo = function (v) {
             return Math.sqrt(this.distanceToSquared(v));

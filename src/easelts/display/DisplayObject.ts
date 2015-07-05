@@ -1307,10 +1307,10 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * Matrix object is returned.
 	 * @return {Matrix2D} A matrix representing this display object's transform.
 	 **/
-	public getMatrix(matrix?:m2.Matrix2)
+	public getMatrix(matrix?:Matrix4)
 	{
 		var o = this;
-		return (matrix ? matrix.identity() : new m2.Matrix2(0, 0, 0, 0, 0, 0))
+		return (matrix ? matrix.identity() : new Matrix4())
 			.appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY)
 			.appendProperties(o.alpha, o.shadow, o.compositeOperation, 1);
 	}
@@ -1326,7 +1326,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Matrix2D} a concatenated Matrix2D object representing the combined transform of the display object and
 	 * all of its parent Containers up to the highest level ancestor (usually the {{#crossLink "Stage"}}{{/crossLink}}).
 	 **/
-	public getConcatenatedMatrix(matrix:m2.Matrix2):m2.Matrix2
+	public getConcatenatedMatrix(matrix:Matrix4):Matrix4
 	{
 		if(matrix)
 		{
