@@ -1334,7 +1334,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		}
 		else
 		{
-			matrix = new m2.Matrix2(0, 0, 0, 0, 0, 0);
+			matrix = new Matrix4();
 		}
 		var o = this;
 		while(o != null)
@@ -1691,7 +1691,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	protected _getBounds(matrix?:m2.Matrix2, ignoreTransform?:boolean)
+	protected _getBounds(matrix?:Matrix4, ignoreTransform?:boolean)
 	{
 		return this._transformBounds(this.getBounds(), matrix, ignoreTransform);
 	}
@@ -1707,7 +1707,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	protected _transformBounds(bounds:Rectangle, matrix:m2.Matrix2, ignoreTransform:boolean)
+	protected _transformBounds(bounds:Rectangle, matrix:Matrix4, ignoreTransform:boolean)
 	{
 		if(!bounds)
 		{

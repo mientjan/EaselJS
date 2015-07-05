@@ -933,9 +933,9 @@ export class Pointer
 
 		for(var i = 0; i < events.length; i++)
 		{
-			element.addEventListener(events[i], (event:PointerEvent) => {
-
-			})
+			element.addEventListener(
+				events[i], (event:PointerEvent) => {}
+			);
 			
 		}
 	}
