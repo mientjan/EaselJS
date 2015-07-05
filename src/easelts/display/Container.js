@@ -297,14 +297,14 @@ define(["require", "exports", './DisplayObject', '../util/Methods'], function (r
             return (this.getObjectUnderPoint(x, y) != null);
         };
         Container.prototype.getObjectsUnderPoint = function (x, y) {
-            var arr = [];
-            var pt = this.localToGlobal(x, y);
-            this._getObjectsUnderPoint(pt.x, pt.y, arr);
-            return arr;
-        };
-        Container.prototype.getObjectUnderPoint = function (x, y) {
             var pt = this.localToGlobal(x, y);
             return this._getObjectsUnderPoint(pt.x, pt.y);
+        };
+        Container.prototype.getObjectUnderPoint = function (x, y) {
+            var arr = [];
+            var pt = this.localToGlobal(x, y);
+            var objects = this._getObjectsUnderPoint(pt.x, pt.y);
+            return objects[0];
         };
         Container.prototype.getBounds = function () {
             return this._getBounds(null, true);
@@ -357,63 +357,28 @@ define(["require", "exports", './DisplayObject', '../util/Methods'], function (r
                 }
             }
         };
-        Container.prototype._getObjectsUnderPoint = function (x, y, arr, mouse, activeListener) {
-            var ctx = DisplayObject._hitTestContext;
-            var mtx = this._matrix;
-            activeListener = activeListener || (mouse && this._hasMouseEventListener());
+        Container.prototype._getObjectsUnderPoint = function (x, y) {
             var children = this.children;
             var l = children.length;
+            var mtx = this._matrix;
             for (var i = l - 1; i >= 0; i--) {
                 var child = children[i];
                 var hitArea = child.hitArea;
-                var mask = child.mask;
-                if (!child.visible || (!child.isVisible()) || (mouse && !child.mouseEnabled)) {
+                if (!child.visible || !child.mouseEnabled || (!child.isVisible())) {
                     continue;
                 }
-                if (!hitArea && mask && mask.graphics && !mask.graphics.isEmpty()) {
-                    var maskMtx = mask.getMatrix(mask._matrix).prependMatrix(this.getConcatenatedMatrix(mtx));
-                    ctx.setTransform(maskMtx.a, maskMtx.b, maskMtx.c, maskMtx.d, maskMtx.tx - x, maskMtx.ty - y);
-                    mask.graphics.drawAsPath(ctx);
-                    ctx.fillStyle = "#000";
-                    ctx.fill();
-                    if (!this._testHit(ctx)) {
-                        continue;
-                    }
-                    ctx.setTransform(1, 0, 0, 1, 0, 0);
-                    ctx.clearRect(0, 0, 2, 2);
-                }
                 if (!hitArea && child.type == 2) {
-                    var result = child._getObjectsUnderPoint(x, y, arr, mouse, activeListener);
-                    if (!arr && result) {
-                        return (mouse && !this.mouseChildren) ? this : result;
+                    var result = child._getObjectsUnderPoint(x, y);
+                    if (result) {
+                        return !this.mouseChildren ? [this] : result;
                     }
                 }
                 else {
-                    if (mouse && !activeListener && !child._hasMouseEventListener()) {
-                        continue;
-                    }
                     child.getConcatenatedMatrix(mtx);
                     if (hitArea) {
-                        mtx.appendTransform(hitArea.x, hitArea.y, hitArea.scaleX, hitArea.scaleY, hitArea.rotation, hitArea.skewX, hitArea.skewY, hitArea.regX, hitArea.regY);
-                        mtx.alpha = hitArea.alpha;
-                    }
-                    ctx.globalAlpha = mtx.alpha;
-                    ctx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx - x, mtx.ty - y);
-                    (hitArea || child).draw(ctx);
-                    if (!this._testHit(ctx)) {
-                        continue;
-                    }
-                    ctx.setTransform(1, 0, 0, 1, 0, 0);
-                    ctx.clearRect(0, 0, 2, 2);
-                    if (arr) {
-                        arr.push(child);
-                    }
-                    else {
-                        return (mouse && !this.mouseChildren) ? this : child;
                     }
                 }
             }
-            return null;
         };
         Container.prototype._getBounds = function (matrix, ignoreTransform) {
             var bounds = _super.prototype.getBounds.call(this);

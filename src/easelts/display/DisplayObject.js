@@ -31,7 +31,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", '../../createts/event/EventDispatcher', '../../createts/event/Signal2', '../util/UID', '../util/Methods', './Shadow', '../geom/FluidCalculation', '../geom/Matrix2', '../geom/Rectangle', '../geom/Point'], function (require, exports, EventDispatcher, Signal2, UID, Methods, Shadow, FluidCalculation, m2, Rectangle, Point) {
+define(["require", "exports", '../../createts/event/EventDispatcher', '../../createts/event/Signal2', '../util/UID', '../util/Methods', './Shadow', '../geom/FluidCalculation', '../geom/Matrix4', '../geom/Rectangle', '../geom/Point'], function (require, exports, EventDispatcher, Signal2, UID, Methods, Shadow, FluidCalculation, Matrix4_1, Rectangle, Point) {
     var DisplayObject = (function (_super) {
         __extends(DisplayObject, _super);
         function DisplayObject(width, height, x, y, regX, regY) {
@@ -90,7 +90,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             this._cacheScale = 1;
             this._cacheDataURLID = 0;
             this._cacheDataURL = null;
-            this._matrix = new m2.Matrix2(0, 0, 0, 0, 0, 0);
+            this._matrix = new Matrix4_1.Matrix4();
             this._rectangle = new Rectangle(0, 0, 0, 0);
             this._bounds = null;
             this._off = false;
@@ -673,15 +673,6 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             }
             return bounds.setProperies(minX, minY, maxX - minX, maxY - minY);
         };
-        DisplayObject.prototype._hasMouseEventListener = function () {
-            var evts = DisplayObject._MOUSE_EVENTS;
-            for (var i = 0, l = evts.length; i < l; i++) {
-                if (this.hasEventListener(evts[i])) {
-                    return true;
-                }
-            }
-            return this.cursor != null;
-        };
         DisplayObject.prototype.onStageSet = function () { };
         DisplayObject.prototype.onResize = function (width, height) {
             this.isDirty = false;
@@ -730,35 +721,15 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             this.destructAllBehaviors();
             _super.prototype.destruct.call(this);
         };
-        DisplayObject.EVENT_MOUSE_CLICK = 'click';
-        DisplayObject.EVENT_MOUSE_DOWN = 'mousedown';
-        DisplayObject.EVENT_MOUSE_OUT = 'mouseout';
-        DisplayObject.EVENT_MOUSE_OVER = 'mouseover';
-        DisplayObject.EVENT_MOUSE_MOVE = 'mousemove';
-        DisplayObject.EVENT_PRESS_MOVE = 'pressmove';
-        DisplayObject.EVENT_PRESS_UP = 'pressup';
-        DisplayObject.EVENT_ROLL_OUT = 'rollout';
-        DisplayObject.EVENT_ROLL_OVER = 'rollover';
-        DisplayObject.EVENT_POINTER_CLICK = 'click';
-        DisplayObject.EVENT_POINTER_DOWN = 'mousedown';
-        DisplayObject.EVENT_POINTER_MOVE = 'mousemove';
-        DisplayObject.EVENT_POINTER_UP = 'pressup';
-        DisplayObject.EVENT_POINTER_CANCEL = 'mousedown';
-        DisplayObject.EVENT_POINTER_ENTER = 'mouseover';
-        DisplayObject.EVENT_POINTER_LEAVE = 'mouseout';
-        DisplayObject.EVENT_POINTER_OUT = 'mouseout';
-        DisplayObject.EVENT_POINTER_OVER = 'mouseover';
-        DisplayObject._MOUSE_EVENTS = [
-            DisplayObject.EVENT_MOUSE_CLICK,
-            DisplayObject.EVENT_MOUSE_DOWN,
-            DisplayObject.EVENT_MOUSE_OUT,
-            DisplayObject.EVENT_MOUSE_OVER,
-            DisplayObject.EVENT_PRESS_MOVE,
-            DisplayObject.EVENT_PRESS_UP,
-            DisplayObject.EVENT_ROLL_OUT,
-            DisplayObject.EVENT_ROLL_OVER,
-            "dblclick"
-        ];
+        DisplayObject.EVENT_POINTER_CLICK = 'pointer.click';
+        DisplayObject.EVENT_POINTER_DOWN = 'pointer.down';
+        DisplayObject.EVENT_POINTER_MOVE = 'pointer.move';
+        DisplayObject.EVENT_POINTER_UP = 'pointer.up';
+        DisplayObject.EVENT_POINTER_CANCEL = 'pointer.cancel';
+        DisplayObject.EVENT_POINTER_ENTER = 'pointer.enter';
+        DisplayObject.EVENT_POINTER_LEAVE = 'pointer.leave';
+        DisplayObject.EVENT_POINTER_OUT = 'pointer.out';
+        DisplayObject.EVENT_POINTER_OVER = 'pointer.over';
         DisplayObject.COMPOSITE_OPERATION_SOURCE_ATOP = 'source-atop';
         DisplayObject.COMPOSITE_OPERATION_SOURCE_IN = 'source-in';
         DisplayObject.COMPOSITE_OPERATION_SOURCE_OUT = 'source-out';

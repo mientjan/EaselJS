@@ -30,7 +30,7 @@ import DisplayObject = require('./DisplayObject');
 import Methods = require('../util/Methods');
 import DisplayType = require('../enum/DisplayType');
 import Size = require('../geom/Size');
-import m2 = require('../geom/Matrix2');
+import {Matrix4} from '../geom/Matrix4';
 import Rectangle = require('../geom/Rectangle');
 
 import TimeEvent = require('../../createts/event/TimeEvent');
@@ -70,7 +70,7 @@ class Container extends DisplayObject
 	 * @type Array
 	 * @default null
 	 **/
-	public children:any[] = [];
+	public children:Array<DisplayObject> = [];
 
 	/**
 	 * Indicates whether the children of this container are independently enabled for mouse/pointer interaction.
@@ -705,10 +705,9 @@ class Container extends DisplayObject
 	 **/
 	public getObjectsUnderPoint(x:number, y:number):DisplayObject[]
 	{
-		var arr = [];
+
 		var pt = this.localToGlobal(x, y);
-		this._getObjectsUnderPoint(pt.x, pt.y, arr);
-		return arr;
+		return this._getObjectsUnderPoint(pt.x, pt.y);
 	}
 
 	/**
@@ -720,10 +719,12 @@ class Container extends DisplayObject
 	 * @param {Number} y The y position in the container to test.
 	 * @return {DisplayObject} The top-most display object under the specified coordinates.
 	 **/
-	public getObjectUnderPoint(x:number, y:number):DisplayObject[]
+	public getObjectUnderPoint(x:number, y:number):DisplayObject
 	{
+		var arr = []
 		var pt = this.localToGlobal(x, y);
-		return this._getObjectsUnderPoint(pt.x, pt.y);
+		var objects = this._getObjectsUnderPoint(pt.x, pt.y);
+		return objects[0];
 	}
 
 	/**
@@ -838,6 +839,68 @@ class Container extends DisplayObject
 		}
 	}
 
+	protected _getObjectsUnderPoint(x:number, y:number):Array<DisplayObject>
+	{
+		var children = this.children;
+		var l = children.length;
+		var mtx = this._matrix;
+
+		for(var i = l - 1; i >= 0; i--)
+		{
+			var child = children[i];
+			var hitArea = child.hitArea;
+
+			if(!child.visible || !child.mouseEnabled || (!child.isVisible()))
+			{
+				continue;
+			}
+
+			// if a child container has a hitArea then we only need to check its hitArea, so we can treat it as a normal DO:
+			if(!hitArea && child.type == DisplayType.CONTAINER)
+			{
+				var result = ( <Container> child)._getObjectsUnderPoint(x, y);
+				if(result)
+				{
+					return !this.mouseChildren ? [this] : result;
+				}
+			}
+			else
+			{
+				child.getConcatenatedMatrix(mtx);
+
+				if(hitArea)
+				{
+//					mtx.appendTransform(hitArea.x, hitArea.y, hitArea.scaleX, hitArea.scaleY, hitArea.rotation, hitArea.skewX, hitArea.skewY, hitArea.regX, hitArea.regY);
+//					mtx.alpha = hitArea.alpha;
+				}
+
+//				ctx.globalAlpha = mtx.alpha;
+//				ctx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx - x, mtx.ty - y);
+//				(hitArea || child).draw(ctx);
+//
+//
+//				if(!this._testHit(ctx))
+//				{
+//					continue;
+//				}
+//				ctx.setTransform(1, 0, 0, 1, 0, 0);
+//				ctx.clearRect(0, 0, 2, 2);
+//
+//
+//				if(arr)
+//				{
+//					arr.push(child);
+//				}
+//				else
+//				{
+//
+//
+//					return (mouse && !this.mouseChildren) ? this : child;
+//				}
+			}
+		}
+	}
+
 	/**
 	 * @method _getObjectsUnderPoint
 	 * @param {Number} x
@@ -848,103 +911,103 @@ class Container extends DisplayObject
 	 * @return {Array}
 	 * @protected
 	 **/
-	public _getObjectsUnderPoint(x, y, arr?:any[], mouse?:boolean, activeListener?:boolean)
-	{
-		var ctx = DisplayObject._hitTestContext;
-		var mtx = this._matrix;
-		activeListener = activeListener || (mouse && this._hasMouseEventListener());
-
-		// draw children one at a time, and check if we get a hit:
-		var children = this.children;
-		var l = children.length;
-		for(var i = l - 1; i >= 0; i--)
-		{
-			var child = children[i];
-			var hitArea = child.hitArea;
-			var mask = child.mask;
-
-
-			if(!child.visible || (!child.isVisible()) || (mouse && !child.mouseEnabled))
-			{
-				continue;
-			}
-
-
-			if(!hitArea && mask && mask.graphics && !mask.graphics.isEmpty())
-			{
-				var maskMtx = mask.getMatrix(mask._matrix).prependMatrix(this.getConcatenatedMatrix(mtx));
-				ctx.setTransform(maskMtx.a, maskMtx.b, maskMtx.c, maskMtx.d, maskMtx.tx - x, maskMtx.ty - y);
-
-				// draw the mask as a solid fill:
-				mask.graphics.drawAsPath(ctx);
-				ctx.fillStyle = "#000";
-				ctx.fill();
-
-				// if we don't hit the mask, then no need to keep looking at this DO:
-
-				if(!this._testHit(ctx))
-				{
-					continue;
-				}
-				ctx.setTransform(1, 0, 0, 1, 0, 0);
-				ctx.clearRect(0, 0, 2, 2);
-			}
-
-			// if a child container has a hitArea then we only need to check its hitArea, so we can treat it as a normal DO:
-			if(!hitArea && child.type == DisplayType.CONTAINER)
-			{
-				var result = ( <Container> child)._getObjectsUnderPoint(x, y, arr, mouse, activeListener);
-				if(!arr && result)
-				{
-					return (mouse && !this.mouseChildren) ? this : result;
-				}
-			}
-			else
-			{
-
-
-				if(mouse && !activeListener && !child._hasMouseEventListener())
-				{
-					continue;
-				}
-
-
-				child.getConcatenatedMatrix(mtx);
-
-				if(hitArea)
-				{
-					mtx.appendTransform(hitArea.x, hitArea.y, hitArea.scaleX, hitArea.scaleY, hitArea.rotation, hitArea.skewX, hitArea.skewY, hitArea.regX, hitArea.regY);
-					mtx.alpha = hitArea.alpha;
-				}
-
-				ctx.globalAlpha = mtx.alpha;
-				ctx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx - x, mtx.ty - y);
-				(hitArea || child).draw(ctx);
-
-
-				if(!this._testHit(ctx))
-				{
-					continue;
-				}
-				ctx.setTransform(1, 0, 0, 1, 0, 0);
-				ctx.clearRect(0, 0, 2, 2);
-
-
-				if(arr)
-				{
-					arr.push(child);
-				}
-				else
-				{
-
-
-					return (mouse && !this.mouseChildren) ? this : child;
-				}
-			}
-		}
-
-		return null;
-	}
+//	public __OLD_getObjectsUnderPoint(x, y, arr?:any[], mouse?:boolean, activeListener?:boolean)
+//	{
+//		var ctx = DisplayObject._hitTestContext;
+//		var mtx = this._matrix;
+//		activeListener = activeListener; // || (mouse && this._hasMouseEventListener());
+//
+//		// draw children one at a time, and check if we get a hit:
+//		var children = this.children;
+//		var l = children.length;
+//		for(var i = l - 1; i >= 0; i--)
+//		{
+//			var child = children[i];
+//			var hitArea = child.hitArea;
+//			var mask = child.mask;
+//
+//
+//			if(!child.visible || (!child.isVisible()) || (mouse && !child.mouseEnabled))
+//			{
+//				continue;
+//			}
+//
+//
+//			if(!hitArea && mask && mask.graphics && !mask.graphics.isEmpty())
+//			{
+//				var maskMtx = mask.getMatrix(mask._matrix).prependMatrix(this.getConcatenatedMatrix(mtx));
+//				ctx.setTransform(maskMtx.a, maskMtx.b, maskMtx.c, maskMtx.d, maskMtx.tx - x, maskMtx.ty - y);
+//
+//				// draw the mask as a solid fill:
+//				mask.graphics.drawAsPath(ctx);
+//				ctx.fillStyle = "#000";
+//				ctx.fill();
+//
+//				// if we don't hit the mask, then no need to keep looking at this DO:
+//
+//				if(!this._testHit(ctx))
+//				{
+//					continue;
+//				}
+//				ctx.setTransform(1, 0, 0, 1, 0, 0);
+//				ctx.clearRect(0, 0, 2, 2);
+//			}
+//
+//			// if a child container has a hitArea then we only need to check its hitArea, so we can treat it as a normal DO:
+//			if(!hitArea && child.type == DisplayType.CONTAINER)
+//			{
+//				var result = ( <Container> child)._getObjectsUnderPoint(x, y, arr, mouse, activeListener);
+//				if(!arr && result)
+//				{
+//					return (mouse && !this.mouseChildren) ? this : result;
+//				}
+//			}
+//			else
+//			{
+//
+//
+//				if(mouse && !activeListener && !child._hasMouseEventListener())
+//				{
+//					continue;
+//				}
+//
+//
+//				child.getConcatenatedMatrix(mtx);
+//
+//				if(hitArea)
+//				{
+//					mtx.appendTransform(hitArea.x, hitArea.y, hitArea.scaleX, hitArea.scaleY, hitArea.rotation, hitArea.skewX, hitArea.skewY, hitArea.regX, hitArea.regY);
+////					mtx.alpha = hitArea.alpha;
+//				}
+//
+//				ctx.globalAlpha = mtx.alpha;
+//				ctx.setTransform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx - x, mtx.ty - y);
+//				(hitArea || child).draw(ctx);
+//
+//
+//				if(!this._testHit(ctx))
+//				{
+//					continue;
+//				}
+//				ctx.setTransform(1, 0, 0, 1, 0, 0);
+//				ctx.clearRect(0, 0, 2, 2);
+//
+//
+//				if(arr)
+//				{
+//					arr.push(child);
+//				}
+//				else
+//				{
+//
+//
+//					return (mouse && !this.mouseChildren) ? this : child;
+//				}
+//			}
+//		}
+//
+//		return null;
+//	}
 
 	/**
 	 * @method _getBounds
@@ -953,7 +1016,7 @@ class Container extends DisplayObject
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	public _getBounds(matrix:m2.Matrix2, ignoreTransform:boolean):Rectangle
+	public _getBounds(matrix:Matrix4, ignoreTransform:boolean):Rectangle
 	{
 		var bounds = super.getBounds();
 		if(bounds)

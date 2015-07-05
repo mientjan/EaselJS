@@ -48,7 +48,6 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
             this._isRunning = false;
             this._tickSignalConnection = null;
             this._fps = 60;
-            this._eventListeners = null;
             this._onResizeEventListener = null;
             this.autoClear = true;
             this.canvas = null;
@@ -282,10 +281,7 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
             this.stop();
             _super.prototype.destruct.call(this);
         };
-        Stage.EVENT_MOUSE_LEAVE = 'mouseleave';
-        Stage.EVENT_MOUSE_ENTER = 'mouseenter';
-        Stage.EVENT_STAGE_MOUSE_MOVE = 'stagemousemove';
         return Stage;
     })(Container);
-    return Stage;
+    exports.Stage = Stage;
 });

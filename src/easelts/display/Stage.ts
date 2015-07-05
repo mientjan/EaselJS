@@ -85,52 +85,12 @@ import SignalConnection = require('../../createts/event/SignalConnection');
  * of a canvas object in the current document.
  **/
 
-class Stage extends Container
+export class Stage extends Container
 {
 	// events:
-
-	public static EVENT_MOUSE_LEAVE = 'mouseleave';
-	public static EVENT_MOUSE_ENTER = 'mouseenter';
-	public static EVENT_STAGE_MOUSE_MOVE = 'stagemousemove';
-
-
-	/**
-	 * Dispatched when the user moves the mouse over the canvas.
-	 * See the {{#crossLink "MouseEvent"}}{{/crossLink}} class for a listing of event properties.
-	 * @event stagemousemove
-	 * @since 0.6.0
-	 */
-
-	/**
-	 * Dispatched when the user presses their left mouse button on the canvas. See the {{#crossLink "MouseEvent"}}{{/crossLink}}
-	 * class for a listing of event properties.
-	 * @event stagemousedown
-	 * @since 0.6.0
-	 */
-
-	/**
-	 * Dispatched when the user the user releases the mouse button anywhere that the page can detect it (this varies slightly between browsers).
-	 * You can use {{#crossLink "Stage/mouseInBounds:property"}}{{/crossLink}} to check whether the mouse is currently within the stage bounds.
-	 * See the {{#crossLink "MouseEvent"}}{{/crossLink}} class for a listing of event properties.
-	 * @event stagemouseup
-	 * @since 0.6.0
-	 */
-
-	/**
-	 * Dispatched when the mouse moves from within the canvas area (mouseInBounds == true) to outside it (mouseInBounds == false).
-	 * This is currently only dispatched for mouse input (not touch). See the {{#crossLink "MouseEvent"}}{{/crossLink}}
-	 * class for a listing of event properties.
-	 * @event mouseleave
-	 * @since 0.7.0
-	 */
-
-	/**
-	 * Dispatched when the mouse moves into the canvas area (mouseInBounds == false) from outside it (mouseInBounds == true).
-	 * This is currently only dispatched for mouse input (not touch). See the {{#crossLink "MouseEvent"}}{{/crossLink}}
-	 * class for a listing of event properties.
-	 * @event mouseenter
-	 * @since 0.7.0
-	 */
+//	public static EVENT_MOUSE_LEAVE = 'mouseleave';
+//	public static EVENT_MOUSE_ENTER = 'mouseenter';
+//	public static EVENT_STAGE_MOUSE_MOVE = 'stagemousemove';
 
 	/**
 	 * Dispatched each update immediately before the tick event is propagated through the display list.
@@ -173,16 +133,9 @@ class Stage extends Container
 	 * @type {boolean}
 	 * @private
 	 */
-	public _isRunning:boolean = false;
-	public _tickSignalConnection:SignalConnection = null;
-	public _fps:number = 60;
-
-	public _eventListeners:{
-		[name:string]: {
-			window: any;
-			fn: (e) => void;
-		}
-	} = null;
+	protected _isRunning:boolean = false;
+	protected _tickSignalConnection:SignalConnection = null;
+	protected _fps:number = 60;
 
 	public _onResizeEventListener:Function = null;
 
@@ -727,7 +680,7 @@ class Stage extends Container
 	 * @method _handleWindowResize
 	 * @protected
 	 **/
-	public _handleWindowResize(e)
+	protected _handleWindowResize(e?:any):void
 	{
 		this.onResize(this.holder.offsetWidth, this.holder.offsetHeight);
 	}
@@ -755,13 +708,13 @@ class Stage extends Container
 		return this._fps;
 	}
 
-	public enableAutoResize()
+	public enableAutoResize():void
 	{
 		this._onResizeEventListener = (e) => this._handleWindowResize(e)
 		window.addEventListener('resize', <any> this._onResizeEventListener);
 	}
 
-	public disableAutoResize()
+	public disableAutoResize():void
 	{
 		window.removeEventListener('resize', <any> this._onResizeEventListener);
 	}
@@ -802,7 +755,7 @@ class Stage extends Container
 			this._tickSignalConnection = null;
 
 			// update stage for a last tick, solves rendering
-			// issues when having slowdown. Last frame is sometimes not rendered. When using createjsAnimations
+			// issues when having slowdown. Last frame is sometimes not rendered. When using Animations
 			setTimeout(this.update, 1000 / this._fps);
 
 			this._isRunning = false;
@@ -822,6 +775,8 @@ class Stage extends Container
 	{
 		return this._isRunning;
 	}
+
+
 
 	/**
 	 * Is triggered when the stage (canvas) is resized.
@@ -856,5 +811,3 @@ class Stage extends Container
 		super.destruct();
 	}
 }
-
-export = Stage;

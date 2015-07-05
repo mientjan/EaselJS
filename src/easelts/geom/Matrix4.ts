@@ -18,6 +18,7 @@ import { Quaternion } from './Quaternion';
  * @author timknip / http://www.floorplanner.com/
  * @author bhouston / http://exocortex.com
  * @author WestLangley / http://github.com/WestLangley
+ * @author Mientjan / http://github.com/mientjan
  */
 export class Matrix4
 {
