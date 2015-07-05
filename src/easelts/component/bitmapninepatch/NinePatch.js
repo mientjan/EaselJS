@@ -13,28 +13,16 @@ define(["require", "exports", '../../display/Bitmap', './NinePatchCoordinates'],
             var rw = this.rectangle.width;
             var rh = this.rectangle.height;
             var sourceRow = [
-                0,
-                ry,
-                ry + rh,
-                ih
+                0, ry, ry + rh, ih
             ];
             var sourceColumn = [
-                0,
-                rx,
-                rx + rw,
-                iw
+                0, rx, rx + rw, iw
             ];
             var destRow = [
-                0,
-                ry,
-                height - (sourceRow[3] - sourceRow[2]),
-                height
+                0, ry, height - (sourceRow[3] - sourceRow[2]), height
             ];
             var destColumn = [
-                0,
-                rx,
-                width - (sourceColumn[3] - sourceColumn[2]),
-                width
+                0, rx, width - (sourceColumn[3] - sourceColumn[2]), width
             ];
             return new NinePatchCoordinates(sourceRow, sourceColumn, destRow, destColumn);
         };

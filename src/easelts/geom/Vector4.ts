@@ -1,4 +1,3 @@
-
 /**
  * @author supereggbert / http://www.paulbrunt.co.uk/
  * @author philogb / http://blog.thejit.org/
@@ -10,66 +9,58 @@
  */
 class Vector4
 {
+	public x:number = 0;
+	public y:number = 0;
+	public z:number = 0;
+	public w:number = 1;
 
-	constructor(public x:number = 0, public y:number = 0, public z:number = 0, public w:number = 1)
+	constructor(x:number = 0, y:number = 0, z:number = 0, w:number = 1)
 	{
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.w = w;
 	}
 
 
 	public set(x:number, y:number, z:number, w:number)
 	{
-
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.w = w;
 
 		return this;
-
 	}
 
-	public setX(x)
+	public setX(x:number)
 	{
-
 		this.x = x;
-
 		return this;
-
 	}
 
-	public setY(y)
+	public setY(y:number)
 	{
-
 		this.y = y;
-
 		return this;
-
 	}
 
-	public setZ(z)
+	public setZ(z:number)
 	{
-
 		this.z = z;
-
 		return this;
-
 	}
 
-	public setW(w)
+	public setW(w:number)
 	{
-
 		this.w = w;
-
 		return this;
-
 	}
 
-	public setComponent(index, value)
+	public setComponent(index:number, value:number)
 	{
-
 		switch(index)
 		{
-
 			case 0:
 				this.x = value;
 				break;
@@ -84,17 +75,13 @@ class Vector4
 				break;
 			default:
 				throw 'index is out of range: ' + index;
-
 		}
-
 	}
 
-	public getComponent(index)
+	public getComponent(index:number)
 	{
-
 		switch(index)
 		{
-
 			case 0:
 				return this.x;
 			case 1:
@@ -105,109 +92,74 @@ class Vector4
 				return this.w;
 			default:
 				throw 'index is out of range: ' + index;
-
 		}
-
 	}
 
-	public copy(v)
+	public copy(v:Vector4)
 	{
-
 		this.x = v.x;
 		this.y = v.y;
 		this.z = v.z;
 		this.w = ( v.w !== undefined ) ? v.w : 1;
 
 		return this;
-
 	}
 
-	public add(v, w)
+	public add(v:Vector4)
 	{
-
-		if(w !== undefined)
-		{
-
-			console.warn('THREE.Vector4: .add() now only accepts one argument. Use .addVectors( a, b ) instead.');
-			return this.addVectors(v, w);
-
-		}
-
 		this.x += v.x;
 		this.y += v.y;
 		this.z += v.z;
 		this.w += v.w;
-
 		return this;
-
 	}
 
-	public addScalar(s)
+	public addScalar(s:number)
 	{
-
 		this.x += s;
 		this.y += s;
 		this.z += s;
 		this.w += s;
-
 		return this;
-
 	}
 
-	public addVectors(a, b)
+	public addVectors(a:Vector4, b:Vector4)
 	{
-
 		this.x = a.x + b.x;
 		this.y = a.y + b.y;
 		this.z = a.z + b.z;
 		this.w = a.w + b.w;
-
 		return this;
-
 	}
 
-	public sub(v, w)
+	public sub(v:Vector4)
 	{
-
-		if(w !== undefined)
-		{
-
-			console.warn('THREE.Vector4: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
-			return this.subVectors(v, w);
-
-		}
-
 		this.x -= v.x;
 		this.y -= v.y;
 		this.z -= v.z;
 		this.w -= v.w;
 
 		return this;
-
 	}
 
-	public subVectors(a, b)
+	public subVectors(a:Vector4, b:Vector4)
 	{
-
 		this.x = a.x - b.x;
 		this.y = a.y - b.y;
 		this.z = a.z - b.z;
 		this.w = a.w - b.w;
 
 		return this;
-
 	}
 
 	public multiplyScalar(scalar)
 	{
-
 		this.x *= scalar;
 		this.y *= scalar;
 		this.z *= scalar;
 		this.w *= scalar;
 
 		return this;
-
 	}
 
 	public applyMatrix4(m)
@@ -569,11 +521,13 @@ class Vector4
 
 	public clampScalar(minVal, maxVal)
 	{
-		if(!this.__clampScalarMin){
+		if(!this.__clampScalarMin)
+		{
 			this.__clampScalarMin = new Vector4(0, 0, 0, 0);
 		}
 
-		if(!this.__clampScalarMax){
+		if(!this.__clampScalarMax)
+		{
 			this.__clampScalarMax = new Vector4(0, 0, 0, 0);
 		}
 

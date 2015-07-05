@@ -1,37 +1,25 @@
-define(["require", "exports", '../util/MathUtil', './Vector3', './Quaternion'], function (require, exports, MathUtil, v3, q) {
+define(["require", "exports", '../util/MathUtil', './Vector3', './Quaternion'], function (require, exports, MathUtil_1, Vector3_1, Quaternion_1) {
     var Matrix4 = (function () {
         function Matrix4() {
             this._quaternion = {};
             this._vector3 = {};
             this._matrix4 = {};
             this.elements = new Float32Array([
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
             ]);
         }
         Matrix4.prototype.getQuaternion = function (value) {
             if (!this._quaternion[value]) {
-                this._quaternion[value] = new q.Quaternion();
+                this._quaternion[value] = new Quaternion_1.Quaternion();
             }
             return this._quaternion[value];
         };
         Matrix4.prototype.getVector3 = function (value) {
             if (!this._vector3[value]) {
-                this._vector3[value] = new v3.Vector3();
+                this._vector3[value] = new Vector3_1.Vector3();
             }
             return this._vector3[value];
         };
@@ -339,7 +327,30 @@ define(["require", "exports", '../util/MathUtil', './Vector3', './Quaternion'], 
             var n21 = te[1], n22 = te[5], n23 = te[9], n24 = te[13];
             var n31 = te[2], n32 = te[6], n33 = te[10], n34 = te[14];
             var n41 = te[3], n42 = te[7], n43 = te[11], n44 = te[15];
-            return (n41 * (+n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34) + n42 * (+n11 * n23 * n34 - n11 * n24 * n33 + n14 * n21 * n33 - n13 * n21 * n34 + n13 * n24 * n31 - n14 * n23 * n31) + n43 * (+n11 * n24 * n32 - n11 * n22 * n34 - n14 * n21 * n32 + n12 * n21 * n34 + n14 * n22 * n31 - n12 * n24 * n31) + n44 * (-n13 * n22 * n31 - n11 * n23 * n32 + n11 * n22 * n33 + n13 * n21 * n32 - n12 * n21 * n33 + n12 * n23 * n31));
+            return (n41 * (+n14 * n23 * n32
+                - n13 * n24 * n32
+                - n14 * n22 * n33
+                + n12 * n24 * n33
+                + n13 * n22 * n34
+                - n12 * n23 * n34) +
+                n42 * (+n11 * n23 * n34
+                    - n11 * n24 * n33
+                    + n14 * n21 * n33
+                    - n13 * n21 * n34
+                    + n13 * n24 * n31
+                    - n14 * n23 * n31) +
+                n43 * (+n11 * n24 * n32
+                    - n11 * n22 * n34
+                    - n14 * n21 * n32
+                    + n12 * n21 * n34
+                    + n14 * n22 * n31
+                    - n12 * n24 * n31) +
+                n44 * (-n13 * n22 * n31
+                    - n11 * n23 * n32
+                    + n11 * n22 * n33
+                    + n13 * n21 * n32
+                    - n12 * n21 * n33
+                    + n12 * n23 * n31));
         };
         Matrix4.prototype.transpose = function () {
             var te = this.elements;
@@ -551,7 +562,7 @@ define(["require", "exports", '../util/MathUtil', './Vector3', './Quaternion'], 
             return this;
         };
         Matrix4.prototype.makePerspective = function (fov, aspect, near, far) {
-            var ymax = near * Math.tan(MathUtil.degToRad(fov * 0.5));
+            var ymax = near * Math.tan(MathUtil_1.MathUtil.degToRad(fov * 0.5));
             var ymin = -ymax;
             var xmin = ymin * aspect;
             var xmax = ymax * aspect;
@@ -590,22 +601,10 @@ define(["require", "exports", '../util/MathUtil', './Vector3', './Quaternion'], 
         Matrix4.prototype.toArray = function () {
             var te = this.elements;
             return [
-                te[0],
-                te[1],
-                te[2],
-                te[3],
-                te[4],
-                te[5],
-                te[6],
-                te[7],
-                te[8],
-                te[9],
-                te[10],
-                te[11],
-                te[12],
-                te[13],
-                te[14],
-                te[15]
+                te[0], te[1], te[2], te[3],
+                te[4], te[5], te[6], te[7],
+                te[8], te[9], te[10], te[11],
+                te[12], te[13], te[14], te[15]
             ];
         };
         Matrix4.prototype.clone = function () {

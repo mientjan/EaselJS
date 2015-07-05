@@ -222,7 +222,7 @@ class Container extends DisplayObject
 
 		if(this._isRenderIsolated)
 		{
-			localCtx = this._renderIsolationCanvas.getContext('2d');
+			localCtx = <CanvasRenderingContext2D> this._renderIsolationCanvas.getContext('2d');
 
 			if(this._willUpdateRenderIsolation)
 			{

@@ -1,23 +1,11 @@
 define(["require", "exports", './Vector3'], function (require, exports, v3) {
-    /**
-     * @method Matrix3
-     * @author alteredq / http://alteredqualia.com/
-     * @author WestLangley / http://github.com/WestLangley
-     * @author bhouston / http://exocortex.com
-     */
     var Matrix3 = (function () {
         function Matrix3() {
             this.__v0 = null;
             this.elements = new Float32Array([
-                1,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                1
+                1, 0, 0,
+                0, 1, 0,
+                0, 0, 1
             ]);
         }
         Matrix3.prototype.set = function (n11, n12, n13, n21, n22, n23, n31, n32, n33) {
@@ -98,7 +86,6 @@ define(["require", "exports", './Vector3'], function (require, exports, v3) {
             te[7] = -me[9] * me[0] + me[1] * me[8];
             te[8] = me[5] * me[0] - me[1] * me[4];
             var det = me[0] * te[0] + me[1] * te[3] + me[2] * te[6];
-            // no inverse
             if (det === 0) {
                 var msg = "Matrix3.getInverse(): can't invert matrix, determinant is 0";
                 if (throwOnInvertible || false) {
@@ -164,15 +151,9 @@ define(["require", "exports", './Vector3'], function (require, exports, v3) {
         Matrix3.prototype.toArray = function () {
             var te = this.elements;
             return [
-                te[0],
-                te[1],
-                te[2],
-                te[3],
-                te[4],
-                te[5],
-                te[6],
-                te[7],
-                te[8]
+                te[0], te[1], te[2],
+                te[3], te[4], te[5],
+                te[6], te[7], te[8]
             ];
         };
         Matrix3.prototype.clone = function () {

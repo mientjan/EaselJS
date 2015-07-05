@@ -1092,7 +1092,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		{
 			throw "cache() must be called before updateCache()";
 		}
-		var ctx = cacheCanvas.getContext("2d");
+		var ctx:CanvasRenderingContext2D = <CanvasRenderingContext2D> cacheCanvas.getContext("2d");
 
 		// update bounds based on filters:
 		if(fBounds = this._applyFilterBounds(offX, offY, w, h))
@@ -1655,7 +1655,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 			return;
 		}
 		var l = this.filters.length;
-		var ctx = this.cacheCanvas.getContext("2d");
+		var ctx = <CanvasRenderingContext2D> this.cacheCanvas.getContext("2d");
 		var w = this.cacheCanvas.width;
 		var h = this.cacheCanvas.height;
 		for(var i = 0; i < l; i++)

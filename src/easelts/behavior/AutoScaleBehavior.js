@@ -166,17 +166,20 @@ define(["require", "exports", './AbstractBehavior', '../geom/Size'], function (r
                         width = Math.max(width, this._downScaleLimit.width);
                         height = Math.max(height, this._downScaleLimit.height);
                     }
-                    this.owner.scaleX = this.owner.scaleY = Math.min(1, width / this._downScaleBreakPoint.width, height / this._downScaleBreakPoint.height);
+                    this.owner.scaleX =
+                        this.owner.scaleY = Math.min(1, width / this._downScaleBreakPoint.width, height / this._downScaleBreakPoint.height);
                 }
                 else if (this._upScaleBreakPoint && (width > this._upScaleBreakPoint.width || height > this._upScaleBreakPoint.height)) {
                     if (this._upScaleLimit) {
                         width = Math.min(width, this._upScaleLimit.width);
                         height = Math.min(height, this._upScaleLimit.height);
                     }
-                    this.owner.scaleX = this.owner.scaleY = Math.max(1, Math.min(width / this._upScaleBreakPoint.width, height / this._upScaleBreakPoint.height));
+                    this.owner.scaleX =
+                        this.owner.scaleY = Math.max(1, Math.min(width / this._upScaleBreakPoint.width, height / this._upScaleBreakPoint.height));
                 }
                 else {
-                    this.owner.scaleX = this.owner.scaleY = 1;
+                    this.owner.scaleX =
+                        this.owner.scaleY = 1;
                 }
             }
             return true;

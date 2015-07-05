@@ -156,6 +156,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.applyMatrix4 = function (m) {
+            // input: THREE.Matrix4 affine matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z + e[12];
@@ -164,6 +165,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.applyProjection = function (m) {
+            // input: THREE.Matrix4 projection matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             var d = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]);
@@ -200,6 +202,8 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this.applyProjection(m1);
         };
         Vector3.prototype.transformDirection = function (m) {
+            // input: THREE.Matrix4 affine matrix
+            // vector interpreted as a direction
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z;
@@ -253,6 +257,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.clamp = function (min, max) {
+            // This function assumes min < max, if this assumption isn't true it will not operate correctly
             if (this.x < min.x) {
                 this.x = min.x;
             }

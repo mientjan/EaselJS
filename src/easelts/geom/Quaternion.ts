@@ -1,12 +1,12 @@
-import am3 = require('./math3d/AbstractMath3d');
-import m4 = require('./Matrix4');
-import v3 = require('./Vector3');
+//import am3 = require('./math3d/AbstractMath3d');
+import { Matrix4 } from './Matrix4';
+import { Vector3 } from './Vector3';
 
 export class Quaternion
 {
 	private _quaternion:{[index:string]:Quaternion} = {};
-	private _vector3:{[index:string]:v3.Vector3} = {};
-	private _matrix4:{[index:string]:m4.Matrix4} = {};
+	private _vector3:{[index:string]:Vector3} = {};
+	private _matrix4:{[index:string]:Matrix4} = {};
 
 	protected getQuaternion(value:string):Quaternion
 	{
@@ -17,20 +17,20 @@ export class Quaternion
 		return this._quaternion[value];
 	}
 
-	protected getVector3(value:string):v3.Vector3
+	protected getVector3(value:string):Vector3
 	{
 		if(!this._vector3[value])
 		{
-			this._vector3[value] = new v3.Vector3();
+			this._vector3[value] = new Vector3();
 		}
 		return this._vector3[value];
 	}
 
-	protected getMatrix4(value:string):m4.Matrix4
+	protected getMatrix4(value:string):Matrix4
 	{
 		if(!this._matrix4[value])
 		{
-			this._matrix4[value] = new m4.Matrix4();
+			this._matrix4[value] = new Matrix4();
 		}
 		return this._matrix4[value];
 	}

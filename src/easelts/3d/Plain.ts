@@ -1,10 +1,10 @@
-import Object3d = require('./Object3d');
+import { Object3d } from './Object3d';
 
 class Plain extends Object3d
 {
 	constructor(){
 		super();
 
-		this._vertices[]
+		// this._vertices[]
 	}
 }

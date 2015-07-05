@@ -442,7 +442,7 @@ class Stage extends Container
 
 		this.enableDOMEvents(true);
 		this.setFps(this._fps);
-		this.ctx = this.canvas.getContext('2d');
+		this.ctx = <CanvasRenderingContext2D> this.canvas.getContext('2d');
 		this.setQuality(QualityType.LOW);
 		this.stage = this;
 
@@ -601,7 +601,7 @@ class Stage extends Container
 		{
 			return;
 		}
-		var ctx = this.canvas.getContext("2d");
+		var ctx = <CanvasRenderingContext2D> this.canvas.getContext("2d");
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.clearRect(0, 0, this.canvas.width + 1, this.canvas.height + 1);
 	}
@@ -623,7 +623,7 @@ class Stage extends Container
 			mimeType = "image/png";
 		}
 
-		var ctx = this.canvas.getContext('2d');
+		var ctx = <CanvasRenderingContext2D> this.canvas.getContext('2d');
 		var w = this.canvas.width;
 		var h = this.canvas.height;
 
@@ -818,7 +818,7 @@ class Stage extends Container
 		var offX = (window.pageXOffset || document['scrollLeft'] || 0) - (document['clientLeft'] || document.body.clientLeft || 0);
 		var offY = (window.pageYOffset || document['scrollTop'] || 0) - (document['clientTop'] || document.body.clientTop || 0);
 
-		var styles = window.getComputedStyle ? getComputedStyle(element, null) : element.currentStyle; // IE <9 compatibility.
+		var styles = window.getComputedStyle ? window.getComputedStyle(element, null) : element['currentStyle']; // IE <9 compatibility.
 		var padL = parseInt(styles.paddingLeft) + parseInt(styles.borderLeftWidth);
 		var padT = parseInt(styles.paddingTop) + parseInt(styles.borderTopWidth);
 		var padR = parseInt(styles.paddingRight) + parseInt(styles.borderRightWidth);
@@ -838,7 +838,7 @@ class Stage extends Container
 	 * @protected
 	 * @param {Number} id
 	 **/
-	public _getPointerData(id):PointerData
+	protected _getPointerData(id:number):PointerData
 	{
 		var data = this._pointerData[id];
 		if(!data)
@@ -865,12 +865,8 @@ class Stage extends Container
 	 * @protected
 	 * @param {MouseEvent} e
 	 **/
-	public _handleMouseMove(e:MouseEvent = <any> window['event'])
+	protected _handleMouseMove(e:MouseEvent = <any> window['event'])
 	{
-		//		if(!e){
-		//			var b = <MouseEvent> window['event'];
-		//		 }
-
 		this._handlePointerMove(-1, e, e.pageX, e.pageY);
 	}
 
