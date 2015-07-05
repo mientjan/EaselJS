@@ -33,7 +33,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', './Container', '../geom/Size', '../geom/PointerData', '../event/PointerEvent', '../../createts/event/Signal'], function (require, exports, Ticker, DisplayObject, Container, Size, PointerData, PointerEvent, Signal) {
+define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', './Container', '../geom/Size', '../../createts/event/Signal'], function (require, exports, Ticker, DisplayObject, Container, Size, Signal) {
     var Stage = (function (_super) {
         __extends(Stage, _super);
         function Stage(element, triggerResizeOnWindowResize) {
@@ -118,10 +118,8 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
                         break;
                     }
             }
-            this.enableDOMEvents(true);
             this.setFps(this._fps);
             this.ctx = this.canvas.getContext('2d');
-            this.setQuality(1);
             this.stage = this;
             if (triggerResizeOnWindowResize) {
                 this.enableAutoResize();
@@ -203,63 +201,9 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
             }
             return dataURL;
         };
-        Stage.prototype.enableMouseOver = function (frequency) {
-            var _this = this;
-            if (frequency === void 0) { frequency = null; }
-            if (this._mouseOverIntervalID) {
-                clearInterval(this._mouseOverIntervalID);
-                this._mouseOverIntervalID = null;
-                if (frequency == 0) {
-                    this._testMouseOver(true);
-                }
-            }
-            if (frequency == null) {
-                frequency = 20;
-            }
-            else if (frequency <= 0) {
-                return void 0;
-            }
-            this.enableMouseInteraction();
-            this._mouseOverIntervalID = setInterval(function () {
-                _this._testMouseOver();
-            }, 1000 / Math.min(50, frequency));
-        };
-        Stage.prototype.enableDOMEvents = function (enable) {
-            var _this = this;
-            if (enable === void 0) { enable = true; }
-            var name, o, eventListeners = this._eventListeners;
-            if (!enable && eventListeners) {
-                for (name in eventListeners) {
-                    o = eventListeners[name];
-                    o.window.removeEventListener(name, o.fn, false);
-                }
-                this._eventListeners = null;
-            }
-            else if (enable && !eventListeners && this.canvas) {
-                var windowsObject = window['addEventListener'] ? window : document;
-                eventListeners = this._eventListeners = {};
-                eventListeners["mouseup"] = {
-                    window: windowsObject,
-                    fn: function (e) { return _this._handleMouseUp(e); }
-                };
-                eventListeners["mousemove"] = {
-                    window: windowsObject,
-                    fn: function (e) { return _this._handleMouseMove(e); }
-                };
-                eventListeners["mousedown"] = {
-                    window: this.canvas,
-                    fn: function (e) { return _this._handleMouseDown(e); }
-                };
-                for (name in eventListeners) {
-                    o = eventListeners[name];
-                    o.window.addEventListener(name, o.fn, false);
-                }
-            }
-        };
         Stage.prototype.clone = function () {
-            var o = new Stage(null, this.triggerResizeOnWindowResize);
-            this.cloneProps(o);
-            return o;
+            throw new Error('cannot clone stage');
+            return this;
         };
         Stage.prototype.toString = function () {
             return "[Stage (name=" + this.name + ")]";
@@ -281,188 +225,8 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
                 bottom: bounds.bottom + offY - padB
             };
         };
-        Stage.prototype._getPointerData = function (id) {
-            var data = this._pointerData[id];
-            if (!data) {
-                data = this._pointerData[id] = new PointerData(0, 0);
-                if (this._primaryPointerID == null) {
-                    this._primaryPointerID = id;
-                }
-                if (this._primaryPointerID == null || this._primaryPointerID == -1) {
-                    this._primaryPointerID = id;
-                }
-            }
-            return data;
-        };
-        Stage.prototype._handleMouseMove = function (e) {
-            if (e === void 0) { e = window['event']; }
-            this._handlePointerMove(-1, e, e.pageX, e.pageY);
-        };
-        Stage.prototype._handlePointerMove = function (id, e, pageX, pageY, owner) {
-            if (this._prevStage && owner === undefined) {
-                return;
-            }
-            if (!this.canvas) {
-                return;
-            }
-            var nextStage = this._nextStage;
-            var pointerData = this._getPointerData(id);
-            var inBounds = pointerData.inBounds;
-            this._updatePointerPosition(id, e, pageX, pageY);
-            if (inBounds || pointerData.inBounds || this.mouseMoveOutside) {
-                if (id == -1 && pointerData.inBounds == !inBounds) {
-                    this._dispatchMouseEvent(this, (inBounds ? "mouseleave" : "mouseenter"), false, id, pointerData, e);
-                }
-                this._dispatchMouseEvent(this, "stagemousemove", false, id, pointerData, e);
-                this._dispatchMouseEvent(pointerData.target, "pressmove", true, id, pointerData, e);
-            }
-            nextStage && nextStage._handlePointerMove(id, e, pageX, pageY, null);
-        };
-        Stage.prototype._updatePointerPosition = function (id, e, pageX, pageY) {
-            var rect = this._getElementRect(this.canvas);
-            pageX -= rect.left;
-            pageY -= rect.top;
-            var w = this.canvas.width;
-            var h = this.canvas.height;
-            pageX /= (rect.right - rect.left) / w;
-            pageY /= (rect.bottom - rect.top) / h;
-            var pointerData = this._getPointerData(id);
-            if (pointerData.inBounds = (pageX >= 0 && pageY >= 0 && pageX <= w - 1 && pageY <= h - 1)) {
-                pointerData.x = pageX;
-                pointerData.y = pageY;
-            }
-            else if (this.mouseMoveOutside) {
-                pointerData.x = pageX < 0 ? 0 : (pageX > w - 1 ? w - 1 : pageX);
-                pointerData.y = pageY < 0 ? 0 : (pageY > h - 1 ? h - 1 : pageY);
-            }
-            pointerData.posEvtObj = e;
-            pointerData.rawX = pageX;
-            pointerData.rawY = pageY;
-            if (id == this._primaryPointerID) {
-                this.mouseX = pointerData.x;
-                this.mouseY = pointerData.y;
-                this.mouseInBounds = pointerData.inBounds;
-            }
-        };
-        Stage.prototype._handleMouseUp = function (e) {
-            this._handlePointerUp(-1, e, false);
-        };
-        Stage.prototype._handlePointerUp = function (id, e, clear, owner) {
-            var nextStage = this._nextStage, o = this._getPointerData(id);
-            if (this._prevStage && owner === undefined) {
-                return;
-            }
-            this._dispatchMouseEvent(this, "stagemouseup", false, id, o, e);
-            var target = null, oTarget = o.target;
-            if (!owner && (oTarget || nextStage)) {
-                target = this._getObjectsUnderPoint(o.x, o.y, null, true);
-            }
-            if (target == oTarget) {
-                this._dispatchMouseEvent(oTarget, "click", true, id, o, e);
-            }
-            this._dispatchMouseEvent(oTarget, "pressup", true, id, o, e);
-            if (clear) {
-                if (id == this._primaryPointerID) {
-                    this._primaryPointerID = null;
-                }
-                delete (this._pointerData[id]);
-            }
-            else {
-                o.target = null;
-            }
-            nextStage && nextStage._handlePointerUp(id, e, clear, owner || target && this);
-        };
-        Stage.prototype._handleMouseDown = function (e) {
-            this._handlePointerDown(-1, e, e.pageX, e.pageY);
-        };
-        Stage.prototype._handlePointerDown = function (id, e, pageX, pageY, owner) {
-            if (pageY != null) {
-                this._updatePointerPosition(id, e, pageX, pageY);
-            }
-            var target = null;
-            var nextStage = this._nextStage;
-            var pointerData = this._getPointerData(id);
-            if (pointerData.inBounds) {
-                this._dispatchMouseEvent(this, "stagemousedown", false, id, pointerData, e);
-            }
-            if (!owner) {
-                target = pointerData.target = this._getObjectsUnderPoint(pointerData.x, pointerData.y, null, true);
-                this._dispatchMouseEvent(pointerData.target, "mousedown", true, id, pointerData, e);
-            }
-            nextStage && nextStage._handlePointerDown(id, e, pageX, pageY, owner || target && this);
-        };
-        Stage.prototype._testMouseOver = function (clear, owner, eventTarget) {
-            if (this._prevStage && owner === undefined) {
-                return;
-            }
-            var nextStage = this._nextStage;
-            if (!this._mouseOverIntervalID) {
-                nextStage && nextStage._testMouseOver(clear, owner, eventTarget);
-                return;
-            }
-            if (this._primaryPointerID != -1 || (!clear && this.mouseX == this._mouseOverX && this.mouseY == this._mouseOverY && this.mouseInBounds)) {
-                return;
-            }
-            var o = this._getPointerData(-1), e = o.posEvtObj;
-            var isEventTarget = eventTarget || e && (e.target == this.canvas);
-            var target = null, common = -1, cursor = "", t, i, l;
-            if (!owner && (clear || this.mouseInBounds && isEventTarget)) {
-                target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, true);
-                this._mouseOverX = this.mouseX;
-                this._mouseOverY = this.mouseY;
-            }
-            var oldList = this._mouseOverTarget || [];
-            var oldTarget = oldList[oldList.length - 1];
-            var list = this._mouseOverTarget = [];
-            t = target;
-            while (t) {
-                list.unshift(t);
-                if (t.cursor != null) {
-                    cursor = t.cursor;
-                }
-                t = t.parent;
-            }
-            this.canvas.style.cursor = cursor;
-            if (!owner && eventTarget) {
-                eventTarget.canvas.style.cursor = cursor;
-            }
-            for (i = 0, l = list.length; i < l; i++) {
-                if (list[i] != oldList[i]) {
-                    break;
-                }
-                common = i;
-            }
-            if (oldTarget != target) {
-                this._dispatchMouseEvent(oldTarget, "mouseout", true, -1, o, e);
-            }
-            for (i = oldList.length - 1; i > common; i--) {
-                this._dispatchMouseEvent(oldList[i], "rollout", false, -1, o, e);
-            }
-            for (i = list.length - 1; i > common; i--) {
-                this._dispatchMouseEvent(list[i], "rollover", false, -1, o, e);
-            }
-            if (oldTarget != target) {
-                this._dispatchMouseEvent(target, "mouseover", true, -1, o, e);
-            }
-            nextStage && nextStage._testMouseOver(clear, owner || target && this, eventTarget || isEventTarget && this);
-        };
-        Stage.prototype._handleDoubleClick = function (e, owner) {
-            var target = null, nextStage = this._nextStage, o = this._getPointerData(-1);
-            if (!owner) {
-                target = this._getObjectsUnderPoint(o.x, o.y, null, true);
-                this._dispatchMouseEvent(target, "dblclick", true, -1, o, e);
-            }
-            nextStage && nextStage._handleDoubleClick(e, owner || target && this);
-        };
         Stage.prototype._handleWindowResize = function (e) {
             this.onResize(this.holder.offsetWidth, this.holder.offsetHeight);
-        };
-        Stage.prototype._dispatchMouseEvent = function (target, type, bubbles, pointerId, o, nativeEvent) {
-            if (!target || (!bubbles && !target.hasEventListener(type))) {
-                return;
-            }
-            var evt = new PointerEvent(type, bubbles, false, o.x, o.y, nativeEvent, pointerId, pointerId == this._primaryPointerID, o.rawX, o.rawY);
-            target.dispatchEvent(evt);
         };
         Stage.prototype.setFps = function (value) {
             this._fps = value;
@@ -516,7 +280,6 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
         };
         Stage.prototype.destruct = function () {
             this.stop();
-            this.enableDOMEvents(false);
             _super.prototype.destruct.call(this);
         };
         Stage.EVENT_MOUSE_LEAVE = 'mouseleave';
