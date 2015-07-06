@@ -15,7 +15,7 @@ define(["require", "exports", '../display/Bitmap', '../display/DisplayObject'], 
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
-            this.type = 7 /* BITMAP */;
+            this.type = 7;
             this.loaded = false;
             this._patch = ninePatch;
             if (!this._patch.bitmap.loaded) {

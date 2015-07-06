@@ -5,12 +5,16 @@ define(["require", "exports"], function (require, exports) {
             if (y === void 0) { y = 0; }
             if (z === void 0) { z = 0; }
             if (w === void 0) { w = 1; }
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+            this.w = 1;
+            this.__clampScalarMin = null;
+            this.__clampScalarMax = null;
             this.x = x;
             this.y = y;
             this.z = z;
             this.w = w;
-            this.__clampScalarMin = null;
-            this.__clampScalarMax = null;
         }
         Vector4.prototype.set = function (x, y, z, w) {
             this.x = x;
@@ -74,11 +78,7 @@ define(["require", "exports"], function (require, exports) {
             this.w = (v.w !== undefined) ? v.w : 1;
             return this;
         };
-        Vector4.prototype.add = function (v, w) {
-            if (w !== undefined) {
-                console.warn('THREE.Vector4: .add() now only accepts one argument. Use .addVectors( a, b ) instead.');
-                return this.addVectors(v, w);
-            }
+        Vector4.prototype.add = function (v) {
             this.x += v.x;
             this.y += v.y;
             this.z += v.z;
@@ -99,11 +99,7 @@ define(["require", "exports"], function (require, exports) {
             this.w = a.w + b.w;
             return this;
         };
-        Vector4.prototype.sub = function (v, w) {
-            if (w !== undefined) {
-                console.warn('THREE.Vector4: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.');
-                return this.subVectors(v, w);
-            }
+        Vector4.prototype.sub = function (v) {
             this.x -= v.x;
             this.y -= v.y;
             this.z -= v.z;
@@ -153,6 +149,7 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.setAxisAngleFromQuaternion = function (q) {
+            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
             this.w = 2 * Math.acos(q.w);
             var s = Math.sqrt(1 - q.w * q.w);
             if (s < 0.0001) {
@@ -168,9 +165,15 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.setAxisAngleFromRotationMatrix = function (m) {
+            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
             var angle, x, y, z, epsilon = 0.01, epsilon2 = 0.1, te = m.elements, m11 = te[0], m12 = te[4], m13 = te[8], m21 = te[1], m22 = te[5], m23 = te[9], m31 = te[2], m32 = te[6], m33 = te[10];
-            if ((Math.abs(m12 - m21) < epsilon) && (Math.abs(m13 - m31) < epsilon) && (Math.abs(m23 - m32) < epsilon)) {
-                if ((Math.abs(m12 + m21) < epsilon2) && (Math.abs(m13 + m31) < epsilon2) && (Math.abs(m23 + m32) < epsilon2) && (Math.abs(m11 + m22 + m33 - 3) < epsilon2)) {
+            if ((Math.abs(m12 - m21) < epsilon)
+                && (Math.abs(m13 - m31) < epsilon)
+                && (Math.abs(m23 - m32) < epsilon)) {
+                if ((Math.abs(m12 + m21) < epsilon2)
+                    && (Math.abs(m13 + m31) < epsilon2)
+                    && (Math.abs(m23 + m32) < epsilon2)
+                    && (Math.abs(m11 + m22 + m33 - 3) < epsilon2)) {
                     this.set(1, 0, 0, 0);
                     return this;
                 }
@@ -220,7 +223,9 @@ define(["require", "exports"], function (require, exports) {
                 this.set(x, y, z, angle);
                 return this;
             }
-            var s = Math.sqrt((m32 - m23) * (m32 - m23) + (m13 - m31) * (m13 - m31) + (m21 - m12) * (m21 - m12));
+            var s = Math.sqrt((m32 - m23) * (m32 - m23)
+                + (m13 - m31) * (m13 - m31)
+                + (m21 - m12) * (m21 - m12));
             if (Math.abs(s) < 0.001) {
                 s = 1;
             }
@@ -261,6 +266,7 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.clamp = function (min, max) {
+            // This function assumes min < max, if this assumption isn't true it will not operate correctly
             if (this.x < min.x) {
                 this.x = min.x;
             }

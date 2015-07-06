@@ -181,4 +181,6 @@ class MathUtil
 	}
 }
 
-export = MathUtil;
+export {
+	MathUtil
+};

@@ -67,9 +67,9 @@ class PointerData implements IPoint
 	 */
 	public inBounds:boolean = false;
 	public target:any = null;
-	posEvtObj:any = null;
-	rawX = 0;
-	rawY = 0;
+	public posEvtObj:any = null;
+	public rawX = 0;
+	public rawY = 0;
 
 	constructor(x:number, y:number)
 	{

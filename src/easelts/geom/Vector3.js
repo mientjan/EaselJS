@@ -1,4 +1,4 @@
-define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], function (require, exports, m4, q, MathUtil) {
+define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], function (require, exports, Matrix4_1, Quaternion_1, MathUtil_1) {
     var Vector3 = (function () {
         function Vector3(x, y, z) {
             if (x === void 0) { x = 0; }
@@ -14,7 +14,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
         }
         Vector3.prototype.getQuaternion = function (value) {
             if (!this._quaternion[value]) {
-                this._quaternion[value] = new q.Quaternion();
+                this._quaternion[value] = new Quaternion_1.Quaternion();
             }
             return this._quaternion[value];
         };
@@ -26,7 +26,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
         };
         Vector3.prototype.getMatrix4 = function (value) {
             if (!this._matrix4[value]) {
-                this._matrix4[value] = new m4.Matrix4();
+                this._matrix4[value] = new Matrix4_1.Matrix4();
             }
             return this._matrix4[value];
         };
@@ -156,6 +156,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.applyMatrix4 = function (m) {
+            // input: THREE.Matrix4 affine matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z + e[12];
@@ -164,6 +165,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.applyProjection = function (m) {
+            // input: THREE.Matrix4 projection matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             var d = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]);
@@ -200,6 +202,8 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this.applyProjection(m1);
         };
         Vector3.prototype.transformDirection = function (m) {
+            // input: THREE.Matrix4 affine matrix
+            // vector interpreted as a direction
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z;
@@ -253,6 +257,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
             return this;
         };
         Vector3.prototype.clamp = function (min, max) {
+            // This function assumes min < max, if this assumption isn't true it will not operate correctly
             if (this.x < min.x) {
                 this.x = min.x;
             }
@@ -374,7 +379,7 @@ define(["require", "exports", './Matrix4', './Quaternion', '../util/MathUtil'], 
         };
         Vector3.prototype.angleTo = function (v) {
             var theta = this.dot(v) / (this.length() * v.length());
-            return Math.acos(MathUtil.clamp(theta, -1, 1));
+            return Math.acos(MathUtil_1.MathUtil.clamp(theta, -1, 1));
         };
         Vector3.prototype.distanceTo = function (v) {
             return Math.sqrt(this.distanceToSquared(v));

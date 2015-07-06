@@ -39,7 +39,7 @@ import Methods = require('../util/Methods');
 // display
 import Shape = require('./Shape');
 import Shadow = require('./Shadow');
-import Stage = require('./Stage');
+import {Stage} from './Stage';
 import Container = require('./Container');
 
 // filter
@@ -55,7 +55,7 @@ import FluidMeasurementsUnit = require('../geom/FluidMeasurementsUnit');
 import CalculationUnitType = require('../enum/CalculationUnitType');
 import ValueCalculation = require('../geom/ValueCalculation');
 
-import m2 = require('../geom/Matrix2');
+import {Matrix4} from '../geom/Matrix4';
 import Rectangle = require('../geom/Rectangle');
 import Size = require('../geom/Size');
 import Point = require('../geom/Point');
@@ -72,53 +72,34 @@ import IBehavior = require('../behavior/IBehavior');
  */
 class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplayType
 {
-	public static EVENT_MOUSE_CLICK = 'click';
-	public static EVENT_MOUSE_DOWN = 'mousedown';
-	public static EVENT_MOUSE_OUT = 'mouseout';
-	public static EVENT_MOUSE_OVER = 'mouseover';
+	public static EVENT_POINTER_CLICK = 'pointer.click';
+	public static EVENT_POINTER_DOWN = 'pointer.down';
+	public static EVENT_POINTER_MOVE = 'pointer.move';
+	public static EVENT_POINTER_UP = 'pointer.up';
+	public static EVENT_POINTER_CANCEL = 'pointer.cancel';
+	public static EVENT_POINTER_ENTER = 'pointer.enter';
+	public static EVENT_POINTER_LEAVE = 'pointer.leave';
+	public static EVENT_POINTER_OUT = 'pointer.out';
+	public static EVENT_POINTER_OVER = 'pointer.over';
 
-	/**
-	 *
-	 * @type {string}
-	 */
-	public static EVENT_MOUSE_MOVE = 'mousemove';
-
-	public static EVENT_PRESS_MOVE = 'pressmove';
-	public static EVENT_PRESS_UP = 'pressup';
-	public static EVENT_ROLL_OUT = 'rollout';
-	public static EVENT_ROLL_OVER = 'rollover';
-
-	/**
-	 * @todo replace mouse events with pointer events
-	 */
-	public static EVENT_POINTER_CLICK = 'click';
-	public static EVENT_POINTER_DOWN = 'mousedown';
-	public static EVENT_POINTER_MOVE = 'mousemove';
-	public static EVENT_POINTER_UP = 'pressup';
-	public static EVENT_POINTER_CANCEL = 'mousedown';
-	public static EVENT_POINTER_ENTER = 'mouseover';
-	public static EVENT_POINTER_LEAVE = 'mouseout';
-	public static EVENT_POINTER_OUT = 'mouseout';
-	public static EVENT_POINTER_OVER = 'mouseover';
-
-	/**
-	 * Listing of mouse event names. Used in _hasMouseEventListener.
-	 * @property _MOUSE_EVENTS
-	 * @protected
-	 * @static
-	 * @type {string[]}
-	 **/
-	public static _MOUSE_EVENTS = [
-		DisplayObject.EVENT_MOUSE_CLICK,
-		DisplayObject.EVENT_MOUSE_DOWN,
-		DisplayObject.EVENT_MOUSE_OUT,
-		DisplayObject.EVENT_MOUSE_OVER,
-		DisplayObject.EVENT_PRESS_MOVE,
-		DisplayObject.EVENT_PRESS_UP,
-		DisplayObject.EVENT_ROLL_OUT,
-		DisplayObject.EVENT_ROLL_OVER,
-		"dblclick" // @todo make depricated
-	];
+//	/**
+//	 * Listing of mouse event names. Used in _hasMouseEventListener.
+//	 * @property _MOUSE_EVENTS
+//	 * @protected
+//	 * @static
+//	 * @type {string[]}
+//	 **/
+//	public static _MOUSE_EVENTS = [
+//		DisplayObject.EVENT_MOUSE_CLICK,
+//		DisplayObject.EVENT_MOUSE_DOWN,
+//		DisplayObject.EVENT_MOUSE_OUT,
+//		DisplayObject.EVENT_MOUSE_OVER,
+//		DisplayObject.EVENT_PRESS_MOVE,
+//		DisplayObject.EVENT_PRESS_UP,
+//		DisplayObject.EVENT_ROLL_OUT,
+//		DisplayObject.EVENT_ROLL_OVER,
+//		"dblclick" // @todo make depricated
+//	];
 
 	public static COMPOSITE_OPERATION_SOURCE_ATOP = 'source-atop';
 	public static COMPOSITE_OPERATION_SOURCE_IN = 'source-in';
@@ -520,7 +501,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @type {Matrix2D}
 	 * @default null
 	 **/
-	protected _matrix:m2.Matrix2 = new m2.Matrix2(0, 0, 0, 0, 0, 0);
+	protected _matrix:Matrix4 = new Matrix4();
 
 	/**
 	 * @property _rectangle
@@ -1092,7 +1073,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		{
 			throw "cache() must be called before updateCache()";
 		}
-		var ctx = cacheCanvas.getContext("2d");
+		var ctx:CanvasRenderingContext2D = <CanvasRenderingContext2D> cacheCanvas.getContext("2d");
 
 		// update bounds based on filters:
 		if(fBounds = this._applyFilterBounds(offX, offY, w, h))
@@ -1326,10 +1307,10 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * Matrix object is returned.
 	 * @return {Matrix2D} A matrix representing this display object's transform.
 	 **/
-	public getMatrix(matrix?:m2.Matrix2)
+	public getMatrix(matrix?:Matrix4)
 	{
 		var o = this;
-		return (matrix ? matrix.identity() : new m2.Matrix2(0, 0, 0, 0, 0, 0))
+		return (matrix ? matrix.identity() : new Matrix4())
 			.appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY)
 			.appendProperties(o.alpha, o.shadow, o.compositeOperation, 1);
 	}
@@ -1345,7 +1326,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Matrix2D} a concatenated Matrix2D object representing the combined transform of the display object and
 	 * all of its parent Containers up to the highest level ancestor (usually the {{#crossLink "Stage"}}{{/crossLink}}).
 	 **/
-	public getConcatenatedMatrix(matrix:m2.Matrix2):m2.Matrix2
+	public getConcatenatedMatrix(matrix:Matrix4):Matrix4
 	{
 		if(matrix)
 		{
@@ -1353,7 +1334,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		}
 		else
 		{
-			matrix = new m2.Matrix2(0, 0, 0, 0, 0, 0);
+			matrix = new Matrix4();
 		}
 		var o = this;
 		while(o != null)
@@ -1654,10 +1635,12 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		{
 			return;
 		}
+
 		var l = this.filters.length;
-		var ctx = this.cacheCanvas.getContext("2d");
+		var ctx = <CanvasRenderingContext2D> this.cacheCanvas.getContext("2d");
 		var w = this.cacheCanvas.width;
 		var h = this.cacheCanvas.height;
+
 		for(var i = 0; i < l; i++)
 		{
 			this.filters[i].applyFilter(ctx, 0, 0, w, h);
@@ -1708,7 +1691,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	protected _getBounds(matrix?:m2.Matrix2, ignoreTransform?:boolean)
+	protected _getBounds(matrix?:Matrix4, ignoreTransform?:boolean)
 	{
 		return this._transformBounds(this.getBounds(), matrix, ignoreTransform);
 	}
@@ -1724,7 +1707,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	protected _transformBounds(bounds:Rectangle, matrix:m2.Matrix2, ignoreTransform:boolean)
+	protected _transformBounds(bounds:Rectangle, matrix:Matrix4, ignoreTransform:boolean)
 	{
 		if(!bounds)
 		{
@@ -1808,19 +1791,19 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Boolean}
 	 * @protected
 	 **/
-	protected _hasMouseEventListener():boolean
-	{
-		var evts = DisplayObject._MOUSE_EVENTS;
-		for(var i = 0, l = evts.length; i < l; i++)
-		{
-			if(this.hasEventListener(evts[i]))
-			{
-				return true;
-			}
-		}
-
-		return this.cursor != null;
-	}
+//	protected _hasMouseEventListener():boolean
+//	{
+//		var evts = DisplayObject._MOUSE_EVENTS;
+//		for(var i = 0, l = evts.length; i < l; i++)
+//		{
+//			if(this.hasEventListener(evts[i]))
+//			{
+//				return true;
+//			}
+//		}
+//
+//		return this.cursor != null;
+//	}
 
 	public onStageSet():void {}
 

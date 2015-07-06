@@ -78,7 +78,6 @@ define(["require", "exports", './Quaternion', '../util/MathUtil'], function (req
         };
         Euler.prototype.setFromRotationMatrix = function (m, order) {
             var clamp = MathUtil.clamp;
-            // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
             var te = m.elements;
             var m11 = te[0], m12 = te[4], m13 = te[8];
             var m21 = te[1], m22 = te[5], m23 = te[9];
@@ -161,8 +160,6 @@ define(["require", "exports", './Quaternion', '../util/MathUtil'], function (req
             if (order === void 0) { order = this._order; }
             if (update === void 0) { update = false; }
             var clamp = MathUtil.clamp;
-            // q is assumed to be normalized
-            // http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m
             var sqx = q.x * q.x;
             var sqy = q.y * q.y;
             var sqz = q.z * q.z;
@@ -206,7 +203,6 @@ define(["require", "exports", './Quaternion', '../util/MathUtil'], function (req
             return this;
         };
         Euler.prototype.reorder = function (newOrder) {
-            // WARNING: this discards revolution information -bhouston
             var q = this._reorder_q;
             q.setFromEuler(this);
             this.setFromQuaternion(q, newOrder);
@@ -230,8 +226,7 @@ define(["require", "exports", './Quaternion', '../util/MathUtil'], function (req
             this.onChangeCallback = callback;
             return this;
         };
-        Euler.prototype.onChangeCallback = function () {
-        };
+        Euler.prototype.onChangeCallback = function () { };
         Euler.prototype.clone = function () {
             return new Euler(this._x, this._y, this._z, this._order);
         };

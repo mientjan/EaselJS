@@ -63,7 +63,7 @@ class Touch
 	 **/
 	public static isSupported()
 	{
-		return    ('ontouchstart' in window) // iOS
+		return ('ontouchstart' in window) // iOS
 			|| (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0) // IE10
 			|| (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0); // IE11+
 	}
@@ -89,8 +89,6 @@ class Touch
 			return false;
 		}
 
-
-
 		// inject required properties on stage:
 		stage.__touch = new TouchInjectProperties();
 
@@ -102,7 +100,6 @@ class Touch
 		// these to prevent duplicate calls. It doesn't seem to be an issue with iOS devices though.
 		if('ontouchstart' in window)
 		{
-			stage.enableDOMEvents(false);
 			Touch._IOS_enable(stage);
 		}
 		else if(window.navigator['msPointerEnabled'] || window.navigator["pointerEnabled"])

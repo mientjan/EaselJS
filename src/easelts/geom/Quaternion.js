@@ -1,4 +1,4 @@
-define(["require", "exports", './Matrix4', './Vector3'], function (require, exports, m4, v3) {
+define(["require", "exports", './Matrix4', './Vector3'], function (require, exports, Matrix4_1, Vector3_1) {
     var Quaternion = (function () {
         function Quaternion(x, y, z, w) {
             if (x === void 0) { x = 0; }
@@ -22,13 +22,13 @@ define(["require", "exports", './Matrix4', './Vector3'], function (require, expo
         };
         Quaternion.prototype.getVector3 = function (value) {
             if (!this._vector3[value]) {
-                this._vector3[value] = new v3.Vector3();
+                this._vector3[value] = new Vector3_1.Vector3();
             }
             return this._vector3[value];
         };
         Quaternion.prototype.getMatrix4 = function (value) {
             if (!this._matrix4[value]) {
-                this._matrix4[value] = new m4.Matrix4();
+                this._matrix4[value] = new Matrix4_1.Matrix4();
             }
             return this._matrix4[value];
         };
@@ -96,6 +96,9 @@ define(["require", "exports", './Matrix4', './Vector3'], function (require, expo
             return this;
         };
         Quaternion.prototype.setFromEuler = function (euler, update) {
+            // http://www.mathworks.com/matlabcentral/fileexchange/
+            // 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
+            //	content/SpinCalc.m
             if (update === void 0) { update = false; }
             var c1 = Math.cos(euler._x / 2);
             var c2 = Math.cos(euler._y / 2);
@@ -145,6 +148,7 @@ define(["require", "exports", './Matrix4', './Vector3'], function (require, expo
             return this;
         };
         Quaternion.prototype.setFromAxisAngle = function (axis, angle) {
+            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
             var halfAngle = angle / 2, s = Math.sin(halfAngle);
             this._x = axis.x * s;
             this._y = axis.y * s;
@@ -154,6 +158,7 @@ define(["require", "exports", './Matrix4', './Vector3'], function (require, expo
             return this;
         };
         Quaternion.prototype.setFromRotationMatrix = function (m) {
+            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
             var te = m.elements, m11 = te[0], m12 = te[4], m13 = te[8], m21 = te[1], m22 = te[5], m23 = te[9], m31 = te[2], m32 = te[6], m33 = te[10], trace = m11 + m22 + m33, s;
             if (trace > 0) {
                 s = 0.5 / Math.sqrt(trace + 1.0);
@@ -251,6 +256,7 @@ define(["require", "exports", './Matrix4', './Vector3'], function (require, expo
             return this.multiplyQuaternions(this, q);
         };
         Quaternion.prototype.multiplyQuaternions = function (a, b) {
+            // from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
             var qax = a._x, qay = a._y, qaz = a._z, qaw = a._w;
             var qbx = b._x, qby = b._y, qbz = b._z, qbw = b._w;
             this._x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;

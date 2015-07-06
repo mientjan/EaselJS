@@ -13,7 +13,7 @@ define(["require", "exports", '../display/DisplayObject', '../display/SpriteShee
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
-            this.type = 7 /* BITMAP */;
+            this.type = 7;
             this._playing = false;
             this._timeIndex = -1;
             this._frame = 0;

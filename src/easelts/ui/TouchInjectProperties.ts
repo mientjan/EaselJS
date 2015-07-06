@@ -1,9 +1,9 @@
 class TouchInjectProperties
 {
-	pointers = {};
-	multitouch:boolean = false;
-	preventDefault:boolean = false;
-	count:number = 0;
+	public pointers = {};
+	public multitouch:boolean = false;
+	public preventDefault:boolean = false;
+	public count:number = 0;
 }
 
 export = TouchInjectProperties;

@@ -4,7 +4,9 @@ define(["require", "exports", './TouchInjectProperties'], function (require, exp
             throw "Touch cannot be instantiated";
         }
         Touch.isSupported = function () {
-            return ('ontouchstart' in window) || (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0) || (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0);
+            return ('ontouchstart' in window)
+                || (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0)
+                || (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0);
         };
         Touch.enable = function (stage, singleTouch, allowDefault) {
             if (singleTouch === void 0) { singleTouch = true; }
@@ -17,7 +19,6 @@ define(["require", "exports", './TouchInjectProperties'], function (require, exp
             stage.__touch.preventDefault = !allowDefault;
             stage.__touch.count = 0;
             if ('ontouchstart' in window) {
-                stage.enableDOMEvents(false);
                 Touch._IOS_enable(stage);
             }
             else if (window.navigator['msPointerEnabled'] || window.navigator["pointerEnabled"]) {
@@ -148,7 +149,8 @@ define(["require", "exports", './TouchInjectProperties'], function (require, exp
                 if (type == "MSPointerMove" || type == "pointermove") {
                     this._handleMove(stage, id, e, e.pageX, e.pageY);
                 }
-                else if (type == "MSPointerUp" || type == "MSPointerCancel" || type == "pointerup" || type == "pointercancel") {
+                else if (type == "MSPointerUp" || type == "MSPointerCancel"
+                    || type == "pointerup" || type == "pointercancel") {
                     delete (ids[id]);
                     this._handleEnd(stage, id, e);
                 }
