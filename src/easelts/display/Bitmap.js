@@ -153,10 +153,12 @@ define(["require", "exports", './DisplayObject'], function (require, exports, Di
                             if (height == 0) {
                                 this.height = height = this._imageNaturalHeight;
                             }
+                            console.log('bitmap:bitmapType', this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, width, height);
                             ctx.drawImage(this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, width, height);
                         }
                     }
                     else {
+                        console.log('draw:image');
                         ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, width, height);
                     }
                 }

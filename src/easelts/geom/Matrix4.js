@@ -76,6 +76,92 @@ define(["require", "exports", '../util/MathUtil', './Vector3', './Quaternion'], 
             this.set(xAxis.x, yAxis.x, zAxis.x, 0, xAxis.y, yAxis.y, zAxis.y, 0, xAxis.z, yAxis.z, zAxis.z, 0, 0, 0, 0, 1);
             return this;
         };
+        Matrix4.prototype.append2d = function (xx, yx, xy, yy, dx, dy) {
+            var elements = this.elements;
+            var a1 = elements[0];
+            var b1 = elements[4];
+            var c1 = elements[1];
+            var d1 = elements[5];
+            elements[0] = xx * a1 + yx * c1;
+            elements[4] = xx * b1 + yx * d1;
+            elements[1] = xy * a1 + yy * c1;
+            elements[5] = xy * b1 + yy * d1;
+            elements[12] = dx * a1 + dy * c1 + elements[12];
+            elements[13] = dx * b1 + dy * d1 + elements[13];
+            return this;
+        };
+        Matrix4.prototype.prepend2d = function (xx, yx, xy, yy, dx, dy) {
+            var tx1 = this.elements[12];
+            if (xx != 1 || yx != 0 || xy != 0 || yy != 1) {
+                var a1 = this.elements[0];
+                var c1 = this.elements[1];
+                this.elements[0] = a1 * xx + this.elements[4] * xy;
+                this.elements[4] = a1 * yx + this.elements[4] * yy;
+                this.elements[1] = c1 * xx + this.elements[5] * xy;
+                this.elements[5] = c1 * yx + this.elements[5] * yy;
+            }
+            this.elements[12] = tx1 * xx + this.elements[13] * xy + dx;
+            this.elements[13] = tx1 * yx + this.elements[13] * yy + dy;
+            return this;
+        };
+        Matrix4.prototype.appendTransform2d = function (x, y, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
+            if (rotation % 360) {
+                var r = rotation * Matrix4.DEG_TO_RAD;
+                var cos = Math.cos(r);
+                var sin = Math.sin(r);
+            }
+            else {
+                cos = 1;
+                sin = 0;
+            }
+            if (skewX || skewY) {
+                skewX *= Matrix4.DEG_TO_RAD;
+                skewY *= Matrix4.DEG_TO_RAD;
+                this.append2d(Math.cos(skewY), Math.sin(skewY), -Math.sin(skewX), Math.cos(skewX), x, y);
+                this.append2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, 0, 0);
+            }
+            else {
+                this.append2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, x, y);
+            }
+            if (regX || regY) {
+                this.elements[12] -= regX * this.elements[0] + regY * this.elements[1];
+                this.elements[13] -= regX * this.elements[4] + regY * this.elements[5];
+            }
+            return this;
+        };
+        Matrix4.prototype.prependTransform2d = function (x, y, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
+            if (rotation % 360) {
+                var r = rotation * Matrix4.DEG_TO_RAD;
+                var cos = Math.cos(r);
+                var sin = Math.sin(r);
+            }
+            else {
+                cos = 1;
+                sin = 0;
+            }
+            if (regX || regY) {
+                this.elements[12] -= regX;
+                this.elements[13] -= regY;
+            }
+            if (skewX || skewY) {
+                skewX *= Matrix4.DEG_TO_RAD;
+                skewY *= Matrix4.DEG_TO_RAD;
+                this.prepend2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, 0, 0);
+                this.prepend2d(Math.cos(skewY), Math.sin(skewY), -Math.sin(skewX), Math.cos(skewX), x, y);
+            }
+            else {
+                this.prepend2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, x, y);
+            }
+            return this;
+        };
+        Matrix4.prototype.prependMatrix2d = function (matrix) {
+            this.prepend2d(matrix.elements[0], matrix.elements[4], matrix.elements[1], matrix.elements[5], matrix.elements[12], matrix.elements[13]);
+            return this;
+        };
+        Matrix4.prototype.appendMatrix2d = function (matrix) {
+            this.append2d(matrix.elements[0], matrix.elements[4], matrix.elements[1], matrix.elements[5], matrix.elements[12], matrix.elements[13]);
+            return this;
+        };
         Matrix4.prototype.extractRotation = function (m) {
             var v1 = this.getVector3('v1ExtractRotation');
             var te = this.elements;
@@ -610,6 +696,7 @@ define(["require", "exports", '../util/MathUtil', './Vector3', './Quaternion'], 
         Matrix4.prototype.clone = function () {
             return new Matrix4().fromArray(this.elements);
         };
+        Matrix4.DEG_TO_RAD = Math.PI / 180;
         return Matrix4;
     })();
     exports.Matrix4 = Matrix4;

@@ -83,7 +83,7 @@ class Bitmap extends DisplayObject
 	 * @property image
 	 * @type HTMLImageElement | HTMLCanvasElement | HTMLVideoElement
 	 **/
-	public image:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement = null;
+	public image:HTMLVideoElement|HTMLImageElement|HTMLCanvasElement = null;
 
 	protected _imageNaturalWidth:number = null;
 	protected _imageNaturalHeight:number = null;
@@ -245,7 +245,10 @@ class Bitmap extends DisplayObject
 		{
 			return true;
 		}
-
+		
+		// console.log('bitmap:isVisible', this.isVisible());
+		
+		
 		if(this.isVisible())
 		{
 			var sourceRect = this.sourceRect;
@@ -255,24 +258,28 @@ class Bitmap extends DisplayObject
 
 			if(sourceRect && !destRect)
 			{
-				ctx.drawImage(this.image, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, width, height);
+				ctx.drawImage( <HTMLImageElement> this.image, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, width, height);
 			}
 			else if(!sourceRect && destRect)
 			{
-				ctx.drawImage(this.image, 0, 0, width, height, destRect.x, destRect.y, destRect.width, destRect.height);
+				ctx.drawImage( <HTMLImageElement> this.image, 0, 0, width, height, destRect.x, destRect.y, destRect.width, destRect.height);
 			}
 			else if(sourceRect && destRect)
 			{
-				ctx.drawImage(this.image, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, destRect.x, destRect.y, destRect.width, destRect.height);
+				ctx.drawImage( <HTMLImageElement> this.image, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, destRect.x, destRect.y, destRect.width, destRect.height);
 			}
 			else
 			{
-				if( this.bitmapType == BitmapType.IMAGE ){
+
+				if( this.bitmapType == BitmapType.IMAGE )
+				{
 					if( this._imageNaturalWidth == 0 || this._imageNaturalHeight == 0)
 					{
 						this._imageNaturalWidth = ( <HTMLImageElement> this.image).naturalWidth;
 						this._imageNaturalHeight = ( <HTMLImageElement> this.image).naturalHeight;
 					}
+
+
 
 					if( this._imageNaturalWidth != 0 && this._imageNaturalHeight != 0)
 					{
@@ -285,10 +292,14 @@ class Bitmap extends DisplayObject
 							this.height = height = this._imageNaturalHeight;
 						}
 
-						ctx.drawImage(this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, width, height);
+						console.log('bitmap:bitmapType', this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, width, height );
+
+						ctx.drawImage(<HTMLImageElement> this.image, 0, 0, this._imageNaturalWidth, this._imageNaturalHeight, 0, 0, width, height);
 					}
 				} else {
-					ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, 0, 0, width, height );
+
+					console.log('draw:image');
+					ctx.drawImage(<HTMLImageElement> this.image, 0, 0, this.image.width, this.image.height, 0, 0, width, height );
 				}
 			}
 		}

@@ -39,7 +39,7 @@ import Methods = require('../util/Methods');
 // display
 import Shape = require('./Shape');
 import Shadow = require('./Shadow');
-import {Stage} from './Stage';
+import Stage from './Stage';
 import Container = require('./Container');
 
 // filter
@@ -72,49 +72,30 @@ import IBehavior = require('../behavior/IBehavior');
  */
 class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplayType
 {
-	public static EVENT_POINTER_CLICK = 'pointer.click';
-	public static EVENT_POINTER_DOWN = 'pointer.down';
-	public static EVENT_POINTER_MOVE = 'pointer.move';
-	public static EVENT_POINTER_UP = 'pointer.up';
-	public static EVENT_POINTER_CANCEL = 'pointer.cancel';
-	public static EVENT_POINTER_ENTER = 'pointer.enter';
-	public static EVENT_POINTER_LEAVE = 'pointer.leave';
-	public static EVENT_POINTER_OUT = 'pointer.out';
-	public static EVENT_POINTER_OVER = 'pointer.over';
+	public static EVENT_POINTER_CLICK:string = 'pointer.click';
+	public static EVENT_POINTER_DOWN:string = 'pointer.down';
+	public static EVENT_POINTER_MOVE:string = 'pointer.move';
+	public static EVENT_POINTER_UP:string = 'pointer.up';
+	public static EVENT_POINTER_CANCEL:string = 'pointer.cancel';
+	public static EVENT_POINTER_ENTER:string = 'pointer.enter';
+	public static EVENT_POINTER_LEAVE:string = 'pointer.leave';
+	public static EVENT_POINTER_OUT:string = 'pointer.out';
+	public static EVENT_POINTER_OVER:string = 'pointer.over';
 
-//	/**
-//	 * Listing of mouse event names. Used in _hasMouseEventListener.
-//	 * @property _MOUSE_EVENTS
-//	 * @protected
-//	 * @static
-//	 * @type {string[]}
-//	 **/
-//	public static _MOUSE_EVENTS = [
-//		DisplayObject.EVENT_MOUSE_CLICK,
-//		DisplayObject.EVENT_MOUSE_DOWN,
-//		DisplayObject.EVENT_MOUSE_OUT,
-//		DisplayObject.EVENT_MOUSE_OVER,
-//		DisplayObject.EVENT_PRESS_MOVE,
-//		DisplayObject.EVENT_PRESS_UP,
-//		DisplayObject.EVENT_ROLL_OUT,
-//		DisplayObject.EVENT_ROLL_OVER,
-//		"dblclick" // @todo make depricated
-//	];
+	public static COMPOSITE_OPERATION_SOURCE_ATOP:string = 'source-atop';
+	public static COMPOSITE_OPERATION_SOURCE_IN:string = 'source-in';
+	public static COMPOSITE_OPERATION_SOURCE_OUT:string = 'source-out';
+	public static COMPOSITE_OPERATION_SOURCE_OVER:string = 'source-over';
 
-	public static COMPOSITE_OPERATION_SOURCE_ATOP = 'source-atop';
-	public static COMPOSITE_OPERATION_SOURCE_IN = 'source-in';
-	public static COMPOSITE_OPERATION_SOURCE_OUT = 'source-out';
-	public static COMPOSITE_OPERATION_SOURCE_OVER = 'source-over';
+	public static COMPOSITE_OPERATION_DESTINATION_ATOP:string = 'destination-atop';
+	public static COMPOSITE_OPERATION_DESTINATION_IN:string = 'destination-in';
+	public static COMPOSITE_OPERATION_DESTINATION_OUT:string = 'destination-out';
+	public static COMPOSITE_OPERATION_DESTINATION_OVER:string = 'destination-over';
 
-	public static COMPOSITE_OPERATION_DESTINATION_ATOP = 'destination-atop';
-	public static COMPOSITE_OPERATION_DESTINATION_IN = 'destination-in';
-	public static COMPOSITE_OPERATION_DESTINATION_OUT = 'destination-out';
-	public static COMPOSITE_OPERATION_DESTINATION_OVER = 'destination-over';
-
-	public static COMPOSITE_OPERATION_LIGHTER = 'lighter';
-	public static COMPOSITE_OPERATION_DARKER = 'darker';
-	public static COMPOSITE_OPERATION_XOR = 'xor';
-	public static COMPOSITE_OPERATION_COPY = 'copy';
+	public static COMPOSITE_OPERATION_LIGHTER:string = 'lighter';
+	public static COMPOSITE_OPERATION_DARKER:string = 'darker';
+	public static COMPOSITE_OPERATION_XOR:string = 'xor';
+	public static COMPOSITE_OPERATION_COPY:string = 'copy';
 
 	/**
 	 * Suppresses errors generated when using features like hitTest, mouse events, and {{#crossLink "getObjectsUnderPoint"}}{{/crossLink}}
@@ -159,6 +140,10 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 **/
 	public static _nextCacheID:number = 1;
 
+	/**
+	 *
+	 * @type {DisplayType}
+	 */
 	public type:DisplayType = DisplayType.DISPLAYOBJECT;
 
 	/**
@@ -521,11 +506,11 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 
 	public _off:boolean = false;
 
-	constructor(width:any = '100%', height:any = '100%', x:any = 0, y:any = 0, regX:any = 0, regY:any = 0)
+	constructor(width:number|string = '100%', height:number|string = '100%', x:number|string = 0, y:number|string = 0, regX:number|string = 0, regY:number|string = 0)
 	{
 		super();
 
-		this.setGeomTransform(width, height, x, y, regX, regY);
+		this.setTransform(x, y, width, height, null, null, null, null, null, regX, regY);
 	}
 
 	/**
@@ -964,29 +949,38 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 **/
 	public updateContext(ctx:CanvasRenderingContext2D):void
 	{
-		var mtx, mask = this.mask, o = this;
+		var mtx;
+		var mask = this.mask;
+		var o = this;
 
-		if(mask && mask.graphics && !mask.graphics.isEmpty())
-		{
-			mtx = mask.getMatrix(mask._matrix);
-			ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
+		//if(mask && mask.graphics && !mask.graphics.isEmpty())
+		//{
+		//	mtx = mask.getMatrix(mask._matrix);
+		//	ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
+		//
+		//	mask.graphics.drawAsPath(ctx);
+		//	ctx.clip();
+		//
+		//	mtx.invert();
+		//	ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
+		//}
 
-			mask.graphics.drawAsPath(ctx);
-			ctx.clip();
+		mtx = o._matrix.identity().appendTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+		
 
-			mtx.invert();
-			ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
-		}
 
-		mtx = o._matrix.identity().appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
-		var tx = mtx.tx, ty = mtx.ty;
+		var tx = mtx.elements[12];
+		var ty = mtx.elements[13];
+
 		if(DisplayObject._snapToPixelEnabled && o.snapToPixel)
 		{
 			tx = tx + (tx < 0 ? -0.5 : 0.5) | 0;
 			ty = ty + (ty < 0 ? -0.5 : 0.5) | 0;
 		}
-		ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, tx, ty);
-		ctx.globalAlpha *= o.alpha;
+		console.log(this, this.scaleX, o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+		ctx.transform(mtx.elements[0], mtx.elements[4], mtx.elements[1], mtx.elements[5], tx, ty);
+		//ctx.globalAlpha *= o.alpha;
+
 		if(o.compositeOperation)
 		{
 			ctx.globalCompositeOperation = o.compositeOperation;
@@ -1166,8 +1160,8 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		{
 			return null;
 		}
-		mtx.append(1, 0, 0, 1, x, y);
-		return new Point(mtx.tx, mtx.ty);
+		mtx.append2d(1, 0, 0, 1, x, y);
+		return new Point(mtx.elements[12], mtx.elements[13]);
 	}
 
 	/**
@@ -1197,9 +1191,11 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		{
 			return null;
 		}
-		mtx.invert();
-		mtx.append(1, 0, 0, 1, x, y);
-		return new Point(mtx.tx, mtx.ty);
+
+		// @todo IMPLEMENT!!!! THIS BREAKS EVERYTHING
+		//mtx.invert();
+		mtx.append2d(1, 0, 0, 1, x, y);
+		return new Point(mtx.elements[12], mtx.elements[13]);
 	}
 
 	/**
@@ -1244,57 +1240,53 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @param {Number} [regY=0] The vertical registration point in pixels
 	 * @return {DisplayObject} Returns this instance. Useful for chaining commands.
 	 */
-	public setTransform(x:number = 0, y:number = 0, scaleX:number = 1, scaleY:number = 1, rotation:number = 0, skewX:number = 0, skewY:number = 0, regX:number = 0, regY:number = 0)
+	public setTransform(
+		x:string|number = 0,
+		y:string|number = 0,
+		width?:string|number,
+		height?:string|number,
+		scaleX:number = 1,
+		scaleY:number = 1,
+		rotation:number = 0,
+		skewX:number = 0,
+		skewY:number = 0,
+		regX:string|number = 0,
+		regY:string|number = 0)
 	{
-		this.x = x;
-		this.y = y;
-		this.scaleX = scaleX;
-		this.scaleY = scaleY;
-		this.rotation = rotation;
-		this.skewX = skewX;
-		this.skewY = skewY;
-		this.regX = regX;
-		this.regY = regY;
-
-		return this;
-	}
-
-	/**
-	 *
-	 * @param w
-	 * @param h
-	 * @param x
-	 * @param y
-	 * @param rx
-	 * @param ry
-	 * @returns {DisplayObject}
-	 */
-	public setGeomTransform(w:any = null, h:any = null, x:any = null, y:any = null, rx:any = null, ry:any = null):any
-	{
-
-		if(x != null)
+		if(x != void 0)
 		{
 			this.setX(x);
 		}
-		if(y != null)
+
+		if(y != void 0)
 		{
 			this.setY(y);
 		}
-		if(w != null)
+		
+		if(width != void 0)
 		{
-			this.setWidth(w);
+			this.setWidth(width);
 		}
-		if(h != null)
+
+		if(height != void 0)
 		{
-			this.setHeight(h);
+			this.setHeight(height);
 		}
-		if(rx != null)
+
+		if(scaleX != void 0) this.scaleX = scaleX;
+		if(scaleY != void 0) this.scaleY = scaleY;
+		if(rotation != void 0) this.rotation = rotation;
+		if(skewX != void 0) this.skewX = rotation;
+		if(skewY != void 0) this.skewY = skewY;
+
+		if(regX != void 0)
 		{
-			this.setRegX(rx);
+			this.setRegX(regX);
 		}
-		if(ry != null)
+
+		if(regY != void 0)
 		{
-			this.setRegY(ry);
+			this.setRegY(regY);
 		}
 
 		return this;
@@ -1311,8 +1303,9 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	{
 		var o = this;
 		return (matrix ? matrix.identity() : new Matrix4())
-			.appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY)
-			.appendProperties(o.alpha, o.shadow, o.compositeOperation, 1);
+			.appendTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+
+			//.appendProperties(o.alpha, o.shadow, o.compositeOperation, 1);
 	}
 
 	/**
@@ -1339,7 +1332,8 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		var o = this;
 		while(o != null)
 		{
-			matrix.prependTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY).prependProperties(o.alpha, o.shadow, o.compositeOperation, o.visible);
+			matrix.prependTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+				//.prependProperties(o.alpha, o.shadow, o.compositeOperation, o.visible);
 			o = o.parent;
 		}
 		return matrix;
@@ -1691,7 +1685,7 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	protected _getBounds(matrix?:Matrix4, ignoreTransform?:boolean)
+	public _getBounds(matrix?:Matrix4, ignoreTransform?:boolean)
 	{
 		return this._transformBounds(this.getBounds(), matrix, ignoreTransform);
 	}
@@ -1713,21 +1707,25 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 		{
 			return bounds;
 		}
-		var x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
+		var x = bounds.x;
+		var y = bounds.y;
+		var width = bounds.width;
+		var height = bounds.height;
+
 		var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
 
 		if(x || y)
 		{
-			mtx.appendTransform(0, 0, 1, 1, 0, 0, 0, -x, -y);
+			mtx.appendTransform2d(0, 0, 1, 1, 0, 0, 0, -x, -y);
 		}
 		if(matrix)
 		{
-			mtx.prependMatrix(matrix);
+			mtx.prependMatrix2d(matrix);
 		}
 
-		var x_a = width * mtx.a, x_b = width * mtx.b;
-		var y_c = height * mtx.c, y_d = height * mtx.d;
-		var tx = mtx.tx, ty = mtx.ty;
+		var x_a = width * mtx.elements[0], x_b = width * mtx.elements[5];
+		var y_c = height * mtx.elements[1], y_d = height * mtx.elements[6];
+		var tx = mtx.elements[12], ty = mtx.elements[13];
 
 		var minX = tx, maxX = tx, minY = ty, maxY = ty;
 

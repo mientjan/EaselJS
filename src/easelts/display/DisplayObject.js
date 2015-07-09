@@ -95,7 +95,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             this._bounds = null;
             this._off = false;
             this.DisplayObject_getBounds = this._getBounds;
-            this.setGeomTransform(width, height, x, y, regX, regY);
+            this.setTransform(x, y, width, height, null, null, null, null, null, regX, regY);
         }
         Object.defineProperty(DisplayObject.prototype, "resizeSignal", {
             get: function () {
@@ -325,23 +325,18 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             return true;
         };
         DisplayObject.prototype.updateContext = function (ctx) {
-            var mtx, mask = this.mask, o = this;
-            if (mask && mask.graphics && !mask.graphics.isEmpty()) {
-                mtx = mask.getMatrix(mask._matrix);
-                ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
-                mask.graphics.drawAsPath(ctx);
-                ctx.clip();
-                mtx.invert();
-                ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
-            }
-            mtx = o._matrix.identity().appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
-            var tx = mtx.tx, ty = mtx.ty;
+            var mtx;
+            var mask = this.mask;
+            var o = this;
+            mtx = o._matrix.identity().appendTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+            var tx = mtx.elements[12];
+            var ty = mtx.elements[13];
             if (DisplayObject._snapToPixelEnabled && o.snapToPixel) {
                 tx = tx + (tx < 0 ? -0.5 : 0.5) | 0;
                 ty = ty + (ty < 0 ? -0.5 : 0.5) | 0;
             }
-            ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, tx, ty);
-            ctx.globalAlpha *= o.alpha;
+            console.log(this, this.scaleX, o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+            ctx.transform(mtx.elements[0], mtx.elements[4], mtx.elements[1], mtx.elements[5], tx, ty);
             if (o.compositeOperation) {
                 ctx.globalCompositeOperation = o.compositeOperation;
             }
@@ -414,23 +409,22 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             if (mtx == null) {
                 return null;
             }
-            mtx.append(1, 0, 0, 1, x, y);
-            return new Point(mtx.tx, mtx.ty);
+            mtx.append2d(1, 0, 0, 1, x, y);
+            return new Point(mtx.elements[12], mtx.elements[13]);
         };
         DisplayObject.prototype.globalToLocal = function (x, y) {
             var mtx = this.getConcatenatedMatrix(this._matrix);
             if (mtx == null) {
                 return null;
             }
-            mtx.invert();
-            mtx.append(1, 0, 0, 1, x, y);
-            return new Point(mtx.tx, mtx.ty);
+            mtx.append2d(1, 0, 0, 1, x, y);
+            return new Point(mtx.elements[12], mtx.elements[13]);
         };
         DisplayObject.prototype.localToLocal = function (x, y, target) {
             var pt = this.localToGlobal(x, y);
             return target.globalToLocal(pt.x, pt.y);
         };
-        DisplayObject.prototype.setTransform = function (x, y, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
+        DisplayObject.prototype.setTransform = function (x, y, width, height, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
             if (x === void 0) { x = 0; }
             if (y === void 0) { y = 0; }
             if (scaleX === void 0) { scaleX = 1; }
@@ -440,60 +434,51 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             if (skewY === void 0) { skewY = 0; }
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
-            this.x = x;
-            this.y = y;
-            this.scaleX = scaleX;
-            this.scaleY = scaleY;
-            this.rotation = rotation;
-            this.skewX = skewX;
-            this.skewY = skewY;
-            this.regX = regX;
-            this.regY = regY;
-            return this;
-        };
-        DisplayObject.prototype.setGeomTransform = function (w, h, x, y, rx, ry) {
-            if (w === void 0) { w = null; }
-            if (h === void 0) { h = null; }
-            if (x === void 0) { x = null; }
-            if (y === void 0) { y = null; }
-            if (rx === void 0) { rx = null; }
-            if (ry === void 0) { ry = null; }
-            if (x != null) {
+            if (x != void 0) {
                 this.setX(x);
             }
-            if (y != null) {
+            if (y != void 0) {
                 this.setY(y);
             }
-            if (w != null) {
-                this.setWidth(w);
+            if (width != void 0) {
+                this.setWidth(width);
             }
-            if (h != null) {
-                this.setHeight(h);
+            if (height != void 0) {
+                this.setHeight(height);
             }
-            if (rx != null) {
-                this.setRegX(rx);
+            if (scaleX != void 0)
+                this.scaleX = scaleX;
+            if (scaleY != void 0)
+                this.scaleY = scaleY;
+            if (rotation != void 0)
+                this.rotation = rotation;
+            if (skewX != void 0)
+                this.skewX = rotation;
+            if (skewY != void 0)
+                this.skewY = skewY;
+            if (regX != void 0) {
+                this.setRegX(regX);
             }
-            if (ry != null) {
-                this.setRegY(ry);
+            if (regY != void 0) {
+                this.setRegY(regY);
             }
             return this;
         };
         DisplayObject.prototype.getMatrix = function (matrix) {
             var o = this;
             return (matrix ? matrix.identity() : new Matrix4_1.Matrix4())
-                .appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY)
-                .appendProperties(o.alpha, o.shadow, o.compositeOperation, 1);
+                .appendTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
         };
         DisplayObject.prototype.getConcatenatedMatrix = function (matrix) {
             if (matrix) {
                 matrix.identity();
             }
             else {
-                matrix = new m2.Matrix2(0, 0, 0, 0, 0, 0);
+                matrix = new Matrix4_1.Matrix4();
             }
             var o = this;
             while (o != null) {
-                matrix.prependTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY).prependProperties(o.alpha, o.shadow, o.compositeOperation, o.visible);
+                matrix.prependTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
                 o = o.parent;
             }
             return matrix;
@@ -623,17 +608,20 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             if (!bounds) {
                 return bounds;
             }
-            var x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
+            var x = bounds.x;
+            var y = bounds.y;
+            var width = bounds.width;
+            var height = bounds.height;
             var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
             if (x || y) {
-                mtx.appendTransform(0, 0, 1, 1, 0, 0, 0, -x, -y);
+                mtx.appendTransform2d(0, 0, 1, 1, 0, 0, 0, -x, -y);
             }
             if (matrix) {
-                mtx.prependMatrix(matrix);
+                mtx.prependMatrix2d(matrix);
             }
-            var x_a = width * mtx.a, x_b = width * mtx.b;
-            var y_c = height * mtx.c, y_d = height * mtx.d;
-            var tx = mtx.tx, ty = mtx.ty;
+            var x_a = width * mtx.elements[0], x_b = width * mtx.elements[5];
+            var y_c = height * mtx.elements[1], y_d = height * mtx.elements[6];
+            var tx = mtx.elements[12], ty = mtx.elements[13];
             var minX = tx, maxX = tx, minY = ty, maxY = ty;
             if ((x = x_a + tx) < minX) {
                 minX = x;
