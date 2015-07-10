@@ -283,5 +283,5 @@ define(["require", "exports", '../../createts/util/Ticker', './DisplayObject', '
         };
         return Stage;
     })(Container);
-    exports.default = Stage;
+    exports.Stage = Stage;
 });

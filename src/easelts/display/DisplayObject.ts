@@ -39,7 +39,7 @@ import Methods = require('../util/Methods');
 // display
 import Shape = require('./Shape');
 import Shadow = require('./Shadow');
-import Stage from './Stage';
+import { Stage } from './Stage';
 import Container = require('./Container');
 
 // filter
@@ -82,20 +82,38 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	public static EVENT_POINTER_OUT:string = 'pointer.out';
 	public static EVENT_POINTER_OVER:string = 'pointer.over';
 
-	public static COMPOSITE_OPERATION_SOURCE_ATOP:string = 'source-atop';
+	public static COMPOSITE_OPERATION_SOURCE_OVER:string = 'source-over';
 	public static COMPOSITE_OPERATION_SOURCE_IN:string = 'source-in';
 	public static COMPOSITE_OPERATION_SOURCE_OUT:string = 'source-out';
-	public static COMPOSITE_OPERATION_SOURCE_OVER:string = 'source-over';
+	public static COMPOSITE_OPERATION_SOURCE_ATOP:string = 'source-atop';
 
-	public static COMPOSITE_OPERATION_DESTINATION_ATOP:string = 'destination-atop';
+	public static COMPOSITE_OPERATION_DESTINATION_OVER:string = 'destination-over';
 	public static COMPOSITE_OPERATION_DESTINATION_IN:string = 'destination-in';
 	public static COMPOSITE_OPERATION_DESTINATION_OUT:string = 'destination-out';
-	public static COMPOSITE_OPERATION_DESTINATION_OVER:string = 'destination-over';
+	public static COMPOSITE_OPERATION_DESTINATION_ATOP:string = 'destination-atop';
 
 	public static COMPOSITE_OPERATION_LIGHTER:string = 'lighter';
-	public static COMPOSITE_OPERATION_DARKER:string = 'darker';
-	public static COMPOSITE_OPERATION_XOR:string = 'xor';
 	public static COMPOSITE_OPERATION_COPY:string = 'copy';
+	public static COMPOSITE_OPERATION_XOR:string = 'xor';
+
+
+	// All Operations below are not in the official spec but are supported in various browsers.
+	public static COMPOSITE_OPERATION_DARKER:string = 'darker';
+	public static COMPOSITE_OPERATION_MULTIPLY:string = 'multiply';
+	public static COMPOSITE_OPERATION_SCREEN:string = 'screen';
+	public static COMPOSITE_OPERATION_OVERLAY:string = 'overlay';
+	public static COMPOSITE_OPERATION_DARKEN:string = 'darken';
+	public static COMPOSITE_OPERATION_LIGHTEN:string = 'lighten';
+	public static COMPOSITE_OPERATION_COLOR_DODGE:string = 'color-dodge';
+	public static COMPOSITE_OPERATION_COLOR_BURN:string = 'color-burn';
+	public static COMPOSITE_OPERATION_HARD_LIGHT:string = 'hard-light';
+	public static COMPOSITE_OPERATION_SOFT_LIGHT:string = 'soft-light';
+	public static COMPOSITE_OPERATION_DIFFERENCE:string = 'difference';
+	public static COMPOSITE_OPERATION_EXCLUSION:string = 'exclusion';
+	public static COMPOSITE_OPERATION_HUE:string = 'hue';
+	public static COMPOSITE_OPERATION_SATURATION:string = 'saturation';
+	public static COMPOSITE_OPERATION_COLOR:string = 'color';
+	public static COMPOSITE_OPERATION_LUMINOSITY:string = 'luminosity';
 
 	/**
 	 * Suppresses errors generated when using features like hitTest, mouse events, and {{#crossLink "getObjectsUnderPoint"}}{{/crossLink}}
@@ -237,47 +255,17 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	public isDirty:boolean = false;
 	public isHitable:boolean = true;
 
-
-	/**
-	 * The x (horizontal) position of the display object, relative to its parent.
-	 * @property x
-	 * @type {Number}
-	 * @default 0
-	 **/
 	public x:number = 0;
-	protected _x_type:CalculationType = CalculationType.STATIC;
-	protected _x_percent:number = .0;
-	protected _x_calc:Array<FluidMeasurementsUnit|CalculationUnitType>;
-
-	/** The y (vertical) position of the display object, relative to its parent.
-	 * @property y
-	 * @type {Number}
-	 * @default 0
-	 **/
 	public y:number = 0;
-	protected _y_type:CalculationType;
-	protected _y_percent:number = .0;
-	protected _y_calc:Array<FluidMeasurementsUnit|CalculationUnitType>;
+	public z:number = 0;
 
 	public width:number = 0;
-	protected _width_type:CalculationType = CalculationType.STATIC;
-	protected _width_percent:number = .0;
-	protected _width_calc:Array<FluidMeasurementsUnit|CalculationUnitType>;
-
 	public height:number = 0;
-	protected _height_type:CalculationType = CalculationType.STATIC;
-	protected _height_percent:number = .0;
-	protected _height_calc:Array<FluidMeasurementsUnit|CalculationUnitType>;
+	public depth:number = 0;
 
 	public regX:number = 0;
-	protected _regX_type:CalculationType = CalculationType.STATIC;
-	protected _regX_percent:number = .0;
-	protected _regX_calc:Array<FluidMeasurementsUnit|CalculationUnitType>;
-
 	public regY:number = 0;
-	protected _regY_type:CalculationType = CalculationType.STATIC;
-	protected _regY_percent:number = .0;
-	protected _regY_calc:Array<FluidMeasurementsUnit|CalculationUnitType>;
+	public regZ:number = 0;
 
 	/**
 	 * The rotation in degrees for this display object.
@@ -287,39 +275,13 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 **/
 	public rotation:number = 0;
 
-	/**
-	 * The factor to stretch this display object horizontally. For example, setting scaleX to 2 will stretch the display
-	 * object to twice its nominal width. To horizontally flip an object, set the scale to a negative number.
-	 * @property scaleX
-	 * @type {Number}
-	 * @default 1
-	 **/
 	public scaleX:number = 1;
-
-	/**
-	 * The factor to stretch this display object vertically. For example, setting scaleY to 0.5 will stretch the display
-	 * object to half its nominal height. To vertically flip an object, set the scale to a negative number.
-	 * @property scaleY
-	 * @type {Number}
-	 * @default 1
-	 **/
 	public scaleY:number = 1;
+	public scaleZ:number = 1;
 
-	/**
-	 * The factor to skew this display object horizontally.
-	 * @property skewX
-	 * @type {Number}
-	 * @default 0
-	 **/
 	public skewX:number = 0;
-
-	/**
-	 * The factor to skew this display object vertically.
-	 * @property skewY
-	 * @type {Number}
-	 * @default 0
-	 **/
 	public skewY:number = 0;
+	public skewZ:number = 0;
 
 	/**
 	 * A shadow object that defines the shadow to render on this display object. Set to `null` to remove a shadow. If
@@ -521,285 +483,6 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	public initialize(...args:any[])
 	{
 		this['constructor'].apply(this, args);
-	}
-
-	/**
-	 * @method dot
-	 * @param v
-	 * @returns {number}
-	 */
-	public dot(v:IVector2):number
-	{
-		return this.x * v.x + this.y * v.y;
-	}
-
-	/**
-	 * @method distanceToSquared
-	 * @param v
-	 * @returns {number}
-	 */
-	public distanceToSquared(v:IVector2):number
-	{
-		var dx = this.x - v.x, dy = this.y - v.y;
-		return dx * dx + dy * dy;
-	}
-
-	/**
-	 * distanceTo
-	 * @param {IVector2} v
-	 * @returns {any}
-	 */
-	public distanceTo(v:IVector2):number
-	{
-		return Math.sqrt(this.distanceToSquared(v));
-	}
-
-	/**
-	 * @method setWidth
-	 * @param {string|number} width
-	 */
-	public setWidth(value:number|string):any
-	{
-		this._width_type = FluidCalculation.getCalculationTypeByValue(value);
-
-		switch( this._width_type )
-		{
-			case CalculationType.PERCENT:{
-				this._width_percent = FluidCalculation.getPercentageParcedValue( <string> value);
-				break;
-			}
-
-			case CalculationType.CALC:{
-				this._width_calc = FluidCalculation.dissolveCalcElements( <string> value);
-				break;
-			}
-
-			case CalculationType.STATIC:{
-				this.width = <number> value;
-				break;
-			}
-		}
-
-		this.isDirty = true;
-
-		return this;
-	}
-
-	/**
-	 * @method getWidth
-	 * @returns {number}
-	 */
-	public getWidth():number
-	{
-		return this.width;
-	}
-
-	/**
-	 * @method setHeight
-	 * @param {string|number} height
-	 * @result DisplayObject
-	 */
-	public setHeight(value:number|string):any
-	{
-		this._height_type = FluidCalculation.getCalculationTypeByValue(value);
-
-		switch( this._height_type )
-		{
-			case CalculationType.PERCENT:{
-				this._height_percent = FluidCalculation.getPercentageParcedValue( <string> value);
-				break;
-			}
-
-			case CalculationType.CALC:{
-				this._height_calc = FluidCalculation.dissolveCalcElements( <string> value);
-				break;
-			}
-
-			case CalculationType.STATIC:{
-				this.height = <number> value;
-				break;
-			}
-		}
-
-		this.isDirty = true;
-
-		return this;
-	}
-
-	/**
-	 * @method getHeight
-	 * @returns {number}
-	 */
-	public getHeight():number
-	{
-		return this.height;
-	}
-
-	/**
-	 * @method setX
-	 * @param {string|number} x
-	 * @return DisplayObject
-	 */
-	public setX(value:number|string):any
-	{
-		this._x_type = FluidCalculation.getCalculationTypeByValue(value);
-
-		switch( this._x_type )
-		{
-			case CalculationType.PERCENT:{
-				this._x_percent = FluidCalculation.getPercentageParcedValue( <string> value);
-				break;
-			}
-
-			case CalculationType.CALC:{
-				this._x_calc = FluidCalculation.dissolveCalcElements( <string> value);
-				break;
-			}
-
-			case CalculationType.STATIC:{
-				this.x = <number> value;
-				break;
-			}
-		}
-
-		this.isDirty = true;
-
-		return this;
-	}
-
-	/**
-	 * @method getX
-	 * @return {Number}
-	 */
-	public getX():number
-	{
-		return this.x;
-	}
-
-
-	/**
-	 * @method setY
-	 * @param {number|string} y
-	 * @returns {DisplayObject}
-	 */
-	public setY(value:number|string):any
-	{
-
-
-		this._y_type = FluidCalculation.getCalculationTypeByValue(value);
-
-		switch( this._y_type )
-		{
-			case CalculationType.PERCENT:{
-				this._y_percent = FluidCalculation.getPercentageParcedValue( <string> value);
-				break;
-			}
-
-			case CalculationType.CALC:{
-				this._y_calc = FluidCalculation.dissolveCalcElements( <string> value);
-				break;
-			}
-
-			case CalculationType.STATIC:{
-				this.y = <number> value;
-				break;
-			}
-		}
-
-		this.isDirty = true;
-
-		return this;
-	}
-
-	/**
-	 * @method getY
-	 * @returns {number}
-	 */
-	public getY():number
-	{
-		return this.y;
-	}
-
-	/**
-	 * @method setRegX
-	 * @param {number|string} value
-	 * @returns {DisplayObject}
-	 */
-	public setRegX(value:number|string):any
-	{
-		this.isDirty = true;
-
-		this._regX_type = FluidCalculation.getCalculationTypeByValue(value);
-
-		switch( this._regX_type )
-		{
-			case CalculationType.PERCENT:{
-				this._regX_percent = FluidCalculation.getPercentageParcedValue( <string> value);
-				break;
-			}
-
-			case CalculationType.CALC:{
-				this._regX_calc = FluidCalculation.dissolveCalcElements( <string> value);
-				break;
-			}
-
-			case CalculationType.STATIC:{
-				this.regX = <number> value;
-				break;
-			}
-		}
-
-		return this;
-	}
-
-	/**
-	 * @method getRegX
-	 * @returns {number}
-	 */
-	public getRegX()
-	{
-		return this.regX;
-	}
-
-	/**
-	 * @method setRegY
-	 * @param {number|string} value
-	 * @returns {DisplayObject}
-	 */
-	public setRegY(value:number|string):any
-	{
-		this.isDirty = true;
-
-		this._regY_type = FluidCalculation.getCalculationTypeByValue(value);
-
-		switch( this._regY_type )
-		{
-			case CalculationType.PERCENT:{
-				this._regY_percent = FluidCalculation.getPercentageParcedValue( <string> value);
-				break;
-			}
-
-			case CalculationType.CALC:{
-				this._regY_calc = FluidCalculation.dissolveCalcElements( <string> value);
-				break;
-			}
-
-			case CalculationType.STATIC:{
-				this.regY = <number> value;
-				break;
-			}
-		}
-
-		return this;
-	}
-
-	/**
-	 * @method getRegY
-	 * @returns {number}
-	 */
-	public getRegY():number
-	{
-		return this.regY;
 	}
 
 	public addBehavior(behavior:IBehavior):DisplayObject
@@ -1241,53 +924,26 @@ class DisplayObject extends EventDispatcher implements IVector2, ISize, IDisplay
 	 * @return {DisplayObject} Returns this instance. Useful for chaining commands.
 	 */
 	public setTransform(
-		x:string|number = 0,
+		x:number = 0,
 		y:string|number = 0,
-		width?:string|number,
-		height?:string|number,
 		scaleX:number = 1,
 		scaleY:number = 1,
 		rotation:number = 0,
 		skewX:number = 0,
 		skewY:number = 0,
-		regX:string|number = 0,
-		regY:string|number = 0)
+		regX:number = 0,
+		regY:number = 0)
 	{
-		if(x != void 0)
-		{
-			this.setX(x);
-		}
+		this.x = x;
+		this.y = x;
+		this.z = x;
+		this.scaleX = x;
+		this.scaleY = x;
+		this.x = x;
+		this.x = x;
+		this.x = x;
+		this.x = x;
 
-		if(y != void 0)
-		{
-			this.setY(y);
-		}
-		
-		if(width != void 0)
-		{
-			this.setWidth(width);
-		}
-
-		if(height != void 0)
-		{
-			this.setHeight(height);
-		}
-
-		if(scaleX != void 0) this.scaleX = scaleX;
-		if(scaleY != void 0) this.scaleY = scaleY;
-		if(rotation != void 0) this.rotation = rotation;
-		if(skewX != void 0) this.skewX = rotation;
-		if(skewY != void 0) this.skewY = skewY;
-
-		if(regX != void 0)
-		{
-			this.setRegX(regX);
-		}
-
-		if(regY != void 0)
-		{
-			this.setRegY(regY);
-		}
 
 		return this;
 	}

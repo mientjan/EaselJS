@@ -1,7 +1,6 @@
-define(["require", "exports", '../../src/easelts/display/Stage', '../../src/easelts/display/Shape', '../../src/easelts/behavior/ButtonBehavior', '../../src/easelts/display/BitmapProjective'], function (require, exports, Stage, Shape, ButtonBehavior, BitmapProjective) {
+define(["require", "exports", '../../src/easelts/display/Stage', '../../src/easelts/display/Shape', '../../src/easelts/behavior/ButtonBehavior', '../../src/easelts/display/BitmapProjective'], function (require, exports, Stage_1, Shape, ButtonBehavior, BitmapProjective) {
     var holder = document.getElementById('holder');
-    var stage = new Stage(holder, true);
-    stage.enableMouseOver(20);
+    var stage = new Stage_1.Stage(holder, true);
     var points = [
         [100, 100],
         [200 + Math.random() * 200, 100],
@@ -16,17 +15,6 @@ define(["require", "exports", '../../src/easelts/display/Stage', '../../src/ease
         var btn = new Shape();
         btn.graphics.beginFill('#FF0').beginStroke('#000').drawRect(0, 0, 30, 30);
         btn.addBehavior(new ButtonBehavior);
-        btn.addEventListener(Stage.EVENT_PRESS_MOVE, function (index, event) {
-            var x = event.rawX;
-            var y = event.rawY;
-            var lx = event.getLocalX();
-            var ly = event.getLocalY();
-            points[index][0] = x;
-            points[index][1] = y;
-            this.x = x;
-            this.y = y;
-            image.setPoints(points);
-        }.bind(btn, i));
         btn.x = points[i][0];
         btn.y = points[i][1];
         buttonPoints.push(btn);

@@ -1,4 +1,4 @@
-import Stage = require('../../src/easelts/display/Stage');
+import { Stage } from '../../src/easelts/display/Stage';
 import Bitmap = require('../../src/easelts/display/Bitmap');
 
 var holder = <HTMLBlockElement> document.getElementById('holder');

@@ -85,7 +85,7 @@ import SignalConnection = require('../../createts/event/SignalConnection');
  * of a canvas object in the current document.
  **/
 
-export default class Stage extends Container
+export class Stage extends Container
 {
 	// events:
 //	public static EVENT_MOUSE_LEAVE = 'mouseleave';

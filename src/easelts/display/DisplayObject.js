@@ -54,27 +54,21 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             this.isDirty = false;
             this.isHitable = true;
             this.x = 0;
-            this._x_type = 2;
-            this._x_percent = .0;
             this.y = 0;
-            this._y_percent = .0;
+            this.z = 0;
             this.width = 0;
-            this._width_type = 2;
-            this._width_percent = .0;
             this.height = 0;
-            this._height_type = 2;
-            this._height_percent = .0;
+            this.depth = 0;
             this.regX = 0;
-            this._regX_type = 2;
-            this._regX_percent = .0;
             this.regY = 0;
-            this._regY_type = 2;
-            this._regY_percent = .0;
+            this.regZ = 0;
             this.rotation = 0;
             this.scaleX = 1;
             this.scaleY = 1;
+            this.scaleZ = 1;
             this.skewX = 0;
             this.skewY = 0;
+            this.skewZ = 0;
             this.shadow = null;
             this.stage = null;
             this._behaviorList = null;
@@ -113,148 +107,6 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
                 args[_i - 0] = arguments[_i];
             }
             this['constructor'].apply(this, args);
-        };
-        DisplayObject.prototype.dot = function (v) {
-            return this.x * v.x + this.y * v.y;
-        };
-        DisplayObject.prototype.distanceToSquared = function (v) {
-            var dx = this.x - v.x, dy = this.y - v.y;
-            return dx * dx + dy * dy;
-        };
-        DisplayObject.prototype.distanceTo = function (v) {
-            return Math.sqrt(this.distanceToSquared(v));
-        };
-        DisplayObject.prototype.setWidth = function (value) {
-            this._width_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._width_type) {
-                case 1: {
-                    this._width_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._width_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.width = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getWidth = function () {
-            return this.width;
-        };
-        DisplayObject.prototype.setHeight = function (value) {
-            this._height_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._height_type) {
-                case 1: {
-                    this._height_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._height_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.height = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getHeight = function () {
-            return this.height;
-        };
-        DisplayObject.prototype.setX = function (value) {
-            this._x_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._x_type) {
-                case 1: {
-                    this._x_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._x_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.x = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getX = function () {
-            return this.x;
-        };
-        DisplayObject.prototype.setY = function (value) {
-            this._y_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._y_type) {
-                case 1: {
-                    this._y_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._y_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.y = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getY = function () {
-            return this.y;
-        };
-        DisplayObject.prototype.setRegX = function (value) {
-            this.isDirty = true;
-            this._regX_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._regX_type) {
-                case 1: {
-                    this._regX_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._regX_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.regX = value;
-                    break;
-                }
-            }
-            return this;
-        };
-        DisplayObject.prototype.getRegX = function () {
-            return this.regX;
-        };
-        DisplayObject.prototype.setRegY = function (value) {
-            this.isDirty = true;
-            this._regY_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._regY_type) {
-                case 1: {
-                    this._regY_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._regY_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.regY = value;
-                    break;
-                }
-            }
-            return this;
-        };
-        DisplayObject.prototype.getRegY = function () {
-            return this.regY;
         };
         DisplayObject.prototype.addBehavior = function (behavior) {
             if (!this._behaviorList) {
@@ -424,7 +276,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             var pt = this.localToGlobal(x, y);
             return target.globalToLocal(pt.x, pt.y);
         };
-        DisplayObject.prototype.setTransform = function (x, y, width, height, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
+        DisplayObject.prototype.setTransform = function (x, y, scaleX, scaleY, rotation, skewX, skewY, regX, regY) {
             if (x === void 0) { x = 0; }
             if (y === void 0) { y = 0; }
             if (scaleX === void 0) { scaleX = 1; }
@@ -434,34 +286,15 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             if (skewY === void 0) { skewY = 0; }
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
-            if (x != void 0) {
-                this.setX(x);
-            }
-            if (y != void 0) {
-                this.setY(y);
-            }
-            if (width != void 0) {
-                this.setWidth(width);
-            }
-            if (height != void 0) {
-                this.setHeight(height);
-            }
-            if (scaleX != void 0)
-                this.scaleX = scaleX;
-            if (scaleY != void 0)
-                this.scaleY = scaleY;
-            if (rotation != void 0)
-                this.rotation = rotation;
-            if (skewX != void 0)
-                this.skewX = rotation;
-            if (skewY != void 0)
-                this.skewY = skewY;
-            if (regX != void 0) {
-                this.setRegX(regX);
-            }
-            if (regY != void 0) {
-                this.setRegY(regY);
-            }
+            this.x = x;
+            this.y = x;
+            this.z = x;
+            this.scaleX = x;
+            this.scaleY = x;
+            this.x = x;
+            this.x = x;
+            this.x = x;
+            this.x = x;
             return this;
         };
         DisplayObject.prototype.getMatrix = function (matrix) {
@@ -718,18 +551,33 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
         DisplayObject.EVENT_POINTER_LEAVE = 'pointer.leave';
         DisplayObject.EVENT_POINTER_OUT = 'pointer.out';
         DisplayObject.EVENT_POINTER_OVER = 'pointer.over';
-        DisplayObject.COMPOSITE_OPERATION_SOURCE_ATOP = 'source-atop';
+        DisplayObject.COMPOSITE_OPERATION_SOURCE_OVER = 'source-over';
         DisplayObject.COMPOSITE_OPERATION_SOURCE_IN = 'source-in';
         DisplayObject.COMPOSITE_OPERATION_SOURCE_OUT = 'source-out';
-        DisplayObject.COMPOSITE_OPERATION_SOURCE_OVER = 'source-over';
-        DisplayObject.COMPOSITE_OPERATION_DESTINATION_ATOP = 'destination-atop';
+        DisplayObject.COMPOSITE_OPERATION_SOURCE_ATOP = 'source-atop';
+        DisplayObject.COMPOSITE_OPERATION_DESTINATION_OVER = 'destination-over';
         DisplayObject.COMPOSITE_OPERATION_DESTINATION_IN = 'destination-in';
         DisplayObject.COMPOSITE_OPERATION_DESTINATION_OUT = 'destination-out';
-        DisplayObject.COMPOSITE_OPERATION_DESTINATION_OVER = 'destination-over';
+        DisplayObject.COMPOSITE_OPERATION_DESTINATION_ATOP = 'destination-atop';
         DisplayObject.COMPOSITE_OPERATION_LIGHTER = 'lighter';
-        DisplayObject.COMPOSITE_OPERATION_DARKER = 'darker';
-        DisplayObject.COMPOSITE_OPERATION_XOR = 'xor';
         DisplayObject.COMPOSITE_OPERATION_COPY = 'copy';
+        DisplayObject.COMPOSITE_OPERATION_XOR = 'xor';
+        DisplayObject.COMPOSITE_OPERATION_DARKER = 'darker';
+        DisplayObject.COMPOSITE_OPERATION_MULTIPLY = 'multiply';
+        DisplayObject.COMPOSITE_OPERATION_SCREEN = 'screen';
+        DisplayObject.COMPOSITE_OPERATION_OVERLAY = 'overlay';
+        DisplayObject.COMPOSITE_OPERATION_DARKEN = 'darken';
+        DisplayObject.COMPOSITE_OPERATION_LIGHTEN = 'lighten';
+        DisplayObject.COMPOSITE_OPERATION_COLOR_DODGE = 'color-dodge';
+        DisplayObject.COMPOSITE_OPERATION_COLOR_BURN = 'color-burn';
+        DisplayObject.COMPOSITE_OPERATION_HARD_LIGHT = 'hard-light';
+        DisplayObject.COMPOSITE_OPERATION_SOFT_LIGHT = 'soft-light';
+        DisplayObject.COMPOSITE_OPERATION_DIFFERENCE = 'difference';
+        DisplayObject.COMPOSITE_OPERATION_EXCLUSION = 'exclusion';
+        DisplayObject.COMPOSITE_OPERATION_HUE = 'hue';
+        DisplayObject.COMPOSITE_OPERATION_SATURATION = 'saturation';
+        DisplayObject.COMPOSITE_OPERATION_COLOR = 'color';
+        DisplayObject.COMPOSITE_OPERATION_LUMINOSITY = 'luminosity';
         DisplayObject.suppressCrossDomainErrors = false;
         DisplayObject._snapToPixelEnabled = false;
         DisplayObject._hitTestCanvas = Methods.createCanvas();
