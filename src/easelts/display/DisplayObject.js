@@ -54,27 +54,21 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             this.isDirty = false;
             this.isHitable = true;
             this.x = 0;
-            this._x_type = 2;
-            this._x_percent = .0;
             this.y = 0;
-            this._y_percent = .0;
+            this.z = 0;
             this.width = 0;
-            this._width_type = 2;
-            this._width_percent = .0;
             this.height = 0;
-            this._height_type = 2;
-            this._height_percent = .0;
+            this.depth = 0;
             this.regX = 0;
-            this._regX_type = 2;
-            this._regX_percent = .0;
             this.regY = 0;
-            this._regY_type = 2;
-            this._regY_percent = .0;
+            this.regZ = 0;
             this.rotation = 0;
             this.scaleX = 1;
             this.scaleY = 1;
+            this.scaleZ = 1;
             this.skewX = 0;
             this.skewY = 0;
+            this.skewZ = 0;
             this.shadow = null;
             this.stage = null;
             this._behaviorList = null;
@@ -95,7 +89,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             this._bounds = null;
             this._off = false;
             this.DisplayObject_getBounds = this._getBounds;
-            this.setGeomTransform(width, height, x, y, regX, regY);
+            this.setTransform(x, y, width, height, null, null, null, null, null, regX, regY);
         }
         Object.defineProperty(DisplayObject.prototype, "resizeSignal", {
             get: function () {
@@ -113,148 +107,6 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
                 args[_i - 0] = arguments[_i];
             }
             this['constructor'].apply(this, args);
-        };
-        DisplayObject.prototype.dot = function (v) {
-            return this.x * v.x + this.y * v.y;
-        };
-        DisplayObject.prototype.distanceToSquared = function (v) {
-            var dx = this.x - v.x, dy = this.y - v.y;
-            return dx * dx + dy * dy;
-        };
-        DisplayObject.prototype.distanceTo = function (v) {
-            return Math.sqrt(this.distanceToSquared(v));
-        };
-        DisplayObject.prototype.setWidth = function (value) {
-            this._width_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._width_type) {
-                case 1: {
-                    this._width_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._width_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.width = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getWidth = function () {
-            return this.width;
-        };
-        DisplayObject.prototype.setHeight = function (value) {
-            this._height_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._height_type) {
-                case 1: {
-                    this._height_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._height_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.height = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getHeight = function () {
-            return this.height;
-        };
-        DisplayObject.prototype.setX = function (value) {
-            this._x_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._x_type) {
-                case 1: {
-                    this._x_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._x_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.x = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getX = function () {
-            return this.x;
-        };
-        DisplayObject.prototype.setY = function (value) {
-            this._y_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._y_type) {
-                case 1: {
-                    this._y_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._y_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.y = value;
-                    break;
-                }
-            }
-            this.isDirty = true;
-            return this;
-        };
-        DisplayObject.prototype.getY = function () {
-            return this.y;
-        };
-        DisplayObject.prototype.setRegX = function (value) {
-            this.isDirty = true;
-            this._regX_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._regX_type) {
-                case 1: {
-                    this._regX_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._regX_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.regX = value;
-                    break;
-                }
-            }
-            return this;
-        };
-        DisplayObject.prototype.getRegX = function () {
-            return this.regX;
-        };
-        DisplayObject.prototype.setRegY = function (value) {
-            this.isDirty = true;
-            this._regY_type = FluidCalculation.getCalculationTypeByValue(value);
-            switch (this._regY_type) {
-                case 1: {
-                    this._regY_percent = FluidCalculation.getPercentageParcedValue(value);
-                    break;
-                }
-                case 3: {
-                    this._regY_calc = FluidCalculation.dissolveCalcElements(value);
-                    break;
-                }
-                case 2: {
-                    this.regY = value;
-                    break;
-                }
-            }
-            return this;
-        };
-        DisplayObject.prototype.getRegY = function () {
-            return this.regY;
         };
         DisplayObject.prototype.addBehavior = function (behavior) {
             if (!this._behaviorList) {
@@ -325,23 +177,18 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             return true;
         };
         DisplayObject.prototype.updateContext = function (ctx) {
-            var mtx, mask = this.mask, o = this;
-            if (mask && mask.graphics && !mask.graphics.isEmpty()) {
-                mtx = mask.getMatrix(mask._matrix);
-                ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
-                mask.graphics.drawAsPath(ctx);
-                ctx.clip();
-                mtx.invert();
-                ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
-            }
-            mtx = o._matrix.identity().appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
-            var tx = mtx.tx, ty = mtx.ty;
+            var mtx;
+            var mask = this.mask;
+            var o = this;
+            mtx = o._matrix.identity().appendTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+            var tx = mtx.elements[12];
+            var ty = mtx.elements[13];
             if (DisplayObject._snapToPixelEnabled && o.snapToPixel) {
                 tx = tx + (tx < 0 ? -0.5 : 0.5) | 0;
                 ty = ty + (ty < 0 ? -0.5 : 0.5) | 0;
             }
-            ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, tx, ty);
-            ctx.globalAlpha *= o.alpha;
+            console.log(this, this.scaleX, o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+            ctx.transform(mtx.elements[0], mtx.elements[4], mtx.elements[1], mtx.elements[5], tx, ty);
             if (o.compositeOperation) {
                 ctx.globalCompositeOperation = o.compositeOperation;
             }
@@ -414,17 +261,16 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             if (mtx == null) {
                 return null;
             }
-            mtx.append(1, 0, 0, 1, x, y);
-            return new Point(mtx.tx, mtx.ty);
+            mtx.append2d(1, 0, 0, 1, x, y);
+            return new Point(mtx.elements[12], mtx.elements[13]);
         };
         DisplayObject.prototype.globalToLocal = function (x, y) {
             var mtx = this.getConcatenatedMatrix(this._matrix);
             if (mtx == null) {
                 return null;
             }
-            mtx.invert();
-            mtx.append(1, 0, 0, 1, x, y);
-            return new Point(mtx.tx, mtx.ty);
+            mtx.append2d(1, 0, 0, 1, x, y);
+            return new Point(mtx.elements[12], mtx.elements[13]);
         };
         DisplayObject.prototype.localToLocal = function (x, y, target) {
             var pt = this.localToGlobal(x, y);
@@ -441,48 +287,20 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             this.x = x;
-            this.y = y;
-            this.scaleX = scaleX;
-            this.scaleY = scaleY;
-            this.rotation = rotation;
-            this.skewX = skewX;
-            this.skewY = skewY;
-            this.regX = regX;
-            this.regY = regY;
-            return this;
-        };
-        DisplayObject.prototype.setGeomTransform = function (w, h, x, y, rx, ry) {
-            if (w === void 0) { w = null; }
-            if (h === void 0) { h = null; }
-            if (x === void 0) { x = null; }
-            if (y === void 0) { y = null; }
-            if (rx === void 0) { rx = null; }
-            if (ry === void 0) { ry = null; }
-            if (x != null) {
-                this.setX(x);
-            }
-            if (y != null) {
-                this.setY(y);
-            }
-            if (w != null) {
-                this.setWidth(w);
-            }
-            if (h != null) {
-                this.setHeight(h);
-            }
-            if (rx != null) {
-                this.setRegX(rx);
-            }
-            if (ry != null) {
-                this.setRegY(ry);
-            }
+            this.y = x;
+            this.z = x;
+            this.scaleX = x;
+            this.scaleY = x;
+            this.x = x;
+            this.x = x;
+            this.x = x;
+            this.x = x;
             return this;
         };
         DisplayObject.prototype.getMatrix = function (matrix) {
             var o = this;
             return (matrix ? matrix.identity() : new Matrix4_1.Matrix4())
-                .appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY)
-                .appendProperties(o.alpha, o.shadow, o.compositeOperation, 1);
+                .appendTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
         };
         DisplayObject.prototype.getConcatenatedMatrix = function (matrix) {
             if (matrix) {
@@ -493,7 +311,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             }
             var o = this;
             while (o != null) {
-                matrix.prependTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY).prependProperties(o.alpha, o.shadow, o.compositeOperation, o.visible);
+                matrix.prependTransform2d(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
                 o = o.parent;
             }
             return matrix;
@@ -623,17 +441,20 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
             if (!bounds) {
                 return bounds;
             }
-            var x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
+            var x = bounds.x;
+            var y = bounds.y;
+            var width = bounds.width;
+            var height = bounds.height;
             var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
             if (x || y) {
-                mtx.appendTransform(0, 0, 1, 1, 0, 0, 0, -x, -y);
+                mtx.appendTransform2d(0, 0, 1, 1, 0, 0, 0, -x, -y);
             }
             if (matrix) {
-                mtx.prependMatrix(matrix);
+                mtx.prependMatrix2d(matrix);
             }
-            var x_a = width * mtx.a, x_b = width * mtx.b;
-            var y_c = height * mtx.c, y_d = height * mtx.d;
-            var tx = mtx.tx, ty = mtx.ty;
+            var x_a = width * mtx.elements[0], x_b = width * mtx.elements[5];
+            var y_c = height * mtx.elements[1], y_d = height * mtx.elements[6];
+            var tx = mtx.elements[12], ty = mtx.elements[13];
             var minX = tx, maxX = tx, minY = ty, maxY = ty;
             if ((x = x_a + tx) < minX) {
                 minX = x;
@@ -730,18 +551,33 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
         DisplayObject.EVENT_POINTER_LEAVE = 'pointer.leave';
         DisplayObject.EVENT_POINTER_OUT = 'pointer.out';
         DisplayObject.EVENT_POINTER_OVER = 'pointer.over';
-        DisplayObject.COMPOSITE_OPERATION_SOURCE_ATOP = 'source-atop';
+        DisplayObject.COMPOSITE_OPERATION_SOURCE_OVER = 'source-over';
         DisplayObject.COMPOSITE_OPERATION_SOURCE_IN = 'source-in';
         DisplayObject.COMPOSITE_OPERATION_SOURCE_OUT = 'source-out';
-        DisplayObject.COMPOSITE_OPERATION_SOURCE_OVER = 'source-over';
-        DisplayObject.COMPOSITE_OPERATION_DESTINATION_ATOP = 'destination-atop';
+        DisplayObject.COMPOSITE_OPERATION_SOURCE_ATOP = 'source-atop';
+        DisplayObject.COMPOSITE_OPERATION_DESTINATION_OVER = 'destination-over';
         DisplayObject.COMPOSITE_OPERATION_DESTINATION_IN = 'destination-in';
         DisplayObject.COMPOSITE_OPERATION_DESTINATION_OUT = 'destination-out';
-        DisplayObject.COMPOSITE_OPERATION_DESTINATION_OVER = 'destination-over';
+        DisplayObject.COMPOSITE_OPERATION_DESTINATION_ATOP = 'destination-atop';
         DisplayObject.COMPOSITE_OPERATION_LIGHTER = 'lighter';
-        DisplayObject.COMPOSITE_OPERATION_DARKER = 'darker';
-        DisplayObject.COMPOSITE_OPERATION_XOR = 'xor';
         DisplayObject.COMPOSITE_OPERATION_COPY = 'copy';
+        DisplayObject.COMPOSITE_OPERATION_XOR = 'xor';
+        DisplayObject.COMPOSITE_OPERATION_DARKER = 'darker';
+        DisplayObject.COMPOSITE_OPERATION_MULTIPLY = 'multiply';
+        DisplayObject.COMPOSITE_OPERATION_SCREEN = 'screen';
+        DisplayObject.COMPOSITE_OPERATION_OVERLAY = 'overlay';
+        DisplayObject.COMPOSITE_OPERATION_DARKEN = 'darken';
+        DisplayObject.COMPOSITE_OPERATION_LIGHTEN = 'lighten';
+        DisplayObject.COMPOSITE_OPERATION_COLOR_DODGE = 'color-dodge';
+        DisplayObject.COMPOSITE_OPERATION_COLOR_BURN = 'color-burn';
+        DisplayObject.COMPOSITE_OPERATION_HARD_LIGHT = 'hard-light';
+        DisplayObject.COMPOSITE_OPERATION_SOFT_LIGHT = 'soft-light';
+        DisplayObject.COMPOSITE_OPERATION_DIFFERENCE = 'difference';
+        DisplayObject.COMPOSITE_OPERATION_EXCLUSION = 'exclusion';
+        DisplayObject.COMPOSITE_OPERATION_HUE = 'hue';
+        DisplayObject.COMPOSITE_OPERATION_SATURATION = 'saturation';
+        DisplayObject.COMPOSITE_OPERATION_COLOR = 'color';
+        DisplayObject.COMPOSITE_OPERATION_LUMINOSITY = 'luminosity';
         DisplayObject.suppressCrossDomainErrors = false;
         DisplayObject._snapToPixelEnabled = false;
         DisplayObject._hitTestCanvas = Methods.createCanvas();

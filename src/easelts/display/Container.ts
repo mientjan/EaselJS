@@ -124,7 +124,7 @@ class Container extends DisplayObject
 	 * @method isVisible
 	 * @return {Boolean} Boolean indicating whether the display object would be visible if drawn to a canvas
 	 **/
-	public isVisible()
+	public isVisible():boolean
 	{
 		return !!(this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0 && (this.cacheCanvas || this.children.length) );
 	}
@@ -1009,6 +1009,11 @@ class Container extends DisplayObject
 //		return null;
 //	}
 
+	public getBounds()
+	{
+		return this._getBounds(null, true);
+	}
+
 	/**
 	 * @method _getBounds
 	 * @param {Matrix2D} matrix
@@ -1016,7 +1021,7 @@ class Container extends DisplayObject
 	 * @return {Rectangle}
 	 * @protected
 	 **/
-	public getBounds(matrix:Matrix4 = null, ignoreTransform:boolean = true):Rectangle
+	public _getBounds(matrix:Matrix4 = null, ignoreTransform:boolean = true):Rectangle
 	{
 		var bounds = super.getBounds();
 		if(bounds)
@@ -1028,14 +1033,14 @@ class Container extends DisplayObject
 		var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
 		if(matrix)
 		{
-			mtx.prependMatrix(matrix);
+			mtx.prependMatrix2d(matrix);
 		}
 
 		var l = this.children.length;
 		for(var i = 0; i < l; i++)
 		{
 			var child = this.children[i];
-			if(!child.visible || !(bounds = child.getBounds(mtx)))
+			if(!child.visible || !(bounds = child._getBounds(mtx)))
 			{
 				continue;
 			}

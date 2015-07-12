@@ -22,6 +22,8 @@ import { Quaternion } from './Quaternion';
  */
 export class Matrix4
 {
+	public static DEG_TO_RAD:number = Math.PI / 180;
+
 	private _quaternion:{[index:string]:Quaternion} = {};
 	private _vector3:{[index:string]:Vector3} = {};
 	private _matrix4:{[index:string]:Matrix4} = {};
@@ -54,6 +56,13 @@ export class Matrix4
 	}
 
 
+	/**
+	 *
+	 * xx, xy, xz, xw
+	 * yx, yy, yz, yw
+	 * zx, zy, zz, zw
+	 * wx, wy, wz, ww
+	 */
 	public elements:Float32Array = new Float32Array([
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -139,6 +148,201 @@ export class Matrix4
 			0, 0, 0, 1
 		);
 
+		return this;
+	}
+	/**
+	 * Appends the specified matrix properties with this matrix. All parameters are required.
+	 * @method append
+	 * @param {Number} xx
+	 * @param {Number} yx
+	 * @param {Number} xy
+	 * @param {Number} yy
+	 * @param {Number} dx
+	 * @param {Number} dy
+	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
+	 **/
+	public append2d(xx:number, yx:number, xy:number, yy:number, dx:number, dy:number)
+	{
+		/**
+		 * xx, xy, xz, xw
+		 * yx, yy, yz, yw
+		 * zx, zy, zz, zw
+		 * dx, dy, dz, dw
+		 */
+		var elements = this.elements;
+		var a1 = elements[0];
+		var b1 = elements[4];
+		var c1 = elements[1];
+		var d1 = elements[5];
+
+		elements[0] = xx * a1 + yx * c1;
+		elements[4] = xx * b1 + yx * d1;
+		elements[1] = xy * a1 + yy * c1;
+		elements[5] = xy * b1 + yy * d1;
+		elements[12] = dx * a1 + dy * c1 + elements[12];
+		elements[13] = dx * b1 + dy * d1 + elements[13];
+		return this;
+	}
+
+	/**
+	 * Concatenates the specified matrix properties with this matrix. All parameters are required.
+	 * @method prepend
+	 * @param {Number} xx
+	 * @param {Number} yx
+	 * @param {Number} xy
+	 * @param {Number} yy
+	 * @param {Number} dx
+	 * @param {Number} dy
+	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
+	 **/
+	public prepend2d(xx:number, yx:number, xy:number, yy:number, dx:number, dy:number)
+	{
+		var tx1 = this.elements[12];
+		if(xx != 1 || yx != 0 || xy != 0 || yy != 1)
+		{
+			var a1 = this.elements[0];
+			var c1 = this.elements[1];
+
+			this.elements[0] = a1 * xx + this.elements[4] * xy;
+			this.elements[4] = a1 * yx + this.elements[4] * yy;
+			this.elements[1] = c1 * xx + this.elements[5] * xy;
+			this.elements[5] = c1 * yx + this.elements[5] * yy;
+		}
+
+		this.elements[12] = tx1 * xx + this.elements[13] * xy + dx;
+		this.elements[13] = tx1 * yx + this.elements[13] * yy + dy;
+		return this;
+	}
+
+	/**
+	 * Generates matrix properties from the specified display object transform properties, and appends them with this matrix.
+	 * For example, you can use this to generate a matrix from a display object: var mtx = new Matrix2D();
+	 * mtx.appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation);
+	 * @method appendTransform
+	 * @param {Number} x
+	 * @param {Number} y
+	 * @param {Number} scaleX
+	 * @param {Number} scaleY
+	 * @param {Number} rotation
+	 * @param {Number} skewX
+	 * @param {Number} skewY
+	 * @param {Number} regX Optional.
+	 * @param {Number} regY Optional.
+	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
+	 **/
+	public appendTransform2d(x:number, y:number, scaleX:number, scaleY:number, rotation:number, skewX:number, skewY:number, regX:number, regY:number):Matrix4
+	{
+		if(rotation % 360)
+		{
+			var r = rotation * Matrix4.DEG_TO_RAD;
+			var cos = Math.cos(r);
+			var sin = Math.sin(r);
+		}
+		else
+		{
+			cos = 1;
+			sin = 0;
+		}
+
+		if(skewX || skewY)
+		{
+			// TODO: can this be combined into a single append?
+			skewX *= Matrix4.DEG_TO_RAD;
+			skewY *= Matrix4.DEG_TO_RAD;
+
+			this.append2d(Math.cos(skewY), Math.sin(skewY), -Math.sin(skewX), Math.cos(skewX), x, y);
+			this.append2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, 0, 0);
+		}
+		else
+		{
+			this.append2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, x, y);
+		}
+
+		if(regX || regY)
+		{
+			// prepend the registration offset:
+			this.elements[12] -= regX * this.elements[0] + regY * this.elements[1];
+			this.elements[13] -= regX * this.elements[4] + regY * this.elements[5];
+		}
+
+		return this;
+	}
+
+	/**
+	 * Generates matrix properties from the specified display object transform properties, and prepends them with this matrix.
+	 * For example, you can use this to generate a matrix from a display object: var mtx = new Matrix2D();
+	 * mtx.prependTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation);
+	 * @method prependTransform
+	 * @param {Number} x
+	 * @param {Number} y
+	 * @param {Number} scaleX
+	 * @param {Number} scaleY
+	 * @param {Number} rotation
+	 * @param {Number} skewX
+	 * @param {Number} skewY
+	 * @param {Number} regX Optional.
+	 * @param {Number} regY Optional.
+	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
+	 **/
+	public prependTransform2d(x:number, y:number, scaleX:number, scaleY:number, rotation:number, skewX:number, skewY:number, regX:number, regY:number):Matrix4
+	{
+		if(rotation % 360)
+		{
+			var r = rotation * Matrix4.DEG_TO_RAD;
+			var cos = Math.cos(r);
+			var sin = Math.sin(r);
+		}
+		else
+		{
+			cos = 1;
+			sin = 0;
+		}
+
+		if(regX || regY)
+		{
+			// append the registration offset:
+			this.elements[12] -= regX;
+			this.elements[13] -= regY;
+		}
+		if(skewX || skewY)
+		{
+			// TODO: can this be combined into a single prepend operation?
+			skewX *= Matrix4.DEG_TO_RAD;
+			skewY *= Matrix4.DEG_TO_RAD;
+
+			this.prepend2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, 0, 0);
+			this.prepend2d(Math.cos(skewY), Math.sin(skewY), -Math.sin(skewX), Math.cos(skewX), x, y);
+		}
+		else
+		{
+			this.prepend2d(cos * scaleX, sin * scaleX, -sin * scaleY, cos * scaleY, x, y);
+		}
+		return this;
+	}
+
+	/**
+	 * Prepends the specified matrix with this matrix.
+	 * @method prependMatrix
+	 * @param {Matrix2D} matrix
+	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
+	 **/
+	public prependMatrix2d(matrix:Matrix4)
+	{
+		this.prepend2d(matrix.elements[0], matrix.elements[4], matrix.elements[1], matrix.elements[5], matrix.elements[12], matrix.elements[13]);
+		//this.prependProperties(matrix.alpha, matrix.shadow, matrix.compositeOperation, matrix.visible);
+		return this;
+	}
+
+	/**
+	 * Appends the specified matrix with this matrix.
+	 * @method appendMatrix
+	 * @param {Matrix2D} matrix
+	 * @return {Matrix2D} This matrix. Useful for chaining method calls.
+	 **/
+	public appendMatrix2d(matrix:Matrix4)
+	{
+		this.append2d(matrix.elements[0], matrix.elements[4], matrix.elements[1], matrix.elements[5], matrix.elements[12], matrix.elements[13]);
+		//this.appendProperties(matrix.alpha, matrix.shadow, matrix.compositeOperation, matrix.visible);
 		return this;
 	}
 
@@ -325,7 +529,6 @@ export class Matrix4
 		te[ 15 ] = 1;
 
 		return this;
-
 	}
 
 	public lookAt(eye:Vector3, target:Vector3, up:Vector3):Matrix4
@@ -364,7 +567,6 @@ export class Matrix4
 		te[ 10 ] = zLookAt.z;
 
 		return this;
-
 	}
 
 	public multiply(m:Matrix4):Matrix4
