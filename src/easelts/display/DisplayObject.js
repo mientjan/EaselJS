@@ -489,7 +489,7 @@ define(["require", "exports", '../../createts/event/EventDispatcher', '../../cre
                 matrix.identity();
             }
             else {
-                matrix = new m2.Matrix2(0, 0, 0, 0, 0, 0);
+                matrix = new Matrix4_1.Matrix4();
             }
             var o = this;
             while (o != null) {
