@@ -1,5 +1,5 @@
 # EaselTS
-[![Build Status](https://travis-ci.org/markknol/EaselTS.svg)](https://travis-ci.org/markknol/EaselTS)
+[![Build Status](https://travis-ci.org/miento/EaselTS.svg)](https://travis-ci.org/miento/EaselTS)
 
 is a complete rewrite of easeljs in typescript. Plus adding a lot of stuff that easeljs does not support.
 
