@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - '0.12'
+notifications:
+  email: false
+before_install:
+  - npm install -g typescript
+script:
+  - tsc --target ES5 --module amd examples/scripts/example.ts
+  - tsc --target ES5 --module amd examples/scripts/example0.ts
+  - tsc --target ES5 --module amd examples/scripts/example1.ts
+  - tsc --target ES5 --module amd examples/scripts/example2.ts
+  - tsc --target ES5 --module amd examples/scripts/example3.ts
+  - tsc --target ES5 --module amd examples/scripts/example4.ts
+  - tsc --target ES5 --module amd examples/scripts/example5.ts
+  - tsc --target ES5 --module amd examples/scripts/example6.ts
+  - tsc --target ES5 --module amd examples/scripts/example7.ts
+  - tsc --target ES5 --module amd examples/scripts/example8.ts
