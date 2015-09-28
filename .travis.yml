@@ -5,7 +5,7 @@ notifications:
   email: false
 
 before_install:
-  - npm install -g typescript@1.5.3
+  - npm install -g typescript@1.6.2
 
 script:
   - tsc --target ES5 --module amd examples/image-drawing/draw-image.ts
