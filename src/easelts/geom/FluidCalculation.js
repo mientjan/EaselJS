@@ -1,7 +1,18 @@
 define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUnitType"], function (require, exports, FluidMeasurementsUnit_1, MeasurementUnitType_1) {
+    /**
+     * @todo add more unit types
+     * @class FluidCalculation
+     * @author Mient-jan Stelling
+     */
     var FluidCalculation = (function () {
         function FluidCalculation() {
         }
+        /**
+         *
+         * @method dissolveCalcElements
+         * @param {string[]} statement
+         * @returns {Array}
+         */
         FluidCalculation.dissolveCalcElements = function (statement) {
             statement = statement.replace('*', ' * ').replace('/', ' / ');
             var arr = statement.split(FluidCalculation._spaceSplit);
@@ -12,6 +23,13 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
             }
             return calculationElements;
         };
+        /**
+         * @method dissolveElement
+         * @param {String} val
+         * @return ( FluidMeasurementsUnit | CalculationUnitType )
+         * @public
+         * @static
+         */
         FluidCalculation.dissolveElement = function (val) {
             var index = FluidCalculation._calculationUnitypeString.indexOf(val);
             if (index >= 0) {
@@ -30,6 +48,12 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
             }
             return unit;
         };
+        /**
+         * @method calcUnit
+         * @param size
+         * @param data
+         * @returns {number}
+         */
         FluidCalculation.calcUnit = function (size, data) {
             var sizea = FluidCalculation.getCalcUnitSize(size, data[0]);
             for (var i = 2, l = data.length; i < l; i = i + 2) {
@@ -37,24 +61,33 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
             }
             return sizea;
         };
+        /**
+         * Calculates arithmetic on 2 units.
+         *
+         * @author Mient-jan Stelling
+         * @param unit1
+         * @param math
+         * @param unit2
+         * @returns number;
+         */
         FluidCalculation.getCalcUnit = function (unit1, math, unit2) {
             switch (math) {
-                case 0:
+                case 0 /* ADDITION */:
                     {
                         return unit1 + unit2;
                         break;
                     }
-                case 1:
+                case 1 /* SUBSTRACTION */:
                     {
                         return unit1 - unit2;
                         break;
                     }
-                case 2:
+                case 2 /* MULTIPLICATION */:
                     {
                         return unit1 * unit2;
                         break;
                     }
-                case 3:
+                case 3 /* DIVISION */:
                     {
                         return unit1 / unit2;
                         break;
@@ -66,20 +99,48 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
                     }
             }
         };
+        /**
+         * @author Mient-jan Stelling
+         * @method getCalculationTypeByValue
+         * @param value {number|string}
+         * @returns {CalculationType}
+         * @public
+         * @static
+         */
         FluidCalculation.getCalculationTypeByValue = function (value) {
             if (typeof (value) == 'string') {
                 if (value.substr(-1) == '%') {
-                    return 1;
+                    return 1 /* PERCENT */;
                 }
                 else {
-                    return 3;
+                    return 3 /* CALC */;
                 }
             }
-            return 2;
+            return 2 /* STATIC */;
         };
+        /**
+         * @author Mient-jan Stelling
+         * @method getCalculationTypeByValue
+         * @param value {number|string}
+         * @returns {CalculationType}
+         * @public
+         * @static
+         */
         FluidCalculation.getPercentageParcedValue = function (value) {
             return parseFloat(value.substr(0, value.length - 1)) / 100;
         };
+        /**
+         *
+         * @todo add support for more unit types.
+         *
+         * @author Mient-jan Stelling
+         * @method getCalcUnitSize
+         * @param size
+         * @param data
+         * @returns {number}
+         * @public
+         * @static
+         */
         FluidCalculation.getCalcUnitSize = function (size, data) {
             switch (data.unit) {
                 case MeasurementUnitType_1.default.PROCENT:
@@ -97,12 +158,18 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
         FluidCalculation.toFloat = function (value) {
             return parseFloat(value) || 0.0;
         };
+        /**
+         *
+         */
         FluidCalculation._calculationUnitType = [
-            0,
-            1,
-            2,
-            3
+            0 /* ADDITION */,
+            1 /* SUBSTRACTION */,
+            2 /* MULTIPLICATION */,
+            3 /* DIVISION */
         ];
+        /**
+         * @property _measurementUnitTypeString
+         **/
         FluidCalculation._measurementUnitTypeString = [
             '%', 'px', 'pt', 'in', 'cm', 'mm', 'vw', 'vh'
         ];

@@ -26,8 +26,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 define(["require", "exports"], function (require, exports) {
+    /**
+     * @module easelts
+     */
+    /**
+     * Represents a point on a 2 dimensional x / y coordinate system.
+     *
+     * <h4>Example</h4>
+     *
+     *      var point = new createjs.Point(0, 100);
+     *
+     * @class Point
+     * @param {Number} [x=0] X position.
+     * @param {Number} [y=0] Y position.
+     * @constructor
+     **/
     var PointerData = (function () {
         function PointerData(x, y) {
+            /**
+             * @property inBounds
+             * @type boolean
+             */
             this.inBounds = false;
             this.target = null;
             this.posEvtObj = null;

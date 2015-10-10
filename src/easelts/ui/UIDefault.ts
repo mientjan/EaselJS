@@ -7,7 +7,7 @@ import DisplayObject from "../display/DisplayObject";
 class UIDefault
 {
 	private _stage:Stage;
-	private _eventListeners:IHashMap<{window:any, fn: Function}> = {};
+	private _eventListeners:IHashMap<{window:any, fn: Function}> = null;
 	private _mouseoverInterval:Interval = null;
 	private _pointerData:IHashMap<PointerData> = {};
 	private _primaryPointerID:number = 0;
@@ -79,6 +79,7 @@ class UIDefault
 		}
 		else if(enable && !eventListeners && element)
 		{
+
 			var windowsObject = window['addEventListener'] ? <any> window : <any> document;
 			eventListeners = this._eventListeners = {};
 
@@ -184,10 +185,7 @@ class UIDefault
 	 **/
 	public _handleMouseMove(e:MouseEvent = <any> window['event'])
 	{
-		//		if(!e){
-		//			var b = <MouseEvent> window['event'];
-		//		 }
-
+		console.log('_handleMouseMove', -1, e, e.pageX, e.pageY);
 		this._handlePointerMove(-1, e, e.pageX, e.pageY);
 	}
 
@@ -202,6 +200,8 @@ class UIDefault
 	 **/
 	public _handlePointerMove(id:number, e:MouseEvent, pageX:number, pageY:number, owner?:Stage)
 	{
+		console.log('_handlePointerMove', id, e, pageX, pageY, owner);
+
 		var pointerData = this._getPointerData(id);
 
 		var inBounds = pointerData.inBounds;
@@ -218,7 +218,7 @@ class UIDefault
 			this._dispatchMouseEvent(pointerData.target, "pressmove", true, id, pointerData, e);
 		}
 
-		nextStage && nextStage._handlePointerMove(id, e, pageX, pageY, null);
+		//nextStage && nextStage._handlePointerMove(id, e, pageX, pageY, null);
 	}
 
 	/**
@@ -231,12 +231,12 @@ class UIDefault
 	 **/
 	public _updatePointerPosition(id:number, e:MouseEvent, pageX:number, pageY:number)
 	{
-		var rect = this._getElementRect(this.ctx.canvas);
+		var rect = this._getElementRect(this._stage.ctx.canvas);
 		pageX -= rect.left;
 		pageY -= rect.top;
 
-		var w = this.ctx.canvas.width;
-		var h = this.ctx.canvas.height;
+		var w = this._stage.ctx.canvas.width;
+		var h = this._stage.ctx.canvas.height;
 		pageX /= (rect.right - rect.left) / w;
 		pageY /= (rect.bottom - rect.top) / h;
 		var pointerData = this._getPointerData(id);
@@ -619,3 +619,5 @@ class UIDefault
 	}
 
 }
+
+export default UIDefault;

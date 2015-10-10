@@ -24,16 +24,28 @@
  */
 define(["require", "exports"], function (require, exports) {
     var SignalConnection = (function () {
+        /**
+         *
+         * @param {SignalAbstract} signal
+         * @param {Function} listener
+         */
         function SignalConnection(signal, listener) {
             this._next = null;
             this.stayInList = true;
             this._signal = signal;
             this._listener = listener;
         }
+        /**
+         * Only dispatches once
+         * @returns {SignalConnection}
+         */
         SignalConnection.prototype.once = function () {
             this.stayInList = false;
             return this;
         };
+        /**
+         * Throws away the signal
+         */
         SignalConnection.prototype.dispose = function () {
             if (this._signal != null) {
                 this._signal.disconnect(this);
