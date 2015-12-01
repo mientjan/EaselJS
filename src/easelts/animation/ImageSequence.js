@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../display/DisplayObject", "../../createts/util/Promise", "../data/AnimationQueue", "../data/Queue"], function (require, exports, DisplayObject_1, Promise_1, AnimationQueue_1, Queue_1) {
+define(["require", "exports", "../display/DisplayObject", "../display/SpriteSheet", "../../createts/util/Promise", "../data/AnimationQueue", "../data/Queue"], function (require, exports, DisplayObject_1, SpriteSheet_1, Promise_1, AnimationQueue_1, Queue_1) {
     var ImageSequence = (function (_super) {
         __extends(ImageSequence, _super);
         function ImageSequence(spriteSheet, fps, width, height, x, y, regX, regY) {
@@ -22,6 +22,16 @@ define(["require", "exports", "../display/DisplayObject", "../../createts/util/P
             this._fps = fps;
             this._queue = new AnimationQueue_1.default(fps, 1000);
         }
+        ImageSequence.createFromString = function (images, fps, width, height) {
+            var sequenceStructure = {
+                "images": images.map(function (src) { return src; }),
+                "frames": images.map(function (src, index) { return [0, 0, width, height, index, 0, 0]; }),
+                "animations": {
+                    "animation": [0, images.length - 1]
+                }
+            };
+            return new ImageSequence(new SpriteSheet_1.default(sequenceStructure), fps, width, height);
+        };
         ImageSequence.prototype.hasLoaded = function () {
             return this._hasLoaded;
         };

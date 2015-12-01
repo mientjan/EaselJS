@@ -17,6 +17,30 @@ import Queue from "../data/Queue";
  */
 class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, IPlayable
 {
+	/**
+	 * @static
+	 * @method createFromString
+	 * @param {Array<string>} images
+	 * @param {number} fps
+	 * @param {number} width
+	 * @param {number} height
+	 * @returns {ImageSequence}
+	 */
+	public static createFromString(images:string[], fps:number, width:number, height:number):ImageSequence
+	{
+		var sequenceStructure = {
+
+			"images": images.map(src => src),
+			"frames": images.map((src, index) => [0, 0, width, height, index, 0, 0]),
+			"animations": {
+				"animation": [0, images.length - 1]
+			}
+
+		};
+
+		return new ImageSequence(new SpriteSheet(sequenceStructure), fps, width, height);
+	}
+
 	public type:DisplayType = DisplayType.BITMAP;
 
 	protected _queue:AnimationQueue;
