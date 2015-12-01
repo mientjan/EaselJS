@@ -7,6 +7,8 @@ import FlumpMovie from './FlumpMovie';
 import FlumpLabelData from './FlumpLabelData';
 import IHashMap from "../../interface/IHashMap";
 import FlumpMtx = require("./FlumpMtx");
+import IFlumpMovie from "./IFlumpMovie";
+import DisplayType from "../../enum/DisplayType";
 
 class FlumpMovieLayer extends DisplayObject
 {
@@ -14,8 +16,8 @@ class FlumpMovieLayer extends DisplayObject
 	private _frame:number = 0;
 	public flumpLayerData:FlumpLayerData;
 
-	protected _symbol:FlumpMovie|FlumpTexture;
-	public _symbols:IHashMap<FlumpMovie|FlumpTexture> = {};
+	protected _symbol:IFlumpMovie;
+	public _symbols:IHashMap<IFlumpMovie> = {};
 	protected _symbolName:any = null;
 
 	// disable layer from code
@@ -51,7 +53,52 @@ class FlumpMovieLayer extends DisplayObject
 		this.setFrame(0);
 	}
 
-	//Matrix get transformationMatrix => _transformationMatrix;
+	public getSymbol(name:string):FlumpMovie
+	{
+		var symbols = this._symbols;
+		for(var val in symbols)
+		{
+			var symbol = symbols[val];
+			
+			if( symbol instanceof FlumpMovie)
+			{
+				if( symbol.name == name ){
+					return symbol;
+				} else {
+					var data =  symbol.getSymbol(name);
+
+					if( data != null )
+					{
+						return data;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public replaceSymbol(name:string, item:IFlumpMovie):boolean
+	{
+		var symbols = this._symbols;
+		for(var val in symbols)
+		{
+			var symbol = symbols[val];
+
+			if( symbol.name == name ){
+				this._symbols[val] = <IFlumpMovie> item;
+				return true;
+			}
+			else if( symbol instanceof FlumpMovie && symbol.replaceSymbol(name, item) )
+			{
+				return true
+			}
+		}
+
+		return false;
+	}
+
+
 
 	public onTick(delta:number):void
 	{
@@ -76,7 +123,8 @@ class FlumpMovieLayer extends DisplayObject
 			if(this._symbol != this._symbols[keyframe.ref])
 			{
 				this._symbol = this._symbols[keyframe.ref];
-				this._symbol.reset();
+
+				if(this._symbol.type == DisplayType.FLUMPSYMBOL) this._symbol.reset();
 			}
 		}
 		else
@@ -165,7 +213,7 @@ class FlumpMovieLayer extends DisplayObject
 
 	public reset()
 	{
-		if(this._symbol) this._symbol.reset();
+		if(this._symbol && this._symbol.type == DisplayType.FLUMPSYMBOL) this._symbol.reset();
 	}
 
 	public draw(ctx:CanvasRenderingContext2D, ignoreCache?:boolean):boolean

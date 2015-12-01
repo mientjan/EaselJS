@@ -11,12 +11,16 @@ import FlumpLabelQueueData from './FlumpLabelQueueData';
 import FlumpTexture from "./FlumpTexture";
 import AnimationQueue from '../../data/AnimationQueue';
 import Queue from '../../data/Queue';
+import IFlumpMovie from "./IFlumpMovie";
+import DisplayType from "../../enum/DisplayType";
 
 /**
  * @author Mient-jan Stelling
  */
 class FlumpMovie extends DisplayObject implements IPlayable
 {
+	public type:DisplayType = DisplayType.FLUMPSYMBOL;
+
 	public flumpLibrary:FlumpLibrary;
 	public flumpMovieData;
 	public flumpMovieLayers:Array<FlumpMovieLayer>;
@@ -219,82 +223,43 @@ class FlumpMovie extends DisplayObject implements IPlayable
 			}
 		}
 	}
-/*
-	public onTick2(delta:number):void
+
+	/**
+	 *
+	 * @param name
+	 * @returns {any}
+	 */
+	public getSymbol(name:string):FlumpMovie
 	{
-		super.onTick(delta);
-
-		delta *= this.speed;
-
-		if(this.paused == false)
+		var layers = this.flumpMovieLayers;
+		for(var i = 0; i < layers.length; i++)
 		{
-			this._queue.onTick(delta);
-			this.time += delta;
+			var layer = layers[i];
+			var symbol:FlumpMovie = layer.getSymbol(name);
 
-			var label = this._label;
-			var fromFrame = this.frame;
-			var toFrame = 0;
-
-			if( label )
+			if(symbol != null)
 			{
-				toFrame = this.frames * this.time / this.duration;
-
-				//console.log('toFrame: ', toFrame, this.frames);
-
-				if( label.times != -1 )
-				{
-					if (toFrame > label.times * label.duration)
-					//if ( label.times - Math.ceil((toFrame+2) / label.duration) < 0 )
-					{
-						//console.log('>>> label ended');
-						if( this._labelQueue.length > 0 )
-						{
-							//console.log('next');
-							this.gotoNextLabel();
-							label = this._label;
-							toFrame = this.frames * this.time / this.duration;
-						} else {
-							//console.log('stop');
-							this.stop();
-							return;
-						}
-					}
-				}
-
-				toFrame = label.index + ( toFrame % label.duration );
-
-				//console.log('onTick label: ', toFrame, this.name);
-
-				if( this.hasFrameCallbacks )
-				{
-					this.handleFrameCallback(fromFrame, toFrame | 0, delta);
-				}
-
+				return symbol;
 			}
-			else
-			{
-				// inner flumpmovie
-				toFrame = (this.frames * (this.time % this.duration)) / this.duration;
-				//
-				if(toFrame < this.frames)
-				{
-					toFrame = toFrame % this.duration;
-				}
-
-				//console.log('onTick inner: ', toFrame, this.name);
-			}
-
-
-			for(var i = 0; i < this.flumpMovieLayers.length; i++)
-			{
-				var layer = this.flumpMovieLayers[i];
-				layer.onTick(delta);
-				layer.setFrame(toFrame);
-			}
-
-			this.frame = toFrame;
 		}
-	}*/
+
+		return null;
+	}
+
+	public replaceSymbol(name:string, symbol:IFlumpMovie ):boolean
+	{
+		var layers = this.flumpMovieLayers;
+		for(var i = 0; i < layers.length; i++)
+		{
+			var layer = layers[i];
+			if( layer.replaceSymbol(name, symbol) )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public handleFrameCallback(fromFrame:number, toFrame:number, delta:number):FlumpMovie
 	{

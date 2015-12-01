@@ -53,7 +53,8 @@ class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, I
 	protected _hasLoaded:boolean = false;
 
 	/**
-	 *
+	 * @class ImageSequence
+	 * @constructor
 	 * @param {string[]} images
 	 * @param {number} fps
 	 * @param {string|number} width

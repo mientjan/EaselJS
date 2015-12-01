@@ -1,7 +1,11 @@
 import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
+import IFlumpMovie from "./IFlumpMovie";
+import DisplayType from "../../enum/DisplayType";
 
-class FlumpTexture {
-
+class FlumpTexture implements IFlumpMovie
+{
+	public type:DisplayType = DisplayType.FLUMPSYMBOL;
+	public name:string;
 	public time:number = 0.0;
 	public renderTexture:HTMLImageElement|HTMLCanvasElement;
 	public originX:number;
@@ -11,8 +15,9 @@ class FlumpTexture {
 	public width:number;
 	public height:number;
 
-	constructor( renderTexture:HTMLImageElement|HTMLCanvasElement, json:IFlumpLibrary.ITexture)
+	constructor(renderTexture:HTMLImageElement|HTMLCanvasElement, json:IFlumpLibrary.ITexture)
 	{
+		this.name = json.symbol;
 		this.renderTexture = renderTexture;
 		this.originX = json.origin[0];
 		this.originY = json.origin[1];
@@ -22,9 +27,13 @@ class FlumpTexture {
 		this.height = json.rect[3];
 	}
 
+	public onTick(delta:number):void
+	{
+	}
+
 	public draw(ctx:CanvasRenderingContext2D):boolean
 	{
-		ctx.drawImage( <HTMLImageElement> this.renderTexture, this.x, this.y, this.width, this.height, 0, 0, this.width, this.height);
+		ctx.drawImage(<HTMLImageElement> this.renderTexture, this.x, this.y, this.width, this.height, 0, 0, this.width, this.height);
 		return true;
 	}
 

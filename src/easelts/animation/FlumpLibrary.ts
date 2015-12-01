@@ -11,9 +11,12 @@ import FlumpTextureGroup from './flump/FlumpTextureGroup';
 import FlumpMovie from './flump/FlumpMovie';
 import EventDispatcher from "../../createts/event/EventDispatcher";
 import Queue from "../data/Queue";
+import IFlumpMovie from "./flump/IFlumpMovie";
 
 class FlumpLibrary implements ILoadable<FlumpLibrary>
 {
+	public static EVENT_LOAD = 'load';
+
 	public static load(url:string, flumpLibrary?:FlumpLibrary, onProcess?:(process:number) => any ):Promise<FlumpLibrary>
 	{
 		var baseDir = url;
@@ -37,7 +40,6 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 		} else {
 			flumpLibrary.url = baseDir;
 		}
-
 		
 		return HttpRequest.getJSON(url).then((json:IFlumpLibrary.ILibrary) =>
 		{
@@ -150,7 +152,7 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 		throw new Error('movie not found');
 	}
 
-	public createSymbol(name:string, paused:boolean = false):FlumpMovie|FlumpTexture
+	public createSymbol(name:string, paused:boolean = false):IFlumpMovie
 	{
 		for(var i = 0; i < this.textureGroups.length; i++)
 		{
@@ -165,8 +167,7 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 		for(var i = 0; i < this.movieData.length; i++)
 		{
 			var movieData = this.movieData[i];
-
-
+			
 			if(movieData.id == name)
 			{
 				var movie = new FlumpMovie(this, name);

@@ -14,6 +14,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
+            this.type = DisplayType_1.default.FLUMPSYMBOL;
             this._labels = {};
             this._labelQueue = [];
             this._label = null;
@@ -145,6 +146,27 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
                     layer.setFrame(this.frame);
                 }
             }
+        };
+        FlumpMovie.prototype.getSymbol = function (name) {
+            var layers = this.flumpMovieLayers;
+            for (var i = 0; i < layers.length; i++) {
+                var layer = layers[i];
+                var symbol = layer.getSymbol(name);
+                if (symbol != null) {
+                    return symbol;
+                }
+            }
+            return null;
+        };
+        FlumpMovie.prototype.replaceSymbol = function (name, symbol) {
+            var layers = this.flumpMovieLayers;
+            for (var i = 0; i < layers.length; i++) {
+                var layer = layers[i];
+                if (layer.replaceSymbol(name, symbol)) {
+                    return true;
+                }
+            }
+            return false;
         };
         FlumpMovie.prototype.handleFrameCallback = function (fromFrame, toFrame, delta) {
             if (toFrame > fromFrame) {

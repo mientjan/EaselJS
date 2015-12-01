@@ -1,18 +1,21 @@
 define(["require", "exports"], function (require, exports) {
+    /**
+     * @enum ValueType
+     */
     var DisplayType;
     (function (DisplayType) {
         DisplayType[DisplayType["UNKNOWN"] = 1] = "UNKNOWN";
-        DisplayType[DisplayType["STAGE"] = 2] = "STAGE";
-        DisplayType[DisplayType["CONTAINER"] = 4] = "CONTAINER";
-        DisplayType[DisplayType["DISPLAYOBJECT"] = 8] = "DISPLAYOBJECT";
+        DisplayType[DisplayType["DISPLAYOBJECT"] = 2] = "DISPLAYOBJECT";
+        DisplayType[DisplayType["STAGE"] = 4] = "STAGE";
+        DisplayType[DisplayType["CONTAINER"] = 8] = "CONTAINER";
         DisplayType[DisplayType["SHAPE"] = 16] = "SHAPE";
-        DisplayType[DisplayType["GRAPHICS"] = 32] = "GRAPHICS";
+        DisplayType[DisplayType["BITMAP"] = 32] = "BITMAP";
         DisplayType[DisplayType["MOVIECLIP"] = 64] = "MOVIECLIP";
-        DisplayType[DisplayType["BITMAP"] = 128] = "BITMAP";
-        DisplayType[DisplayType["SPRITESHEET"] = 256] = "SPRITESHEET";
-        DisplayType[DisplayType["BITMAPVIDEO"] = 512] = "BITMAPVIDEO";
-        DisplayType[DisplayType["BITMAPTEXT"] = 1024] = "BITMAPTEXT";
-        DisplayType[DisplayType["TEXTURE"] = 2048] = "TEXTURE";
+        DisplayType[DisplayType["SPRITESHEET"] = 128] = "SPRITESHEET";
+        DisplayType[DisplayType["BITMAPVIDEO"] = 256] = "BITMAPVIDEO";
+        DisplayType[DisplayType["BITMAPTEXT"] = 512] = "BITMAPTEXT";
+        DisplayType[DisplayType["TEXTURE"] = 1024] = "TEXTURE";
+        DisplayType[DisplayType["FLUMPSYMBOL"] = 2048] = "FLUMPSYMBOL";
     })(DisplayType || (DisplayType = {}));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = DisplayType;

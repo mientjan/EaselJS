@@ -133,6 +133,7 @@ define(["require", "exports", '../../createts/util/HttpRequest', '../../createts
             }
             return value;
         };
+        FlumpLibrary.EVENT_LOAD = 'load';
         return FlumpLibrary;
     })();
     Object.defineProperty(exports, "__esModule", { value: true });

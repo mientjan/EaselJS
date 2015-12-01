@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeData', './FlumpTexture', './FlumpLabelData', "./FlumpMtx"], function (require, exports, DisplayObject_1, FlumpKeyframeData_1, FlumpTexture_1, FlumpLabelData_1, FlumpMtx) {
+define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeData', './FlumpTexture', './FlumpMovie', './FlumpLabelData', "./FlumpMtx"], function (require, exports, DisplayObject_1, FlumpKeyframeData_1, FlumpTexture_1, FlumpMovie_1, FlumpLabelData_1, FlumpMtx) {
     var FlumpMovieLayer = (function (_super) {
         __extends(FlumpMovieLayer, _super);
         function FlumpMovieLayer(flumpMove, flumpLayerData) {
@@ -28,6 +28,38 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             }
             this.setFrame(0);
         }
+        FlumpMovieLayer.prototype.getSymbol = function (name) {
+            var symbols = this._symbols;
+            for (var val in symbols) {
+                var symbol = symbols[val];
+                if (symbol instanceof FlumpMovie_1.default) {
+                    if (symbol.name == name) {
+                        return symbol;
+                    }
+                    else {
+                        var data = symbol.getSymbol(name);
+                        if (data != null) {
+                            return data;
+                        }
+                    }
+                }
+            }
+            return null;
+        };
+        FlumpMovieLayer.prototype.replaceSymbol = function (name, item) {
+            var symbols = this._symbols;
+            for (var val in symbols) {
+                var symbol = symbols[val];
+                if (symbol.name == name) {
+                    this._symbols[val] = item;
+                    return true;
+                }
+                else if (symbol instanceof FlumpMovie_1.default && symbol.replaceSymbol(name, item)) {
+                    return true;
+                }
+            }
+            return false;
+        };
         FlumpMovieLayer.prototype.onTick = function (delta) {
             if (this._symbol != null && !(this._symbol instanceof FlumpTexture_1.default)) {
                 this._symbol.onTick(delta);
@@ -42,7 +74,8 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             if (keyframe.ref != -1 && keyframe.ref != null) {
                 if (this._symbol != this._symbols[keyframe.ref]) {
                     this._symbol = this._symbols[keyframe.ref];
-                    this._symbol.reset();
+                    if (this._symbol.type == DisplayType_1.default.FLUMPSYMBOL)
+                        this._symbol.reset();
                 }
             }
             else {
@@ -107,7 +140,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             this._frame = frame;
         };
         FlumpMovieLayer.prototype.reset = function () {
-            if (this._symbol)
+            if (this._symbol && this._symbol.type == DisplayType_1.default.FLUMPSYMBOL)
                 this._symbol.reset();
         };
         FlumpMovieLayer.prototype.draw = function (ctx, ignoreCache) {

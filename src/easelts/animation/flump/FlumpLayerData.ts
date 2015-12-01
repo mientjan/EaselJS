@@ -27,9 +27,6 @@ class FlumpLayerData {
 			this.flumpKeyframeDatas.push( keyFrameData );
 		}
 
-		console.log(keyFrameData);
-		
-
 		this.frames = keyFrameData.index + keyFrameData.duration;
 	}
 
