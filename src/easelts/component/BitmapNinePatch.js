@@ -14,7 +14,7 @@ define(["require", "exports", "../display/DisplayObject", "../geom/Size"], funct
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
-            this.type = 2048;
+            this.type = 1024;
             this._isLoaded = false;
             this._patch = ninePatch;
             console.log(this._patch.texture.hasLoaded());

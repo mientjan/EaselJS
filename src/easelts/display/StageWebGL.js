@@ -99,7 +99,7 @@ define(["require", "exports", "./Stage", "../data/StageOption", "../data/RGBA"],
                 console && console.log("Error: You can only add children of type SpriteContainer, Sprite, Bitmap, BitmapText, or DOMElement. [" + child.toString() + "]");
                 return child;
             }
-            if (!child.image && !child.spriteSheet && child.type != 4) {
+            if (!child.image && !child.spriteSheet && child.type != 8) {
                 console && console.log("Error: You can only add children that have an image or spriteSheet defined on them. [" + child.toString() + "]");
                 return child;
             }
@@ -345,13 +345,13 @@ define(["require", "exports", "./Stage", "../data/StageOption", "../data/RGBA"],
                 mtx = kid._matrix;
                 mtx = (parentMVMatrix ? mtx.copy(parentMVMatrix) : mtx.identity()).appendTransform(kid.x, kid.y, kid.scaleX, kid.scaleY, kid.rotation, kid.skewX, kid.skewY, kid.regX, kid.regY);
                 var uStart = 0, uEnd = 1, vStart = 0, vEnd = 1;
-                if (kid.type === 128) {
+                if (kid.type === 32) {
                     leftSide = 0;
                     topSide = 0;
                     rightSide = image.width;
                     bottomSide = image.height;
                 }
-                else if (kid.type === 256) {
+                else if (kid.type === 128) {
                     var frame = kid.spriteSheet.getFrame(kid.currentFrame), rect = frame.rect;
                     leftSide = -frame.regX;
                     topSide = -frame.regY;
@@ -364,11 +364,11 @@ define(["require", "exports", "./Stage", "../data/StageOption", "../data/RGBA"],
                 }
                 else {
                     image = null;
-                    if (kid.type === 1024) {
+                    if (kid.type === 512) {
                         kid._updateText();
                     }
                 }
-                if (!parentMVMatrix && (kid.type == 128 || kid.type == 4 || kid.type == 256) && texture !== this._drawTexture) {
+                if (!parentMVMatrix && (kid.type == 32 || kid.type == 8 || kid.type == 128) && texture !== this._drawTexture) {
                     this._drawToGPU(ctx);
                     this._drawTexture = texture;
                 }
@@ -427,9 +427,9 @@ define(["require", "exports", "./Stage", "../data/StageOption", "../data/RGBA"],
             this._drawTexture = null;
         };
         StageWebGL.COMPATIBLE = [
-            4,
-            128,
-            2048
+            8,
+            32,
+            1024
         ];
         StageWebGL.NUM_VERTEX_PROPERTIES = 5;
         StageWebGL.POINTS_PER_BOX = 4;

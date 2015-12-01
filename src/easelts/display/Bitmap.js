@@ -38,7 +38,7 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
             if (width === void 0) { width = 0; }
             if (height === void 0) { height = 0; }
             _super.call(this, width, height, x, y, regX, regY);
-            this.type = 128;
+            this.type = 32;
             this.source = null;
             this._imageNaturalWidth = null;
             this._imageNaturalHeight = null;

@@ -14,7 +14,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
-            this.type = DisplayType_1.default.FLUMPSYMBOL;
+            this.type = 2048;
             this._labels = {};
             this._labelQueue = [];
             this._label = null;

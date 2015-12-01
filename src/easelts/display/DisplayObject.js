@@ -41,7 +41,7 @@ define(["require", "exports", "../../createts/event/EventDispatcher", "../../cre
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this);
-            this.type = 8;
+            this.type = 2;
             this.cacheCanvas = null;
             this.id = UID_1.default.get();
             this.mouseEnabled = true;

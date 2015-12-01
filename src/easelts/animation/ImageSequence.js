@@ -12,7 +12,7 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
-            this.type = 128;
+            this.type = 32;
             this.spriteSheet = null;
             this.frames = 0;
             this.frame = 0;

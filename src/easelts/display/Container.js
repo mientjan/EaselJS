@@ -41,7 +41,7 @@ define(["require", "exports", "./DisplayObject", "../../createts/util/HttpReques
             if (regX === void 0) { regX = 0; }
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
-            this.type = 4;
+            this.type = 8;
             this.children = [];
             this.mouseChildren = true;
             this.tickChildren = true;
@@ -352,7 +352,7 @@ define(["require", "exports", "./DisplayObject", "../../createts/util/HttpReques
                     ctx.setTransform(1, 0, 0, 1, 0, 0);
                     ctx.clearRect(0, 0, 2, 2);
                 }
-                if (!hitArea && child.type == 4) {
+                if (!hitArea && child.type == 8) {
                     var result = child._getObjectsUnderPoint(x, y, arr, mouse, activeListener);
                     if (!arr && result) {
                         return (mouse && !this.mouseChildren) ? this : result;

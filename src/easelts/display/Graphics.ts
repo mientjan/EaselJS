@@ -1378,8 +1378,6 @@ class Graphics
 
 	protected _ctx:CanvasRenderingContext2D = Graphics._ctx;
 
-	public type:DisplayType = DisplayType.GRAPHICS;
-
 	/**
 	 * @constructor
 	 **/

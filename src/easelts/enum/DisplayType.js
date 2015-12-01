@@ -1,7 +1,4 @@
 define(["require", "exports"], function (require, exports) {
-    /**
-     * @enum ValueType
-     */
     var DisplayType;
     (function (DisplayType) {
         DisplayType[DisplayType["UNKNOWN"] = 1] = "UNKNOWN";

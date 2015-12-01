@@ -40,7 +40,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", 
             this.tickendSignal = new Signal_1.default();
             this.drawstartSignal = new Signal_1.default();
             this.drawendSignal = new Signal_1.default();
-            this.type = 2;
+            this.type = 4;
             this._isRunning = false;
             this._fps = 60;
             this._fpsCounter = null;

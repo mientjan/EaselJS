@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     var FlumpTexture = (function () {
         function FlumpTexture(renderTexture, json) {
-            this.type = DisplayType_1.default.FLUMPSYMBOL;
+            this.type = 2048;
             this.time = 0.0;
             this.name = json.symbol;
             this.renderTexture = renderTexture;

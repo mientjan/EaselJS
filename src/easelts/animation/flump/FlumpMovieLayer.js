@@ -74,7 +74,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             if (keyframe.ref != -1 && keyframe.ref != null) {
                 if (this._symbol != this._symbols[keyframe.ref]) {
                     this._symbol = this._symbols[keyframe.ref];
-                    if (this._symbol.type == DisplayType_1.default.FLUMPSYMBOL)
+                    if (this._symbol.type == 2048)
                         this._symbol.reset();
                 }
             }
@@ -140,7 +140,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             this._frame = frame;
         };
         FlumpMovieLayer.prototype.reset = function () {
-            if (this._symbol && this._symbol.type == DisplayType_1.default.FLUMPSYMBOL)
+            if (this._symbol && this._symbol.type == 2048)
                 this._symbol.reset();
         };
         FlumpMovieLayer.prototype.draw = function (ctx, ignoreCache) {
