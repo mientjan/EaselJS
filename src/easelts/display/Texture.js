@@ -1,4 +1,4 @@
-define(["require", "exports", "../../createts/util/Promise", "../geom/Size"], function (require, exports, Promise_1, Size_1) {
+define(["require", "exports", "../../createts/util/Promise", "../geom/Size", "../util/MathUtil"], function (require, exports, Promise_1, Size_1, MathUtil_1) {
     var Texture = (function () {
         function Texture(source, autoload) {
             if (autoload === void 0) { autoload = false; }
@@ -36,8 +36,9 @@ define(["require", "exports", "../../createts/util/Promise", "../geom/Size"], fu
                 }
                 return this._loadPromise;
             }
-            if (onProgress)
+            if (onProgress) {
                 onProgress(1);
+            }
             return Promise_1.default.resolve(this);
         };
         Texture.prototype._load = function (onComplete, onError) {
@@ -99,6 +100,10 @@ define(["require", "exports", "../../createts/util/Promise", "../geom/Size"], fu
         Texture.prototype.bindTexture = function (ctx) {
             var bitmap = this.source;
             if (this.hasLoaded()) {
+                if (!(MathUtil_1.default.isPowerOfTwo(this.width) && MathUtil_1.default.isPowerOfTwo(this.height))) {
+                    if (console && console.warn)
+                        console.warn("Texture " + this.width + "x" + this.height + " is not power of 2", this);
+                }
                 if (!this.webGLTexture) {
                     var texture = this.webGLTexture = ctx.createTexture();
                     ctx.bindTexture(ctx.TEXTURE_2D, texture);

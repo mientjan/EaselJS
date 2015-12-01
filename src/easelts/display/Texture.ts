@@ -1,7 +1,7 @@
-
 import ILoadable from "../interface/ILoadable";
 import Promise from "../../createts/util/Promise";
 import Size from "../geom/Size";
+import MathUtil from "../util/MathUtil";
 
 /**
  * Base class For all bitmap type drawing.
@@ -53,14 +53,15 @@ class Texture implements ILoadable<Texture>
 		return this._loadPromise != null;
 	}
 
-	public load( onProgress?:(progress:number) => any):Promise<Texture>
+	public load(onProgress?:(progress:number) => any):Promise<Texture>
 	{
 		if(!this._hasLoaded)
 		{
 			if(!this._loadPromise)
 			{
 				this._loadPromise = new Promise<Texture>((resolve:(result:Texture) => any, reject:() => any) =>
-					this._load((scope) => {
+					this._load((scope) =>
+					{
 						resolve(scope);
 						this._loadPromise = null;
 					}, reject)
@@ -70,7 +71,10 @@ class Texture implements ILoadable<Texture>
 			return this._loadPromise;
 		}
 
-		if(onProgress) onProgress(1);
+		if(onProgress)
+		{
+			onProgress(1);
+		}
 		return Promise.resolve(this);
 	}
 
@@ -79,7 +83,8 @@ class Texture implements ILoadable<Texture>
 		var bitmap:any = this.source;
 		var tagName:string = '';
 
-		if( bitmap ){
+		if(bitmap)
+		{
 			tagName = bitmap.tagName.toLowerCase();
 		}
 
@@ -87,11 +92,15 @@ class Texture implements ILoadable<Texture>
 		{
 			case 'img':
 			{
-				if( (bitmap['complete'] || bitmap['readyState'] >= 2) ){
+				if((bitmap['complete'] || bitmap['readyState'] >= 2))
+				{
 					this.initImage(bitmap);
-				} else {
+				}
+				else
+				{
 					( <HTMLImageElement> bitmap).onload = (function(scope){
-						return function(ev:Event){
+						return function(ev:Event)
+						{
 							scope.initImage(this);
 							onComplete(scope);
 						}
@@ -143,10 +152,24 @@ class Texture implements ILoadable<Texture>
 
 	public draw(ctx:CanvasRenderingContext2D, sx:number, sy:number, sw:number, sh:number, dx:number, dy:number, dw:number, dh:number):boolean
 	{
-		ctx.drawImage( <HTMLImageElement> this.source, sx, sy, sw, sh, dx, dy, dw, dh);
+		ctx.drawImage(<HTMLImageElement> this.source, sx, sy, sw, sh, dx, dy, dw, dh);
 		return true;
 	}
 
+	/**
+	 * @method drawWebGL
+	 * @alpha
+	 * @param ctx
+	 * @param sx
+	 * @param sy
+	 * @param sw
+	 * @param sh
+	 * @param dx
+	 * @param dy
+	 * @param dw
+	 * @param dh
+	 * @returns {boolean}
+	 */
 	public drawWebGL(ctx:WebGLRenderingContext, sx:number, sy:number, sw:number, sh:number, dx:number, dy:number, dw:number, dh:number):boolean
 	{
 		//ctx.drawImage( <HTMLImageElement> this.bitmap, sx, sy, sw, sh, dx, dy, dw, dh);
@@ -159,6 +182,11 @@ class Texture implements ILoadable<Texture>
 
 		if(this.hasLoaded())
 		{
+			if( !(MathUtil.isPowerOfTwo(this.width) && MathUtil.isPowerOfTwo(this.height)) )
+			{
+				if(console && console.warn) console.warn(`Texture ${this.width}x${this.height} is not power of 2`, this)
+			}
+
 			// Create and use a new texture for this image if it doesn't already have one:
 			if(!this.webGLTexture)
 			{
