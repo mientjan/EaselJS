@@ -10,7 +10,7 @@ interface IDispatcher {
 	fps( n:number ):void;
 }
 
-//com.greensock.core
+//com.greensock.util
 declare class Animation {
 	data:any;
 	static ticker:IDispatcher;

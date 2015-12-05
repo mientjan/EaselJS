@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
     }
 };
-define(["require", "exports", "../../src/createts/util/Decorator"], function (require, exports, Decorator_1) {
+define(["require", "exports", "../../src/core/util/Decorator"], function (require, exports, Decorator_1) {
     var FooBar = (function () {
         function FooBar() {
         }
