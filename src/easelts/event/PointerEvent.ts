@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Event from "../../createts/event/Event";
+import Event from "../../core/event/Event";
 
 /**
  * @module easelts

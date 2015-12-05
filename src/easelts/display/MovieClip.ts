@@ -1,7 +1,7 @@
 import Container from "./Container";
 import Timeline from "../../tweents/Timeline";
 import Tween from "../../tweents/Tween";
-import TimeEvent from "../../createts/event/TimeEvent";
+import TimeEvent from "../../core/event/TimeEvent";
 import DisplayObject from "./DisplayObject";
 import IDisplayObject from "../interface/IDisplayObject";
 

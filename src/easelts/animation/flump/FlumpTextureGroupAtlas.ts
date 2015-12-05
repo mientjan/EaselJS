@@ -2,7 +2,7 @@ import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
 import FlumpTexture from './FlumpTexture';
 import FlumpLibrary from '../FlumpLibrary';
 import IHashMap from '../../interface/IHashMap';
-import Promise from '../../../createts/util/Promise';
+import Promise from '../../../core/util/Promise';
 
 class FlumpTextureGroupAtlas
 {

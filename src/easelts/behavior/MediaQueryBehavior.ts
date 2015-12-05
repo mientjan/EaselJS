@@ -6,7 +6,7 @@ import DisplayObject from "../display/DisplayObject";
 import * as IMediaQuery from "../interface/IMediaQuery";
 import Point from "../geom/Point";
 import Size from "../geom/Size";
-import SignalConnection from "../../createts/event/SignalConnection";
+import SignalConnection from "../../core/event/SignalConnection";
 
 class MediaQueryBehavior extends AbstractBehavior
 {

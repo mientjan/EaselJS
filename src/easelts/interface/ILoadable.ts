@@ -1,4 +1,4 @@
-import Promise from "../../createts/util/Promise";
+import Promise from "../../core/util/Promise";
 
 interface ILoadable<T>
 {

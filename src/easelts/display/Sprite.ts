@@ -27,8 +27,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Event from "../../createts/event/Event";
-import TimeEvent from "../../createts/event/TimeEvent";
+import Event from "../../core/event/Event";
+import TimeEvent from "../../core/event/TimeEvent";
 import DisplayObject from "./DisplayObject";
 import SpriteSheet from "./SpriteSheet";
 import Rectangle from "../geom/Rectangle";

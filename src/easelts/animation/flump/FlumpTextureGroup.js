@@ -1,4 +1,4 @@
-define(["require", "exports", './FlumpTextureGroupAtlas', '../../../createts/util/Promise'], function (require, exports, FlumpTextureGroupAtlas_1, Promise_1) {
+define(["require", "exports", './FlumpTextureGroupAtlas', '../../../core/util/Promise'], function (require, exports, FlumpTextureGroupAtlas_1, Promise_1) {
     var FlumpTextureGroup = (function () {
         function FlumpTextureGroup(flumpTextureGroupAtlases, flumpTextures) {
             this.flumpTextureGroupAtlases = flumpTextureGroupAtlases;

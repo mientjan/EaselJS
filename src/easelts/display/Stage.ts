@@ -50,11 +50,11 @@ import DisplayType from "../enum/DisplayType";
 
 // event / signal
 import PointerEvent from "../event/PointerEvent";
-import TimeEvent from "../../createts/event/TimeEvent";
-import Signal1 from "../../createts/event/Signal1";
-import Signal from "../../createts/event/Signal";
-import SignalConnection from "../../createts/event/SignalConnection";
-import Interval from "../../createts/util/Interval";
+import TimeEvent from "../../core/event/TimeEvent";
+import Signal1 from "../../core/event/Signal1";
+import Signal from "../../core/event/Signal";
+import SignalConnection from "../../core/event/SignalConnection";
+import Interval from "../../core/util/Interval";
 import Stats from "../component/Stats";
 import {StageOption} from "../data/StageOption";
 import IContext2D from "../interface/IContext2D";

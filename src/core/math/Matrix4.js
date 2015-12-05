@@ -1,19 +1,155 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], function (require, exports, MathUtil_1, AbstractMath3D_1) {
-    var Matrix4 = (function (_super) {
-        __extends(Matrix4, _super);
+define(["require", "exports", "./Vector3", "./MathUtil", "./Euler"], function (require, exports, Vector3_1, MathUtil_1, Euler_1) {
+    var Matrix4 = (function () {
         function Matrix4() {
-            _super.call(this);
+            this.extractRotation = function () {
+                var v1;
+                return function (m) {
+                    if (v1 === undefined)
+                        v1 = new Vector3_1.Vector3();
+                    var te = this.elements;
+                    var me = m.elements;
+                    var scaleX = 1 / v1.set(me[0], me[1], me[2]).length();
+                    var scaleY = 1 / v1.set(me[4], me[5], me[6]).length();
+                    var scaleZ = 1 / v1.set(me[8], me[9], me[10]).length();
+                    te[0] = me[0] * scaleX;
+                    te[1] = me[1] * scaleX;
+                    te[2] = me[2] * scaleX;
+                    te[4] = me[4] * scaleY;
+                    te[5] = me[5] * scaleY;
+                    te[6] = me[6] * scaleY;
+                    te[8] = me[8] * scaleZ;
+                    te[9] = me[9] * scaleZ;
+                    te[10] = me[10] * scaleZ;
+                    return this;
+                };
+            }();
+            this.lookAt = function () {
+                var x, y, z;
+                return function (eye, target, up) {
+                    if (x === undefined)
+                        x = new Vector3_1.Vector3();
+                    if (y === undefined)
+                        y = new Vector3_1.Vector3();
+                    if (z === undefined)
+                        z = new Vector3_1.Vector3();
+                    var te = this.elements;
+                    z.subVectors(eye, target).normalize();
+                    if (z.lengthSq() === 0) {
+                        z.z = 1;
+                    }
+                    x.crossVectors(up, z).normalize();
+                    if (x.lengthSq() === 0) {
+                        z.x += 0.0001;
+                        x.crossVectors(up, z).normalize();
+                    }
+                    y.crossVectors(z, x);
+                    te[0] = x.x;
+                    te[4] = y.x;
+                    te[8] = z.x;
+                    te[1] = x.y;
+                    te[5] = y.y;
+                    te[9] = z.y;
+                    te[2] = x.z;
+                    te[6] = y.z;
+                    te[10] = z.z;
+                    return this;
+                };
+            }();
+            this.applyToVector3Array = function () {
+                var v1;
+                return function (array, offset, length) {
+                    if (offset === void 0) { offset = 0; }
+                    if (length === void 0) { length = array.length; }
+                    if (v1 === undefined)
+                        v1 = new Vector3_1.Vector3();
+                    if (offset === undefined)
+                        offset = 0;
+                    if (length === undefined)
+                        length = array.length;
+                    for (var i = 0, j = offset; i < length; i += 3, j += 3) {
+                        v1.fromArray(array, j);
+                        v1.applyMatrix4(this);
+                        v1.toArray(array, j);
+                    }
+                    return array;
+                };
+            }();
+            this.applyToBuffer = function () {
+                var v1;
+                return function applyToBuffer(buffer, offset, length) {
+                    if (v1 === undefined)
+                        v1 = new Vector3_1.Vector3();
+                    if (offset === undefined)
+                        offset = 0;
+                    if (length === undefined)
+                        length = buffer.length / buffer.itemSize;
+                    for (var i = 0, j = offset; i < length; i++, j++) {
+                        v1.x = buffer.getX(j);
+                        v1.y = buffer.getY(j);
+                        v1.z = buffer.getZ(j);
+                        v1.applyMatrix4(this);
+                        buffer.setXYZ(v1.x, v1.y, v1.z);
+                    }
+                    return buffer;
+                };
+            }();
+            this.getPosition = function () {
+                var v1;
+                return function () {
+                    if (v1 === undefined)
+                        v1 = new Vector3_1.Vector3();
+                    console.warn('THREE.Matrix4: .getPosition() has been removed. Use Vector3.setFromMatrixPosition( matrix ) instead.');
+                    var te = this.elements;
+                    return v1.set(te[12], te[13], te[14]);
+                };
+            }();
+            this.decompose = function () {
+                var vector, matrix;
+                return function (position, quaternion, scale) {
+                    if (vector === undefined)
+                        vector = new Vector3_1.Vector3();
+                    if (matrix === undefined)
+                        matrix = new Matrix4();
+                    var te = this.elements;
+                    var sx = vector.set(te[0], te[1], te[2]).length();
+                    var sy = vector.set(te[4], te[5], te[6]).length();
+                    var sz = vector.set(te[8], te[9], te[10]).length();
+                    var det = this.determinant();
+                    if (det < 0) {
+                        sx = -sx;
+                    }
+                    position.x = te[12];
+                    position.y = te[13];
+                    position.z = te[14];
+                    matrix.elements.set(this.elements);
+                    var invSX = 1 / sx;
+                    var invSY = 1 / sy;
+                    var invSZ = 1 / sz;
+                    matrix.elements[0] *= invSX;
+                    matrix.elements[1] *= invSX;
+                    matrix.elements[2] *= invSX;
+                    matrix.elements[4] *= invSY;
+                    matrix.elements[5] *= invSY;
+                    matrix.elements[6] *= invSY;
+                    matrix.elements[8] *= invSZ;
+                    matrix.elements[9] *= invSZ;
+                    matrix.elements[10] *= invSZ;
+                    quaternion.setFromRotationMatrix(matrix);
+                    scale.x = sx;
+                    scale.y = sy;
+                    scale.z = sz;
+                    return this;
+                };
+            }();
             this.elements = new Float32Array([
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1
             ]);
+            if (arguments.length > 0) {
+                console.error('THREE.Matrix4: the constructor no longer reads arguments. use .set() instead.');
+            }
         }
         Matrix4.prototype.set = function (n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44) {
             var te = this.elements;
@@ -39,9 +175,16 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             this.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
             return this;
         };
+        Matrix4.prototype.clone = function () {
+            return new Matrix4().fromArray(this.elements);
+        };
         Matrix4.prototype.copy = function (m) {
             this.elements.set(m.elements);
             return this;
+        };
+        Matrix4.prototype.extractPosition = function (m) {
+            console.warn('THREE.Matrix4: .extractPosition() has been renamed to .copyPosition().');
+            return this.copyPosition(m);
         };
         Matrix4.prototype.copyPosition = function (m) {
             var te = this.elements;
@@ -62,25 +205,10 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             this.set(xAxis.x, yAxis.x, zAxis.x, 0, xAxis.y, yAxis.y, zAxis.y, 0, xAxis.z, yAxis.z, zAxis.z, 0, 0, 0, 0, 1);
             return this;
         };
-        Matrix4.prototype.extractRotation = function (m) {
-            var v1 = this.getVector3('v1ExtractRotation');
-            var te = this.elements;
-            var me = m.elements;
-            var scaleX = 1 / v1.set(me[0], me[1], me[2]).length();
-            var scaleY = 1 / v1.set(me[4], me[5], me[6]).length();
-            var scaleZ = 1 / v1.set(me[8], me[9], me[10]).length();
-            te[0] = me[0] * scaleX;
-            te[1] = me[1] * scaleX;
-            te[2] = me[2] * scaleX;
-            te[4] = me[4] * scaleY;
-            te[5] = me[5] * scaleY;
-            te[6] = me[6] * scaleY;
-            te[8] = me[8] * scaleZ;
-            te[9] = me[9] * scaleZ;
-            te[10] = me[10] * scaleZ;
-            return this;
-        };
         Matrix4.prototype.makeRotationFromEuler = function (euler) {
+            if (euler instanceof Euler_1.Euler === false) {
+                console.error('THREE.Matrix: .makeRotationFromEuler() now expects a Euler rotation rather than a Vector3 and order.');
+            }
             var te = this.elements;
             var x = euler.x, y = euler.y, z = euler.z;
             var a = Math.cos(x), b = Math.sin(x);
@@ -167,6 +295,10 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             te[15] = 1;
             return this;
         };
+        Matrix4.prototype.setRotationFromQuaternion = function (q) {
+            console.warn('THREE.Matrix4: .setRotationFromQuaternion() has been renamed to .makeRotationFromQuaternion().');
+            return this.makeRotationFromQuaternion(q);
+        };
         Matrix4.prototype.makeRotationFromQuaternion = function (q) {
             var te = this.elements;
             var x = q.x, y = q.y, z = q.z, w = q.w;
@@ -192,33 +324,14 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             te[15] = 1;
             return this;
         };
-        Matrix4.prototype.lookAt = function (eye, target, up) {
-            var xLookAt = this.getVector3('xLookAt');
-            var yLookAt = this.getVector3('yLookAt');
-            var zLookAt = this.getVector3('zLookAt');
-            var te = this.elements;
-            zLookAt.subVectors(eye, target).normalize();
-            if (zLookAt.length() === 0) {
-                zLookAt.z = 1;
-            }
-            xLookAt.crossVectors(up, zLookAt).normalize();
-            if (xLookAt.length() === 0) {
-                zLookAt.x += 0.0001;
-                xLookAt.crossVectors(up, zLookAt).normalize();
-            }
-            yLookAt.crossVectors(zLookAt, xLookAt);
-            te[0] = xLookAt.x;
-            te[4] = yLookAt.x;
-            te[8] = zLookAt.x;
-            te[1] = xLookAt.y;
-            te[5] = yLookAt.y;
-            te[9] = zLookAt.y;
-            te[2] = xLookAt.z;
-            te[6] = yLookAt.z;
-            te[10] = zLookAt.z;
-            return this;
-        };
         Matrix4.prototype.multiply = function (m) {
+            //
+            //if ( n !== undefined ) {
+            //
+            //	console.warn( 'THREE.Matrix4: .multiply() now only accepts one argument. Use .multiplyMatrices( a, b ) instead.' );
+            //	return this.multiplyMatrices( m, n );
+            //
+            //}
             return this.multiplyMatrices(this, m);
         };
         Matrix4.prototype.multiplyMatrices = function (a, b) {
@@ -292,20 +405,25 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             te[15] *= s;
             return this;
         };
-        Matrix4.prototype.applyToVector3Array = function (array, offset, length) {
-            if (offset === void 0) { offset = 0; }
-            if (length === void 0) { length = array.length; }
-            var v1 = this.getVector3('v1ApplyToVector3Array');
-            for (var i = 0, j = offset; i < length; i += 3, j += 3) {
-                v1.x = array[j];
-                v1.y = array[j + 1];
-                v1.z = array[j + 2];
-                v1.applyMatrix4(this);
-                array[j] = v1.x;
-                array[j + 1] = v1.y;
-                array[j + 2] = v1.z;
-            }
-            return array;
+        Matrix4.prototype.multiplyVector3 = function (vector) {
+            console.warn('THREE.Matrix4: .multiplyVector3() has been removed. Use vector.applyMatrix4( matrix ) or vector.applyProjection( matrix ) instead.');
+            return vector.applyProjection(this);
+        };
+        Matrix4.prototype.multiplyVector4 = function (vector) {
+            console.warn('THREE.Matrix4: .multiplyVector4() has been removed. Use vector.applyMatrix4( matrix ) instead.');
+            return vector.applyMatrix4(this);
+        };
+        Matrix4.prototype.multiplyVector3Array = function (a) {
+            console.warn('THREE.Matrix4: .multiplyVector3Array() has been renamed. Use matrix.applyToVector3Array( array ) instead.');
+            return this.applyToVector3Array(a);
+        };
+        Matrix4.prototype.rotateAxis = function (v) {
+            console.warn('THREE.Matrix4: .rotateAxis() has been removed. Use Vector3.transformDirection( matrix ) instead.');
+            v.transformDirection(this);
+        };
+        Matrix4.prototype.crossVector = function (vector) {
+            console.warn('THREE.Matrix4: .crossVector() has been removed. Use vector.applyMatrix4( matrix ) instead.');
+            return vector.applyMatrix4(this);
         };
         Matrix4.prototype.determinant = function () {
             var te = this.elements;
@@ -389,7 +507,6 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             return this;
         };
         Matrix4.prototype.getInverse = function (m, throwOnInvertible) {
-            if (throwOnInvertible === void 0) { throwOnInvertible = false; }
             var te = this.elements;
             var me = m.elements;
             var n11 = me[0], n12 = me[4], n13 = me[8], n14 = me[12];
@@ -413,18 +530,34 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             te[11] = n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43;
             te[15] = n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33;
             var det = n11 * te[0] + n21 * te[4] + n31 * te[8] + n41 * te[12];
-            if (det == 0) {
-                var msg = "Matrix4.getInverse(): can't invert matrix, determinant is 0";
+            if (det === 0) {
+                var msg = "THREE.Matrix4.getInverse(): can't invert matrix, determinant is 0";
                 if (throwOnInvertible || false) {
                     throw new Error(msg);
                 }
                 else {
+                    console.warn(msg);
                 }
                 this.identity();
                 return this;
             }
             this.multiplyScalar(1 / det);
             return this;
+        };
+        Matrix4.prototype.translate = function (v) {
+            console.error('THREE.Matrix4: .translate() has been removed.');
+        };
+        Matrix4.prototype.rotateX = function (angle) {
+            console.error('THREE.Matrix4: .rotateX() has been removed.');
+        };
+        Matrix4.prototype.rotateY = function (angle) {
+            console.error('THREE.Matrix4: .rotateY() has been removed.');
+        };
+        Matrix4.prototype.rotateZ = function (angle) {
+            console.error('THREE.Matrix4: .rotateZ() has been removed.');
+        };
+        Matrix4.prototype.rotateByAxis = function (axis, angle) {
+            console.error('THREE.Matrix4: .rotateByAxis() has been removed.');
         };
         Matrix4.prototype.scale = function (v) {
             var te = this.elements;
@@ -448,7 +581,7 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             var scaleXSq = te[0] * te[0] + te[1] * te[1] + te[2] * te[2];
             var scaleYSq = te[4] * te[4] + te[5] * te[5] + te[6] * te[6];
             var scaleZSq = te[8] * te[8] + te[9] * te[9] + te[10] * te[10];
-            return Math.sqrt(Math.max(scaleXSq, Math.max(scaleYSq, scaleZSq)));
+            return Math.sqrt(Math.max(scaleXSq, scaleYSq, scaleZSq));
         };
         Matrix4.prototype.makeTranslation = function (x, y, z) {
             this.set(1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
@@ -470,6 +603,7 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             return this;
         };
         Matrix4.prototype.makeRotationAxis = function (axis, angle) {
+            // Based on http://www.gamedev.net/reference/articles/article1199.asp
             var c = Math.cos(angle);
             var s = Math.sin(angle);
             var t = 1 - c;
@@ -486,39 +620,6 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             this.makeRotationFromQuaternion(quaternion);
             this.scale(scale);
             this.setPosition(position);
-            return this;
-        };
-        Matrix4.prototype.decompose = function (position, quaternion, scale) {
-            var decomposeVector = this.getVector3('decomposeVector');
-            var decomposeMatrix = this.getMatrix4('decomposeMatrix');
-            var te = this.elements;
-            var sx = decomposeVector.set(te[0], te[1], te[2]).length();
-            var sy = decomposeVector.set(te[4], te[5], te[6]).length();
-            var sz = decomposeVector.set(te[8], te[9], te[10]).length();
-            var det = this.determinant();
-            if (det < 0) {
-                sx = -sx;
-            }
-            position.x = te[12];
-            position.y = te[13];
-            position.z = te[14];
-            decomposeMatrix.elements.set(this.elements);
-            var invSX = 1 / sx;
-            var invSY = 1 / sy;
-            var invSZ = 1 / sz;
-            decomposeMatrix.elements[0] *= invSX;
-            decomposeMatrix.elements[1] *= invSX;
-            decomposeMatrix.elements[2] *= invSX;
-            decomposeMatrix.elements[4] *= invSY;
-            decomposeMatrix.elements[5] *= invSY;
-            decomposeMatrix.elements[6] *= invSY;
-            decomposeMatrix.elements[8] *= invSZ;
-            decomposeMatrix.elements[9] *= invSZ;
-            decomposeMatrix.elements[10] *= invSZ;
-            quaternion.setFromRotationMatrix(decomposeMatrix);
-            scale.x = sx;
-            scale.y = sy;
-            scale.z = sz;
             return this;
         };
         Matrix4.prototype.makeFrustum = function (left, right, bottom, top, near, far) {
@@ -580,6 +681,15 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
             te[15] = 1;
             return this;
         };
+        Matrix4.prototype.equals = function (matrix) {
+            var te = this.elements;
+            var me = matrix.elements;
+            for (var i = 0; i < 16; i++) {
+                if (te[i] !== me[i])
+                    return false;
+            }
+            return true;
+        };
         Matrix4.prototype.fromArray = function (array) {
             this.elements.set(array);
             return this;
@@ -593,11 +703,7 @@ define(["require", "exports", "../util/MathUtil", "./math3d/AbstractMath3D"], fu
                 te[12], te[13], te[14], te[15]
             ];
         };
-        Matrix4.prototype.clone = function () {
-            return new Matrix4().fromArray(this.elements);
-        };
         return Matrix4;
-    })(AbstractMath3D_1.default);
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Matrix4;
+    })();
+    exports.Matrix4 = Matrix4;
 });

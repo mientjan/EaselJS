@@ -130,9 +130,9 @@
  * @extends EventDispatcher
  **/
 
-import EventDispatcher from "../../createts/event/EventDispatcher";
-import Promise from "../../createts/util/Promise";
-import HttpRequest from "../../createts/util/HttpRequest";
+import EventDispatcher from "../../core/event/EventDispatcher";
+import Promise from "../../core/util/Promise";
+import HttpRequest from "../../core/util/HttpRequest";
 import Rectangle from "../geom/Rectangle";
 import ILoadable from "../interface/ILoadable";
 

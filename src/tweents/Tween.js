@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../createts/event/EventDispatcher", "../tweents/Ease", "../createts/util/Interval"], function (require, exports, EventDispatcher_1, Ease_1, Interval_1) {
+define(["require", "exports", "../core/event/EventDispatcher", "../tweents/Ease", "../core/util/Interval"], function (require, exports, EventDispatcher_1, Ease_1, Interval_1) {
     var Tween = (function (_super) {
         __extends(Tween, _super);
         function Tween(target, props, pluginData) {

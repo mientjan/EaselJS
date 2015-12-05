@@ -27,14 +27,14 @@
  */
 
 // event
-import EventDispatcher from "../../createts/event/EventDispatcher";
-import Event from "../../createts/event/Event";
-import TimeEvent from "../../createts/event/TimeEvent";
-import Signal2 from "../../createts/event/Signal2";
+import EventDispatcher from "../../core/event/EventDispatcher";
+import Event from "../../core/event/Event";
+import TimeEvent from "../../core/event/TimeEvent";
+import Signal2 from "../../core/event/Signal2";
 
 // utils
-import UID from "../util/UID";
-import Promise from "../../createts/util/Promise";
+import UID from "../../core/util/UID";
+import Promise from "../../core/util/Promise";
 import * as Methods from "../util/Methods";
 
 // display

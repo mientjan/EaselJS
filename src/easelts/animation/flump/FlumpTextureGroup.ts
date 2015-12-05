@@ -4,8 +4,8 @@ import FlumpLibrary from '../FlumpLibrary';
 import IHashMap from '../../interface/IHashMap';
 import FlumpTextureGroupAtlas from './FlumpTextureGroupAtlas';
 import FlumpTexture from './FlumpTexture';
-import HttpRequest from '../../../createts/util/HttpRequest';
-import Promise from '../../../createts/util/Promise';
+import HttpRequest from '../../../core/util/HttpRequest';
+import Promise from '../../../core/util/Promise';
 
 class FlumpTextureGroup
 {

@@ -1,15 +1,15 @@
 import * as IFlumpLibrary from '../interface/IFlumpLibrary';
 import ILoadable from '../interface/ILoadable';
 
-import Signal from '../../createts/event/Signal';
-import HttpRequest from '../../createts/util/HttpRequest';
-import Promise from '../../createts/util/Promise';
-import SignalConnection from '../../createts/event/SignalConnection';
+import Signal from '../../core/event/Signal';
+import HttpRequest from '../../core/util/HttpRequest';
+import Promise from '../../core/util/Promise';
+import SignalConnection from '../../core/event/SignalConnection';
 import FlumpMovieData from './flump/FlumpMovieData';
 import FlumpTexture from './flump/FlumpTexture';
 import FlumpTextureGroup from './flump/FlumpTextureGroup';
 import FlumpMovie from './flump/FlumpMovie';
-import EventDispatcher from "../../createts/event/EventDispatcher";
+import EventDispatcher from "../../core/event/EventDispatcher";
 import Queue from "../data/Queue";
 import IFlumpMovie from "./flump/IFlumpMovie";
 

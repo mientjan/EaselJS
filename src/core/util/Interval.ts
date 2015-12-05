@@ -57,9 +57,9 @@
 		};
 }());
 
-import Signal1 from "../../createts/event/Signal1";
-import Signal from "../../createts/event/Signal";
-import SignalConnection from "../../createts/event/SignalConnection";
+import Signal1 from "../event/Signal1";
+import Signal from "../event/Signal";
+import SignalConnection from "../event/SignalConnection";
 
 /*
  * Interval

@@ -1,4 +1,4 @@
-define(["require", "exports", "./Vector3"], function (require, exports, Vector3_1) {
+define(["require", "exports", "Vector3"], function (require, exports, Vector3_1) {
     var Matrix3 = (function () {
         function Matrix3() {
             this.__v0 = null;
@@ -32,7 +32,7 @@ define(["require", "exports", "./Vector3"], function (require, exports, Vector3_
         };
         Matrix3.prototype.applyToVector3Array = function (array, offset, length) {
             if (!this.__v0) {
-                this.__v0 = new Vector3_1.default(0, 0, 0);
+                this.__v0 = new Vector3_1.Vector3(0, 0, 0);
             }
             var v1 = this.__v0;
             if (offset === undefined) {

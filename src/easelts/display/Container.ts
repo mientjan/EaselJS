@@ -33,13 +33,13 @@ import Size from "../geom/Size";
 import m2 from "../geom/Matrix2";
 import Rectangle from "../geom/Rectangle";
 
-import TimeEvent from "../../createts/event/TimeEvent";
+import TimeEvent from "../../core/event/TimeEvent";
 import Stage from "./Stage";
 import CanvasBuffer from "./buffer/CanvasBuffer";
 import Matrix2 from "../geom/Matrix2";
 import IDisplayObject from "../interface/IDisplayObject";
-import HttpRequest from "../../createts/util/HttpRequest";
-import Promise from "../../createts/util/Promise";
+import HttpRequest from "../../core/util/HttpRequest";
+import Promise from "../../core/util/Promise";
 import ILoadable from "../interface/ILoadable";
 
 /**

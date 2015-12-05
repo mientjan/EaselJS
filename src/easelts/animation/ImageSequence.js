@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../display/DisplayObject", "../display/SpriteSheet", "../../createts/util/Promise", "../data/AnimationQueue", "../data/Queue"], function (require, exports, DisplayObject_1, SpriteSheet_1, Promise_1, AnimationQueue_1, Queue_1) {
+define(["require", "exports", "../display/DisplayObject", "../display/SpriteSheet", "../../core/util/Promise", "../data/AnimationQueue", "../data/Queue"], function (require, exports, DisplayObject_1, SpriteSheet_1, Promise_1, AnimationQueue_1, Queue_1) {
     var ImageSequence = (function (_super) {
         __extends(ImageSequence, _super);
         function ImageSequence(spriteSheet, fps, width, height, x, y, regX, regY) {

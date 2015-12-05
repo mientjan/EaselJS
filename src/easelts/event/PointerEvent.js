@@ -30,7 +30,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../createts/event/Event"], function (require, exports, Event_1) {
+define(["require", "exports", "../../core/event/Event"], function (require, exports, Event_1) {
     var MouseEvent = (function (_super) {
         __extends(MouseEvent, _super);
         function MouseEvent(type, bubbles, cancelable, stageX, stageY, nativeEvent, pointerID, primary, rawX, rawY) {

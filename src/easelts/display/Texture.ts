@@ -1,7 +1,7 @@
 import ILoadable from "../interface/ILoadable";
-import Promise from "../../createts/util/Promise";
+import Promise from "../../core/util/Promise";
 import Size from "../geom/Size";
-import MathUtil from "../util/MathUtil";
+import MathUtil from "../../core/math/MathUtil";
 
 /**
  * Base class For all bitmap type drawing.

@@ -1,4 +1,4 @@
-define(["require", "exports", '../../createts/util/HttpRequest', '../../createts/util/Promise', './flump/FlumpMovieData', './flump/FlumpTextureGroup', './flump/FlumpMovie', "../data/Queue"], function (require, exports, HttpRequest_1, Promise_1, FlumpMovieData_1, FlumpTextureGroup_1, FlumpMovie_1, Queue_1) {
+define(["require", "exports", '../../core/util/HttpRequest', '../../core/util/Promise', './flump/FlumpMovieData', './flump/FlumpTextureGroup', './flump/FlumpMovie', "../data/Queue"], function (require, exports, HttpRequest_1, Promise_1, FlumpMovieData_1, FlumpTextureGroup_1, FlumpMovie_1, Queue_1) {
     var FlumpLibrary = (function () {
         function FlumpLibrary(basePath) {
             this.movieData = [];

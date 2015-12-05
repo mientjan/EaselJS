@@ -1,20 +1,32 @@
-/**
- * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
- * @author bhouston / http://exocortex.com
- */
-define(["require", "exports", "../util/MathUtil", "./Quaternion"], function (require, exports, MathUtil_1, Quaternion_1) {
+define(["require", "exports", "./Quaternion", "./Matrix4", "./Vector3", "./MathUtil"], function (require, exports, Quaternion_1, Matrix4_1, Vector3_1, MathUtil_1) {
     var Euler = (function () {
         function Euler(x, y, z, order) {
-            this._x = 0;
-            this._y = 0;
-            this._z = 0;
-            this._order = Euler.DefaultOrder;
-            this._reorder_q = new Quaternion_1.default(0, 0, 0);
-            this._x = x || 0;
-            this._y = y || 0;
-            this._z = z || 0;
-            this._order = order || Euler.DefaultOrder;
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            if (z === void 0) { z = 0; }
+            if (order === void 0) { order = Euler.DefaultOrder; }
+            this.setFromQuaternion = function () {
+                var matrix;
+                return function (q, order, update) {
+                    if (matrix === undefined)
+                        matrix = new Matrix4_1.Matrix4();
+                    matrix.makeRotationFromQuaternion(q);
+                    this.setFromRotationMatrix(matrix, order, update);
+                    return this;
+                };
+            }();
+            this.reorder = function () {
+                // WARNING: this discards revolution information -bhouston
+                var q = new Quaternion_1.Quaternion();
+                return function (newOrder) {
+                    q.setFromEuler(this);
+                    this.setFromQuaternion(q, newOrder);
+                };
+            }();
+            this._x = x;
+            this._y = y;
+            this._z = z;
+            this._order = order;
         }
         Object.defineProperty(Euler.prototype, "x", {
             get: function () {
@@ -68,6 +80,9 @@ define(["require", "exports", "../util/MathUtil", "./Quaternion"], function (req
             this.onChangeCallback();
             return this;
         };
+        Euler.prototype.clone = function () {
+            return new Euler(this._x, this._y, this._z, this._order);
+        };
         Euler.prototype.copy = function (euler) {
             this._x = euler._x;
             this._y = euler._y;
@@ -76,7 +91,7 @@ define(["require", "exports", "../util/MathUtil", "./Quaternion"], function (req
             this.onChangeCallback();
             return this;
         };
-        Euler.prototype.setFromRotationMatrix = function (m, order) {
+        Euler.prototype.setFromRotationMatrix = function (m, order, update) {
             var clamp = MathUtil_1.default.clamp;
             var te = m.elements;
             var m11 = te[0], m12 = te[4], m13 = te[8];
@@ -150,62 +165,15 @@ define(["require", "exports", "../util/MathUtil", "./Quaternion"], function (req
                 }
             }
             else {
-                console.warn('THREE.Euler: .setFromRotationMatrix() given unsupported order: ' + order);
-            }
-            this._order = order;
-            this.onChangeCallback();
-            return this;
-        };
-        Euler.prototype.setFromQuaternion = function (q, order, update) {
-            if (order === void 0) { order = this._order; }
-            if (update === void 0) { update = false; }
-            var clamp = MathUtil_1.default.clamp;
-            var sqx = q.x * q.x;
-            var sqy = q.y * q.y;
-            var sqz = q.z * q.z;
-            var sqw = q.w * q.w;
-            if (order === 'XYZ') {
-                this._x = Math.atan2(2 * (q.x * q.w - q.y * q.z), (sqw - sqx - sqy + sqz));
-                this._y = Math.asin(clamp(2 * (q.x * q.z + q.y * q.w), -1, 1));
-                this._z = Math.atan2(2 * (q.z * q.w - q.x * q.y), (sqw + sqx - sqy - sqz));
-            }
-            else if (order === 'YXZ') {
-                this._x = Math.asin(clamp(2 * (q.x * q.w - q.y * q.z), -1, 1));
-                this._y = Math.atan2(2 * (q.x * q.z + q.y * q.w), (sqw - sqx - sqy + sqz));
-                this._z = Math.atan2(2 * (q.x * q.y + q.z * q.w), (sqw - sqx + sqy - sqz));
-            }
-            else if (order === 'ZXY') {
-                this._x = Math.asin(clamp(2 * (q.x * q.w + q.y * q.z), -1, 1));
-                this._y = Math.atan2(2 * (q.y * q.w - q.z * q.x), (sqw - sqx - sqy + sqz));
-                this._z = Math.atan2(2 * (q.z * q.w - q.x * q.y), (sqw - sqx + sqy - sqz));
-            }
-            else if (order === 'ZYX') {
-                this._x = Math.atan2(2 * (q.x * q.w + q.z * q.y), (sqw - sqx - sqy + sqz));
-                this._y = Math.asin(clamp(2 * (q.y * q.w - q.x * q.z), -1, 1));
-                this._z = Math.atan2(2 * (q.x * q.y + q.z * q.w), (sqw + sqx - sqy - sqz));
-            }
-            else if (order === 'YZX') {
-                this._x = Math.atan2(2 * (q.x * q.w - q.z * q.y), (sqw - sqx + sqy - sqz));
-                this._y = Math.atan2(2 * (q.y * q.w - q.x * q.z), (sqw + sqx - sqy - sqz));
-                this._z = Math.asin(clamp(2 * (q.x * q.y + q.z * q.w), -1, 1));
-            }
-            else if (order === 'XZY') {
-                this._x = Math.atan2(2 * (q.x * q.w + q.y * q.z), (sqw - sqx + sqy - sqz));
-                this._y = Math.atan2(2 * (q.x * q.z + q.y * q.w), (sqw + sqx - sqy - sqz));
-                this._z = Math.asin(clamp(2 * (q.z * q.w - q.x * q.y), -1, 1));
-            }
-            else {
-                console.warn('THREE.Euler: .setFromQuaternion() given unsupported order: ' + order);
+                console.warn('Euler: .setFromRotationMatrix() given unsupported order: ' + order);
             }
             this._order = order;
             if (update !== false)
                 this.onChangeCallback();
             return this;
         };
-        Euler.prototype.reorder = function (newOrder) {
-            var q = this._reorder_q;
-            q.setFromEuler(this);
-            this.setFromQuaternion(q, newOrder);
+        Euler.prototype.setFromVector3 = function (v, order) {
+            return this.set(v.x, v.y, v.z, order || this._order);
         };
         Euler.prototype.equals = function (euler) {
             return (euler._x === this._x) && (euler._y === this._y) && (euler._z === this._z) && (euler._order === this._order);
@@ -219,21 +187,33 @@ define(["require", "exports", "../util/MathUtil", "./Quaternion"], function (req
             this.onChangeCallback();
             return this;
         };
-        Euler.prototype.toArray = function () {
-            return [this._x, this._y, this._z, this._order];
+        Euler.prototype.toArray = function (array, offset) {
+            if (array === undefined)
+                array = [];
+            if (offset === undefined)
+                offset = 0;
+            array[offset] = this._x;
+            array[offset + 1] = this._y;
+            array[offset + 2] = this._z;
+            array[offset + 3] = this._order;
+            return array;
+        };
+        Euler.prototype.toVector3 = function (optionalResult) {
+            if (optionalResult) {
+                return optionalResult.set(this._x, this._y, this._z);
+            }
+            else {
+                return new Vector3_1.Vector3(this._x, this._y, this._z);
+            }
         };
         Euler.prototype.onChange = function (callback) {
             this.onChangeCallback = callback;
             return this;
         };
         Euler.prototype.onChangeCallback = function () { };
-        Euler.prototype.clone = function () {
-            return new Euler(this._x, this._y, this._z, this._order);
-        };
         Euler.RotationOrders = ['XYZ', 'YZX', 'ZXY', 'XZY', 'YXZ', 'ZYX'];
         Euler.DefaultOrder = 'XYZ';
         return Euler;
     })();
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Euler;
+    exports.Euler = Euler;
 });

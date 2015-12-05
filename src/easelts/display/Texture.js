@@ -1,4 +1,4 @@
-define(["require", "exports", "../../createts/util/Promise", "../geom/Size", "../util/MathUtil"], function (require, exports, Promise_1, Size_1, MathUtil_1) {
+define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../core/math/MathUtil"], function (require, exports, Promise_1, Size_1, MathUtil_1) {
     var Texture = (function () {
         function Texture(source, autoload) {
             if (autoload === void 0) { autoload = false; }

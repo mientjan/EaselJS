@@ -29,11 +29,11 @@
 
 import DisplayObject from "./DisplayObject";
 import Texture from "./Texture";
-import Promise from "../../createts/util/Promise";
+import Promise from "../../core/util/Promise";
 import DisplayType from "../enum/DisplayType";
 import BitmapType from "../enum/BitmapType";
 import Rectangle from "../geom/Rectangle";
-import Signal from "../../createts/event/Signal";
+import Signal from "../../core/event/Signal";
 import Size from "../geom/Size";
 import ILoadable from "../interface/ILoadable";
 

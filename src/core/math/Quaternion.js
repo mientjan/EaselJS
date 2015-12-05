@@ -1,18 +1,38 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exports, AbstractMath3D_1) {
-    var Quaternion = (function (_super) {
-        __extends(Quaternion, _super);
+define(["require", "exports", "./Euler", "./Vector3"], function (require, exports, Euler_1, Vector3_1) {
+    var Quaternion = (function () {
         function Quaternion(x, y, z, w) {
             if (x === void 0) { x = 0; }
             if (y === void 0) { y = 0; }
             if (z === void 0) { z = 0; }
             if (w === void 0) { w = 1; }
-            _super.call(this);
-            this._setFromUnitVectors_r = 0;
+            this.setFromUnitVectors = function () {
+                var v1, r;
+                var EPS = 0.000001;
+                return function (vFrom, vTo) {
+                    if (v1 === undefined) {
+                        v1 = new Vector3_1.Vector3();
+                    }
+                    r = vFrom.dot(vTo) + 1;
+                    if (r < EPS) {
+                        r = 0;
+                        if (Math.abs(vFrom.x) > Math.abs(vFrom.z)) {
+                            v1.set(-vFrom.y, vFrom.x, 0);
+                        }
+                        else {
+                            v1.set(0, -vFrom.z, vFrom.y);
+                        }
+                    }
+                    else {
+                        v1.crossVectors(vFrom, vTo);
+                    }
+                    this._x = v1.x;
+                    this._y = v1.y;
+                    this._z = v1.z;
+                    this._w = r;
+                    this.normalize();
+                    return this;
+                };
+            }();
             this._x = x;
             this._y = y;
             this._z = z;
@@ -73,6 +93,9 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
             this.onChangeCallback();
             return this;
         };
+        Quaternion.prototype.clone = function () {
+            return new Quaternion(this._x, this._y, this._z, this._w);
+        };
         Quaternion.prototype.copy = function (quaternion) {
             this._x = quaternion.x;
             this._y = quaternion.y;
@@ -82,47 +105,47 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
             return this;
         };
         Quaternion.prototype.setFromEuler = function (euler, update) {
-            // http://www.mathworks.com/matlabcentral/fileexchange/
-            // 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
-            //	content/SpinCalc.m
-            if (update === void 0) { update = false; }
+            if (euler instanceof Euler_1.Euler === false) {
+                throw new Error('Quaternion: .setFromEuler() now expects a Euler rotation rather than a Vector3 and order.');
+            }
             var c1 = Math.cos(euler._x / 2);
             var c2 = Math.cos(euler._y / 2);
             var c3 = Math.cos(euler._z / 2);
             var s1 = Math.sin(euler._x / 2);
             var s2 = Math.sin(euler._y / 2);
             var s3 = Math.sin(euler._z / 2);
-            if (euler.order === 'XYZ') {
+            var order = euler.order;
+            if (order === 'XYZ') {
                 this._x = s1 * c2 * c3 + c1 * s2 * s3;
                 this._y = c1 * s2 * c3 - s1 * c2 * s3;
                 this._z = c1 * c2 * s3 + s1 * s2 * c3;
                 this._w = c1 * c2 * c3 - s1 * s2 * s3;
             }
-            else if (euler.order === 'YXZ') {
+            else if (order === 'YXZ') {
                 this._x = s1 * c2 * c3 + c1 * s2 * s3;
                 this._y = c1 * s2 * c3 - s1 * c2 * s3;
                 this._z = c1 * c2 * s3 - s1 * s2 * c3;
                 this._w = c1 * c2 * c3 + s1 * s2 * s3;
             }
-            else if (euler.order === 'ZXY') {
+            else if (order === 'ZXY') {
                 this._x = s1 * c2 * c3 - c1 * s2 * s3;
                 this._y = c1 * s2 * c3 + s1 * c2 * s3;
                 this._z = c1 * c2 * s3 + s1 * s2 * c3;
                 this._w = c1 * c2 * c3 - s1 * s2 * s3;
             }
-            else if (euler.order === 'ZYX') {
+            else if (order === 'ZYX') {
                 this._x = s1 * c2 * c3 - c1 * s2 * s3;
                 this._y = c1 * s2 * c3 + s1 * c2 * s3;
                 this._z = c1 * c2 * s3 - s1 * s2 * c3;
                 this._w = c1 * c2 * c3 + s1 * s2 * s3;
             }
-            else if (euler.order === 'YZX') {
+            else if (order === 'YZX') {
                 this._x = s1 * c2 * c3 + c1 * s2 * s3;
                 this._y = c1 * s2 * c3 + s1 * c2 * s3;
                 this._z = c1 * c2 * s3 - s1 * s2 * c3;
                 this._w = c1 * c2 * c3 - s1 * s2 * s3;
             }
-            else if (euler.order === 'XZY') {
+            else if (order === 'XZY') {
                 this._x = s1 * c2 * c3 - c1 * s2 * s3;
                 this._y = c1 * s2 * c3 - s1 * c2 * s3;
                 this._z = c1 * c2 * s3 + s1 * s2 * c3;
@@ -134,7 +157,6 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
             return this;
         };
         Quaternion.prototype.setFromAxisAngle = function (axis, angle) {
-            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
             var halfAngle = angle / 2, s = Math.sin(halfAngle);
             this._x = axis.x * s;
             this._y = axis.y * s;
@@ -144,7 +166,6 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
             return this;
         };
         Quaternion.prototype.setFromRotationMatrix = function (m) {
-            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
             var te = m.elements, m11 = te[0], m12 = te[4], m13 = te[8], m21 = te[1], m22 = te[5], m23 = te[9], m31 = te[2], m32 = te[6], m33 = te[10], trace = m11 + m22 + m33, s;
             if (trace > 0) {
                 s = 0.5 / Math.sqrt(trace + 1.0);
@@ -175,29 +196,6 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
                 this._z = 0.25 * s;
             }
             this.onChangeCallback();
-            return this;
-        };
-        Quaternion.prototype.setFromUnitVectors = function (vFrom, vTo) {
-            var v1 = this.getVector3('_setFromUnitVectors_v1'), r = this._setFromUnitVectors_r;
-            var EPS = 0.000001;
-            r = vFrom.dot(vTo) + 1;
-            if (r < EPS) {
-                r = 0;
-                if (Math.abs(vFrom.x) > Math.abs(vFrom.z)) {
-                    v1.set(-vFrom.y, vFrom.x, 0);
-                }
-                else {
-                    v1.set(0, -vFrom.z, vFrom.y);
-                }
-            }
-            else {
-                v1.crossVectors(vFrom, vTo);
-            }
-            this._x = v1.x;
-            this._y = v1.y;
-            this._z = v1.z;
-            this._w = r;
-            this.normalize();
             return this;
         };
         Quaternion.prototype.inverse = function () {
@@ -238,11 +236,14 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
             this.onChangeCallback();
             return this;
         };
-        Quaternion.prototype.multiply = function (q) {
+        Quaternion.prototype.multiply = function (q, p) {
+            if (p !== undefined) {
+                console.warn('Quaternion: .multiply() now only accepts one argument. Use .multiplyQuaternions( a, b ) instead.');
+                return this.multiplyQuaternions(q, p);
+            }
             return this.multiplyQuaternions(this, q);
         };
         Quaternion.prototype.multiplyQuaternions = function (a, b) {
-            // from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
             var qax = a._x, qay = a._y, qaz = a._z, qaw = a._w;
             var qbx = b._x, qby = b._y, qbz = b._z, qbw = b._w;
             this._x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
@@ -251,6 +252,10 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
             this._w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
             this.onChangeCallback();
             return this;
+        };
+        Quaternion.prototype.multiplyVector3 = function (vector) {
+            console.warn('Quaternion: .multiplyVector3() has been removed. Use is now vector.applyQuaternion( quaternion ) instead.');
+            return vector.applyQuaternion(this);
         };
         Quaternion.prototype.slerp = function (qb, t) {
             if (t === 0) {
@@ -328,11 +333,7 @@ define(["require", "exports", "./math3d/AbstractMath3D"], function (require, exp
         };
         Quaternion.prototype.onChangeCallback = function () {
         };
-        Quaternion.prototype.clone = function () {
-            return new Quaternion(this._x, this._y, this._z, this._w);
-        };
         return Quaternion;
-    })(AbstractMath3D_1.default);
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Quaternion;
+    })();
+    exports.Quaternion = Quaternion;
 });

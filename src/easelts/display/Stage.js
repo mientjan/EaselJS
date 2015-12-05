@@ -31,7 +31,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", "../geom/PointerData", "../event/PointerEvent", "../../createts/event/Signal", "../../createts/util/Interval", "../component/Stats", "../data/StageOption"], function (require, exports, DisplayObject_1, Container_1, Size_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1) {
+define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption"], function (require, exports, DisplayObject_1, Container_1, Size_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1) {
     var Stage = (function (_super) {
         __extends(Stage, _super);
         function Stage(element, option) {

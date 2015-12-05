@@ -1,7 +1,7 @@
 
 
-import Vector3 from "./Vector3";
-import Matrix4 from "./Matrix4";
+import {Matrix4} from "./Matrix4";
+import {Vector3} from "Vector3";
 /**
  * @method Matrix3
  * @author alteredq / http://alteredqualia.com/

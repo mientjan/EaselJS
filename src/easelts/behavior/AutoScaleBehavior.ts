@@ -5,7 +5,7 @@ import AbstractBehavior from "./AbstractBehavior";
 import DisplayObject from "../display/DisplayObject";
 import Point from "../geom/Point";
 import Size from "../geom/Size";
-import SignalConnection from "../../createts/event/SignalConnection";
+import SignalConnection from "../../core/event/SignalConnection";
 
 class AutoScaleBehavior extends AbstractBehavior
 {

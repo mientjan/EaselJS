@@ -5,10 +5,10 @@ import DisplayObject from "../display/DisplayObject";
 import SpriteSheet from "../display/SpriteSheet";
 import DisplayType from "../enum/DisplayType";
 import * as Methods from "../util/Methods";
-import TimeEvent from "../../createts/event/TimeEvent";
-import Signal from "../../createts/event/Signal";
-import SignalConnection from "../../createts/event/SignalConnection";
-import Promise from "../../createts/util/Promise";
+import TimeEvent from "../../core/event/TimeEvent";
+import Signal from "../../core/event/Signal";
+import SignalConnection from "../../core/event/SignalConnection";
+import Promise from "../../core/util/Promise";
 import AnimationQueue from "../data/AnimationQueue";
 import Queue from "../data/Queue";
 

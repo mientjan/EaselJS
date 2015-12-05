@@ -31,7 +31,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-define(["require", "exports", "../../createts/event/Signal1"], function (require, exports, Signal1_1) {
+define(["require", "exports", "../event/Signal1"], function (require, exports, Signal1_1) {
     (function () {
         var lastTime = 0;
         var vendors = ['ms', 'moz', 'webkit', 'o'];

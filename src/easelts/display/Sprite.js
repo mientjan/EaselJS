@@ -31,7 +31,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../createts/event/Event", "./DisplayObject"], function (require, exports, Event_1, DisplayObject_1) {
+define(["require", "exports", "../../core/event/Event", "./DisplayObject"], function (require, exports, Event_1, DisplayObject_1) {
     var Sprite = (function (_super) {
         __extends(Sprite, _super);
         function Sprite(spriteSheet, frameOrAnimation) {

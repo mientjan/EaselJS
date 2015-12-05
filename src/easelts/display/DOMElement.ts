@@ -28,7 +28,7 @@
 
 import DisplayObject from "./DisplayObject";
 import Point from "../geom/Point";
-import TimeEvent from "../../createts/event/TimeEvent";
+import TimeEvent from "../../core/event/TimeEvent";
 
 class DOMElement<T extends HTMLElement> extends DisplayObject
 {
