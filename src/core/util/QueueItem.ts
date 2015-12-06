@@ -1,4 +1,4 @@
-class Queue
+class QueueItem
 {
 
 	public label:string;
@@ -25,13 +25,13 @@ class Queue
 		this.delay = delay;
 	}
 
-	public then(complete:() => any):Queue
+	public then(complete:() => any):QueueItem
 	{
 		this._complete = complete;
 		return this;
 	}
 
-	public finish():Queue
+	public finish():QueueItem
 	{
 		if(this._complete)
 		{
@@ -48,4 +48,4 @@ class Queue
 	}
 }
 
-export default Queue;
+export default QueueItem;

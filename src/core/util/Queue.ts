@@ -1,18 +1,20 @@
-import Queue from "./Queue";
 
-class QueueList
+
+import QueueItem from "./QueueItem";
+
+class Queue
 {
-	protected _list:Array<Queue> = [];
-	public current:Queue = null;
+	protected _list:Array<QueueItem> = [];
+	public current:QueueItem = null;
 
-	public add(item:Queue):QueueList
+	public add(item:QueueItem):Queue
 	{
 		this._list.push(item);
 
 		return this;
 	}
 
-	public next():Queue
+	public next():QueueItem
 	{
 		this.kill();
 
@@ -26,7 +28,7 @@ class QueueList
 		return this.current;
 	}
 
-	public end(all:boolean = false):QueueList
+	public end(all:boolean = false):Queue
 	{
 		if(all)
 		{
@@ -40,7 +42,7 @@ class QueueList
 		return this;
 	}
 
-	public kill(all:boolean = false):QueueList
+	public kill(all:boolean = false):Queue
 	{
 		if(all)
 		{
@@ -57,4 +59,4 @@ class QueueList
 	}
 }
 
-export default QueueList;
+export default Queue;

@@ -1,8 +1,8 @@
 import * as IFlumpLibrary from '../interface/IFlumpLibrary';
-import ILoadable from '../interface/ILoadable';
+import ILoadable from '../../core/interface/ILoadable';
 
 import Signal from '../../core/event/Signal';
-import HttpRequest from '../../core/util/HttpRequest';
+import HttpRequest from '../../core/net/HttpRequest';
 import Promise from '../../core/util/Promise';
 import SignalConnection from '../../core/event/SignalConnection';
 import FlumpMovieData from './flump/FlumpMovieData';
@@ -10,8 +10,9 @@ import FlumpTexture from './flump/FlumpTexture';
 import FlumpTextureGroup from './flump/FlumpTextureGroup';
 import FlumpMovie from './flump/FlumpMovie';
 import EventDispatcher from "../../core/event/EventDispatcher";
-import Queue from "../data/Queue";
+
 import IFlumpMovie from "./flump/IFlumpMovie";
+import QueueItem from "../../core/util/QueueItem";
 
 class FlumpLibrary implements ILoadable<FlumpLibrary>
 {
@@ -173,7 +174,7 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 			if(movieData.id == name)
 			{
 				var movie = new FlumpMovie(this, name);
-				movie.getQueue().add(new Queue(null, 0, movie.frames, -1, 0))
+				movie.getQueue().add(new QueueItem(null, 0, movie.frames, -1, 0))
 				movie.paused = paused;
 				return movie;
 			}

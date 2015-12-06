@@ -1,6 +1,6 @@
-import Promise from "./Promise";
-import ILoadable from "../../easelts/interface/ILoadable";
-import IHashMap from "../../easelts/interface/IHashMap";
+import Promise from "./../util/Promise";
+import ILoadable from "../interface/ILoadable";
+import IHashMap from "../interface/IHashMap";
 
 /*
  * HttpRequest

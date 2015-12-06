@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import IPoint from "./../interface/IVector2";
+import IPoint from "./../../core/interface/IVector2";
 import NumberUtil from "./../util/NumberUtil";
 
 /**

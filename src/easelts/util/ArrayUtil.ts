@@ -1,7 +1,7 @@
 import Size from "../geom/Size";
 import ISize from "../interface/ISize";
 import Vector2 from "../geom/Vector2";
-import IVector2 from "../interface/IVector2";
+import IVector2 from "../../core/interface/IVector2";
 import Bounds from "../geom/Bounds";
 
 class ArrayUtil

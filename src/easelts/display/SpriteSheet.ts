@@ -132,9 +132,9 @@
 
 import EventDispatcher from "../../core/event/EventDispatcher";
 import Promise from "../../core/util/Promise";
-import HttpRequest from "../../core/util/HttpRequest";
+import HttpRequest from "../../core/net/HttpRequest";
 import Rectangle from "../geom/Rectangle";
-import ILoadable from "../interface/ILoadable";
+import ILoadable from "../../core/interface/ILoadable";
 
 class SpriteSheet extends EventDispatcher implements ILoadable<SpriteSheet>
 {

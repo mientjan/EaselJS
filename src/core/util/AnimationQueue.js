@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./QueueList"], function (require, exports, QueueList_1) {
+define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
     var AnimationQueue = (function (_super) {
         __extends(AnimationQueue, _super);
         function AnimationQueue(fps, unit) {
@@ -39,7 +39,7 @@ define(["require", "exports", "./QueueList"], function (require, exports, QueueL
             this._time = this._time % this._fpms;
         };
         return AnimationQueue;
-    })(QueueList_1.default);
+    })(Queue_1.default);
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = AnimationQueue;
 });

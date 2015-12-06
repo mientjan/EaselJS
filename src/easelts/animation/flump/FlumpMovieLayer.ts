@@ -5,7 +5,7 @@ import FlumpKeyframeData from './FlumpKeyframeData';
 import FlumpTexture from './FlumpTexture';
 import FlumpMovie from './FlumpMovie';
 import FlumpLabelData from './FlumpLabelData';
-import IHashMap from "../../interface/IHashMap";
+import IHashMap from "../../../core/interface/IHashMap";
 import FlumpMtx = require("./FlumpMtx");
 import IFlumpMovie from "./IFlumpMovie";
 import DisplayType from "../../enum/DisplayType";

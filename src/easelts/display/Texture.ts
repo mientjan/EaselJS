@@ -1,4 +1,4 @@
-import ILoadable from "../interface/ILoadable";
+import ILoadable from "../../core/interface/ILoadable";
 import Promise from "../../core/util/Promise";
 import Size from "../geom/Size";
 import MathUtil from "../../core/math/MathUtil";

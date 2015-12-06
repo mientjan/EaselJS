@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../display/DisplayObject", "../display/SpriteSheet", "../../core/util/Promise", "../data/AnimationQueue", "../data/Queue"], function (require, exports, DisplayObject_1, SpriteSheet_1, Promise_1, AnimationQueue_1, Queue_1) {
+define(["require", "exports", "../display/DisplayObject", "../display/SpriteSheet", "../../core/util/Promise", "../../core/util/AnimationQueue", "../../core/util/QueueItem"], function (require, exports, DisplayObject_1, SpriteSheet_1, Promise_1, AnimationQueue_1, QueueItem_1) {
     var ImageSequence = (function (_super) {
         __extends(ImageSequence, _super);
         function ImageSequence(spriteSheet, fps, width, height, x, y, regX, regY) {
@@ -85,14 +85,14 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
             this.visible = true;
             if (label instanceof Array) {
                 if (label.length == 1) {
-                    var queue = new Queue_1.default(null, label[0], this.getTotalFrames(), times, 0);
+                    var queue = new QueueItem_1.default(null, label[0], this.getTotalFrames(), times, 0);
                 }
                 else {
-                    var queue = new Queue_1.default(null, label[0], label[1], times, 0);
+                    var queue = new QueueItem_1.default(null, label[0], label[1], times, 0);
                 }
             }
             else if (label == null) {
-                var queue = new Queue_1.default(null, 0, this.getTotalFrames(), times, 0);
+                var queue = new QueueItem_1.default(null, 0, this.getTotalFrames(), times, 0);
             }
             if (complete) {
                 queue.then(complete);

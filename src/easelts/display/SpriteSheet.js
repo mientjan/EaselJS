@@ -31,7 +31,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../core/event/EventDispatcher", "../../core/util/Promise", "../../core/util/HttpRequest", "../geom/Rectangle"], function (require, exports, EventDispatcher_1, Promise_1, HttpRequest_1, Rectangle_1) {
+define(["require", "exports", "../../core/event/EventDispatcher", "../../core/util/Promise", "../../core/net/HttpRequest", "../geom/Rectangle"], function (require, exports, EventDispatcher_1, Promise_1, HttpRequest_1, Rectangle_1) {
     var SpriteSheet = (function (_super) {
         __extends(SpriteSheet, _super);
         function SpriteSheet(dataOrUrl) {

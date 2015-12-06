@@ -1,4 +1,4 @@
-define(["require", "exports", "./Promise"], function (require, exports, Promise_1) {
+define(["require", "exports", "./../util/Promise"], function (require, exports, Promise_1) {
     var HttpRequest = (function () {
         function HttpRequest() {
         }

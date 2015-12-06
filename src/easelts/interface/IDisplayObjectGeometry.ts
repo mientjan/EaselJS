@@ -23,8 +23,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Vector2 from "./IVector2";
-import Vector3 from "./IVector3";
+import Vector2 from "./../../core/interface/IVector2";
+import Vector3 from "./../../core/interface/IVector3";
 
 interface IDisplayObjectGeometry extends Vector2
 {

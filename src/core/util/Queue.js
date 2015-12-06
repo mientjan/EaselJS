@@ -1,14 +1,14 @@
 define(["require", "exports"], function (require, exports) {
-    var QueueList = (function () {
-        function QueueList() {
+    var Queue = (function () {
+        function Queue() {
             this._list = [];
             this.current = null;
         }
-        QueueList.prototype.add = function (item) {
+        Queue.prototype.add = function (item) {
             this._list.push(item);
             return this;
         };
-        QueueList.prototype.next = function () {
+        Queue.prototype.next = function () {
             this.kill();
             if (this._list.length > 0) {
                 this.current = this._list.shift();
@@ -18,7 +18,7 @@ define(["require", "exports"], function (require, exports) {
             }
             return this.current;
         };
-        QueueList.prototype.end = function (all) {
+        Queue.prototype.end = function (all) {
             if (all === void 0) { all = false; }
             if (all) {
                 this._list.length = 0;
@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
             }
             return this;
         };
-        QueueList.prototype.kill = function (all) {
+        Queue.prototype.kill = function (all) {
             if (all === void 0) { all = false; }
             if (all) {
                 this._list.length = 0;
@@ -39,8 +39,8 @@ define(["require", "exports"], function (require, exports) {
             }
             return this;
         };
-        return QueueList;
+        return Queue;
     })();
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = QueueList;
+    exports.default = Queue;
 });

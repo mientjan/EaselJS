@@ -2,7 +2,7 @@ import EventDispatcher from "../core/event/EventDispatcher";
 //import Ticker from "../createts/util/Ticker";
 import Ease from "../tweents/Ease";
 import Interval from "../core/util/Interval";
-import IHashMap from "../easelts/interface/IHashMap";
+import IHashMap from "../core/interface/IHashMap";
 
 
 /*

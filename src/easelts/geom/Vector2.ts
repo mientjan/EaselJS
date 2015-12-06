@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-import IVector2 from "./../interface/IVector2";
+import IVector2 from "./../../core/interface/IVector2";
 import NumberUtil from "./../util/NumberUtil";
 
 /**

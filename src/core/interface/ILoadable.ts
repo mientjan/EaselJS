@@ -1,4 +1,4 @@
-import Promise from "../../core/util/Promise";
+import Promise from "../util/Promise";
 
 interface ILoadable<T>
 {

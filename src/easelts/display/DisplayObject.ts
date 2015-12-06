@@ -61,13 +61,13 @@ import Rectangle from "../geom/Rectangle";
 import Size from "../geom/Size";
 import Point from "../geom/Point";
 
-import IVector2 from "../interface/IVector2";
+import IVector2 from "../../core/interface/IVector2";
 import ISize from "../interface/ISize";
 import IDisplayType from "../interface/IDisplayType";
 import IBehavior from "../behavior/IBehavior";
 import IContext2D from "../interface/IContext2D";
 import IDisplayObject from "../interface/IDisplayObject";
-import ILoadable from "../interface/ILoadable";
+import ILoadable from "../../core/interface/ILoadable";
 
 /**
  * @author Mient-jan Stelling <mientjan.stelling@gmail.com>

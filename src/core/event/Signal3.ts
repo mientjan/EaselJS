@@ -28,8 +28,8 @@ import Event from "./Event";
 import SignalAbstract from "./SignalAbstract";
 
 /**
- * @namespace createts.events
- * @module createts
+ * @namespace core.events
+ * @module weasel
  * @class Signal3
  */
 class Signal3<T1,T2,T3> extends SignalAbstract

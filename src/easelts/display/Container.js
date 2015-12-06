@@ -30,7 +30,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "../../core/util/HttpRequest"], function (require, exports, DisplayObject_1, HttpRequest_1) {
+define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], function (require, exports, DisplayObject_1, HttpRequest_1) {
     var Container = (function (_super) {
         __extends(Container, _super);
         function Container(width, height, x, y, regX, regY) {

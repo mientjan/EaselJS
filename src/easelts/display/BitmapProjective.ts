@@ -30,7 +30,7 @@ import DisplayObject from "./DisplayObject";
 import Bitmap from "./Bitmap";
 import DisplayType from "../enum/DisplayType";
 import Rectangle from "../geom/Rectangle";
-import IVector2 from "../interface/IVector2";
+import IVector2 from "../../core/interface/IVector2";
 import Vector2 from "../geom/Vector2";
 import Signal from "../../core/event/Signal";
 import Size from "../geom/Size";

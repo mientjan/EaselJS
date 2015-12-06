@@ -30,7 +30,7 @@ import Rectangle from "../geom/Rectangle";
 import IRectangle from "./IRectangle";
 import Shape from "../display/Shape";
 import Matrix2 from "../geom/Matrix2";
-import ILoadable from "./ILoadable";
+import ILoadable from "./../../core/interface/ILoadable";
 
 interface IDisplayObject extends ILoadable<any>
 {

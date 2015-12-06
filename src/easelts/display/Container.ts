@@ -38,9 +38,9 @@ import Stage from "./Stage";
 import CanvasBuffer from "./buffer/CanvasBuffer";
 import Matrix2 from "../geom/Matrix2";
 import IDisplayObject from "../interface/IDisplayObject";
-import HttpRequest from "../../core/util/HttpRequest";
+import HttpRequest from "../../core/net/HttpRequest";
 import Promise from "../../core/util/Promise";
-import ILoadable from "../interface/ILoadable";
+import ILoadable from "../../core/interface/ILoadable";
 
 /**
  * A Container is a nestable display list that allows you to work with compound display elements. For  example you could

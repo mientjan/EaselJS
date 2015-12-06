@@ -1,18 +1,19 @@
 import DisplayObject from '../../display/DisplayObject';
 
-import IHashMap from '../../interface/IHashMap';
+import IHashMap from '../../../core/interface/IHashMap';
 import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
-import IPlayable from '../../interface/IPlayable';
+import IPlayable from '../../../core/interface/IPlayable';
 
 import FlumpLibrary from '../FlumpLibrary';
 import FlumpMovieLayer from './FlumpMovieLayer';
 import FlumpLabelData from './FlumpLabelData';
 import FlumpLabelQueueData from './FlumpLabelQueueData';
 import FlumpTexture from "./FlumpTexture";
-import AnimationQueue from '../../data/AnimationQueue';
-import Queue from '../../data/Queue';
+import AnimationQueue from '../../../core/util/AnimationQueue';
+
 import IFlumpMovie from "./IFlumpMovie";
 import DisplayType from "../../enum/DisplayType";
+import QueueItem from "../../../core/util/QueueItem";
 
 /**
  * @author Mient-jan Stelling
@@ -95,13 +96,13 @@ class FlumpMovie extends DisplayObject implements IPlayable
 		{
 			if(label.length == 1)
 			{
-				var queue = new Queue(null, label[0], this.frames, times, 0);
+				var queue = new QueueItem(null, label[0], this.frames, times, 0);
 			} else {
-				var queue = new Queue(null, label[0], label[1], times, 0);
+				var queue = new QueueItem(null, label[0], label[1], times, 0);
 			}
 		} else if( label == null || label == '*')
 		{
-			var queue = new Queue(null, 0, this.frames, times, 0);
+			var queue = new QueueItem(null, 0, this.frames, times, 0);
 		} else {
 			var queueLabel = this._labels[<string> label];
 
@@ -110,7 +111,7 @@ class FlumpMovie extends DisplayObject implements IPlayable
 				throw new Error('unknown label:' + queueLabel + ' | ' + this.name );
 			}
 
-			var queue = new Queue(queueLabel.label, queueLabel.index, queueLabel.duration, times, 0);
+			var queue = new QueueItem(queueLabel.label, queueLabel.index, queueLabel.duration, times, 0);
 		}
 
 		if(complete)
@@ -158,7 +159,7 @@ class FlumpMovie extends DisplayObject implements IPlayable
 		return this;
 	}
 
-	public next():Queue
+	public next():QueueItem
 	{
 		return this._queue.next();
 	}
@@ -198,7 +199,7 @@ class FlumpMovie extends DisplayObject implements IPlayable
 		{
 			frame = frameOrLabel;
 		}
-		var queue = new Queue(null, frame, 1, 1, 0);
+		var queue = new QueueItem(null, frame, 1, 1, 0);
 		this._queue.add(queue);
 
 		return this;

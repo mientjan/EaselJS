@@ -1,5 +1,5 @@
-import ILoadable from "../interface/ILoadable";
-import IPlayable from "../interface/IPlayable";
+import ILoadable from "../../core/interface/ILoadable";
+import IPlayable from "../../core/interface/IPlayable";
 
 import DisplayObject from "../display/DisplayObject";
 import SpriteSheet from "../display/SpriteSheet";
@@ -9,8 +9,8 @@ import TimeEvent from "../../core/event/TimeEvent";
 import Signal from "../../core/event/Signal";
 import SignalConnection from "../../core/event/SignalConnection";
 import Promise from "../../core/util/Promise";
-import AnimationQueue from "../data/AnimationQueue";
-import Queue from "../data/Queue";
+import AnimationQueue from "../../core/util/AnimationQueue";
+import QueueItem from "../../core/util/QueueItem";
 
 /**
  * @class ImageSequence
@@ -151,13 +151,13 @@ class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, I
 		{
 			if(label.length == 1)
 			{
-				var queue = new Queue(null, label[0], this.getTotalFrames(), times, 0);
+				var queue = new QueueItem(null, label[0], this.getTotalFrames(), times, 0);
 			} else {
-				var queue = new Queue(null, label[0], label[1], times, 0);
+				var queue = new QueueItem(null, label[0], label[1], times, 0);
 			}
 		} else if( label == null)
 		{
-			var queue = new Queue(null, 0, this.getTotalFrames(), times, 0);
+			var queue = new QueueItem(null, 0, this.getTotalFrames(), times, 0);
 		}
 
 		if(complete)
@@ -199,7 +199,7 @@ class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, I
 		return this;
 	}
 3
-	public next():Queue
+	public next():QueueItem
 	{
 		return this._queue.next();
 	}

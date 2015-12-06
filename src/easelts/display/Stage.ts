@@ -36,7 +36,7 @@ import Container from "./Container";
 import * as Methods from "../../easelts/util/Methods";
 
 // interfaces
-import IVector2 from "../interface/IVector2";
+import IVector2 from "../../core/interface/IVector2";
 import {IStageOption} from "../interface/IStageOption";
 import IDisplayObject from "../interface/IDisplayObject";
 // geom
@@ -58,6 +58,7 @@ import Interval from "../../core/util/Interval";
 import Stats from "../component/Stats";
 import {StageOption} from "../data/StageOption";
 import IContext2D from "../interface/IContext2D";
+import IHashMap from "../../core/interface/IHashMap";
 
 
 
@@ -125,12 +126,10 @@ class Stage extends Container<IDisplayObject>
 	protected _fpsCounter:Stats = null;
 	protected _ticker:Interval;
 
-	public _eventListeners:{
-		[name:string]: {
-			window: any;
-			fn: (e) => void;
-		}
-	} = null;
+	public _eventListeners:IHashMap<{
+		window: any;
+		fn: (e) => void;
+	}> = null;
 
 	public _onResizeEventListener:Function = null;
 

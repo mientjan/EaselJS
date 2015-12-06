@@ -1,4 +1,4 @@
-import IHashMap from "../interface/IHashMap";
+import IHashMap from "../../core/interface/IHashMap";
 import RenderType from "../enum/RenderType";
 import RendererOptions from "./RendererOptions";
 

@@ -1,7 +1,10 @@
-import Queue from "./Queue";
-import QueueList from "./QueueList";
 
-class AnimationQueue extends QueueList
+
+import QueueItem from "./QueueItem";
+import Queue from "./Queue";
+
+
+class AnimationQueue extends Queue
 {
 	public frame:number = 0;
 
@@ -37,7 +40,7 @@ class AnimationQueue extends QueueList
 		}
 	}
 
-	public next():Queue
+	public next():QueueItem
 	{
 		this.reset();
 		return super.next();

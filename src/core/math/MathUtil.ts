@@ -1,5 +1,5 @@
-import IVector2 from "../../easelts/interface/IVector2";
-import IVector3 from "../../easelts/interface/IVector3";
+import IVector2 from "../interface/IVector2";
+import IVector3 from "../interface/IVector3";
 
 /**
  * @author Mient-jan Stelling

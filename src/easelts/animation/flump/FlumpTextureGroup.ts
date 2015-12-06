@@ -1,10 +1,10 @@
 import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
-import ILoadable from '../../interface/ILoadable';
+import ILoadable from '../../../core/interface/ILoadable';
 import FlumpLibrary from '../FlumpLibrary';
-import IHashMap from '../../interface/IHashMap';
+import IHashMap from '../../../core/interface/IHashMap';
 import FlumpTextureGroupAtlas from './FlumpTextureGroupAtlas';
 import FlumpTexture from './FlumpTexture';
-import HttpRequest from '../../../core/util/HttpRequest';
+import HttpRequest from '../../../core/net/HttpRequest';
 import Promise from '../../../core/util/Promise';
 
 class FlumpTextureGroup
