@@ -29,6 +29,7 @@ define(["require", "exports", '../../core/net/HttpRequest', '../../core/util/Pro
                 flumpLibrary.url = baseDir;
             }
             return HttpRequest_1.default.getJSON(url).then(function (json) {
+                console.log(json);
                 return flumpLibrary.processData(json, onProcess);
             });
         };

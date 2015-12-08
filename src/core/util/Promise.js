@@ -28,9 +28,9 @@ define(["require", "exports"], function (require, exports) {
             return;
         }
         asap(function () {
-            var cb = me._state ? deferred.onFulfilled : deferred.onRejected;
+            var cb = me['_state'] ? deferred.onFulfilled : deferred.onRejected;
             if (cb === null) {
-                (me._state ? deferred.resolve : deferred.reject)(me._value);
+                (me['_state'] ? deferred.resolve : deferred.reject)(me._value);
                 return;
             }
             var ret;
@@ -55,8 +55,8 @@ define(["require", "exports"], function (require, exports) {
                     return;
                 }
             }
-            this._state = true;
-            this._value = newValue;
+            this['_state'] = true;
+            this['_value'] = newValue;
             finale.call(this);
         }
         catch (e) {

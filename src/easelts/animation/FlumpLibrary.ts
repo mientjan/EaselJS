@@ -44,8 +44,7 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 		
 		return HttpRequest.getJSON(url).then((json:IFlumpLibrary.ILibrary) =>
 		{
-
-			
+			console.log(json);
 			return flumpLibrary.processData(json, onProcess);
 		});
 	}

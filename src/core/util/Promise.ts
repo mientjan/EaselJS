@@ -3,7 +3,7 @@
 // Use polyfill for setImmediate for performance gains
 var asap = (typeof setImmediate === 'function' && setImmediate) ||
 	function(fn) { setTimeout(fn, 1);
-};
+	};
 if (!Function.prototype.bind) {
 	Function.prototype.bind = function(oThis) {
 		if (typeof this !== 'function') {
@@ -13,14 +13,14 @@ if (!Function.prototype.bind) {
 		}
 
 		var aArgs   = Array.prototype.slice.call(arguments, 1),
-				fToBind = this,
-				fNOP    = function() {},
-				fBound  = function() {
-					return fToBind.apply(this instanceof fNOP
-									? this
-									: oThis,
-							aArgs.concat(Array.prototype.slice.call(arguments)));
-				};
+			fToBind = this,
+			fNOP    = function() {},
+			fBound  = function() {
+				return fToBind.apply(this instanceof fNOP
+						? this
+						: oThis,
+					aArgs.concat(Array.prototype.slice.call(arguments)));
+			};
 
 		if (this.prototype) {
 			// native functions don't have a prototype
@@ -41,9 +41,9 @@ function handle(deferred) {
 		return
 	}
 	asap(function() {
-		var cb = me._state ? deferred.onFulfilled : deferred.onRejected
+		var cb = me['_state'] ? deferred.onFulfilled : deferred.onRejected
 		if (cb === null) {
-			(me._state ? deferred.resolve : deferred.reject)(me._value);
+			(me['_state'] ? deferred.resolve : deferred.reject)(me._value);
 			return;
 		}
 		var ret;
@@ -68,10 +68,10 @@ function resolve(newValue) {
 				return;
 			}
 		}
-		this._state = true;
-		this._value = newValue;
+		this['_state'] = true;
+		this['_value'] = newValue;
 		finale.call(this);
-	} catch (e) { 
+	} catch (e) {
 		reject.call(this, e);
 	}
 }
@@ -123,7 +123,7 @@ function doResolve(fn, onFulfilled, onRejected) {
 
 class Promise<T>
 {
-	public static all(promiseList:Array<Promise<any>>)
+	public static all(promiseList:Array<Promise<any>>):Promise<any>
 	{
 		return new Promise(function (resolve, reject)
 		{
@@ -164,7 +164,7 @@ class Promise<T>
 		});
 	}
 
-	public static resolve(value)
+	public static resolve(value):Promise<any>
 	{
 		if(value && typeof value === 'object' && value.constructor === Promise)
 		{
@@ -177,7 +177,7 @@ class Promise<T>
 		});
 	}
 
-	public static reject(value)
+	public static reject(value):Promise<any>
 	{
 		return new Promise(function (resolve, reject)
 		{
@@ -185,7 +185,7 @@ class Promise<T>
 		});
 	}
 
-	public static race(values)
+	public static race(values):Promise<any>
 	{
 		return new Promise(function (resolve, reject)
 		{
@@ -206,9 +206,9 @@ class Promise<T>
 		asap = fn;
 	}
 
-	private _state = null;
-	private _value = null;
-	private _deferreds = [];
+	private _state:boolean = null;
+	private _value:any = null;
+	private _deferreds:Array<any> = [];
 
 	constructor(init: (resolve: (value?: T | Promise<T>) => void, reject: (reason?: any) => void) => void)
 	{
@@ -218,12 +218,12 @@ class Promise<T>
 		doResolve(init, resolve.bind(this), reject.bind(this));
 	}
 
-	public catch(onRejected)
+	public catch(onRejected:(value:any) => any):Promise<T>
 	{
 		return this.then(null, onRejected);
 	}
 
-	public then(onFulfilled:any, onRejected?:any)
+	public then(onFulfilled:any, onRejected?:any):Promise<T>
 	{
 		var me = this;
 		return new Promise(function (resolve, reject)
