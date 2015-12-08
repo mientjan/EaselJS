@@ -1,6 +1,3 @@
-import Promise from "./../util/Promise";
-import ILoadable from "../interface/ILoadable";
-import IHashMap from "../interface/IHashMap";
 
 /*
  * HttpRequest
@@ -31,6 +28,10 @@ import IHashMap from "../interface/IHashMap";
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
+
+import IHashMap from "../interface/IHashMap";
+import Promise from "../util/Promise";
+import ILoadable from "../interface/ILoadable";
 
 /**
  * @class HttpRequest
@@ -153,9 +154,12 @@ class HttpRequest
 	public static waitForLoadable(list:Array<ILoadable<any>>, onProgress:(progress:number) => any = (progress:number) => {}):Promise<Array<any>>
 	{
 		var count = list.length;
-		var progressList = new Array(count).map(function(value){
-			return value == void 0 ? 0 : value;
-		});
+		var progressList = [];
+		for(var i = 0; i < count; i++)
+		{
+			progressList.push(0);
+
+		}
 
 		var prvProgress = function(index, progress:number)
 		{
