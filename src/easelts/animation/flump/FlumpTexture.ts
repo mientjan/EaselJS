@@ -1,6 +1,6 @@
-import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
 import IFlumpMovie from "./IFlumpMovie";
 import DisplayType from "../../enum/DisplayType";
+import {ITexture} from "./IFlumpLibrary";
 
 class FlumpTexture implements IFlumpMovie
 {
@@ -15,7 +15,7 @@ class FlumpTexture implements IFlumpMovie
 	public width:number;
 	public height:number;
 
-	constructor(renderTexture:HTMLImageElement|HTMLCanvasElement, json:IFlumpLibrary.ITexture)
+	constructor(renderTexture:HTMLImageElement|HTMLCanvasElement, json:ITexture)
 	{
 		this.name = json.symbol;
 		this.renderTexture = renderTexture;

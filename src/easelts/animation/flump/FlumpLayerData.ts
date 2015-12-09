@@ -2,7 +2,7 @@ import DisplayObject from '../../display/DisplayObject';
 import Flump from '../FlumpLibrary';
 import FlumpMovieLayer from './FlumpMovieLayer';
 import FlumpKeyframeData from './FlumpKeyframeData';
-import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
+import {ILayer} from "./IFlumpLibrary";
 
 class FlumpLayerData {
 
@@ -12,7 +12,7 @@ class FlumpLayerData {
 
 	public frames:number;
 
-	constructor(json:IFlumpLibrary.ILayer)
+	constructor(json:ILayer)
 	{
 		this.name = json.name;
 		this.flipbook = 'flipbook' in json ? !!json.flipbook : false;

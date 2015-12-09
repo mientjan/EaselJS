@@ -1502,7 +1502,7 @@ class DisplayObject extends EventDispatcher implements IDisplayObject
 		{
 			matrix = new Matrix2();
 		}
-		var o = this;
+		var o:any = this;
 		while(o != null)
 		{
 			matrix.prependTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY).prependProperties(o.alpha, o.shadow, o.compositeOperation, o.visible);

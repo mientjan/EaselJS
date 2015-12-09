@@ -5,8 +5,6 @@ interface IBuffer
 	context:WebGLRenderingContext|CanvasRenderingContext2D;
 	width:number;
 	height:number;
-	transparent:boolean;
-	background:RGBA;
 
 	draw(ctx:CanvasRenderingContext2D|WebGLRenderingContext):void
 	clear():void;

@@ -59,6 +59,7 @@ import Stats from "../component/Stats";
 import {StageOption} from "../data/StageOption";
 import IContext2D from "../interface/IContext2D";
 import IHashMap from "../../core/interface/IHashMap";
+import {CanvasBuffer} from "../renderer/buffer/CanvasBuffer";
 
 
 
@@ -337,45 +338,48 @@ class Stage extends Container<IDisplayObject>
 
 		this._option = new StageOption(option);
 
-		var size:Size;
-		var canvas:HTMLCanvasElement;
+		var canvas:HTMLCanvasElement, width:number, height:number;
 
-		switch(element.tagName)
+		if(element.tagName == 'CANVAS')
 		{
-			case 'CANVAS':
-			{
-				canvas = <HTMLCanvasElement> element;
-				this.holder = <HTMLBlockElement> element.parentElement;
-
-				size = new Size(canvas.width, canvas.height);
-				break;
+			canvas = <HTMLCanvasElement> element;
+			this.holder = <HTMLBlockElement> element.parentElement;
+			if(this._option.autoResize){
+				width = this.holder.offsetWidth;
+				height = this.holder.offsetHeight;
+			} else {
+				width = canvas.width;
+				height = canvas.height;
 			}
+		} else {
+			canvas = document.createElement('canvas');
+			this.holder = <HTMLBlockElement> element;
 
-			default:
-			{
-				canvas = document.createElement('canvas');
-
-				this.holder = <HTMLBlockElement> element;
-				this.holder.appendChild(canvas);
-
-				size = new Size(this.holder.offsetWidth, this.holder.offsetHeight);
-				break;
-			}
+			width = this.holder.offsetWidth;
+			height = this.holder.offsetHeight;
 		}
 
-		this.canvas = canvas;
+		this.setBuffer(new CanvasBuffer(width, height, {
+			domElement:canvas,
+			transparent:this._option.transparent
+		}), this._option.autoResize );
 
+		if(element.tagName != 'CANVAS')
+		{
+			this.holder.appendChild(canvas);
+		}
 
 		this.enableDOMEvents(true);
 		this.setFps(this._fps);
 
 		this.stage = this;
+		this.ctx = this._buffer.getContext();
 
 		if( this._option.autoResize ){
 			this.enableAutoResize();
 		}
 
-		this.onResize(size.width, size.height);
+		this.onResize(this._buffer.width, this._buffer.height);
 	}
 
 
@@ -384,30 +388,9 @@ class Stage extends Container<IDisplayObject>
 	 * @param {QualityType} value
 	 * @public
 	 */
-	public setQuality(value:QualityType):Stage
+	public setQuality(value:string):Stage
 	{
-		var ctx = this.getContext();
-		switch(value)
-		{
-			case QualityType.LOW:
-			{
-				ctx['mozImageSmoothingEnabled'] = false;
-				ctx['webkitImageSmoothingEnabled'] = false;
-				ctx['msImageSmoothingEnabled'] = false;
-				ctx['imageSmoothingEnabled'] = false;
-				break;
-			}
-
-			case QualityType.NORMAL:
-			{
-				ctx['mozImageSmoothingEnabled'] = true;
-				ctx['webkitImageSmoothingEnabled'] = true;
-				ctx['msImageSmoothingEnabled'] = true;
-				ctx['imageSmoothingEnabled'] = true;
-				break;
-			}
-		}
-
+		this._buffer.setQuality(value);
 		return this;
 	}
 
@@ -691,7 +674,7 @@ class Stage extends Container<IDisplayObject>
 
 	public getContext():CanvasRenderingContext2D
 	{
-		return this.canvas.getContext('2d');
+		return this._buffer.getContext();
 	}
 
 	/**
@@ -722,7 +705,7 @@ class Stage extends Container<IDisplayObject>
 	 * @protected
 	 * @param {HTMLElement} element
 	 **/
-	public _getElementRect(element:HTMLElement)
+	protected _getElementRect(element:HTMLElement)
 	{
 		var bounds;
 		//		try

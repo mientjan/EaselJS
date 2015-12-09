@@ -22,15 +22,20 @@ define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
                 var duration = current.duration;
                 var times = current.times;
                 var frame = (duration * time / (duration * this._fpms));
-                this.frame = from + (frame % duration);
                 if (times > -1 && times - (frame / duration) < 0) {
                     this.next();
+                }
+                else {
+                    this.frame = from + (frame % duration);
                 }
             }
         };
         AnimationQueue.prototype.next = function () {
-            this.reset();
-            return _super.prototype.next.call(this);
+            var next = _super.prototype.next.call(this);
+            if (next) {
+                this.reset();
+            }
+            return next;
         };
         AnimationQueue.prototype.getFrame = function () {
             return this.frame | 0;

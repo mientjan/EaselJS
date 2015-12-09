@@ -1,4 +1,4 @@
-define(["require", "exports", './FlumpTexture', '../../../core/util/Promise'], function (require, exports, FlumpTexture_1, Promise_1) {
+define(["require", "exports", '../../../core/util/Promise', "./FlumpTexture"], function (require, exports, Promise_1, FlumpTexture_1) {
     var FlumpTextureGroupAtlas = (function () {
         function FlumpTextureGroupAtlas(renderTexture, json) {
             this.flumpTextures = {};

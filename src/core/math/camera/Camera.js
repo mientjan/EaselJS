@@ -20,7 +20,6 @@ define(["require", "exports", "../Matrix4", "../Quaternion", "../Vector3"], func
             this.projectionMatrix = new Matrix4_1.Matrix4();
         }
         Camera.prototype.copy = function (source) {
-            //THREE.Object3D.prototype.copy.call( this, source );
             this.matrixWorldInverse.copy(source.matrixWorldInverse);
             this.projectionMatrix.copy(source.projectionMatrix);
             return this;

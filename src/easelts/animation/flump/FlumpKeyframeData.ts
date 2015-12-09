@@ -1,4 +1,5 @@
-import IFlumpLibrary = require('../../interface/IFlumpLibrary');
+
+import {IKeyframe} from "./IFlumpLibrary";
 
 class FlumpKeyframeData
 {
@@ -23,7 +24,7 @@ class FlumpKeyframeData
 
 	ease:number;
 
-	constructor(json:IFlumpLibrary.IKeyframe|Array<any>)
+	constructor(json:IKeyframe|Array<any>)
 	{
 		if(( <Array<any>> json).length != void 0)
 		{
@@ -31,7 +32,7 @@ class FlumpKeyframeData
 		}
 		else
 		{
-			var jsonObject = <IFlumpLibrary.IKeyframe> json;
+			var jsonObject = <IKeyframe> json;
 			this.index = jsonObject.index;
 			this.duration = jsonObject.duration;
 			this.ref = 'ref' in jsonObject ? jsonObject.ref : null;

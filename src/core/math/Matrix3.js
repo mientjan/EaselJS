@@ -71,8 +71,6 @@ define(["require", "exports", "Vector3"], function (require, exports, Vector3_1)
             return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
         };
         Matrix3.prototype.getInverse = function (matrix, throwOnInvertible) {
-            // input: THREE.Matrix4
-            // ( based on http://code.google.com/p/webgl-mjs/ )
             if (throwOnInvertible === void 0) { throwOnInvertible = false; }
             var me = matrix.elements;
             var te = this.elements;
@@ -127,7 +125,6 @@ define(["require", "exports", "Vector3"], function (require, exports, Vector3_1)
             return array;
         };
         Matrix3.prototype.getNormalMatrix = function (m) {
-            // input: THREE.Matrix4
             this.getInverse(m).transpose();
             return this;
         };

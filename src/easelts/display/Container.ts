@@ -35,12 +35,13 @@ import Rectangle from "../geom/Rectangle";
 
 import TimeEvent from "../../core/event/TimeEvent";
 import Stage from "./Stage";
-import CanvasBuffer from "./buffer/CanvasBuffer";
+
 import Matrix2 from "../geom/Matrix2";
 import IDisplayObject from "../interface/IDisplayObject";
 import HttpRequest from "../../core/net/HttpRequest";
 import Promise from "../../core/util/Promise";
 import ILoadable from "../../core/interface/ILoadable";
+import {CanvasBuffer} from "../renderer/buffer/CanvasBuffer";
 
 /**
  * A Container is a nestable display list that allows you to work with compound display elements. For  example you could
@@ -746,7 +747,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 		var buffer = this._buffer;
 		var willAutoResize = this._willBufferAutoResize;
 
-		if(willAutoResize && buffer)
+		if(willAutoResize && buffer && this.type != DisplayType.STAGE)
 		{
 			buffer.setSize(newWidth, newHeight);
 		}

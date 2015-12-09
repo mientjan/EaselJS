@@ -207,8 +207,6 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             return true;
         };
         FlumpMovie.prototype.reset = function () {
-            this.frame = 0;
-            this._queue.reset();
             for (var i = 0; i < this.flumpMovieLayers.length; i++) {
                 var layer = this.flumpMovieLayers[i];
                 layer.reset();

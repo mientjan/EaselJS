@@ -2,7 +2,7 @@ import Stage from '../../src/easelts/display/Stage';
 import Bitmap from '../../src/easelts/display/Bitmap';
 import Debug from '../../src/easelts/display/Debug';
 import Container from '../../src/easelts/display/Container';
-import CanvasBuffer from "../../src/easelts/display/buffer/CanvasBuffer";
+import {CanvasBuffer} from "../../src/easelts/renderer/buffer/CanvasBuffer";
 
 var holder = <HTMLBlockElement> document.getElementById('holder');
 var stage = new Stage(holder, {autoResize:true});

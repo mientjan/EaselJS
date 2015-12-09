@@ -1,8 +1,8 @@
-import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
 
 import Flump from '../FlumpLibrary';
 import FlumpLayerData from './FlumpLayerData';
 import FlumpLabelData from './FlumpLabelData';
+import {IMovie} from "./IFlumpLibrary";
 
 class FlumpMovieData {
 
@@ -12,7 +12,7 @@ class FlumpMovieData {
 
 	public frames:number = 0;
 
-	constructor(flumpLibrary:Flump, json:IFlumpLibrary.IMovie)
+	constructor(flumpLibrary:Flump, json:IMovie)
 	{
 		this.flumpLibrary = flumpLibrary;
 		this.id = json.id;

@@ -1,12 +1,12 @@
-import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
-import FlumpTexture from './FlumpTexture';
 import FlumpLibrary from '../FlumpLibrary';
 import IHashMap from '../../../core/interface/IHashMap';
 import Promise from '../../../core/util/Promise';
+import {IAtlas} from "./IFlumpLibrary";
+import FlumpTexture from "./FlumpTexture";
 
 class FlumpTextureGroupAtlas
 {
-	public static load(flumpLibrary:FlumpLibrary, json:IFlumpLibrary.IAtlas):Promise<FlumpTextureGroupAtlas>
+	public static load(flumpLibrary:FlumpLibrary, json:IAtlas):Promise<FlumpTextureGroupAtlas>
 	{
 		var file = json.file;
 		var url = flumpLibrary.url + '/' + file;
@@ -30,7 +30,7 @@ class FlumpTextureGroupAtlas
 	public renderTexture:HTMLImageElement;
 	public flumpTextures:IHashMap<FlumpTexture> = {};
 
-	constructor( renderTexture:HTMLImageElement, json:IFlumpLibrary.IAtlas)
+	constructor( renderTexture:HTMLImageElement, json:IAtlas)
 	{
 		this.renderTexture = renderTexture;
 

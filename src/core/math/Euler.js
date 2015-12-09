@@ -16,7 +16,6 @@ define(["require", "exports", "./Quaternion", "./Matrix4", "./Vector3", "./MathU
                 };
             }();
             this.reorder = function () {
-                // WARNING: this discards revolution information -bhouston
                 var q = new Quaternion_1.Quaternion();
                 return function (newOrder) {
                     q.setFromEuler(this);

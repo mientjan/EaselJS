@@ -325,13 +325,6 @@ define(["require", "exports", "./Vector3", "./MathUtil", "./Euler"], function (r
             return this;
         };
         Matrix4.prototype.multiply = function (m) {
-            //
-            //if ( n !== undefined ) {
-            //
-            //	console.warn( 'THREE.Matrix4: .multiply() now only accepts one argument. Use .multiplyMatrices( a, b ) instead.' );
-            //	return this.multiplyMatrices( m, n );
-            //
-            //}
             return this.multiplyMatrices(this, m);
         };
         Matrix4.prototype.multiplyMatrices = function (a, b) {
@@ -603,7 +596,6 @@ define(["require", "exports", "./Vector3", "./MathUtil", "./Euler"], function (r
             return this;
         };
         Matrix4.prototype.makeRotationAxis = function (axis, angle) {
-            // Based on http://www.gamedev.net/reference/articles/article1199.asp
             var c = Math.cos(angle);
             var s = Math.sin(angle);
             var t = 1 - c;

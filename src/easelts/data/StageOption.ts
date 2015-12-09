@@ -9,8 +9,9 @@ export class StageOption implements IStageOption
 	 * @type {boolean}
 	 * @default false
 	 */
-	public autoResize:boolean = false;
+	public autoResize:boolean = true;
 	public pixelRatio:number = 1;
+	public transparent:boolean = true;
 
 	/**
 	 * Indicates whether the stage should automatically clear the canvas before each render. You can set this to <code>false</code>
@@ -27,7 +28,7 @@ export class StageOption implements IStageOption
 	 * @default true
 	 **/
 	public autoClear:boolean = true;
-	public autoClearColor:RGBA = new RGBA();
+	public autoClearColor:string|RGBA = '#000000';
 
 	constructor(option:IStageOption)
 	{

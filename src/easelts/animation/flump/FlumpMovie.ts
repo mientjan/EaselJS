@@ -1,8 +1,7 @@
 import DisplayObject from '../../display/DisplayObject';
 
 import IHashMap from '../../../core/interface/IHashMap';
-import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
-import IPlayable from '../../../core/interface/IPlayable';
+
 
 import FlumpLibrary from '../FlumpLibrary';
 import FlumpMovieLayer from './FlumpMovieLayer';
@@ -14,6 +13,7 @@ import AnimationQueue from '../../../core/util/AnimationQueue';
 import IFlumpMovie from "./IFlumpMovie";
 import DisplayType from "../../enum/DisplayType";
 import QueueItem from "../../../core/util/QueueItem";
+import IPlayable from "../../../core/interface/IPlayable";
 
 /**
  * @author Mient-jan Stelling
@@ -355,10 +355,6 @@ class FlumpMovie extends DisplayObject implements IPlayable
 
 	public reset():void
 	{
-		this.frame = 0;
-		this._queue.reset();
-		//this.time = 0.0;
-
 		for(var i = 0; i < this.flumpMovieLayers.length; i++)
 		{
 			var layer = this.flumpMovieLayers[i];

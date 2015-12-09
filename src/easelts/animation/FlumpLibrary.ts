@@ -1,4 +1,3 @@
-import * as IFlumpLibrary from '../interface/IFlumpLibrary';
 import ILoadable from '../../core/interface/ILoadable';
 
 import Signal from '../../core/event/Signal';
@@ -13,6 +12,7 @@ import EventDispatcher from "../../core/event/EventDispatcher";
 
 import IFlumpMovie from "./flump/IFlumpMovie";
 import QueueItem from "../../core/util/QueueItem";
+import {ILibrary} from "./flump/IFlumpLibrary";
 
 class FlumpLibrary implements ILoadable<FlumpLibrary>
 {
@@ -42,7 +42,7 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 			flumpLibrary.url = baseDir;
 		}
 		
-		return HttpRequest.getJSON(url).then((json:IFlumpLibrary.ILibrary) =>
+		return HttpRequest.getJSON(url).then((json:ILibrary) =>
 		{
 			console.log(json);
 			return flumpLibrary.processData(json, onProcess);
@@ -102,7 +102,7 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 		});
 	}
 
-	public processData(json:IFlumpLibrary.ILibrary, onProcess?:(process:number) => any):Promise<FlumpLibrary>
+	public processData(json:ILibrary, onProcess?:(process:number) => any):Promise<FlumpLibrary>
 	{
 
 		this.md5 = json.md5;

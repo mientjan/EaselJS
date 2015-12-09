@@ -153,7 +153,6 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.setAxisAngleFromQuaternion = function (q) {
-            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
             this.w = 2 * Math.acos(q.w);
             var s = Math.sqrt(1 - q.w * q.w);
             if (s < 0.0001) {
@@ -169,7 +168,6 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.setAxisAngleFromRotationMatrix = function (m) {
-            // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/index.htm
             var angle, x, y, z, epsilon = 0.01, epsilon2 = 0.1, te = m.elements, m11 = te[0], m12 = te[4], m13 = te[8], m21 = te[1], m22 = te[5], m23 = te[9], m31 = te[2], m32 = te[6], m33 = te[10];
             if ((Math.abs(m12 - m21) < epsilon)
                 && (Math.abs(m13 - m31) < epsilon)
@@ -270,7 +268,6 @@ define(["require", "exports"], function (require, exports) {
             return this;
         };
         Vector4.prototype.clamp = function (min, max) {
-            // This function assumes min < max, if this assumption isn't true it will not operate correctly
             if (this.x < min.x) {
                 this.x = min.x;
             }

@@ -1,10 +1,11 @@
-define(["require", "exports", "./RGBA"], function (require, exports, RGBA_1) {
+define(["require", "exports"], function (require, exports) {
     var StageOption = (function () {
         function StageOption(option) {
-            this.autoResize = false;
+            this.autoResize = true;
             this.pixelRatio = 1;
+            this.transparent = true;
             this.autoClear = true;
-            this.autoClearColor = new RGBA_1.default();
+            this.autoClearColor = '#000000';
             for (var name in option) {
                 if (this.hasOwnProperty(name)) {
                     var value;

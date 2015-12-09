@@ -1,7 +1,6 @@
 define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3", "./Matrix4", "../util/UID"], function (require, exports, Vector3_1, Euler_1, Quaternion_1, Matrix3_1, Matrix4_1, UID_1) {
     var Object3D = (function () {
         function Object3D() {
-            //
             this.id = Object3D.Object3DIdCount++;
             this.name = '';
             this.type = 'Object3D';
@@ -22,8 +21,6 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
             this.renderOrder = 0;
             this.userData = {};
             this.rotateOnAxis = function () {
-                // rotate object on axis in object space
-                // axis is assumed to be normalized
                 var q1 = new Quaternion_1.Quaternion();
                 return function (axis, angle) {
                     q1.setFromAxisAngle(axis, angle);
@@ -50,8 +47,6 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
                 };
             }();
             this.translateOnAxis = function () {
-                // translate object by distance along axis in object space
-                // axis is assumed to be normalized
                 var v1 = new Vector3_1.Vector3();
                 return function (axis, distance) {
                     v1.copy(axis).applyQuaternion(this.quaternion);
@@ -84,7 +79,6 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
                 };
             }();
             this.lookAt = function () {
-                // This routine does not support objects with rotated and/or translated parent(s)
                 var m1 = new Matrix4_1.Matrix4();
                 return function (vector) {
                     m1.lookAt(vector, this.position, this.up);
@@ -169,18 +163,15 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
             this.matrix.decompose(this.position, this.quaternion, this.scale);
         };
         Object3D.prototype.setRotationFromAxisAngle = function (axis, angle) {
-            // assumes axis is normalized
             this.quaternion.setFromAxisAngle(axis, angle);
         };
         Object3D.prototype.setRotationFromEuler = function (euler) {
             this.quaternion.setFromEuler(euler, true);
         };
         Object3D.prototype.setRotationFromMatrix = function (m) {
-            // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
             this.quaternion.setFromRotationMatrix(m);
         };
         Object3D.prototype.setRotationFromQuaternion = function (q) {
-            // assumes q is normalized
             this.quaternion.copy(q);
         };
         Object3D.prototype.translate = function (distance, axis) {

@@ -1,4 +1,3 @@
-import * as IFlumpLibrary from '../../interface/IFlumpLibrary';
 import ILoadable from '../../../core/interface/ILoadable';
 import FlumpLibrary from '../FlumpLibrary';
 import IHashMap from '../../../core/interface/IHashMap';
@@ -6,16 +5,17 @@ import FlumpTextureGroupAtlas from './FlumpTextureGroupAtlas';
 import FlumpTexture from './FlumpTexture';
 import HttpRequest from '../../../core/net/HttpRequest';
 import Promise from '../../../core/util/Promise';
+import {ITextureGroup, IAtlas} from "./IFlumpLibrary";
 
 class FlumpTextureGroup
 {
-	public static load(flumpLibrary:FlumpLibrary, json:IFlumpLibrary.ITextureGroup):Promise<FlumpTextureGroup>
+	public static load(flumpLibrary:FlumpLibrary, json:ITextureGroup):Promise<FlumpTextureGroup>
 	{
 		var atlases = json.atlases;
 		var loaders:Array<Promise<any>> = [];
 		for(var i = 0; i < atlases.length; i++)
 		{
-			var atlas:IFlumpLibrary.IAtlas = atlases[i];
+			var atlas:IAtlas = atlases[i];
 			loaders.push(FlumpTextureGroupAtlas.load(flumpLibrary, atlas));
 		}
 

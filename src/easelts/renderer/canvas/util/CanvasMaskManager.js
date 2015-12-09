@@ -1,4 +1,3 @@
-//var CanvasGraphics = require('./CanvasGraphics');
 var CanvasMaskManager = (function () {
     function CanvasMaskManager() {
     }

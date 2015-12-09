@@ -645,7 +645,7 @@ class StageWebGL extends Stage
 			antialias: this._antialias,
 			premultipliedAlpha: true // Assume the drawing buffer contains colors with premultiplied alpha.
 		};
-		var autoClearColor = this._option.autoClearColor;
+		var autoClearColor:RGBA = <RGBA> this._option.autoClearColor;
 
 		this._webGLContext = <WebGLRenderingContext> this.canvas.getContext("webgl", options) || <WebGLRenderingContext> this.canvas.getContext("experimental-webgl", options);
 
@@ -697,12 +697,13 @@ class StageWebGL extends Stage
 	 * @param {Number} a A number between 0 and 1.
 	 * @protected
 	 **/
-	public _setClearColor(r, g, b, a)
+	public _setClearColor(r:number, g:number, b:number, a:number)
 	{
-		this._option.autoClearColor.r = r;
-		this._option.autoClearColor.g = g;
-		this._option.autoClearColor.b = b;
-		this._option.autoClearColor.a = a;
+		var autoClearColor = <RGBA> this._option.autoClearColor;
+		autoClearColor.r = r;
+		autoClearColor.g = g;
+		autoClearColor.b = b;
+		autoClearColor.a = a;
 
 		if(this._webGLContext)
 		{

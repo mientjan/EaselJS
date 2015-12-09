@@ -75,8 +75,6 @@ define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"
                 };
             }();
             this.reflect = function () {
-                // reflect incident vector off plane orthogonal to normal
-                // normal is assumed to have unit length
                 var v1;
                 return function reflect(normal) {
                     if (v1 === undefined)
@@ -223,7 +221,6 @@ define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"
             return this;
         };
         Vector3.prototype.applyMatrix4 = function (m) {
-            // input: Matrix4 affine matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z + e[12];
@@ -232,7 +229,6 @@ define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"
             return this;
         };
         Vector3.prototype.applyProjection = function (m) {
-            // input: Matrix4 projection matrix
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             var d = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]);
@@ -259,8 +255,6 @@ define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"
             return this;
         };
         Vector3.prototype.transformDirection = function (m) {
-            // input: Matrix4 affine matrix
-            // vector interpreted as a direction
             var x = this.x, y = this.y, z = this.z;
             var e = m.elements;
             this.x = e[0] * x + e[4] * y + e[8] * z;
@@ -291,7 +285,6 @@ define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"
             return this;
         };
         Vector3.prototype.clamp = function (min, max) {
-            // This function assumes min < max, if this assumption isn't true it will not operate correctly
             this.x = Math.max(min.x, Math.min(max.x, this.x));
             this.y = Math.max(min.y, Math.min(max.y, this.y));
             this.z = Math.max(min.z, Math.min(max.z, this.z));

@@ -1,4 +1,3 @@
-/// <reference path="./Filter.ts" />
 var createts;
 (function (createts) {
     var ColorMatrix = (function () {

@@ -328,7 +328,7 @@ class EventDispatcher
 		}
 		else
 		{
-			var top = this, list = [top];
+			var top:any = this, list = [top];
 			while(top.parent)
 			{
 				list.push(top = top.parent);
@@ -375,7 +375,7 @@ class EventDispatcher
 	 **/
 	public willTrigger(type:string)
 	{
-		var o = this;
+		var o:any = this;
 		while(o)
 		{
 			if(o.hasEventListener(type))

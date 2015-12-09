@@ -1,37 +1,9 @@
-/*
- * Stage
- *
- * Copyright (c) 2010 gskinner.com, inc.
- * Copyright (c) 2014-2015 Mient-jan Stelling
- * Copyright (c) 2015 MediaMonks B.V
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption"], function (require, exports, DisplayObject_1, Container_1, Size_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1) {
+define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption", "../renderer/buffer/CanvasBuffer"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1, CanvasBuffer_1) {
     var Stage = (function (_super) {
         __extends(Stage, _super);
         function Stage(element, option) {
@@ -63,33 +35,40 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", 
             this._nextStage = null;
             this._prevStage = null;
             this._option = new StageOption_1.StageOption(option);
-            var size;
-            var canvas;
-            switch (element.tagName) {
-                case 'CANVAS':
-                    {
-                        canvas = element;
-                        this.holder = element.parentElement;
-                        size = new Size_1.default(canvas.width, canvas.height);
-                        break;
-                    }
-                default:
-                    {
-                        canvas = document.createElement('canvas');
-                        this.holder = element;
-                        this.holder.appendChild(canvas);
-                        size = new Size_1.default(this.holder.offsetWidth, this.holder.offsetHeight);
-                        break;
-                    }
+            var canvas, width, height;
+            if (element.tagName == 'CANVAS') {
+                canvas = element;
+                this.holder = element.parentElement;
+                if (this._option.autoResize) {
+                    width = this.holder.offsetWidth;
+                    height = this.holder.offsetHeight;
+                }
+                else {
+                    width = canvas.width;
+                    height = canvas.height;
+                }
             }
-            this.canvas = canvas;
+            else {
+                canvas = document.createElement('canvas');
+                this.holder = element;
+                width = this.holder.offsetWidth;
+                height = this.holder.offsetHeight;
+            }
+            this.setBuffer(new CanvasBuffer_1.CanvasBuffer(width, height, {
+                domElement: canvas,
+                transparent: this._option.transparent
+            }), this._option.autoResize);
+            if (element.tagName != 'CANVAS') {
+                this.holder.appendChild(canvas);
+            }
             this.enableDOMEvents(true);
             this.setFps(this._fps);
             this.stage = this;
+            this.ctx = this._buffer.getContext();
             if (this._option.autoResize) {
                 this.enableAutoResize();
             }
-            this.onResize(size.width, size.height);
+            this.onResize(this._buffer.width, this._buffer.height);
         }
         Object.defineProperty(Stage.prototype, "nextStage", {
             get: function () {
@@ -108,25 +87,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", 
             configurable: true
         });
         Stage.prototype.setQuality = function (value) {
-            var ctx = this.getContext();
-            switch (value) {
-                case 1:
-                    {
-                        ctx['mozImageSmoothingEnabled'] = false;
-                        ctx['webkitImageSmoothingEnabled'] = false;
-                        ctx['msImageSmoothingEnabled'] = false;
-                        ctx['imageSmoothingEnabled'] = false;
-                        break;
-                    }
-                case 0:
-                    {
-                        ctx['mozImageSmoothingEnabled'] = true;
-                        ctx['webkitImageSmoothingEnabled'] = true;
-                        ctx['msImageSmoothingEnabled'] = true;
-                        ctx['imageSmoothingEnabled'] = true;
-                        break;
-                    }
-            }
+            this._buffer.setQuality(value);
             return this;
         };
         Stage.prototype.setFpsCounter = function (value) {
@@ -266,7 +227,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", 
             }
         };
         Stage.prototype.getContext = function () {
-            return this.canvas.getContext('2d');
+            return this._buffer.getContext();
         };
         Stage.prototype.clone = function () {
             var o = new Stage(null, this._option.autoResize);
@@ -307,9 +268,6 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Size", 
             return data;
         };
         Stage.prototype._handleMouseMove = function (e) {
-            //		if(!e){
-            //			var b = <MouseEvent> window['event'];
-            //		 }
             if (e === void 0) { e = window['event']; }
             this._handlePointerMove(-1, e, e.pageX, e.pageY);
         };

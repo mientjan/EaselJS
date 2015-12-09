@@ -1,21 +1,3 @@
-/*
- * Scroller
- * http://github.com/zynga/scroller
- *
- * Copyright 2015 Mient-jan Stelling.
- * Copyright 2015 MediaMonks B.V.
- * rewrite to typescript from zynga / scroller
- * Licensed under the MIT License.
- *
- * Copyright 2011, Zynga Inc.
- * Licensed under the MIT License.
- * https://raw.github.com/zynga/scroller/master/MIT-LICENSE.txt
- *
- * Based on the work of: Unify Project (unify-project.org)
- * http://unify-project.org
- * Copyright 2011, Deutsche Telekom AG
- * License: MIT + Apache (V2)
- */
 define(["require", "exports"], function (require, exports) {
     var time = Date.now || function () {
         return +new Date();
