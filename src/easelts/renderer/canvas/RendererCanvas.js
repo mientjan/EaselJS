@@ -14,4 +14,6 @@ define(["require", "exports", "../buffer/CanvasBuffer"], function (require, expo
         };
         return RendererCanvas;
     })(CanvasBuffer_1.CanvasBuffer);
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = RendererCanvas;
 });

@@ -84,7 +84,7 @@ class Touch
 	 **/
 	public static enable(stage:Stage, singleTouch = true, allowDefault = false):boolean
 	{
-		if(!stage || !stage.ctx || !stage.ctx.canvas || !Touch.isSupported())
+		if(!stage || !stage.getContext() || !stage.getContext().canvas || !Touch.isSupported())
 		{
 			return false;
 		}

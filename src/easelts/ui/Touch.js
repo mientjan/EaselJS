@@ -11,7 +11,7 @@ define(["require", "exports", "./TouchInjectProperties"], function (require, exp
         Touch.enable = function (stage, singleTouch, allowDefault) {
             if (singleTouch === void 0) { singleTouch = true; }
             if (allowDefault === void 0) { allowDefault = false; }
-            if (!stage || !stage.ctx || !stage.ctx.canvas || !Touch.isSupported()) {
+            if (!stage || !stage.getContext() || !stage.getContext().canvas || !Touch.isSupported()) {
                 return false;
             }
             stage.__touch = new TouchInjectProperties_1.default();

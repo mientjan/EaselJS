@@ -33,7 +33,7 @@ define(["require", "exports", "./Stage", "../data/StageOption", "../data/RGBA"],
             this._initializeWebGL();
         }
         StageWebGL.prototype.getContext = function () {
-            return this.canvas.getContext('2d');
+            return this._buffer.getContext();
         };
         Object.defineProperty(StageWebGL.prototype, "isWebGL", {
             get: function () {

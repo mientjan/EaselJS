@@ -16,10 +16,9 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this._isRunning = false;
             this._fps = 60;
             this._fpsCounter = null;
+            this._buffer = null;
             this._eventListeners = null;
             this._onResizeEventListener = null;
-            this.ctx = null;
-            this.canvas = null;
             this.holder = null;
             this.mouseX = 0;
             this.mouseY = 0;
@@ -64,7 +63,6 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this.enableDOMEvents(true);
             this.setFps(this._fps);
             this.stage = this;
-            this.ctx = this._buffer.getContext();
             if (this._option.autoResize) {
                 this.enableAutoResize();
             }
@@ -102,27 +100,24 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
         Stage.prototype.update = function (delta) {
             var autoClear = this._option.autoClear;
             var autoClearColor = this._option.autoClearColor;
-            if (!this.ctx) {
-                this.ctx = this.getContext();
-                return;
-            }
+            var ctx = this.getContext();
+            var r = this.drawRect, pixelRatio = this._option.pixelRatio;
             if (this.tickOnUpdate) {
                 this.onTick.call(this, Math.min(delta, 100));
             }
             this.drawstartSignal.emit();
             DisplayObject_1.default._snapToPixelEnabled = this.snapToPixelEnabled;
-            var r = this.drawRect, ctx = this.ctx, pixelRatio = this._option.pixelRatio;
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             if (autoClear) {
                 if (autoClearColor) {
                     ctx.fillStyle = autoClearColor;
-                    ctx.fillRect(0, 0, this.ctx.canvas.width + 1, this.ctx.canvas.height + 1);
+                    ctx.fillRect(0, 0, ctx.canvas.width + 1, ctx.canvas.height + 1);
                 }
                 if (r) {
                     ctx.clearRect(r.x, r.y, r.width, r.height);
                 }
                 else {
-                    ctx.clearRect(0, 0, this.ctx.canvas.width + 1, this.ctx.canvas.height + 1);
+                    ctx.clearRect(0, 0, ctx.canvas.width + 1, ctx.canvas.height + 1);
                 }
             }
             ctx.save();
@@ -143,35 +138,10 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this.drawendSignal.emit();
         };
         Stage.prototype.clear = function () {
-            if (!this.ctx) {
-                return;
-            }
-            var ctx = this.ctx.canvas.getContext("2d");
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.clearRect(0, 0, this.ctx.canvas.width + 1, this.ctx.canvas.height + 1);
+            this._buffer.clear();
         };
         Stage.prototype.toDataURL = function (backgroundColor, mimeType) {
-            if (!mimeType) {
-                mimeType = "image/png";
-            }
-            var ctx = this.ctx;
-            var w = this.ctx.canvas.width;
-            var h = this.ctx.canvas.height;
-            var data;
-            if (backgroundColor) {
-                data = ctx.getImageData(0, 0, w, h);
-                var compositeOperation = ctx.globalCompositeOperation;
-                ctx.globalCompositeOperation = "destination-over";
-                ctx.fillStyle = backgroundColor;
-                ctx.fillRect(0, 0, w, h);
-            }
-            var dataURL = this.ctx.canvas.toDataURL(mimeType);
-            if (backgroundColor) {
-                ctx.clearRect(0, 0, w + 1, h + 1);
-                ctx.putImageData(data, 0, 0);
-                ctx.globalCompositeOperation = compositeOperation;
-            }
-            return dataURL;
+            return this._buffer.toDataURL(backgroundColor, mimeType);
         };
         Stage.prototype.enableMouseOver = function (frequency) {
             var _this = this;
@@ -198,6 +168,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             var _this = this;
             if (enable === void 0) { enable = true; }
             var name, o, eventListeners = this._eventListeners;
+            var canvas = this._buffer.domElement;
             if (!enable && eventListeners) {
                 for (name in eventListeners) {
                     o = eventListeners[name];
@@ -205,7 +176,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 }
                 this._eventListeners = null;
             }
-            else if (enable && !eventListeners && this.canvas) {
+            else if (enable && !eventListeners && canvas) {
                 var windowsObject = window['addEventListener'] ? window : document;
                 eventListeners = this._eventListeners = {};
                 eventListeners["mouseup"] = {
@@ -217,7 +188,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                     fn: function (e) { return _this._handleMouseMove(e); }
                 };
                 eventListeners["mousedown"] = {
-                    window: this.canvas,
+                    window: canvas,
                     fn: function (e) { return _this._handleMouseDown(e); }
                 };
                 for (name in eventListeners) {
@@ -275,9 +246,6 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             if (this._prevStage && owner === undefined) {
                 return;
             }
-            if (!this.ctx) {
-                return;
-            }
             var nextStage = this._nextStage;
             var pointerData = this._getPointerData(id);
             var inBounds = pointerData.inBounds;
@@ -292,11 +260,12 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             nextStage && nextStage._handlePointerMove(id, e, pageX, pageY, null);
         };
         Stage.prototype._updatePointerPosition = function (id, e, pageX, pageY) {
-            var rect = this._getElementRect(this.canvas);
+            var buffer = this._buffer;
+            var rect = this._getElementRect(buffer.domElement);
             pageX -= rect.left;
             pageY -= rect.top;
-            var w = this.canvas.width;
-            var h = this.canvas.height;
+            var w = buffer.width;
+            var h = buffer.height;
             pageX /= (rect.right - rect.left) / w;
             pageY /= (rect.bottom - rect.top) / h;
             var pointerData = this._getPointerData(id);
@@ -377,7 +346,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 return;
             }
             var o = this._getPointerData(-1), e = o.posEvtObj;
-            var isEventTarget = eventTarget || e && (e.target == this.ctx.canvas);
+            var isEventTarget = eventTarget || e && (e.target == this._buffer.domElement);
             var target = null, common = -1, cursor = "", t, i, l;
             if (!owner && (clear || this.mouseInBounds && isEventTarget)) {
                 target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, true);
@@ -395,9 +364,9 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 }
                 t = t.parent;
             }
-            this.ctx.canvas.style.cursor = cursor;
+            this._buffer.domElement.style.cursor = cursor;
             if (!owner && eventTarget) {
-                eventTarget.ctx.canvas.style.cursor = cursor;
+                eventTarget.getContext().canvas.style.cursor = cursor;
             }
             for (i = 0, l = list.length; i < l; i++) {
                 if (list[i] != oldList[i]) {
@@ -482,10 +451,10 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             width = width + 1 >> 1 << 1;
             height = height + 1 >> 1 << 1;
             if (this.width != width || this.height != height) {
-                this.canvas.width = width * pixelRatio;
-                this.canvas.height = height * pixelRatio;
-                this.canvas.style.width = '' + width + 'px';
-                this.canvas.style.height = '' + height + 'px';
+                this._buffer.width = width * pixelRatio;
+                this._buffer.height = height * pixelRatio;
+                this._buffer.domElement.style.width = '' + width + 'px';
+                this._buffer.domElement.style.height = '' + height + 'px';
                 _super.prototype.onResize.call(this, width, height);
                 if (!this._isRunning) {
                     this.update(0);

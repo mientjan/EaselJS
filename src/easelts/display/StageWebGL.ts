@@ -347,9 +347,9 @@ class StageWebGL extends Stage
 
 	}
 
-	public getContext():CanvasRenderingContext2D
+	public getContext():WebGLRenderingContext
 	{
-		return this.canvas.getContext('2d');
+		return <WebGLRenderingContext> this._buffer.getContext();
 	}
 
 	/**

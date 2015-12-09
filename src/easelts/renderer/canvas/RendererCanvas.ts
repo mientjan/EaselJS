@@ -16,3 +16,5 @@ class RendererCanvas extends CanvasBuffer
 		item.draw(this.context);
 	}
 }
+
+export default RendererCanvas;

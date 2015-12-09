@@ -60,6 +60,7 @@ import {StageOption} from "../data/StageOption";
 import IContext2D from "../interface/IContext2D";
 import IHashMap from "../../core/interface/IHashMap";
 import {CanvasBuffer} from "../renderer/buffer/CanvasBuffer";
+import RendererCanvas from "../renderer/canvas/RendererCanvas";
 
 
 
@@ -126,6 +127,7 @@ class Stage extends Container<IDisplayObject>
 	protected _fps:number = 60;
 	protected _fpsCounter:Stats = null;
 	protected _ticker:Interval;
+	protected _buffer:RendererCanvas = null;
 
 	public _eventListeners:IHashMap<{
 		window: any;
@@ -133,23 +135,6 @@ class Stage extends Container<IDisplayObject>
 	}> = null;
 
 	public _onResizeEventListener:Function = null;
-
-	/**
-	 * The canvas the stage will render to. Multiple stages can share a single canvas, but you must disable autoClear for all but the
-	 * first stage that will be ticked (or they will clear each other's render).
-	 *
-	 * When changing the canvas property you must disable the events on the old canvas, and enable events on the
-	 * new canvas or mouse events will not work as expected. For example:
-	 *
-	 *      myStage.enableDOMEvents(false);
-	 *      myStage.canvas = anotherCanvas;
-	 *      myStage.enableDOMEvents(true);
-	 *
-	 * @property canvas
-	 * @type HTMLCanvasElement
-	 **/
-	public ctx:IContext2D = null;
-	public canvas:HTMLCanvasElement = null;
 
 	/**
 	 *
@@ -373,7 +358,6 @@ class Stage extends Container<IDisplayObject>
 		this.setFps(this._fps);
 
 		this.stage = this;
-		this.ctx = this._buffer.getContext();
 
 		if( this._option.autoResize ){
 			this.enableAutoResize();
@@ -415,15 +399,14 @@ class Stage extends Container<IDisplayObject>
 	 **/
 	public update(delta:number):void
 	{
+
+
+
 		var autoClear = this._option.autoClear;
 		var autoClearColor = this._option.autoClearColor;
-
-		if(!this.ctx)
-		{
-			this.ctx = this.getContext();
-
-			return;
-		}
+		var ctx = this.getContext();
+		var r = this.drawRect,
+			pixelRatio = this._option.pixelRatio;
 
 		if(this.tickOnUpdate)
 		{
@@ -435,9 +418,7 @@ class Stage extends Container<IDisplayObject>
 
 		DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
 
-		var r = this.drawRect,
-				ctx = this.ctx,
-				pixelRatio = this._option.pixelRatio;
+
 
 
 		/**
@@ -450,7 +431,7 @@ class Stage extends Container<IDisplayObject>
 			if(autoClearColor)
 			{
 				ctx.fillStyle = autoClearColor;
-				ctx.fillRect(0,0,this.ctx.canvas.width + 1, this.ctx.canvas.height + 1);
+				ctx.fillRect(0,0,ctx.canvas.width + 1, ctx.canvas.height + 1);
 			}
 
 			if(r)
@@ -459,7 +440,7 @@ class Stage extends Container<IDisplayObject>
 			}
 			else
 			{
-				ctx.clearRect(0, 0, this.ctx.canvas.width + 1, this.ctx.canvas.height + 1);
+				ctx.clearRect(0, 0, ctx.canvas.width + 1, ctx.canvas.height + 1);
 			}
 		}
 
@@ -496,13 +477,7 @@ class Stage extends Container<IDisplayObject>
 	 **/
 	public clear():void
 	{
-		if(!this.ctx)
-		{
-			return;
-		}
-		var ctx = this.ctx.canvas.getContext("2d");
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.clearRect(0, 0, this.ctx.canvas.width + 1, this.ctx.canvas.height + 1);
+		this._buffer.clear();
 	}
 
 	/**
@@ -517,52 +492,7 @@ class Stage extends Container<IDisplayObject>
 	 **/
 	public toDataURL(backgroundColor:string, mimeType:string):string
 	{
-		if(!mimeType)
-		{
-			mimeType = "image/png";
-		}
-
-		var ctx = this.ctx;
-		var w = this.ctx.canvas.width;
-		var h = this.ctx.canvas.height;
-
-		var data;
-
-		if(backgroundColor)
-		{
-
-			//get the current ImageData for the canvas.
-			data = ctx.getImageData(0, 0, w, h);
-
-			//store the current globalCompositeOperation
-			var compositeOperation = ctx.globalCompositeOperation;
-
-			//set to draw behind current content
-			ctx.globalCompositeOperation = "destination-over";
-
-			//set background color
-			ctx.fillStyle = backgroundColor;
-
-			//draw background on entire canvas
-			ctx.fillRect(0, 0, w, h);
-		}
-
-		//get the image data from the canvas
-		var dataURL = this.ctx.canvas.toDataURL(mimeType);
-
-		if(backgroundColor)
-		{
-			//clear the canvas
-			ctx.clearRect(0, 0, w + 1, h + 1);
-
-			//restore it with original settings
-			ctx.putImageData(data, 0, 0);
-
-			//reset the globalCompositeOperation to what it was
-			ctx.globalCompositeOperation = compositeOperation;
-		}
-
-		return dataURL;
+		return this._buffer.toDataURL(backgroundColor, mimeType);
 	}
 
 	/**
@@ -625,6 +555,8 @@ class Stage extends Container<IDisplayObject>
 	public enableDOMEvents(enable:boolean = true):void
 	{
 		var name, o, eventListeners = this._eventListeners;
+		var canvas = this._buffer.domElement;
+
 		if(!enable && eventListeners)
 		{
 			for(name in eventListeners)
@@ -634,7 +566,7 @@ class Stage extends Container<IDisplayObject>
 			}
 			this._eventListeners = null;
 		}
-		else if(enable && !eventListeners && this.canvas)
+		else if(enable && !eventListeners && canvas)
 		{
 			var windowsObject = window['addEventListener'] ? <any> window : <any> document;
 			eventListeners = this._eventListeners = {};
@@ -651,7 +583,7 @@ class Stage extends Container<IDisplayObject>
 			};
 
 			eventListeners["mousedown"] = {
-				window: this.canvas,
+				window: canvas,
 				fn: e => this._handleMouseDown(e)
 			};
 
@@ -791,13 +723,12 @@ class Stage extends Container<IDisplayObject>
 		{
 			return;
 		}
-
-		// redundant listener.
-		if(!this.ctx)
-		{
-			return;
-		}
-
+		//
+		//// redundant listener.
+		//if(!this.ctx)
+		//{
+		//	return;
+		//}
 
 		var nextStage = this._nextStage;
 		var pointerData = this._getPointerData(id);
@@ -829,12 +760,14 @@ class Stage extends Container<IDisplayObject>
 	 **/
 	public _updatePointerPosition(id:number, e:MouseEvent, pageX:number, pageY:number)
 	{
-		var rect = this._getElementRect(this.canvas);
+		var buffer = this._buffer;
+
+		var rect = this._getElementRect(buffer.domElement);
 		pageX -= rect.left;
 		pageY -= rect.top;
 
-		var w = this.canvas.width;
-		var h = this.canvas.height;
+		var w = buffer.width;
+		var h = buffer.height;
 		pageX /= (rect.right - rect.left) / w;
 		pageY /= (rect.bottom - rect.top) / h;
 		var pointerData = this._getPointerData(id);
@@ -995,7 +928,7 @@ class Stage extends Container<IDisplayObject>
 		var o = this._getPointerData(-1), e = o.posEvtObj;
 
 
-		var isEventTarget = eventTarget || e && (e.target == this.ctx.canvas);
+		var isEventTarget = eventTarget || e && (e.target == this._buffer.domElement);
 		var target = null, common = -1, cursor = "", t, i, l;
 
 		if(!owner && (clear || this.mouseInBounds && isEventTarget))
@@ -1021,10 +954,11 @@ class Stage extends Container<IDisplayObject>
 			}
 			t = t.parent;
 		}
-		this.ctx.canvas.style.cursor = cursor;
+
+		this._buffer.domElement.style.cursor = cursor;
 		if(!owner && eventTarget)
 		{
-			eventTarget.ctx.canvas.style.cursor = cursor;
+			eventTarget.getContext().canvas.style.cursor = cursor;
 		}
 
 		// find common ancestor:
@@ -1230,11 +1164,11 @@ class Stage extends Container<IDisplayObject>
 
 		if(this.width != width || this.height != height)
 		{
-			this.canvas.width = width * pixelRatio;
-			this.canvas.height = height * pixelRatio;
+			this._buffer.width = width * pixelRatio;
+			this._buffer.height = height * pixelRatio;
 
-			this.canvas.style.width = '' + width + 'px';
-			this.canvas.style.height = '' + height + 'px';
+			this._buffer.domElement.style.width = '' + width + 'px';
+			this._buffer.domElement.style.height = '' + height + 'px';
 
 			super.onResize(width, height);
 
