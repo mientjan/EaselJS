@@ -72,9 +72,8 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
                     localCtx.restore();
                 }
             }
-            if (buffer) {
+            if (buffer && this.type != 4) {
                 buffer.draw(ctx);
-                buffer.clear();
             }
             return true;
         };

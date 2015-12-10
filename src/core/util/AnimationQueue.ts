@@ -24,7 +24,6 @@ class AnimationQueue extends Queue
 			var from = current.from;
 			var duration = current.duration;
 			var times = current.times;
-
 			var frame = (duration * time / (duration * this._fpms));
 
 			if(times > -1 && times - (frame / duration) < 0) {

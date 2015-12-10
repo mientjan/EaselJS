@@ -38,9 +38,10 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 
 	for(var i = 0; i < 60; i++)
 	{
+
 		var movie = <FlumpMovie> fl.createMovie(ArrayUtil.getRandom(names));
-		//var movie = <FlumpMovie> fl.createMovie('SupermanWalk');
-		movie.setX(Math.random() * stage.width|0).setY(Math.random() * stage.height|0);
+		////var movie = <FlumpMovie> fl.createMovie('SupermanWalk');
+		movie.setXY(Math.random() * stage.width|0, Math.random() * stage.height|0);
 		movie.play(-1);
 		stage.addChild(movie);
 

@@ -214,10 +214,9 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 			}
 		}
 
-		if(buffer)
+		if(buffer && this.type != DisplayType.STAGE)
 		{
 			buffer.draw(ctx);
-			buffer.clear();
 		}
 
 		return true;

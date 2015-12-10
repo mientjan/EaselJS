@@ -13,7 +13,7 @@ define(["require", "exports", '../../src/easelts/display/Stage', '../../src/ease
         ];
         for (var i = 0; i < 60; i++) {
             var movie = fl.createMovie(ArrayUtil_1.default.getRandom(names));
-            movie.setX(Math.random() * stage.width | 0).setY(Math.random() * stage.height | 0);
+            movie.setXY(Math.random() * stage.width | 0, Math.random() * stage.height | 0);
             movie.play(-1);
             stage.addChild(movie);
         }
