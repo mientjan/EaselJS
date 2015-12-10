@@ -344,7 +344,7 @@ class Stage extends Container<IDisplayObject>
 			height = this.holder.offsetHeight;
 		}
 
-		this.setBuffer(new CanvasBuffer(width, height, {
+		this.setBuffer(new RendererCanvas(width, height, {
 			domElement:canvas,
 			transparent:this._option.transparent
 		}), this._option.autoResize );
@@ -399,9 +399,6 @@ class Stage extends Container<IDisplayObject>
 	 **/
 	public update(delta:number):void
 	{
-
-
-
 		var autoClear = this._option.autoClear;
 		var autoClearColor = this._option.autoClearColor;
 		var ctx = this.getContext();
@@ -417,8 +414,6 @@ class Stage extends Container<IDisplayObject>
 		this.drawstartSignal.emit();
 
 		DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
-
-
 
 
 		/**

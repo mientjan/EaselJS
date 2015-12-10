@@ -3,7 +3,6 @@ import FlumpLibrary from '../../src/easelts/animation/FlumpLibrary';
 import FlumpMovie from '../../src/easelts/animation/flump/FlumpMovie';
 import ArrayUtil from "../../src/easelts/util/ArrayUtil";
 import IDisplayObject from "../../src/easelts/interface/IDisplayObject";
-import StageWebGL from "../../src/easelts/display/StageWebGL";
 import {StageOption} from "../../src/easelts/data/StageOption";
 
 var holder = <HTMLBlockElement> document.getElementById('holder');
