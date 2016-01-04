@@ -479,7 +479,7 @@ class SpriteSheet extends EventDispatcher implements ILoadable<SpriteSheet>
 						resolve(this);
 						clearInterval(kill);
 					}
-				});
+				}, 1000/60);
 
 			});
 		}

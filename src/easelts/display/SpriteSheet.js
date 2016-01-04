@@ -185,7 +185,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ut
                             resolve(_this);
                             clearInterval(kill);
                         }
-                    });
+                    }, 1000 / 60);
                 });
             }
             if (!this.url) {
