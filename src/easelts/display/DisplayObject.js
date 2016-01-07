@@ -189,7 +189,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
         };
         DisplayObject.prototype.setRegXY = function (x, y) {
             this.setRegX(x);
-            this.setRegY(x);
+            this.setRegY(y);
             return this;
         };
         DisplayObject.prototype.setRegX = function (value) {
