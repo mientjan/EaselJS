@@ -127,6 +127,8 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 		{
 			this.source = new Texture( <HTMLImageElement|HTMLCanvasElement> imageOrUri);
 		}
+
+		this.source.load();
 	}
 
 	public hasLoaded():boolean

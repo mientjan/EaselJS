@@ -1,28 +1,38 @@
 define(["require", "exports"], function (require, exports) {
     var Flag = (function () {
-        function Flag() {
-            this.value = 0;
+        function Flag(value) {
+            if (value === void 0) { value = 0; }
+            this._value = 0 + value;
         }
         Flag.prototype.contains = function (value) {
-            var n = value;
-            return (this.value & n) === value;
+            var n = 0 + value;
+            return (this._value & n) === n;
         };
         Flag.prototype.add = function (value) {
-            var n = value;
-            this.value |= n;
-            return this.contains(value);
+            var n = 0 + value;
+            this._value |= n;
         };
         Flag.prototype.remove = function (value) {
-            var n = value;
-            this.value = (this.value ^ n) & this.value;
-            return !this.contains(value);
+            var n = 0 + value;
+            this._value = (this._value ^ n) & this._value;
         };
         Flag.prototype.equals = function (value) {
-            var n = value;
-            return this.value === (n + 0);
+            var n = 0 + value;
+            return this._value === n;
+        };
+        Flag.prototype.diff = function (value) {
+            var n = 0 + value;
+            return new Flag(this._value ^ n);
+        };
+        Flag.prototype.intersection = function (value) {
+            var n = 0 + value;
+            return new Flag(this._value & n);
         };
         Flag.prototype.valueOf = function () {
-            return this.value;
+            return this._value;
+        };
+        Flag.prototype.toString = function (value) {
+            return this._value.toString(value);
         };
         return Flag;
     })();

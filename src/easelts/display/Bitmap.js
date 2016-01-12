@@ -26,6 +26,7 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
             else {
                 this.source = new Texture_1.default(imageOrUri);
             }
+            this.source.load();
         }
         Bitmap.prototype.hasLoaded = function () {
             return this.source.hasLoaded();

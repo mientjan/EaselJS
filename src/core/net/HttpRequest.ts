@@ -97,7 +97,7 @@ class HttpRequest
 	 * @param {IHashMap<any>} query
 	 * @returns {Promise<string>}
 	 */
-	public static getString(url:string, query:IHashMap<any> = {}):Promise<string>
+	public static getString<T>(url:string, query:IHashMap<any> = {}):Promise<T>
 	{
 		return HttpRequest.request('GET', url, query);
 	}
@@ -122,13 +122,13 @@ class HttpRequest
 	 * @param {(progress:number) => any} onProgress
 	 * @returns {Promise}
 	 */
-	public static wait(list:Array<Promise<any>>, onProgress:(progress:number) => any = (progress:number) => {}):Promise<Array<any>>
+	public static wait<T>(list:Array<Promise<T>>, onProgress:(progress:number) => any = (progress:number) => {}):Promise<Array<T>>
 	{
-		return new Promise(function(resolve:(response:any) => any)
+		return new Promise(function(resolve:(response:Array<T>) => any)
 		{
 			var newList = [];
 
-			var then = function(response)
+			var then = function(response:T)
 			{
 				newList.push(response);
 				onProgress( newList.length / list.length);
@@ -151,7 +151,7 @@ class HttpRequest
 	 * @param {(progress:number) => any} onProgress
 	 * @returns {Promise}
 	 */
-	public static waitForLoadable(list:Array<ILoadable<any>>, onProgress:(progress:number) => any = (progress:number) => {}):Promise<Array<any>>
+	public static waitForLoadable<T>(list:Array<ILoadable<T>>, onProgress:(progress:number) => any = (progress:number) => {}):Promise<Array<T>>
 	{
 		var count = list.length;
 		var progressList = [];
@@ -181,9 +181,7 @@ class HttpRequest
 			promiseList[i] = list[i].load(prvProgress.bind(this, i));
 		}
 
-		return HttpRequest.wait(promiseList).then(() => {
-			return true;
-		});
+		return HttpRequest.wait<T>(promiseList);
 	}
 }
 

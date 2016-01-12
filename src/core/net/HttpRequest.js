@@ -80,9 +80,7 @@ define(["require", "exports", "../util/Promise"], function (require, exports, Pr
             for (var i = 0; i < count; i++) {
                 promiseList[i] = list[i].load(prvProgress.bind(this, i));
             }
-            return HttpRequest.wait(promiseList).then(function () {
-                return true;
-            });
+            return HttpRequest.wait(promiseList);
         };
         return HttpRequest;
     })();
