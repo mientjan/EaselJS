@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var CharLocation = (function () {
         function CharLocation(char) {
             this.scale = 0;
@@ -7,7 +8,7 @@ define(["require", "exports"], function (require, exports) {
             this.char = char;
         }
         return CharLocation;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = CharLocation;
 });

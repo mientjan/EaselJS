@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var BitmapChar = (function () {
         function BitmapChar(id, texture, xOffset, yOffset, xAdvance) {
             this.mTexture = texture;
@@ -42,7 +43,7 @@ define(["require", "exports"], function (require, exports) {
             return this.mTexture.spriteSheet.getFrame(this.mTexture.currentFrame).rect.height;
         };
         return BitmapChar;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BitmapChar;
 });

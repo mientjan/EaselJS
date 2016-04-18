@@ -23,8 +23,8 @@ class Texture implements ILoadable<Texture>
 	public width:number = 0;
 	public height:number = 0;
 
-	protected _loadPromise:Promise<Texture> = null;
-	protected _hasLoaded:boolean = false;
+	private _loadPromise:Promise<Texture> = null;
+	private _hasLoaded:boolean = false;
 
 	constructor(source:HTMLCanvasElement|HTMLImageElement, autoload:boolean = false)
 	{
@@ -76,7 +76,8 @@ class Texture implements ILoadable<Texture>
 		{
 			onProgress(1);
 		}
-		return Promise.resolve(this);
+
+		return this._loadPromise;
 	}
 
 	protected _load(onComplete:(result:Texture) => any, onError?:() => any):void

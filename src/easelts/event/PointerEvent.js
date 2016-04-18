@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../../core/event/Event"], function (require, exports, Event_1) {
+    "use strict";
     var MouseEvent = (function (_super) {
         __extends(MouseEvent, _super);
         function MouseEvent(type, bubbles, cancelable, stageX, stageY, nativeEvent, pointerID, primary, rawX, rawY) {
@@ -40,7 +41,7 @@ define(["require", "exports", "../../core/event/Event"], function (require, expo
             return "[MouseEvent (type=" + this.type + " stageX=" + this.stageX + " stageY=" + this.stageY + ")]";
         };
         return MouseEvent;
-    })(Event_1.default);
+    }(Event_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = MouseEvent;
 });

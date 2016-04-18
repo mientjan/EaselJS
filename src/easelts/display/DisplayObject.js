@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../../core/event/EventDispatcher", "../../core/event/Signal2", "../../core/util/UID", "../../core/util/Promise", "../util/Methods", "./Shadow", "../geom/FluidCalculation", "../geom/Matrix2", "../geom/Rectangle", "../geom/Point"], function (require, exports, EventDispatcher_1, Signal2_1, UID_1, Promise_1, Methods, Shadow_1, FluidCalculation_1, Matrix2_1, Rectangle_1, Point_1) {
+    "use strict";
     var DisplayObject = (function (_super) {
         __extends(DisplayObject, _super);
         function DisplayObject(width, height, x, y, regX, regY) {
@@ -779,7 +780,6 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
         DisplayObject._hitTestContext = DisplayObject._hitTestCanvas.getContext('2d');
         DisplayObject._nextCacheID = 1;
         return DisplayObject;
-    })(EventDispatcher_1.default);
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = DisplayObject;
+    }(EventDispatcher_1.default));
+    exports.DisplayObject = DisplayObject;
 });

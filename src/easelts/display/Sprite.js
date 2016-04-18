@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../../core/event/Event", "./DisplayObject"], function (require, exports, Event_1, DisplayObject_1) {
+    "use strict";
     var Sprite = (function (_super) {
         __extends(Sprite, _super);
         function Sprite(spriteSheet, frameOrAnimation) {
@@ -165,7 +166,7 @@ define(["require", "exports", "../../core/event/Event", "./DisplayObject"], func
             }
         };
         return Sprite;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Sprite;
 });

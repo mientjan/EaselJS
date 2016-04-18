@@ -1,4 +1,5 @@
 define(["require", "exports", './FlumpLayerData'], function (require, exports, FlumpLayerData_1) {
+    "use strict";
     var FlumpMovieData = (function () {
         function FlumpMovieData(flumpLibrary, json) {
             this.frames = 0;
@@ -13,7 +14,7 @@ define(["require", "exports", './FlumpLayerData'], function (require, exports, F
             }
         }
         return FlumpMovieData;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpMovieData;
 });

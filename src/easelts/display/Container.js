@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], function (require, exports, DisplayObject_1, HttpRequest_1) {
+    "use strict";
     var Container = (function (_super) {
         __extends(Container, _super);
         function Container(width, height, x, y, regX, regY) {
@@ -300,7 +301,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
             }
         };
         Container.prototype._getObjectsUnderPoint = function (x, y, arr, mouse, activeListener) {
-            var ctx = DisplayObject_1.default._hitTestContext;
+            var ctx = DisplayObject_1.DisplayObject._hitTestContext;
             var mtx = this._matrix;
             activeListener = activeListener || (mouse && this.hasMouseEventListener());
             var children = this.children;
@@ -398,7 +399,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
             _super.prototype.destruct.call(this);
         };
         return Container;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Container;
 });

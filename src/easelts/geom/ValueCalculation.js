@@ -1,4 +1,5 @@
 define(["require", "exports", "./FluidCalculation"], function (require, exports, FluidCalculation_1) {
+    "use strict";
     var ValueCalculation = (function () {
         function ValueCalculation(value) {
             this.type = 0;
@@ -48,7 +49,7 @@ define(["require", "exports", "./FluidCalculation"], function (require, exports,
             }
         };
         return ValueCalculation;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ValueCalculation;
 });

@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../display/DisplayObject", "../display/SpriteSheet", "../../core/util/Promise", "../../core/util/AnimationQueue", "../../core/util/QueueItem"], function (require, exports, DisplayObject_1, SpriteSheet_1, Promise_1, AnimationQueue_1, QueueItem_1) {
+    "use strict";
     var ImageSequence = (function (_super) {
         __extends(ImageSequence, _super);
         function ImageSequence(spriteSheet, fps, width, height, x, y, regX, regY) {
@@ -133,7 +134,7 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
             return this.frames;
         };
         return ImageSequence;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ImageSequence;
 });

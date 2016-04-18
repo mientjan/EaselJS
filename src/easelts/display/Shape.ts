@@ -24,7 +24,7 @@
  */
 
 import Graphics from "./Graphics";
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import DisplayType from "../enum/DisplayType";
 
 /**

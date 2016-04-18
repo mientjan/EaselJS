@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../buffer/CanvasBuffer"], function (require, exports, CanvasBuffer_1) {
+    "use strict";
     var RendererCanvas = (function (_super) {
         __extends(RendererCanvas, _super);
         function RendererCanvas(width, height, options) {
@@ -13,7 +14,7 @@ define(["require", "exports", "../buffer/CanvasBuffer"], function (require, expo
             item.draw(this.context);
         };
         return RendererCanvas;
-    })(CanvasBuffer_1.CanvasBuffer);
+    }(CanvasBuffer_1.CanvasBuffer));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = RendererCanvas;
 });

@@ -1,4 +1,5 @@
 define(["require", "exports", "../../tweents/Tween", "./MovieClip"], function (require, exports, Tween_1, MovieClip_1) {
+    "use strict";
     var MovieClipPlugin = (function () {
         function MovieClipPlugin() {
             throw ("MovieClipPlugin cannot be instantiated.");
@@ -19,7 +20,7 @@ define(["require", "exports", "../../tweents/Tween", "./MovieClip"], function (r
         };
         MovieClipPlugin.priority = 100;
         return MovieClipPlugin;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = MovieClipPlugin;
 });

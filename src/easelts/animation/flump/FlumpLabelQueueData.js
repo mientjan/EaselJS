@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", './FlumpLabelData'], function (require, exports, FlumpLabelData_1) {
+    "use strict";
     var FlumpLabelQueueData = (function (_super) {
         __extends(FlumpLabelQueueData, _super);
         function FlumpLabelQueueData(label, index, duration, times, delay) {
@@ -28,7 +29,7 @@ define(["require", "exports", './FlumpLabelData'], function (require, exports, F
             this._complete = null;
         };
         return FlumpLabelQueueData;
-    })(FlumpLabelData_1.default);
+    }(FlumpLabelData_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpLabelQueueData;
 });

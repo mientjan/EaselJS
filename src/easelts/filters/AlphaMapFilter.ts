@@ -174,7 +174,7 @@ class AlphaMapFilter extends Filter
 		try
 		{
 			var imgData = <ImageData> ctx.getImageData(0, 0, map.width, map.height);
-			this._mapData = imgData.data;
+			this._mapData = <any> imgData.data;
 			return true;
 		} catch(e)
 		{

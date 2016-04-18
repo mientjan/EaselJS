@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../display/DisplayObject", "../geom/Size"], function (require, exports, DisplayObject_1, Size_1) {
+    "use strict";
     var BitmapNinePatch = (function (_super) {
         __extends(BitmapNinePatch, _super);
         function BitmapNinePatch(ninePatch, width, height, x, y, regX, regY) {
@@ -60,7 +61,7 @@ define(["require", "exports", "../display/DisplayObject", "../geom/Size"], funct
             return true;
         };
         return BitmapNinePatch;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BitmapNinePatch;
 });

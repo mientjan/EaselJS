@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
+    "use strict";
     var AnimationQueue = (function (_super) {
         __extends(AnimationQueue, _super);
         function AnimationQueue(fps, unit) {
@@ -44,7 +45,7 @@ define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
             this._time = this._time % this._fpms;
         };
         return AnimationQueue;
-    })(Queue_1.default);
+    }(Queue_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = AnimationQueue;
 });

@@ -1,4 +1,5 @@
 define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
+    "use strict";
     var CSSPlugin = (function () {
         function CSSPlugin() {
             throw ("CSSPlugin cannot be instantiated.");
@@ -48,7 +49,7 @@ define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
         };
         CSSPlugin.priority = -100;
         return CSSPlugin;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = CSSPlugin;
 });

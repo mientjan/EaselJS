@@ -1,5 +1,5 @@
 
-import DisplayObject from "../../display/DisplayObject";
+import {DisplayObject} from "../../display/DisplayObject";
 import {ICanvasBufferOptions} from "../buffer/CanvasBuffer";
 import {CanvasBuffer} from "../buffer/CanvasBuffer";
 

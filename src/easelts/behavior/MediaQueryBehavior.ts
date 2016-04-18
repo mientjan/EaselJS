@@ -2,7 +2,7 @@
  * Created by pieters on 12-Mar-15.
  */
 import AbstractBehavior from "./AbstractBehavior";
-import DisplayObject from "../display/DisplayObject";
+import {DisplayObject} from "../display/DisplayObject";
 import * as IMediaQuery from "../interface/IMediaQuery";
 import Point from "../geom/Point";
 import Size from "../geom/Size";

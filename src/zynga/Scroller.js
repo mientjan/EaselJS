@@ -1,4 +1,5 @@
 define(["require", "exports", "./Animate"], function (require, exports, Animate_1) {
+    "use strict";
     var easeOutCubic = function (pos) {
         return (Math.pow((pos - 1), 3) + 1);
     };
@@ -632,7 +633,7 @@ define(["require", "exports", "./Animate"], function (require, exports, Animate_
             }
         };
         return Scroller;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Scroller;
 });

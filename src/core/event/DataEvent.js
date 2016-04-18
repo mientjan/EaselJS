@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Event"], function (require, exports, Event_1) {
+    "use strict";
     var DataEvent = (function (_super) {
         __extends(DataEvent, _super);
         function DataEvent(type, data, bubbles, cancelable) {
@@ -13,7 +14,7 @@ define(["require", "exports", "./Event"], function (require, exports, Event_1) {
             this.data = data;
         }
         return DataEvent;
-    })(Event_1.default);
+    }(Event_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = DataEvent;
 });

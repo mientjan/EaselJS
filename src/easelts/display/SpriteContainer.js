@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Container"], function (require, exports, Container_1) {
+    "use strict";
     var SpriteContainer = (function (_super) {
         __extends(SpriteContainer, _super);
         function SpriteContainer(spriteSheet) {
@@ -59,7 +60,7 @@ define(["require", "exports", "./Container"], function (require, exports, Contai
             return "[SpriteContainer (name=" + this.name + ")]";
         };
         return SpriteContainer;
-    })(Container_1.default);
+    }(Container_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = SpriteContainer;
 });

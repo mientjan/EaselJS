@@ -1,4 +1,5 @@
 define(["require", "exports", "../util/Promise"], function (require, exports, Promise_1) {
+    "use strict";
     var HttpRequest = (function () {
         function HttpRequest() {
         }
@@ -83,7 +84,7 @@ define(["require", "exports", "../util/Promise"], function (require, exports, Pr
             return HttpRequest.wait(promiseList);
         };
         return HttpRequest;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = HttpRequest;
 });

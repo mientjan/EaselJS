@@ -2,7 +2,7 @@ import Container from "./Container";
 import Timeline from "../../tweents/Timeline";
 import Tween from "../../tweents/Tween";
 import TimeEvent from "../../core/event/TimeEvent";
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import IDisplayObject from "../interface/IDisplayObject";
 
 //import MovieClipPlugin from "./MovieClipPlugin";
@@ -491,7 +491,6 @@ class MovieClip extends Container<IDisplayObject>
 	{
 		// TODO: add support for this? Need to clone the Timeline & retarget tweens - pretty complex.
 		throw("MovieClip cannot be cloned.")
-		return this;
 	}
 
 	/**

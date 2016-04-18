@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Event = (function () {
         function Event(type, bubbles, cancelable) {
             if (bubbles === void 0) { bubbles = false; }
@@ -46,7 +47,7 @@ define(["require", "exports"], function (require, exports) {
             return "[Event (type=" + this.type + ")]";
         };
         return Event;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Event;
 });

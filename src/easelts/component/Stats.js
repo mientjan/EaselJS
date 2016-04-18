@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../display/DisplayObject"], function (require, exports, DisplayObject_1) {
+    "use strict";
     var now = (window.performance && window.performance.now) ? window.performance.now.bind(performance) : Date.now;
     var Stats = (function (_super) {
         __extends(Stats, _super);
@@ -62,7 +63,7 @@ define(["require", "exports", "../display/DisplayObject"], function (require, ex
             this.startTime = this.end();
         };
         return Stats;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Stats;
 });

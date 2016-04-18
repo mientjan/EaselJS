@@ -1,9 +1,10 @@
 define(["require", "exports", "./Functional"], function (require, exports, Functional) {
+    "use strict";
     var Decorator = (function () {
         function Decorator() {
         }
         return Decorator;
-    })();
+    }());
     function log(name) {
         if (name === void 0) { name = ''; }
         return function (target, propertyKey, descriptor) {

@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Filter"], function (require, exports, Filter_1) {
+    "use strict";
     var AlphaMaskFilter = (function (_super) {
         __extends(AlphaMaskFilter, _super);
         function AlphaMaskFilter(mask) {
@@ -37,7 +38,7 @@ define(["require", "exports", "./Filter"], function (require, exports, Filter_1)
             return "[AlphaMaskFilter]";
         };
         return AlphaMaskFilter;
-    })(Filter_1.default);
+    }(Filter_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = AlphaMaskFilter;
 });

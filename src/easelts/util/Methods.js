@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function createCanvas() {
         return document.createElement('canvas');
     }

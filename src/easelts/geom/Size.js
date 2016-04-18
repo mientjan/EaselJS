@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Size = (function () {
         function Size(width, height) {
             this.width = width;
@@ -14,7 +15,7 @@ define(["require", "exports"], function (require, exports) {
             return "[Size (x=" + this.width + " y=" + this.height + ")]";
         };
         return Size;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Size;
 });

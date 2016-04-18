@@ -1,4 +1,5 @@
 define(["require", "exports", "../../geom/Rectangle"], function (require, exports, Rectangle_1) {
+    "use strict";
     var CanvasBuffer = (function () {
         function CanvasBuffer(width, height, options) {
             if (options === void 0) { options = {
@@ -142,6 +143,6 @@ define(["require", "exports", "../../geom/Rectangle"], function (require, export
             this.domElement = null;
         };
         return CanvasBuffer;
-    })();
+    }());
     exports.CanvasBuffer = CanvasBuffer;
 });

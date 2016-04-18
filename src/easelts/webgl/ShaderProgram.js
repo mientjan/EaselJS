@@ -1,4 +1,5 @@
 define(["require", "exports", "./UniformLocation"], function (require, exports, UniformLocation_1) {
+    "use strict";
     var ShaderProgram = (function () {
         function ShaderProgram(gl, vertex, fragment) {
             this._uniforms = null;
@@ -84,7 +85,7 @@ define(["require", "exports", "./UniformLocation"], function (require, exports, 
             this.gl = void 0;
         };
         return ShaderProgram;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ShaderProgram;
 });

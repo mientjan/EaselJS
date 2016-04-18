@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var TimingMode;
     (function (TimingMode) {
         TimingMode[TimingMode["TIMEOUT"] = 0] = "TIMEOUT";

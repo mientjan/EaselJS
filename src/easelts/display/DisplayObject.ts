@@ -73,7 +73,7 @@ import ILoadable from "../../core/interface/ILoadable";
  * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
  * @class DisplayObject
  */
-class DisplayObject extends EventDispatcher implements IDisplayObject
+export class DisplayObject extends EventDispatcher implements IDisplayObject
 {
 	public static EVENT_MOUSE_CLICK = 'click';
 	public static EVENT_MOUSE_DOWN = 'mousedown';
@@ -2054,5 +2054,3 @@ class DisplayObject extends EventDispatcher implements IDisplayObject
 		super.destruct();
 	}
 }
-
-export default DisplayObject;

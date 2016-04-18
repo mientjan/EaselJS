@@ -1,7 +1,7 @@
 import ILoadable from "../../core/interface/ILoadable";
 import IPlayable from "../../core/interface/IPlayable";
 
-import DisplayObject from "../display/DisplayObject";
+import {DisplayObject} from "../display/DisplayObject";
 import SpriteSheet from "../display/SpriteSheet";
 import DisplayType from "../enum/DisplayType";
 import * as Methods from "../util/Methods";

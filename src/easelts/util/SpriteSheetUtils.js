@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var SpriteSheetUtils = (function () {
         function SpriteSheetUtils() {
             throw "SpriteSheetUtils cannot be instantiated";
@@ -107,7 +108,7 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         return SpriteSheetUtils;
-    })();
+    }());
     SpriteSheetUtils['_workingCanvas'] = document.createElement("canvas");
     SpriteSheetUtils['_workingContext'] = SpriteSheetUtils['_workingCanvas'].getContext("2d");
     SpriteSheetUtils['_workingCanvas'].width = SpriteSheetUtils['_workingCanvas'].height = 1;

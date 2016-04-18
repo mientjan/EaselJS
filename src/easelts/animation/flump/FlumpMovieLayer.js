@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeData', './FlumpTexture', './FlumpMovie', './FlumpLabelData', "./FlumpMtx"], function (require, exports, DisplayObject_1, FlumpKeyframeData_1, FlumpTexture_1, FlumpMovie_1, FlumpLabelData_1, FlumpMtx) {
+    "use strict";
     var FlumpMovieLayer = (function (_super) {
         __extends(FlumpMovieLayer, _super);
         function FlumpMovieLayer(flumpMove, flumpLayerData) {
@@ -150,7 +151,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             return true;
         };
         return FlumpMovieLayer;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpMovieLayer;
 });

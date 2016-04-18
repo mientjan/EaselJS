@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Ease = (function () {
         function Ease() {
             throw "Ease cannot be instantiated.";
@@ -154,7 +155,7 @@ define(["require", "exports"], function (require, exports) {
         Ease.elasticOut = Ease.getElasticOut(1, 0.3);
         Ease.elasticInOut = Ease.getElasticInOut(1, 0.3 * 1.5);
         return Ease;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Ease;
 });

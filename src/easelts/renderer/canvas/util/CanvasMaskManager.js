@@ -18,4 +18,4 @@ var CanvasMaskManager = (function () {
     CanvasMaskManager.prototype.destruct = function () { };
     ;
     return CanvasMaskManager;
-})();
+}());

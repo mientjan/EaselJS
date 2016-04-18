@@ -1,4 +1,5 @@
 define(["require", "exports", './FlumpTextureGroupAtlas', '../../../core/util/Promise'], function (require, exports, FlumpTextureGroupAtlas_1, Promise_1) {
+    "use strict";
     var FlumpTextureGroup = (function () {
         function FlumpTextureGroup(flumpTextureGroupAtlases, flumpTextures) {
             this.flumpTextureGroupAtlases = flumpTextureGroupAtlases;
@@ -28,7 +29,7 @@ define(["require", "exports", './FlumpTextureGroupAtlas', '../../../core/util/Pr
             });
         };
         return FlumpTextureGroup;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpTextureGroup;
 });

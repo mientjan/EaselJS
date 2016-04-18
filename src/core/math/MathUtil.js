@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var MathUtil = (function () {
         function MathUtil() {
         }
@@ -123,7 +124,7 @@ define(["require", "exports"], function (require, exports) {
         MathUtil.degreeToRadiansFactor = Math.PI / 180;
         MathUtil.radianToDegreesFactor = 180 / Math.PI;
         return MathUtil;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = MathUtil;
 });

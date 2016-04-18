@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var time = Date.now || function () {
         return +new Date();
     };
@@ -113,7 +114,7 @@ define(["require", "exports"], function (require, exports) {
             };
         })();
         return Animate;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Animate;
 });

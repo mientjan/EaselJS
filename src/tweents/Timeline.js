@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", '../core/event/EventDispatcher', './Tween'], function (require, exports, EventDispatcher_1, Tween_1) {
+    "use strict";
     var Timeline = (function (_super) {
         __extends(Timeline, _super);
         function Timeline(tweens, labels, props) {
@@ -199,7 +200,7 @@ define(["require", "exports", '../core/event/EventDispatcher', './Tween'], funct
             }
         };
         return Timeline;
-    })(EventDispatcher_1.default);
+    }(EventDispatcher_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Timeline;
 });

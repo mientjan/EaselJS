@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../geom/Rectangle", "./Filter"], function (require, exports, Rectangle_1, Filter_1) {
+    "use strict";
     var BlurFilter = (function (_super) {
         __extends(BlurFilter, _super);
         function BlurFilter(blurX, blurY, quality) {
@@ -221,7 +222,7 @@ define(["require", "exports", "../geom/Rectangle", "./Filter"], function (requir
             return "[BlurFilter]";
         };
         return BlurFilter;
-    })(Filter_1.default);
+    }(Filter_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BlurFilter;
 });

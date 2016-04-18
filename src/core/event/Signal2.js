@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./SignalAbstract"], function (require, exports, SignalAbstract_1) {
+    "use strict";
     var Signal2 = (function (_super) {
         __extends(Signal2, _super);
         function Signal2() {
@@ -31,7 +32,7 @@ define(["require", "exports", "./SignalAbstract"], function (require, exports, S
             this.didEmit(head);
         };
         return Signal2;
-    })(SignalAbstract_1.default);
+    }(SignalAbstract_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Signal2;
 });

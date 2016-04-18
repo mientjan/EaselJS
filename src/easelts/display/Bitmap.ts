@@ -27,7 +27,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import Texture from "./Texture";
 import Promise from "../../core/util/Promise";
 import DisplayType from "../enum/DisplayType";

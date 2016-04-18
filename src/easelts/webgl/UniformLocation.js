@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var UniformLocation = (function () {
         function UniformLocation(gl, name, location, type) {
             this._gl = null;
@@ -72,7 +73,7 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return UniformLocation;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = UniformLocation;
 });

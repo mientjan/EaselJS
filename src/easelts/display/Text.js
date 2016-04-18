@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./DisplayObject", "../geom/Rectangle", "../util/Methods"], function (require, exports, DisplayObject_1, Rectangle_1, Methods) {
+    "use strict";
     var Text = (function (_super) {
         __extends(Text, _super);
         function Text(text, font, color, width, height, x, y, regX, regY) {
@@ -331,7 +332,7 @@ define(["require", "exports", "./DisplayObject", "../geom/Rectangle", "../util/M
         Text.H_OFFSETS = { start: 0, left: 0, center: -0.5, end: -1, right: -1 };
         Text.V_OFFSETS = { top: 0, hanging: -0.01, middle: -0.4, alphabetic: -0.8, ideographic: -0.85, bottom: -1 };
         return Text;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     var canvas = Methods.createCanvas();
     if (canvas.getContext) {
         Text._workingContext = canvas.getContext("2d");

@@ -1,4 +1,5 @@
 define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"], function (require, exports, Euler_1, Quaternion_1, Matrix4_1, MathUtil_1) {
+    "use strict";
     var Vector3 = (function () {
         function Vector3(x, y, z) {
             if (x === void 0) { x = 0; }
@@ -457,6 +458,6 @@ define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"
             return this;
         };
         return Vector3;
-    })();
+    }());
     exports.Vector3 = Vector3;
 });

@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption", "../renderer/canvas/RendererCanvas"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1, RendererCanvas_1) {
+    "use strict";
     var Stage = (function (_super) {
         __extends(Stage, _super);
         function Stage(element, option) {
@@ -106,7 +107,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 this.onTick.call(this, Math.min(delta, 100));
             }
             this.drawstartSignal.emit();
-            DisplayObject_1.default._snapToPixelEnabled = this.snapToPixelEnabled;
+            DisplayObject_1.DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             if (autoClear) {
                 if (autoClearColor) {
@@ -470,7 +471,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
         Stage.EVENT_MOUSE_ENTER = 'mouseenter';
         Stage.EVENT_STAGE_MOUSE_MOVE = 'stagemousemove';
         return Stage;
-    })(Container_1.default);
+    }(Container_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Stage;
 });

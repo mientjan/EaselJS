@@ -121,38 +121,41 @@ class FluidCalculation
 	 */
 	public static getCalcUnit(unit1:number, math:CalculationUnitType, unit2:number):number
 	{
+		var result = 0;
 		switch(math)
 		{
 			case CalculationUnitType.ADDITION:
 			{
-				return unit1 + unit2;
+				result = unit1 + unit2;
 				break;
 			}
 
 			case CalculationUnitType.SUBSTRACTION:
 			{
-				return unit1 - unit2;
+				result = unit1 - unit2;
 				break;
 			}
 
 			case CalculationUnitType.MULTIPLICATION:
 			{
-				return unit1 * unit2;
+				result = unit1 * unit2;
 				break;
 			}
 
 			case CalculationUnitType.DIVISION:
 			{
-				return unit1 / unit2;
+				result = unit1 / unit2;
 				break;
 			}
 
 			default:
 			{
-				return 0;
+				result = 0;
 				break;
 			}
 		}
+
+		return result;
 	}
 
 	/**
@@ -207,20 +210,23 @@ class FluidCalculation
 	 */
 	public static getCalcUnitSize(size:number, data:FluidMeasurementsUnit):number
 	{
+		var result = 0;
 		switch(data.unit)
 		{
 			case MeasurementUnitType.PROCENT:
 			{
-				return size * ( data.value / 100 );
+				result = size * ( data.value / 100 );
 				break;
 			}
 
 			default:
 			{
-				return data.value;
+				result = data.value;
 				break;
 			}
 		}
+		
+		return result;
 	}
 
 	public static toFloat(value)

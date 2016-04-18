@@ -1,7 +1,7 @@
 import Bitmap from "../display/Bitmap";
 import BitmapNinePatch from "./BitmapNinePatch";
 
-import DisplayObject from "../display/DisplayObject";
+import {DisplayObject} from "../display/DisplayObject";
 import DisplayType from "../enum/DisplayType";
 import TimeEvent from "../../core/event/TimeEvent";
 import Signal from "../../core/event/Signal";

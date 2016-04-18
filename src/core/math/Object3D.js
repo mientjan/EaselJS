@@ -1,4 +1,5 @@
 define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3", "./Matrix4", "../util/UID"], function (require, exports, Vector3_1, Euler_1, Quaternion_1, Matrix3_1, Matrix4_1, UID_1) {
+    "use strict";
     var Object3D = (function () {
         function Object3D() {
             this.id = Object3D.Object3DIdCount++;
@@ -412,7 +413,7 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
         Object3D.DefaultMatrixAutoUpdate = true;
         Object3D.Object3DIdCount = 0;
         return Object3D;
-    })();
+    }());
     exports.Object3D = Object3D;
     var Channels = (function () {
         function Channels() {
@@ -431,6 +432,6 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
             this.mask &= ~(1 << channel);
         };
         return Channels;
-    })();
+    }());
     exports.Channels = Channels;
 });

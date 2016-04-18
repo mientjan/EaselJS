@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", './Filter'], function (require, exports, Filter_1) {
+    "use strict";
     var ColorMatrixFilter = (function (_super) {
         __extends(ColorMatrixFilter, _super);
         function ColorMatrixFilter(matrix) {
@@ -52,7 +53,7 @@ define(["require", "exports", './Filter'], function (require, exports, Filter_1)
             return new ColorMatrixFilter(this.matrix);
         };
         return ColorMatrixFilter;
-    })(Filter_1.default);
+    }(Filter_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ColorMatrixFilter;
 });

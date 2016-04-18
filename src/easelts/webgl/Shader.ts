@@ -47,7 +47,6 @@ class Shader
 		if(!gl.getShaderParameter(this.shader, gl.COMPILE_STATUS))
 		{
 			throw new Error("An error occurred compiling the shaders: " + gl.getShaderInfoLog(this.shader));
-			return null;
 		}
 
 		return this.shader;

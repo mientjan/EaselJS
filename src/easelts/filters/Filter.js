@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Filter = (function () {
         function Filter() {
         }
@@ -15,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
             return new Filter();
         };
         return Filter;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Filter;
 });

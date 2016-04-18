@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Filter"], function (require, exports, Filter_1) {
+    "use strict";
     var ColorFilter = (function (_super) {
         __extends(ColorFilter, _super);
         function ColorFilter(redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier, redOffset, greenOffset, blueOffset, alphaOffset) {
@@ -57,7 +58,7 @@ define(["require", "exports", "./Filter"], function (require, exports, Filter_1)
             return new ColorFilter(this.redMultiplier, this.greenMultiplier, this.blueMultiplier, this.alphaMultiplier, this.redOffset, this.greenOffset, this.blueOffset, this.alphaOffset);
         };
         return ColorFilter;
-    })(Filter_1.default);
+    }(Filter_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ColorFilter;
 });

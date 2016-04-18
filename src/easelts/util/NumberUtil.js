@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var NumberUtil = (function () {
         function NumberUtil() {
         }
@@ -13,7 +14,7 @@ define(["require", "exports"], function (require, exports) {
             return [p >> 16 & 0xFFFF, p & 0xFFFF];
         };
         return NumberUtil;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = NumberUtil;
 });

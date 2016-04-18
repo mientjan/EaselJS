@@ -30,7 +30,7 @@
 import TouchInjectProperties from "../ui/TouchInjectProperties";
 
 // display
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import Container from "./Container";
 
 import * as Methods from "../../easelts/util/Methods";

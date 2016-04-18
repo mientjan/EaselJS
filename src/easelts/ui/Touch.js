@@ -1,4 +1,5 @@
 define(["require", "exports", "./TouchInjectProperties"], function (require, exports, TouchInjectProperties_1) {
+    "use strict";
     var Touch = (function () {
         function Touch() {
             throw "Touch cannot be instantiated";
@@ -187,7 +188,7 @@ define(["require", "exports", "./TouchInjectProperties"], function (require, exp
             delete (ids[id]);
         };
         return Touch;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Touch;
 });

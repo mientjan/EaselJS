@@ -157,7 +157,7 @@ define(["require", "exports", "./Event"], function (require, exports, Event_1) {
             this.removeAllEventListeners();
         };
         return EventDispatcher;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = EventDispatcher;
 });

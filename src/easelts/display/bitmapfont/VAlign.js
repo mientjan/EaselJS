@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var VAlign = (function () {
         function VAlign() {
         }
@@ -6,7 +7,7 @@ define(["require", "exports"], function (require, exports) {
         VAlign.TOP = "top";
         VAlign.CENTER = "center";
         return VAlign;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = VAlign;
 });

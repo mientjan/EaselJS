@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./DisplayObject"], function (require, exports, DisplayObject_1) {
+    "use strict";
     var DOMElement = (function (_super) {
         __extends(DOMElement, _super);
         function DOMElement(htmlElement, x, y, regX, regY) {
@@ -83,7 +84,7 @@ define(["require", "exports", "./DisplayObject"], function (require, exports, Di
         DOMElement.prototype.onTick = function (delta) {
         };
         return DOMElement;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = DOMElement;
 });

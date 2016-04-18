@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var CalculationUnitType;
     (function (CalculationUnitType) {
         CalculationUnitType[CalculationUnitType["ADDITION"] = 0] = "ADDITION";

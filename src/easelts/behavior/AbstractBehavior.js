@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var AbstractBehavior = (function () {
         function AbstractBehavior() {
             this.owner = null;
@@ -13,7 +14,7 @@ define(["require", "exports"], function (require, exports) {
             this.owner = null;
         };
         return AbstractBehavior;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = AbstractBehavior;
 });

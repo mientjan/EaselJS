@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import Bitmap from "./Bitmap";
 import DisplayType from "../enum/DisplayType";
 import Rectangle from "../geom/Rectangle";
@@ -144,7 +144,6 @@ class BitmapProjective extends Bitmap
 		if(!points.length)
 		{
 			throw new Error('points is empty ');
-			return;
 		}
 
 		// Get extents.

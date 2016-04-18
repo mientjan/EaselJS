@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import Point from "../geom/Point";
 import TimeEvent from "../../core/event/TimeEvent";
 

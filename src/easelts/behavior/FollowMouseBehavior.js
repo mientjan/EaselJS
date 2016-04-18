@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./AbstractBehavior", "../display/Stage"], function (require, exports, AbstractBehavior_1, Stage_1) {
+    "use strict";
     var FollowMouseBehavior = (function (_super) {
         __extends(FollowMouseBehavior, _super);
         function FollowMouseBehavior() {
@@ -31,7 +32,7 @@ define(["require", "exports", "./AbstractBehavior", "../display/Stage"], functio
             _super.prototype.destruct.call(this);
         };
         return FollowMouseBehavior;
-    })(AbstractBehavior_1.default);
+    }(AbstractBehavior_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FollowMouseBehavior;
 });

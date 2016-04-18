@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Bitmap", "../geom/Rectangle", "../geom/Vector2"], function (require, exports, Bitmap_1, Rectangle_1, Vector2_1) {
+    "use strict";
     var BitmapProjective = (function (_super) {
         __extends(BitmapProjective, _super);
         function BitmapProjective(imageOrUri, points, x, y, regX, regY) {
@@ -42,7 +43,6 @@ define(["require", "exports", "./Bitmap", "../geom/Rectangle", "../geom/Vector2"
         BitmapProjective.prototype.getPointsRectangle = function (points) {
             if (!points.length) {
                 throw new Error('points is empty ');
-                return;
             }
             var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
             for (var i = 0; i < points.length; i++) {
@@ -220,7 +220,7 @@ define(["require", "exports", "./Bitmap", "../geom/Rectangle", "../geom/Vector2"
             _super.prototype.destruct.call(this);
         };
         return BitmapProjective;
-    })(Bitmap_1.default);
+    }(Bitmap_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BitmapProjective;
     var Matrix = (function () {
@@ -361,5 +361,5 @@ define(["require", "exports", "./Bitmap", "../geom/Rectangle", "../geom/Vector2"
             return new Matrix(this.w, this.h, values);
         };
         return Matrix;
-    })();
+    }());
 });

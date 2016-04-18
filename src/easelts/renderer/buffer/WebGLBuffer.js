@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var WebGLBuffer = (function () {
         function WebGLBuffer(width, height, element) {
             if (element === void 0) { element = document.createElement('canvas'); }
@@ -43,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
             this.element = null;
         };
         return WebGLBuffer;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = WebGLBuffer;
 });

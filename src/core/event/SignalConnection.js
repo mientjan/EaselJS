@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var SignalConnection = (function () {
         function SignalConnection(signal, listener) {
             this._next = null;
@@ -17,7 +18,7 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         return SignalConnection;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = SignalConnection;
 });

@@ -1,4 +1,5 @@
 define(["require", "exports", "./Vector3", "./MathUtil", "./Euler"], function (require, exports, Vector3_1, MathUtil_1, Euler_1) {
+    "use strict";
     var Matrix4 = (function () {
         function Matrix4() {
             this.extractRotation = function () {
@@ -696,6 +697,6 @@ define(["require", "exports", "./Vector3", "./MathUtil", "./Euler"], function (r
             ];
         };
         return Matrix4;
-    })();
+    }());
     exports.Matrix4 = Matrix4;
 });

@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var StageOption = (function () {
         function StageOption(option) {
             this.autoResize = true;
@@ -24,6 +25,6 @@ define(["require", "exports"], function (require, exports) {
             }
         }
         return StageOption;
-    })();
+    }());
     exports.StageOption = StageOption;
 });

@@ -1,4 +1,5 @@
 define(["require", "exports", "../geom/Size", "../geom/Vector2", "../geom/Bounds"], function (require, exports, Size_1, Vector2_1, Bounds_1) {
+    "use strict";
     var ArrayUtil = (function () {
         function ArrayUtil() {
         }
@@ -128,7 +129,7 @@ define(["require", "exports", "../geom/Size", "../geom/Vector2", "../geom/Bounds
             return point;
         };
         return ArrayUtil;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ArrayUtil;
 });

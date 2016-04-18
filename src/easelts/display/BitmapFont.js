@@ -1,4 +1,5 @@
 define(["require", "exports", "./SpriteSheet", "./Sprite", "./bitmapfont/BitmapChar", "./bitmapfont/CharLocation", "./bitmapfont/VAlign", "./bitmapfont/HAlign", "./Container"], function (require, exports, SpriteSheet_1, Sprite_1, BitmapChar_1, CharLocation_1, VAlign_1, HAlign_1, Container_1) {
+    "use strict";
     var BitmapFont = (function () {
         function BitmapFont(texture, fontXML, size, _scaleFactor) {
             if (_scaleFactor === void 0) { _scaleFactor = 1; }
@@ -317,7 +318,7 @@ define(["require", "exports", "./SpriteSheet", "./Sprite", "./bitmapfont/BitmapC
         BitmapFont.CHAR_NEWLINE = 10;
         BitmapFont.CHAR_CARRIAGE_RETURN = 13;
         return BitmapFont;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BitmapFont;
 });

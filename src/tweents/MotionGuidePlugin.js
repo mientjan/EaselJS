@@ -1,4 +1,5 @@
 define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
+    "use strict";
     var MotionGuidePlugin = (function () {
         function MotionGuidePlugin() {
             throw ("MotionGuidePlugin cannot be instantiated.");
@@ -199,7 +200,7 @@ define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
         };
         MotionGuidePlugin.priority = 0;
         return MotionGuidePlugin;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = MotionGuidePlugin;
 });

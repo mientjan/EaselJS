@@ -1,4 +1,5 @@
 define(["require", "exports", "../../geom/Rectangle", "../../geom/Size", "../../display/Texture", "../../display/TexturePosition"], function (require, exports, Rectangle_1, Size_1, Texture_1, TexturePosition_1) {
+    "use strict";
     var NinePatch = (function () {
         function NinePatch(texture, rectangle) {
             var _this = this;
@@ -81,7 +82,7 @@ define(["require", "exports", "../../geom/Rectangle", "../../geom/Size", "../../
             return this._isLoaded;
         };
         return NinePatch;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = NinePatch;
 });

@@ -1,4 +1,5 @@
 define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUnitType"], function (require, exports, FluidMeasurementsUnit_1, MeasurementUnitType_1) {
+    "use strict";
     var FluidCalculation = (function () {
         function FluidCalculation() {
         }
@@ -38,33 +39,35 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
             return sizea;
         };
         FluidCalculation.getCalcUnit = function (unit1, math, unit2) {
+            var result = 0;
             switch (math) {
                 case 0:
                     {
-                        return unit1 + unit2;
+                        result = unit1 + unit2;
                         break;
                     }
                 case 1:
                     {
-                        return unit1 - unit2;
+                        result = unit1 - unit2;
                         break;
                     }
                 case 2:
                     {
-                        return unit1 * unit2;
+                        result = unit1 * unit2;
                         break;
                     }
                 case 3:
                     {
-                        return unit1 / unit2;
+                        result = unit1 / unit2;
                         break;
                     }
                 default:
                     {
-                        return 0;
+                        result = 0;
                         break;
                     }
             }
+            return result;
         };
         FluidCalculation.getCalculationTypeByValue = function (value) {
             if (typeof (value) == 'string') {
@@ -81,18 +84,20 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
             return parseFloat(value.substr(0, value.length - 1)) / 100;
         };
         FluidCalculation.getCalcUnitSize = function (size, data) {
+            var result = 0;
             switch (data.unit) {
                 case MeasurementUnitType_1.default.PROCENT:
                     {
-                        return size * (data.value / 100);
+                        result = size * (data.value / 100);
                         break;
                     }
                 default:
                     {
-                        return data.value;
+                        result = data.value;
                         break;
                     }
             }
+            return result;
         };
         FluidCalculation.toFloat = function (value) {
             return parseFloat(value) || 0.0;
@@ -110,7 +115,7 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
         FluidCalculation._valueUnitDisolvement = /([\+\-]?[0-9\.]+)(%|px|pt|in|cm|mm|vw|vh)?/;
         FluidCalculation._spaceSplit = /\s+/;
         return FluidCalculation;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FluidCalculation;
 });

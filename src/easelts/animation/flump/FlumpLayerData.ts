@@ -1,4 +1,4 @@
-import DisplayObject from '../../display/DisplayObject';
+import {DisplayObject} from '../../display/DisplayObject';
 import Flump from '../FlumpLibrary';
 import FlumpMovieLayer from './FlumpMovieLayer';
 import FlumpKeyframeData from './FlumpKeyframeData';

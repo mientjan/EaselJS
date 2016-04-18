@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Container", "./Shape", "./Graphics", "./bitmapfont/VAlign", "./bitmapfont/HAlign", "../filters/ColorFilter"], function (require, exports, Container_1, Shape_1, Graphics_1, VAlign_1, HAlign_1, ColorFilter_1) {
+    "use strict";
     function hexToR(h) {
         return parseInt((cutHex(h)).substring(0, 2), 16);
     }
@@ -104,7 +105,7 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./bitmapf
         BitmapTextField.EVENT_TEXT_CHANGE = 'text_change';
         BitmapTextField.bitmapFonts = [];
         return BitmapTextField;
-    })(Container_1.default);
+    }(Container_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BitmapTextField;
 });

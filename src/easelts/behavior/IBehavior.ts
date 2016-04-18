@@ -2,7 +2,7 @@
  * Created by pieters on 09-Mar-15.
  */
 
-import DisplayObject from "../display/DisplayObject";
+import {DisplayObject} from "../display/DisplayObject";
 
 interface IBehavior
 {

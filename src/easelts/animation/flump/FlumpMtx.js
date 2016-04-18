@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var FlumpMtx = (function () {
         function FlumpMtx(a, b, c, d, tx, ty) {
             this.a = a;
@@ -9,6 +10,6 @@ define(["require", "exports"], function (require, exports) {
             this.ty = ty;
         }
         return FlumpMtx;
-    })();
+    }());
     return FlumpMtx;
 });

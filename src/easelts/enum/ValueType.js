@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var ValueType;
     (function (ValueType) {
         ValueType[ValueType["NUMBER"] = 0] = "NUMBER";

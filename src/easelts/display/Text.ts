@@ -27,7 +27,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import Rectangle from "../geom/Rectangle";
 import * as Methods from "../util/Methods";
 

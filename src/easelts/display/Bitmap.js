@@ -107,7 +107,7 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
             _super.prototype.destruct.call(this);
         };
         return Bitmap;
-    }(DisplayObject_1.default));
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Bitmap;
 });

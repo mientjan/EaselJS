@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./AbstractBehavior", "../display/DisplayObject"], function (require, exports, AbstractBehavior_1, DisplayObject_1) {
+    "use strict";
     var ButtonBehavior = (function (_super) {
         __extends(ButtonBehavior, _super);
         function ButtonBehavior() {
@@ -18,26 +19,26 @@ define(["require", "exports", "./AbstractBehavior", "../display/DisplayObject"],
             this.owner.cursor = 'pointer';
             if (typeof (this.owner['onClick']) == 'function') {
                 this._onClickInstance = this.owner['onClick'].bind(this.owner);
-                this.owner.addEventListener(DisplayObject_1.default.EVENT_MOUSE_CLICK, this._onClickInstance);
+                this.owner.addEventListener(DisplayObject_1.DisplayObject.EVENT_MOUSE_CLICK, this._onClickInstance);
             }
             if (typeof (this.owner['onPointerOver']) == 'function') {
                 this._onPointerOverInstance = this.owner['onPointerOver'].bind(this.owner);
-                this.owner.addEventListener(DisplayObject_1.default.EVENT_MOUSE_OVER, this._onPointerOverInstance);
+                this.owner.addEventListener(DisplayObject_1.DisplayObject.EVENT_MOUSE_OVER, this._onPointerOverInstance);
             }
             if (typeof (this.owner['onPointerOut']) == 'function') {
                 this._onPointerOutInstance = this.owner['onPointerOut'].bind(this.owner);
-                this.owner.addEventListener(DisplayObject_1.default.EVENT_MOUSE_OUT, this._onPointerOutInstance);
+                this.owner.addEventListener(DisplayObject_1.DisplayObject.EVENT_MOUSE_OUT, this._onPointerOutInstance);
             }
         };
         ButtonBehavior.prototype.destruct = function () {
             if (this._onClickInstance) {
-                this.owner.removeEventListener(DisplayObject_1.default.EVENT_MOUSE_CLICK, this._onClickInstance);
+                this.owner.removeEventListener(DisplayObject_1.DisplayObject.EVENT_MOUSE_CLICK, this._onClickInstance);
             }
             if (this._onPointerOverInstance) {
-                this.owner.removeEventListener(DisplayObject_1.default.EVENT_MOUSE_OVER, this._onPointerOverInstance);
+                this.owner.removeEventListener(DisplayObject_1.DisplayObject.EVENT_MOUSE_OVER, this._onPointerOverInstance);
             }
             if (this._onPointerOutInstance) {
-                this.owner.removeEventListener(DisplayObject_1.default.EVENT_MOUSE_OUT, this._onPointerOutInstance);
+                this.owner.removeEventListener(DisplayObject_1.DisplayObject.EVENT_MOUSE_OUT, this._onPointerOutInstance);
             }
             this._stage = null;
             this._onClickInstance = null;
@@ -46,7 +47,7 @@ define(["require", "exports", "./AbstractBehavior", "../display/DisplayObject"],
             _super.prototype.destruct.call(this);
         };
         return ButtonBehavior;
-    })(AbstractBehavior_1.default);
+    }(AbstractBehavior_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ButtonBehavior;
 });

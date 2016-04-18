@@ -34,7 +34,7 @@ import VAlign from "./bitmapfont/VAlign";
 import HAlign from "./bitmapfont/HAlign";
 import BitmapFont from "./BitmapFont";
 import ColorFilter from "../filters/ColorFilter";
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 
 
 function hexToR(h)

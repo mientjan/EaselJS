@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer', '../../../core/util/AnimationQueue', "../../../core/util/QueueItem"], function (require, exports, DisplayObject_1, FlumpMovieLayer_1, AnimationQueue_1, QueueItem_1) {
+    "use strict";
     var FlumpMovie = (function (_super) {
         __extends(FlumpMovie, _super);
         function FlumpMovie(flumpLibrary, name, width, height, x, y, regX, regY) {
@@ -216,7 +217,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             }
         };
         return FlumpMovie;
-    })(DisplayObject_1.default);
+    }(DisplayObject_1.DisplayObject));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpMovie;
 });

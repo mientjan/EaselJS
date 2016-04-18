@@ -1,4 +1,5 @@
 define(["require", "exports", './FlumpKeyframeData'], function (require, exports, FlumpKeyframeData_1) {
+    "use strict";
     var FlumpLayerData = (function () {
         function FlumpLayerData(json) {
             this.flumpKeyframeDatas = [];
@@ -31,7 +32,7 @@ define(["require", "exports", './FlumpKeyframeData'], function (require, exports
             return null;
         };
         return FlumpLayerData;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpLayerData;
 });

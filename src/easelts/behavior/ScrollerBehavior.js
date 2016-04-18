@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./AbstractBehavior", "../display/Container", "../../zynga/Scroller"], function (require, exports, AbstractBehavior_1, Container_1, Scroller_1) {
+    "use strict";
     var ScrollerBehavior = (function (_super) {
         __extends(ScrollerBehavior, _super);
         function ScrollerBehavior(options) {
@@ -73,7 +74,7 @@ define(["require", "exports", "./AbstractBehavior", "../display/Container", "../
             _super.prototype.destruct.call(this);
         };
         return ScrollerBehavior;
-    })(AbstractBehavior_1.default);
+    }(AbstractBehavior_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = ScrollerBehavior;
 });

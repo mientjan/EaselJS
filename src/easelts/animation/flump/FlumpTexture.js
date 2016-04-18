@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var FlumpTexture = (function () {
         function FlumpTexture(renderTexture, json) {
             this.type = 2048;
@@ -22,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
             this.time = 0.0;
         };
         return FlumpTexture;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpTexture;
 });

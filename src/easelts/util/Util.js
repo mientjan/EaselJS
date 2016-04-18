@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Util = (function () {
         function Util() {
         }
@@ -47,7 +48,7 @@ define(["require", "exports"], function (require, exports) {
             return smoothProperty;
         };
         return Util;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Util;
 });

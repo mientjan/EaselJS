@@ -1,4 +1,5 @@
 define(["require", "exports", "./ShaderType", "../../core/net/HttpRequest"], function (require, exports, ShaderType_1, HttpRequest_1) {
+    "use strict";
     var Shader = (function () {
         function Shader(type, data) {
             this.type = type;
@@ -24,7 +25,6 @@ define(["require", "exports", "./ShaderType", "../../core/net/HttpRequest"], fun
             }
             if (!gl.getShaderParameter(this.shader, gl.COMPILE_STATUS)) {
                 throw new Error("An error occurred compiling the shaders: " + gl.getShaderInfoLog(this.shader));
-                return null;
             }
             return this.shader;
         };
@@ -41,7 +41,7 @@ define(["require", "exports", "./ShaderType", "../../core/net/HttpRequest"], fun
             this.data = void 0;
         };
         return Shader;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Shader;
 });

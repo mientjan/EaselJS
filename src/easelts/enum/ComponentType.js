@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var ComponentType;
     (function (ComponentType) {
         ComponentType[ComponentType["UNKNOWN"] = 0] = "UNKNOWN";

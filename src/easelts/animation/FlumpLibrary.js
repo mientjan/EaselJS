@@ -1,4 +1,5 @@
 define(["require", "exports", '../../core/net/HttpRequest', '../../core/util/Promise', './flump/FlumpMovieData', './flump/FlumpTextureGroup', './flump/FlumpMovie', "../../core/util/QueueItem"], function (require, exports, HttpRequest_1, Promise_1, FlumpMovieData_1, FlumpTextureGroup_1, FlumpMovie_1, QueueItem_1) {
+    "use strict";
     var FlumpLibrary = (function () {
         function FlumpLibrary(basePath) {
             this.movieData = [];
@@ -135,7 +136,7 @@ define(["require", "exports", '../../core/net/HttpRequest', '../../core/util/Pro
         };
         FlumpLibrary.EVENT_LOAD = 'load';
         return FlumpLibrary;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = FlumpLibrary;
 });

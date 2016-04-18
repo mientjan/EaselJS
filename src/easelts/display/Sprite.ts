@@ -29,7 +29,7 @@
 
 import Event from "../../core/event/Event";
 import TimeEvent from "../../core/event/TimeEvent";
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import SpriteSheet from "./SpriteSheet";
 import Rectangle from "../geom/Rectangle";
 

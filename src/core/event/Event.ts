@@ -27,7 +27,8 @@
  */
 
 
-import DisplayObject from "../../easelts/display/DisplayObject";
+import {DisplayObject} from "../../easelts/display/DisplayObject";
+
 class Event
 {
 	public type:string = null;

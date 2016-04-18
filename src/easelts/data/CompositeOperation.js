@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var CompositeOperation = (function () {
         function CompositeOperation() {
         }
@@ -16,7 +17,7 @@ define(["require", "exports"], function (require, exports) {
         CompositeOperation.MULTIPLY = 'multiply';
         CompositeOperation.SCREEN = 'screen';
         return CompositeOperation;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = CompositeOperation;
 });

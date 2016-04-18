@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import * as Methods from "../util/Methods";
 import DisplayType from "../enum/DisplayType";
 import Size from "../geom/Size";

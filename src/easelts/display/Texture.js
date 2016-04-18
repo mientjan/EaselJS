@@ -41,7 +41,7 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
             if (onProgress) {
                 onProgress(1);
             }
-            return Promise_1.default.resolve(this);
+            return this._loadPromise;
         };
         Texture.prototype._load = function (onComplete, onError) {
             var bitmap = this.source;

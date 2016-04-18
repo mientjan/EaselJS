@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tweents/Tween", "./DisplayObject"], function (require, exports, Container_1, Timeline_1, Tween_1, DisplayObject_1) {
+    "use strict";
     var MovieClip = (function (_super) {
         __extends(MovieClip, _super);
         function MovieClip(mode, startPosition, loop, labels) {
@@ -104,7 +105,6 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
         };
         MovieClip.prototype.clone = function () {
             throw ("MovieClip cannot be cloned.");
-            return this;
         };
         MovieClip.prototype.toString = function () {
             return "[MovieClip (name=" + this.name + ")]";
@@ -161,7 +161,7 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
                     continue;
                 }
                 var offset = tween._stepPosition;
-                if (target instanceof DisplayObject_1.default) {
+                if (target instanceof DisplayObject_1.DisplayObject) {
                     this._addManagedChild(target, offset);
                 }
                 else {
@@ -222,7 +222,7 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
         MovieClip.SYNCHED = "synched";
         MovieClip.inited = false;
         return MovieClip;
-    })(Container_1.default);
+    }(Container_1.default));
     var MovieClipPlugin = (function () {
         function MovieClipPlugin() {
             throw ("MovieClipPlugin cannot be instantiated.");
@@ -243,7 +243,7 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
         };
         MovieClipPlugin.priority = 100;
         return MovieClipPlugin;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = MovieClip;
 });

@@ -173,5 +173,5 @@ var createts;
         ];
         ColorMatrix.LENGTH = ColorMatrix.IDENTITY_MATRIX.length;
         return ColorMatrix;
-    })();
+    }());
 })(createts || (createts = {}));

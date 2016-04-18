@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Shadow = (function () {
         function Shadow(color, offsetX, offsetY, blur) {
             this.color = null;
@@ -18,7 +19,7 @@ define(["require", "exports"], function (require, exports) {
         };
         Shadow.identity = null;
         return Shadow;
-    })();
+    }());
     Shadow.identity = new Shadow("transparent", 0, 0, 0);
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Shadow;

@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var PointerData = (function () {
         function PointerData(x, y) {
             this.inBounds = false;
@@ -10,7 +11,7 @@ define(["require", "exports"], function (require, exports) {
             this.y = y;
         }
         return PointerData;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = PointerData;
 });

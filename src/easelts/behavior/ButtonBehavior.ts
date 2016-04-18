@@ -1,5 +1,5 @@
 import AbstractBehavior from "./AbstractBehavior";
-import DisplayObject from "../display/DisplayObject";
+import {DisplayObject} from "../display/DisplayObject";
 import Stage from "../display/Stage";
 import Container from "../display/Container";
 import DisplayType from "../enum/DisplayType";

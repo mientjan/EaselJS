@@ -1,4 +1,5 @@
 define(["require", "exports", "../geom/Rectangle"], function (require, exports, Rectangle_1) {
+    "use strict";
     var TexturePosition = (function () {
         function TexturePosition(texture, x, y, width, height, destX, destY, destWidth, destHeight) {
             if (destX === void 0) { destX = 0; }
@@ -38,7 +39,7 @@ define(["require", "exports", "../geom/Rectangle"], function (require, exports, 
             return true;
         };
         return TexturePosition;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = TexturePosition;
 });

@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "../util/Methods", "./Filter"], function (require, exports, Methods, Filter_1) {
+    "use strict";
     var AlphaMapFilter = (function (_super) {
         __extends(AlphaMapFilter, _super);
         function AlphaMapFilter(alphaMap) {
@@ -79,7 +80,7 @@ define(["require", "exports", "../util/Methods", "./Filter"], function (require,
             }
         };
         return AlphaMapFilter;
-    })(Filter_1.default);
+    }(Filter_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = AlphaMapFilter;
 });

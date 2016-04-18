@@ -1,4 +1,5 @@
 define(["require", "exports", "../util/Methods"], function (require, exports, Methods) {
+    "use strict";
     var RoundRect = (function () {
         function RoundRect(x, y, w, h, radiusTL, radiusTR, radiusBR, radiusBL) {
             this.x = x;
@@ -50,7 +51,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.closePath();
         };
         return RoundRect;
-    })();
+    }());
     var Oval = (function () {
         function Oval(x, y, xRadius, yRadius, rotationAngle, startAngle, endAngle) {
             this.x = x;
@@ -76,7 +77,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             }
         };
         return Oval;
-    })();
+    }());
     var LineTo = (function () {
         function LineTo(x, y) {
             this.x = x;
@@ -86,7 +87,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.lineTo(this.x, this.y);
         };
         return LineTo;
-    })();
+    }());
     var MoveTo = (function () {
         function MoveTo(x, y) {
             this.x = x;
@@ -96,7 +97,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.moveTo(this.x, this.y);
         };
         return MoveTo;
-    })();
+    }());
     var ArcTo = (function () {
         function ArcTo(x1, y1, x2, y2, radius) {
             this.x1 = x1;
@@ -109,7 +110,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.arcTo(this.x1, this.y1, this.x2, this.y2, this.radius);
         };
         return ArcTo;
-    })();
+    }());
     var Arc = (function () {
         function Arc(x, y, radius, startAngle, endAngle, anticlockwise) {
             this.exec = function (ctx) {
@@ -123,7 +124,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             this.anticlockwise = !!anticlockwise;
         }
         return Arc;
-    })();
+    }());
     var QuadraticCurveTo = (function () {
         function QuadraticCurveTo(cpx, cpy, x, y) {
             this.exec = function (ctx) {
@@ -135,7 +136,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             this.y = y;
         }
         return QuadraticCurveTo;
-    })();
+    }());
     var BezierCurveTo = (function () {
         function BezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
             this.exec = function (ctx) {
@@ -149,7 +150,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             this.y = y;
         }
         return BezierCurveTo;
-    })();
+    }());
     var Rect = (function () {
         function Rect(x, y, w, h) {
             this.exec = function (ctx) {
@@ -161,7 +162,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             this.h = h;
         }
         return Rect;
-    })();
+    }());
     var ClosePath = (function () {
         function ClosePath() {
             this.exec = function (ctx) {
@@ -169,7 +170,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             };
         }
         return ClosePath;
-    })();
+    }());
     var BeginPath = (function () {
         function BeginPath() {
         }
@@ -177,7 +178,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.beginPath();
         };
         return BeginPath;
-    })();
+    }());
     var Fill = (function () {
         function Fill(style, matrix) {
             this.path = false;
@@ -221,7 +222,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             return this;
         };
         return Fill;
-    })();
+    }());
     var Stroke = (function () {
         function Stroke(style, ignoreScale) {
             this.linearGradient = Fill.prototype.linearGradient;
@@ -246,7 +247,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             }
         };
         return Stroke;
-    })();
+    }());
     var StrokeStyle = (function () {
         function StrokeStyle(width, caps, joints, miterLimit) {
             this.path = false;
@@ -262,7 +263,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.miterLimit = (this.miterLimit == null ? "10" : this.miterLimit);
         };
         return StrokeStyle;
-    })();
+    }());
     var StrokeDash = (function () {
         function StrokeDash(segments, offset) {
             this.segments = segments;
@@ -273,7 +274,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.lineDashOffset = this.offset;
         };
         return StrokeDash;
-    })();
+    }());
     var Circle = (function () {
         function Circle(x, y, radius) {
             this.x = x;
@@ -284,7 +285,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         };
         return Circle;
-    })();
+    }());
     var Ellipse = (function () {
         function Ellipse(x, y, w, h) {
             this.x = x;
@@ -309,7 +310,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
         };
         return Ellipse;
-    })();
+    }());
     var PolyStar = (function () {
         function PolyStar(x, y, radius, sides, pointSize, angle) {
             this.x = x;
@@ -338,7 +339,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
             ctx.closePath();
         };
         return PolyStar;
-    })();
+    }());
     var Graphics = (function () {
         function Graphics() {
             this.command = null;
@@ -718,7 +719,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         Graphics._canvas = Methods.createCanvas();
         Graphics._ctx = Graphics._canvas.getContext('2d');
         return Graphics;
-    })();
+    }());
     Graphics._canvas.width = Graphics._canvas.height = 1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Graphics;

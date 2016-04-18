@@ -26,7 +26,7 @@
  */
 
 import Container from "./Container";
-import DisplayObject from "./DisplayObject";
+import {DisplayObject} from "./DisplayObject";
 import SpriteSheet from "./SpriteSheet";
 
 /**
