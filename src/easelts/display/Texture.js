@@ -1,4 +1,5 @@
 define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../core/math/MathUtil"], function (require, exports, Promise_1, Size_1, MathUtil_1) {
+    "use strict";
     var Texture = (function () {
         function Texture(source, autoload) {
             if (autoload === void 0) { autoload = false; }
@@ -15,6 +16,7 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
         Texture.createFromString = function (source, autoload) {
             if (autoload === void 0) { autoload = false; }
             var img = document.createElement('img');
+            img.src = source;
             return new Texture(img, autoload);
         };
         Texture.prototype.hasLoaded = function () {
@@ -91,7 +93,9 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
             return this.height;
         };
         Texture.prototype.draw = function (ctx, sx, sy, sw, sh, dx, dy, dw, dh) {
-            ctx.drawImage(this.source, sx, sy, sw, sh, dx, dy, dw, dh);
+            if (this._hasLoaded) {
+                ctx.drawImage(this.source, sx, sy, sw, sh, dx, dy, dw, dh);
+            }
             return true;
         };
         Texture.prototype.drawWebGL = function (ctx, sx, sy, sw, sh, dx, dy, dw, dh) {
@@ -127,7 +131,7 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
             this._loadPromise = null;
         };
         return Texture;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Texture;
 });

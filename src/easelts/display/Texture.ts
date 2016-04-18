@@ -13,6 +13,7 @@ class Texture implements ILoadable<Texture>
 	public static createFromString(source:string, autoload:boolean = false):Texture
 	{
 		var img = document.createElement('img');
+		img.src = source;
 		return new Texture(img, autoload);
 	}
 
@@ -152,7 +153,10 @@ class Texture implements ILoadable<Texture>
 
 	public draw(ctx:CanvasRenderingContext2D, sx:number, sy:number, sw:number, sh:number, dx:number, dy:number, dw:number, dh:number):boolean
 	{
-		ctx.drawImage(<HTMLImageElement> this.source, sx, sy, sw, sh, dx, dy, dw, dh);
+		if(this._hasLoaded)
+		{
+			ctx.drawImage(<HTMLImageElement> this.source, sx, sy, sw, sh, dx, dy, dw, dh);
+		}
 		return true;
 	}
 

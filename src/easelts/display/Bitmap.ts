@@ -200,6 +200,16 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 		}
 		else
 		{
+			if(!width)
+			{
+				width = source.width;
+			}
+
+			if(!height)
+			{
+				height = source.height;
+			}
+
 			source.draw(ctx, 0, 0, source.width, source.height, 0, 0, width, height );
 		}
 
