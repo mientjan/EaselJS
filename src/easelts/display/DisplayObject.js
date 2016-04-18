@@ -78,7 +78,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
         }
         Object.defineProperty(DisplayObject.prototype, "resizeSignal", {
             get: function () {
-                if (this._resizeSignal === void 0) {
+                if (this._resizeSignal == void 0) {
                     this._resizeSignal = new Signal2_1.default();
                 }
                 return this._resizeSignal;
