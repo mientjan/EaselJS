@@ -51,8 +51,10 @@ class Queue
 
 		if(this.current)
 		{
-			this.current.finish();
-			this.current.destruct();
+			let current = this.current;
+			this.current = null;
+			current.finish();
+			current.destruct();
 		}
 
 		return this;
