@@ -57,21 +57,21 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             this.visible = true;
             if (label instanceof Array) {
                 if (label.length == 1) {
-                    var queue = new QueueItem_1.default(null, label[0], this.frames, times, 0);
+                    var queue = new QueueItem_1.QueueItem(null, label[0], this.frames, times, 0);
                 }
                 else {
-                    var queue = new QueueItem_1.default(null, label[0], label[1], times, 0);
+                    var queue = new QueueItem_1.QueueItem(null, label[0], label[1], times, 0);
                 }
             }
             else if (label == null || label == '*') {
-                var queue = new QueueItem_1.default(null, 0, this.frames, times, 0);
+                var queue = new QueueItem_1.QueueItem(null, 0, this.frames, times, 0);
             }
             else {
                 var queueLabel = this._labels[label];
                 if (!queueLabel) {
                     throw new Error('unknown label:' + queueLabel + ' | ' + this.name);
                 }
-                var queue = new QueueItem_1.default(queueLabel.label, queueLabel.index, queueLabel.duration, times, 0);
+                var queue = new QueueItem_1.QueueItem(queueLabel.label, queueLabel.index, queueLabel.duration, times, 0);
             }
             if (complete) {
                 queue.then(complete);
@@ -131,7 +131,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             else {
                 frame = frameOrLabel;
             }
-            var queue = new QueueItem_1.default(null, frame, 1, 1, 0);
+            var queue = new QueueItem_1.QueueItem(null, frame, 1, 1, 0);
             this._queue.add(queue);
             return this;
         };
@@ -141,10 +141,12 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             if (this.paused == false) {
                 this._queue.onTick(delta);
                 this.frame = this._queue.getFrame();
-                for (var i = 0; i < this.flumpMovieLayers.length; i++) {
-                    var layer = this.flumpMovieLayers[i];
-                    layer.onTick(delta);
-                    layer.setFrame(this.frame);
+                if (!this._queue.hasStopped()) {
+                    for (var i = 0; i < this.flumpMovieLayers.length; i++) {
+                        var layer = this.flumpMovieLayers[i];
+                        layer.onTick(delta);
+                        layer.setFrame(this.frame);
+                    }
                 }
             }
         };

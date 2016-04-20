@@ -1,17 +1,11 @@
-import ILoadable from '../../core/interface/ILoadable';
-
-import Signal from '../../core/event/Signal';
-import HttpRequest from '../../core/net/HttpRequest';
-import Promise from '../../core/util/Promise';
-import SignalConnection from '../../core/event/SignalConnection';
-import FlumpMovieData from './flump/FlumpMovieData';
-import FlumpTexture from './flump/FlumpTexture';
-import FlumpTextureGroup from './flump/FlumpTextureGroup';
-import FlumpMovie from './flump/FlumpMovie';
-import EventDispatcher from "../../core/event/EventDispatcher";
-
+import ILoadable from "../../core/interface/ILoadable";
+import HttpRequest from "../../core/net/HttpRequest";
+import Promise from "../../core/util/Promise";
+import FlumpMovieData from "./flump/FlumpMovieData";
+import FlumpTextureGroup from "./flump/FlumpTextureGroup";
+import FlumpMovie from "./flump/FlumpMovie";
 import IFlumpMovie from "./flump/IFlumpMovie";
-import QueueItem from "../../core/util/QueueItem";
+import {QueueItem} from "../../core/util/QueueItem";
 import {ILibrary} from "./flump/IFlumpLibrary";
 
 class FlumpLibrary implements ILoadable<FlumpLibrary>

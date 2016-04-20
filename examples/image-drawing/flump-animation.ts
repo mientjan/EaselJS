@@ -36,19 +36,31 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 		'SupermanSuductionLose'
 	];
 
-	for(var i = 0; i < 60; i++)
+	for(var i = 0; i < 1; i++)
 	{
 
 		var movie = <FlumpMovie> fl.createMovie(ArrayUtil.getRandom(names));
-		////var movie = <FlumpMovie> fl.createMovie('SupermanWalk');
 		movie.setXY(Math.random() * stage.width|0, Math.random() * stage.height|0);
-		movie.play(-1);
+
+		var playMovie;
+		playMovie = (function(movie){
+			var play;
+			play = function(){
+				setTimeout(() => movie.play(1, null, play), 300);
+			}
+
+			return play;
+		})(movie);
+		////var movie = <FlumpMovie> fl.createMovie('SupermanWalk');
+
 		stage.addChild(movie);
 
 		//var movie = <FlumpMovie> fl.createMovie('aniamtion_hope_sadTriangles');
 		//movie.setX(Math.random() * stage.width).setY(Math.random() * stage.height);
 		//movie.play(-1);
 		//stage.addChild(movie);
+
+		playMovie();
 	}
 
 	stage.children.sort((item0:IDisplayObject, item1:IDisplayObject) => {

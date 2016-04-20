@@ -1,4 +1,5 @@
 define(["require", "exports", '../../src/easelts/display/Stage', '../../src/easelts/display/Bitmap', '../../src/easelts/display/Container', "../../src/easelts/renderer/buffer/CanvasBuffer"], function (require, exports, Stage_1, Bitmap_1, Container_1, CanvasBuffer_1) {
+    "use strict";
     var holder = document.getElementById('holder');
     var stage = new Stage_1.default(holder, { autoResize: true });
     var container = new Container_1.default().setBuffer(new CanvasBuffer_1.CanvasBuffer(500, 500), true);

@@ -1,4 +1,5 @@
 define(["require", "exports", "../../src/core/math/Vector3", "../../src/core/math/Matrix4", "../../src/easelts/display/Stage", "../../src/easelts/display/Shape", "../../src/core/util/Interval"], function (require, exports, Vector3_1, Matrix4_1, Stage_1, Shape_1, Interval_1) {
+    "use strict";
     var v3_0 = new Vector3_1.Vector3();
     var v3_1 = new Vector3_1.Vector3();
     var v3_2 = new Vector3_1.Vector3();

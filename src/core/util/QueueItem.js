@@ -31,6 +31,5 @@ define(["require", "exports"], function (require, exports) {
         };
         return QueueItem;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = QueueItem;
+    exports.QueueItem = QueueItem;
 });

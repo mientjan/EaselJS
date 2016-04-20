@@ -11,13 +11,15 @@ define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
             if (unit === void 0) { unit = 1000; }
             _super.call(this);
             this.frame = 0;
+            this._freeze = false;
+            this._hasStopped = false;
             this._time = 0;
             this._fpms = 0;
             this._fpms = unit / fps;
         }
         AnimationQueue.prototype.onTick = function (delta) {
             var time = this._time += delta;
-            if (this.current != null || this.next() != null) {
+            if ((this.current != null || this.next() != null)) {
                 var current = this.current;
                 var from = current.from;
                 var duration = current.duration;
@@ -31,6 +33,9 @@ define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
                 }
             }
         };
+        AnimationQueue.prototype.hasStopped = function () {
+            return !this.current && !this.hasNext();
+        };
         AnimationQueue.prototype.next = function () {
             var next = _super.prototype.next.call(this);
             if (next) {
@@ -42,10 +47,11 @@ define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
             return this.frame | 0;
         };
         AnimationQueue.prototype.reset = function () {
+            this._freeze = false;
             this._time = this._time % this._fpms;
         };
         return AnimationQueue;
-    }(Queue_1.default));
+    }(Queue_1.Queue));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = AnimationQueue;
 });

@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", '../../../src/easelts/display/Container', '../../../src/easelts/display/Text', '../../../src/easelts/component/BitmapNinePatch', '../../../src/easelts/component/bitmapninepatch/NinePatch', '../../../src/easelts/geom/Rectangle', '../../../src/easelts/behavior/ButtonBehavior'], function (require, exports, Container_1, Text_1, BitmapNinePatch_1, NinePatch_1, Rectangle_1, ButtonBehavior_1) {
+    "use strict";
     var BottomButton = (function (_super) {
         __extends(BottomButton, _super);
         function BottomButton() {
@@ -17,7 +18,7 @@ define(["require", "exports", '../../../src/easelts/display/Container', '../../.
             this.addChild(this._text);
         }
         return BottomButton;
-    })(Container_1.default);
+    }(Container_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = BottomButton;
 });

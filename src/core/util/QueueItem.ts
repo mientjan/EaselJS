@@ -1,4 +1,4 @@
-class QueueItem
+export class QueueItem
 {
 
 	public label:string;
@@ -47,5 +47,3 @@ class QueueItem
 		this._complete = null;
 	}
 }
-
-export default QueueItem;

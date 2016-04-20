@@ -1,4 +1,5 @@
 define(["require", "exports", '../../src/easelts/display/Stage', '../../src/easelts/display/Text', '../../src/easelts/display/Shape'], function (require, exports, Stage_1, Text_1, Shape_1) {
+    "use strict";
     var holder = document.getElementById('holder');
     var stage = new Stage_1.default(holder, true);
     stage.enableMouseOver();

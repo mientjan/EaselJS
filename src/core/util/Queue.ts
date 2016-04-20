@@ -1,16 +1,18 @@
 
 
-import QueueItem from "./QueueItem";
+import {QueueItem} from "./QueueItem";
 
-class Queue
+export class Queue
 {
-	protected _list:Array<QueueItem> = [];
+	private _list:Array<QueueItem> = [];
+	private _listLength:number = 0;
 	public current:QueueItem = null;
 
 	public add(item:QueueItem):Queue
 	{
 		this._list.push(item);
-
+		this._listLength++;
+		
 		return this;
 	}
 
@@ -18,9 +20,10 @@ class Queue
 	{
 		this.kill();
 
-		if(this._list.length > 0)
+		if(this._listLength > 0)
 		{
 			this.current = this._list.shift();
+			this._listLength--;
 		} else {
 			this.current = null;
 		}
@@ -28,11 +31,17 @@ class Queue
 		return this.current;
 	}
 
+	public hasNext():boolean
+	{
+		return this._listLength > 0;
+	}
+
 	public end(all:boolean = false):Queue
 	{
 		if(all)
 		{
 			this._list.length = 0;
+			this._listLength = 0;
 		}
 
 		if(this.current){
@@ -47,6 +56,7 @@ class Queue
 		if(all)
 		{
 			this._list.length = 0;
+			this._listLength = 0;
 		}
 
 		if(this.current)
@@ -60,5 +70,3 @@ class Queue
 		return this;
 	}
 }
-
-export default Queue;

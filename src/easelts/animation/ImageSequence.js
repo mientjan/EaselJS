@@ -86,14 +86,14 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
             this.visible = true;
             if (label instanceof Array) {
                 if (label.length == 1) {
-                    var queue = new QueueItem_1.default(null, label[0], this.getTotalFrames(), times, 0);
+                    var queue = new QueueItem_1.QueueItem(null, label[0], this.getTotalFrames(), times, 0);
                 }
                 else {
-                    var queue = new QueueItem_1.default(null, label[0], label[1], times, 0);
+                    var queue = new QueueItem_1.QueueItem(null, label[0], label[1], times, 0);
                 }
             }
             else if (label == null) {
-                var queue = new QueueItem_1.default(null, 0, this.getTotalFrames(), times, 0);
+                var queue = new QueueItem_1.QueueItem(null, 0, this.getTotalFrames(), times, 0);
             }
             if (complete) {
                 queue.then(complete);

@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", '../../../src/easelts/display/Container'], function (require, exports, Container_1) {
+    "use strict";
     var Carousel = (function (_super) {
         __extends(Carousel, _super);
         function Carousel(width, height, x, y, regX, regY) {
@@ -88,7 +89,7 @@ define(["require", "exports", '../../../src/easelts/display/Container'], functio
             this.reset();
         };
         return Carousel;
-    })(Container_1.default);
+    }(Container_1.default));
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Carousel;
 });

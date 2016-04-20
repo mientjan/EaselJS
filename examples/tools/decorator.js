@@ -5,6 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 define(["require", "exports", "../../src/core/util/Decorator"], function (require, exports, Decorator_1) {
+    "use strict";
     var FooBar = (function () {
         function FooBar() {
         }
@@ -13,5 +14,5 @@ define(["require", "exports", "../../src/core/util/Decorator"], function (requir
             Decorator_1.log()
         ], FooBar.prototype, "logStatement", null);
         return FooBar;
-    })();
+    }());
 });

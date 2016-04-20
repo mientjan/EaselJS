@@ -1,4 +1,5 @@
 define(["require", "exports", '../../src/easelts/display/Stage', '../../src/easelts/display/Debug', '../../src/easelts/component/BitmapNinePatch', '../../src/easelts/component/bitmapninepatch/NinePatch', '../../src/easelts/geom/Rectangle'], function (require, exports, Stage_1, Debug_1, BitmapNinePatch_1, NinePatch_1, Rectangle_1) {
+    "use strict";
     var holder = document.getElementById('holder');
     var stage = new Stage_1.default(holder, true);
     stage.enableMouseOver();

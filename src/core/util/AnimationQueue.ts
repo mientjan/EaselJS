@@ -1,9 +1,17 @@
-import QueueItem from "./QueueItem";
-import Queue from "./Queue";
+import {QueueItem} from "./QueueItem";
+import {Queue} from "./Queue";
 
 class AnimationQueue extends Queue
 {
 	protected frame:number = 0;
+
+	/**
+	 * Will stop
+	 * @property _freeze
+	 * @type {boolean}
+	 */
+	private _freeze:boolean = false;
+	private _hasStopped:boolean = false;
 
 	protected _time:number = 0;
 	protected _fpms:number = 0;
@@ -18,7 +26,7 @@ class AnimationQueue extends Queue
 	{
 		var time = this._time += delta;
 
-		if(this.current != null || this.next() != null)
+		if((this.current != null || this.next() != null) )
 		{
 			var current = this.current;
 			var from = current.from;
@@ -32,6 +40,11 @@ class AnimationQueue extends Queue
 				this.frame = from + (frame % duration);
 			}
 		}
+	}
+
+	public hasStopped():boolean
+	{
+		return !this.current && !this.hasNext();
 	}
 
 	public next():QueueItem
@@ -50,6 +63,7 @@ class AnimationQueue extends Queue
 
 	protected reset():void
 	{
+		this._freeze = false;
 		this._time = this._time % this._fpms;
 	}
 }

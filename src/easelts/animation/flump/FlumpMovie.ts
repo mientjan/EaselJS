@@ -12,7 +12,7 @@ import AnimationQueue from '../../../core/util/AnimationQueue';
 
 import IFlumpMovie from "./IFlumpMovie";
 import DisplayType from "../../enum/DisplayType";
-import QueueItem from "../../../core/util/QueueItem";
+import {QueueItem} from "../../../core/util/QueueItem";
 import IPlayable from "../../../core/interface/IPlayable";
 
 /**
@@ -216,11 +216,14 @@ class FlumpMovie extends DisplayObject implements IPlayable
 			this._queue.onTick(delta);
 			this.frame = this._queue.getFrame();
 
-			for(var i = 0; i < this.flumpMovieLayers.length; i++)
+			if(!this._queue.hasStopped())
 			{
-				var layer = this.flumpMovieLayers[i];
-				layer.onTick(delta);
-				layer.setFrame(this.frame);
+				for(var i = 0; i < this.flumpMovieLayers.length; i++)
+				{
+					var layer = this.flumpMovieLayers[i];
+					layer.onTick(delta);
+					layer.setFrame(this.frame);
+				}
 			}
 		}
 	}

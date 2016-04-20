@@ -6,7 +6,7 @@ import BitmapNinePatch from '../../../src/easelts/component/BitmapNinePatch';
 import NinePatch from '../../../src/easelts/component/bitmapninepatch/NinePatch';
 import Rectangle from '../../../src/easelts/geom/Rectangle';
 import ButtonBehavior from '../../../src/easelts/behavior/ButtonBehavior';
-import DisplayObject from "../../../src/easelts/display/DisplayObject";
+import {DisplayObject} from "../../../src/easelts/display/DisplayObject";
 
 class BottomButton extends Container<DisplayObject>
 {

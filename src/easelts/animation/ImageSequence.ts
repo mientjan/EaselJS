@@ -10,7 +10,7 @@ import Signal from "../../core/event/Signal";
 import SignalConnection from "../../core/event/SignalConnection";
 import Promise from "../../core/util/Promise";
 import AnimationQueue from "../../core/util/AnimationQueue";
-import QueueItem from "../../core/util/QueueItem";
+import {QueueItem} from "../../core/util/QueueItem";
 
 /**
  * @class ImageSequence
