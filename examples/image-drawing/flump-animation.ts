@@ -36,7 +36,7 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 		'SupermanSuductionLose'
 	];
 
-	for(var i = 0; i < 1; i++)
+	for(var i = 0; i < 600; i++)
 	{
 
 		var movie = <FlumpMovie> fl.createMovie(ArrayUtil.getRandom(names));
@@ -50,7 +50,7 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 			}
 
 			return play;
-		})(movie);
+		})(movie); 
 		////var movie = <FlumpMovie> fl.createMovie('SupermanWalk');
 
 		stage.addChild(movie);

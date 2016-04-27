@@ -214,7 +214,8 @@ class FlumpMovie extends DisplayObject implements IPlayable
 		if(this.paused == false)
 		{
 			this._queue.onTick(delta);
-			this.frame = this._queue.getFrame();
+			var frame = this.frame;
+			var newFrame = this._queue.getFrame();
 
 			if(!this._queue.hasStopped())
 			{
@@ -222,9 +223,11 @@ class FlumpMovie extends DisplayObject implements IPlayable
 				{
 					var layer = this.flumpMovieLayers[i];
 					layer.onTick(delta);
-					layer.setFrame(this.frame);
+					layer.setFrame(newFrame);
 				}
 			}
+
+			this.frame = newFrame;
 		}
 	}
 

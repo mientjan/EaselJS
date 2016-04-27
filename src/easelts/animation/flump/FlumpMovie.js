@@ -140,14 +140,16 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             delta *= this.speed;
             if (this.paused == false) {
                 this._queue.onTick(delta);
-                this.frame = this._queue.getFrame();
+                var frame = this.frame;
+                var newFrame = this._queue.getFrame();
                 if (!this._queue.hasStopped()) {
                     for (var i = 0; i < this.flumpMovieLayers.length; i++) {
                         var layer = this.flumpMovieLayers[i];
                         layer.onTick(delta);
-                        layer.setFrame(this.frame);
+                        layer.setFrame(newFrame);
                     }
                 }
+                this.frame = newFrame;
             }
         };
         FlumpMovie.prototype.getSymbol = function (name) {

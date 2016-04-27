@@ -44,7 +44,7 @@ define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
             return next;
         };
         AnimationQueue.prototype.getFrame = function () {
-            return this.frame | 0;
+            return this.frame;
         };
         AnimationQueue.prototype.reset = function () {
             this._freeze = false;

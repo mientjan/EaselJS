@@ -58,7 +58,7 @@ class AnimationQueue extends Queue
 
 	public getFrame():number
 	{
-		return this.frame|0;
+		return this.frame;
 	}
 
 	protected reset():void
