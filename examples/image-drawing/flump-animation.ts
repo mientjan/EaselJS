@@ -36,7 +36,7 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 		'SupermanSuductionLose'
 	];
 
-	for(var i = 0; i < 600; i++)
+	for(var i = 0; i < 60; i++)
 	{
 
 		var movie = <FlumpMovie> fl.createMovie(ArrayUtil.getRandom(names));
@@ -46,7 +46,7 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 		playMovie = (function(movie){
 			var play;
 			play = function(){
-				setTimeout(() => movie.play(1, null, play), 300);
+				setTimeout(() => movie.play(1, null, play), 0);
 			}
 
 			return play;

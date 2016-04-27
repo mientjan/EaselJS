@@ -125,10 +125,10 @@ function requestAnimationFrame(timeUpdate:number):void
 		fc.time += delta;
 		fc.accum += delta;
 
-		if(fc.accum > fc.mspf )
+		if(fc.accum >= fc.mspf )
 		{
-			fc.accum -= fc.mspf;
-			fc.signal.emit(fc.mspf);
+			fc.signal.emit(fc.accum);
+			fc.accum = 0;
 			fc.ptime = fc.time;
 		}
 	}

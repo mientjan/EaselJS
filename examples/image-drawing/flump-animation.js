@@ -12,14 +12,14 @@ define(["require", "exports", '../../src/easelts/display/Stage', '../../src/ease
             'SupermanSuductionWin',
             'SupermanSuductionLose'
         ];
-        for (var i = 0; i < 600; i++) {
+        for (var i = 0; i < 60; i++) {
             var movie = fl.createMovie(ArrayUtil_1.default.getRandom(names));
             movie.setXY(Math.random() * stage.width | 0, Math.random() * stage.height | 0);
             var playMovie;
             playMovie = (function (movie) {
                 var play;
                 play = function () {
-                    setTimeout(function () { return movie.play(1, null, play); }, 300);
+                    setTimeout(function () { return movie.play(1, null, play); }, 0);
                 };
                 return play;
             })(movie);

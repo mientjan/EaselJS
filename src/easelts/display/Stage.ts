@@ -40,7 +40,7 @@ import PointerEvent from "../event/PointerEvent";
 import TimeEvent from "../../core/event/TimeEvent";
 import Signal from "../../core/event/Signal";
 import Interval from "../../core/util/Interval";
-import Stats from "../component/Stats";
+
 import {StageOption} from "../data/StageOption";
 import IHashMap from "../../core/interface/IHashMap";
 import {Canvas2DElement, Canvas2DElementQuality} from "../renderer/Canvas2DElement";
@@ -118,8 +118,7 @@ class Stage extends Container
 
 	protected _option:StageOption;
 	protected _isRunning:boolean = false;
-	protected _fps:number = 60;
-	protected _fpsCounter:Stats = null;
+	protected _fps:number = 40;
 
 	protected _intervalTick:Interval;
 	protected _intervalRenderer:Interval;
@@ -380,11 +379,7 @@ class Stage extends Container
 
 	public setFpsCounter(value:boolean):Stage
 	{
-		if(value){
-			this._fpsCounter = new Stats;
-		} else {
-			this._fpsCounter = null;
-		}
+		this._renderer.setFpsCounter(value);
 
 		return this;
 	}
@@ -1107,7 +1102,7 @@ class Stage extends Container
 	{
 		this.stop();
 
-		this._intervalTick = new Interval(60);
+		this._intervalTick = new Interval(120);
 		this._intervalTick.attach(this.onTick.bind(this));
 
 		this._intervalRenderer = new Interval(this.getFps());

@@ -767,6 +767,8 @@ class Container extends DisplayObject implements ILoadable<Container>
 	 **/
 	public onTick(delta:number):void
 	{
+		console.log(delta);
+		
 		super.onTick(delta);
 
 		if(this.tickChildren)

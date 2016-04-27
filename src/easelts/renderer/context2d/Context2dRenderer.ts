@@ -1,6 +1,8 @@
 import {DisplayObject} from "../../display/DisplayObject";
 import {Canvas2DElement} from "../Canvas2DElement";
 import Signal from "../../../core/event/Signal";
+import Stats from "../../component/Stats";
+import Rectangle from "../../geom/Rectangle";
 
 export class Context2dRenderer
 {
@@ -8,6 +10,9 @@ export class Context2dRenderer
 	_element:Canvas2DElement;
 
 	_autoClear:boolean = true;
+	_fpsCounter:Stats;
+
+	public sourceRect:Rectangle = null;
 
 	/**
 	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it.
@@ -21,6 +26,17 @@ export class Context2dRenderer
 	 * @event drawend
 	 */
 	public drawendSignal:Signal = new Signal();
+
+	public setFpsCounter(value:boolean):this
+	{
+		if(value){
+			this._fpsCounter = new Stats;
+		} else {
+			this._fpsCounter = null;
+		}
+
+		return this;
+	}
 
 	public setElement(element:Canvas2DElement)
 	{
@@ -46,16 +62,26 @@ export class Context2dRenderer
 		}
 
 		ctx.save();
-		// if(this.drawRect)
-		// {
-		// 	ctx.beginPath();
-		// 	ctx.rect(r.x, r.y, r.width, r.height);
-		// 	ctx.clip();
-		// }
+		if(this.sourceRect)
+		{
+			ctx.beginPath();
+			ctx.rect(this.sourceRect.x, this.sourceRect.y, this.sourceRect.width, this.sourceRect.height);
+			ctx.clip();
+		}
 
 		item.updateContext(ctx);
 		item.draw(ctx, false);
 		ctx.restore();
+
+		if(this._fpsCounter)
+		{
+			this._fpsCounter.update();
+
+			ctx.save();
+			//this._fpsCounter.updateContext(ctx);
+			this._fpsCounter.draw(ctx, false);
+			ctx.restore();
+		}
 
 		this.drawendSignal.emit();
 	}

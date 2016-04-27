@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption", "../renderer/Canvas2DElement", "../renderer/context2d/Context2dRenderer"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1, Canvas2DElement_1, Context2dRenderer_1) {
+define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../data/StageOption", "../renderer/Canvas2DElement", "../renderer/context2d/Context2dRenderer"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, StageOption_1, Canvas2DElement_1, Context2dRenderer_1) {
     "use strict";
     var Stage = (function (_super) {
         __extends(Stage, _super);
@@ -15,8 +15,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this.drawendSignal = new Signal_1.default();
             this.type = 4;
             this._isRunning = false;
-            this._fps = 60;
-            this._fpsCounter = null;
+            this._fps = 40;
             this._eventListeners = null;
             this._onResizeEventListener = null;
             this.holder = null;
@@ -92,12 +91,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             return this;
         };
         Stage.prototype.setFpsCounter = function (value) {
-            if (value) {
-                this._fpsCounter = new Stats_1.default;
-            }
-            else {
-                this._fpsCounter = null;
-            }
+            this._renderer.setFpsCounter(value);
             return this;
         };
         Stage.prototype.render = function () {
@@ -434,7 +428,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
         };
         Stage.prototype.start = function () {
             this.stop();
-            this._intervalTick = new Interval_1.default(60);
+            this._intervalTick = new Interval_1.default(120);
             this._intervalTick.attach(this.onTick.bind(this));
             this._intervalRenderer = new Interval_1.default(this.getFps());
             this._intervalRenderer.attach(this.render.bind(this));

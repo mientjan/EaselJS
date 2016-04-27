@@ -47,9 +47,9 @@ define(["require", "exports", "../event/Signal1"], function (require, exports, S
             fc = list[i];
             fc.time += delta;
             fc.accum += delta;
-            if (fc.accum > fc.mspf) {
-                fc.accum -= fc.mspf;
-                fc.signal.emit(fc.mspf);
+            if (fc.accum >= fc.mspf) {
+                fc.signal.emit(fc.accum);
+                fc.accum = 0;
                 fc.ptime = fc.time;
             }
         }

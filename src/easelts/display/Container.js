@@ -292,6 +292,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
             }
         };
         Container.prototype.onTick = function (delta) {
+            console.log(delta);
             _super.prototype.onTick.call(this, delta);
             if (this.tickChildren) {
                 for (var children = this.children, child = null, i = children.length - 1; i >= 0; i--) {

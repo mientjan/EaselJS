@@ -76,7 +76,6 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 	 * @type HTMLImageElement | HTMLCanvasElement | HTMLVideoElement
 	 **/
 	public source:Texture = null;
-	//public image:HTMLImageElement|HTMLCanvasElement|HTMLVideoElement = null;
 
 	protected _imageNaturalWidth:number = null;
 	protected _imageNaturalHeight:number = null;
@@ -91,7 +90,7 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 	public sourceRect:Rectangle = null;
 
 	/**
-	 * Specifies an area of the destination wil be drawn to.
+	 * Specifies an area of the destination will be drawn to.
 	 * @property destinationRect
 	 * @type Rectangle
 	 * @default null
