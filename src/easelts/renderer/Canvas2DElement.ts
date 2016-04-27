@@ -1,85 +1,59 @@
-import IBuffer from "../../interface/IBuffer";
-import RGBA from "../../data/RGBA";
-import Rectangle from "../../geom/Rectangle";
+import {CanvasElement} from "./CanvasElement";
+import Rectangle from "../geom/Rectangle";
+
+export interface ICanvas2DElementOptions {
+	domElement?:HTMLCanvasElement;
+	transparent:boolean;
+	backgroundColor?:string;
+}
+
+export enum Canvas2DElementQuality {
+	LOW, NORMAL
+}
 
 /**
  * Creates a Canvas element of the given size.
  *
- * @class CanvasBuffer
+ * @class CanvasElement
  * @param width {number} the width for the newly created canvas
  * @param height {number} the height for the newly created canvas
  */
-export class CanvasBuffer implements IBuffer
+export class Canvas2DElement extends CanvasElement
 {
-	/**
-	 * The Canvas object that belongs to this CanvasBuffer.
-	 *
-	 * @member {HTMLCanvasElement}
-	 */
-	public domElement:HTMLCanvasElement;
-	public context:CanvasRenderingContext2D;
-
+	protected _context:CanvasRenderingContext2D;
 	protected _transparent:boolean;
 	protected _backgroundColor:string;
+	protected _quality:Canvas2DElementQuality;
 
-	protected _width:number;
-	protected _height:number;
-
-	protected _quality:string = null;
-
-	constructor(width:number, height:number, options:ICanvasBufferOptions = {
-		domElement: <HTMLCanvasElement> document.createElement('canvas'),
+	constructor(width:number, height:number, options:ICanvas2DElementOptions = {
 		transparent:true,
 		backgroundColor:'#000000'
 	})
 	{
 		if(!options.transparent && !options.backgroundColor)
 		{
-			throw new Error('options.backgroundColor is requered when transparent is false');
+			throw new Error('options.backgroundColor is required when transparent is false or not defined');
 		}
+
+		super(width, height, options.domElement);
 
 		this._transparent = options.transparent;
 		this._backgroundColor = options.backgroundColor;
-		this.domElement = options.domElement;
-		this.context = <CanvasRenderingContext2D> this.domElement.getContext('2d', {alpha: this._transparent});
+
+		this._context = <CanvasRenderingContext2D> this._domElement.getContext('2d', {alpha: this._transparent});
 
 		this.setSize(width, height);
-	}
-
-	set width(value:number)
-	{
-		this._width = value;
-		this.domElement.width = value;
-		this.setQuality(this._quality);
-	}
-
-	get width():number
-	{
-		return this._width;
-	}
-
-	set height(value:number)
-	{
-		this._height = value;
-		this.domElement.height = value;
-
-		this.setQuality(this._quality);
-	}
-
-	get height():number
-	{
-		return this._height;
 	}
 
 	public draw(ctx:CanvasRenderingContext2D, ignoreCache?:boolean):void
 	{
 		var w = this._width, h = this._height;
-		ctx.drawImage(this.domElement, 0, 0, w, h, 0, 0, w, h);
+		ctx.drawImage(this._domElement, 0, 0, w, h, 0, 0, w, h);
 	}
 
 	public reset():void
 	{
-		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this._context.setTransform(1, 0, 0, 1, 0, 0);
 		this.clear();
 	}
 
@@ -87,10 +61,10 @@ export class CanvasBuffer implements IBuffer
 	{
 		if(this._transparent)
 		{
-			this.context.clearRect(0, 0, this._width, this._height);
+			this._context.clearRect(0, 0, this._width, this._height);
 		} else {
-			this.context.fillStyle = this._backgroundColor;
-			this.context.fillRect(0, 0, this._width, this._height);
+			this._context.fillStyle = this._backgroundColor;
+			this._context.fillRect(0, 0, this._width, this._height);
 		}
 	}
 
@@ -104,8 +78,8 @@ export class CanvasBuffer implements IBuffer
 	public toDataURL(backgroundColor?:string, mimeType:string = "image/png", quality:number = 1.0):string
 	{
 		var ctx = this.getContext();
-		var w = this.width;
-		var h = this.height;
+		var w = this._width;
+		var h = this._height;
 
 		var data;
 
@@ -129,7 +103,7 @@ export class CanvasBuffer implements IBuffer
 		}
 
 		//get the image data from the canvas
-		var dataURL = this.domElement.toDataURL(mimeType, quality);
+		var dataURL = this._domElement.toDataURL(mimeType, quality);
 
 		if(backgroundColor)
 		{
@@ -147,23 +121,22 @@ export class CanvasBuffer implements IBuffer
 	}
 
 	/**
-	 *
+	 * @method getImageData
 	 * @returns {Rectangle}
 	 */
-
 	public getImageData(x:number = 0, y:number = 0, width:number = this._width, height:number = this._height):ImageData
 	{
-		return this.context.getImageData(x, y, width, height);
+		return this._context.getImageData(x, y, width, height);
 	}
 
 	/**
-	 *
+	 * @method getDrawBounds
 	 * @returns {Rectangle}
 	 */
 	public getDrawBounds():Rectangle
 	{
-		var width = Math.ceil(this.width);
-		var height = Math.ceil(this.height);
+		var width = Math.ceil(this._width);
+		var height = Math.ceil(this._height);
 
 		var pixels = this.getImageData();
 
@@ -195,7 +168,7 @@ export class CanvasBuffer implements IBuffer
 
 	public getContext():CanvasRenderingContext2D
 	{
-		return this.context;
+		return this._context;
 	}
 
 	/**
@@ -205,8 +178,8 @@ export class CanvasBuffer implements IBuffer
 	 */
 	public setSize(width:number, height:number):void
 	{
-		this.domElement.width = this._width = width;
-		this.domElement.height = this._height = height;
+		this._domElement.width = this._width = width;
+		this._domElement.height = this._height = height;
 		this.setQuality(this._quality);
 	}
 
@@ -214,13 +187,13 @@ export class CanvasBuffer implements IBuffer
 	 * @method setQuality
 	 * @param {string} name
 	 */
-	public setQuality(name:string):void
+	public setQuality(name:Canvas2DElementQuality):void
 	{
-		var ctx = this.context;
+		var ctx = this._context;
 
 		switch(name)
 		{
-			case 'low':
+			case Canvas2DElementQuality.LOW:
 			{
 				this._quality = name;
 				ctx['mozImageSmoothingEnabled'] = false;
@@ -230,7 +203,7 @@ export class CanvasBuffer implements IBuffer
 				break;
 			}
 
-			case 'normal':
+			case Canvas2DElementQuality.NORMAL:
 			{
 				this._quality = name;
 				ctx['mozImageSmoothingEnabled'] = true;
@@ -248,13 +221,7 @@ export class CanvasBuffer implements IBuffer
 	 */
 	public destruct():void
 	{
-		this.context = null;
-		this.domElement = null;
+		this._context = null;
+		this._domElement = null;
 	}
-}
-
-export interface ICanvasBufferOptions {
-	domElement:HTMLCanvasElement;
-	transparent:boolean;
-	backgroundColor?:string;
 }

@@ -56,7 +56,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
                 return true;
             }
             if (bufferAvailable) {
-                var localCtx = buffer.context;
+                var localCtx = buffer.getContext();
             }
             else {
                 var localCtx = ctx;
@@ -91,7 +91,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
                 for (var i = 0; i < length; i++) {
                     this.addChild(children[i]);
                 }
-                return children[length - 1];
+                return this;
             }
             var child = children[0];
             if (child.parent) {
@@ -104,7 +104,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
             }
             this.children.push(child);
             child.onResize(child.parent.width, child.parent.height);
-            return child;
+            return this;
         };
         Container.prototype.setStage = function (stage) {
             this.stage = stage;
@@ -125,7 +125,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
             child.isDirty = true;
             this.children.splice(index, 0, child);
             child.onResize(this.width, this.height);
-            return child;
+            return this;
         };
         Container.prototype.removeChild = function () {
             var children = [];
@@ -275,7 +275,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
             return this._getBounds(null, true);
         };
         Container.prototype.toString = function () {
-            return "[Container<T> (name=" + this.name + ")]";
+            return "[Container (name=" + this.name + ")]";
         };
         Container.prototype.onResize = function (width, height) {
             _super.prototype.onResize.call(this, width, height);

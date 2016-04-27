@@ -41,7 +41,7 @@ import IDisplayObject from "../interface/IDisplayObject";
 import HttpRequest from "../../core/net/HttpRequest";
 import Promise from "../../core/util/Promise";
 import ILoadable from "../../core/interface/ILoadable";
-import {CanvasBuffer} from "../renderer/buffer/CanvasBuffer";
+import {Canvas2DElement} from "../renderer/Canvas2DElement";
 
 /**
  * A Container is a nestable display list that allows you to work with compound display elements. For  example you could
@@ -64,7 +64,7 @@ import {CanvasBuffer} from "../renderer/buffer/CanvasBuffer";
  * @extends DisplayObject
  * @constructor
  **/
-class Container<T extends IDisplayObject> extends DisplayObject implements ILoadable<T>
+class Container extends DisplayObject implements ILoadable<Container>
 {
 	// public properties:
 	public type:DisplayType = DisplayType.CONTAINER;
@@ -78,7 +78,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @type Array
 	 * @default null
 	 **/
-	public children:Array<T> = [];
+	public children:Array<any> = [];
 
 	/**
 	 * Indicates whether the children of this container are independently enabled for mouse/pointer interaction.
@@ -100,7 +100,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 **/
 	public tickChildren:boolean = true;
 
-	protected _buffer:CanvasBuffer = null;
+	protected _buffer:Canvas2DElement = null;
 	protected _willBufferAutoResize:boolean = true;
 	protected _willBufferUpdate:boolean = true;
 
@@ -141,20 +141,20 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 		super.setMouseInteraction(value);
 	}
 
-	public setBuffer(buffer:CanvasBuffer, autoResize:boolean = true):Container<T>
+	public setBuffer(buffer:Canvas2DElement, autoResize:boolean = true):Container
 	{
 		this._buffer = buffer;
 		this._willBufferAutoResize = autoResize;
 		return this;
 	}
 
-	public setBufferUpdate(value:boolean):Container<T>
+	public setBufferUpdate(value:boolean):Container
 	{
 		this._willBufferUpdate = value;
 		return this;
 	}
 
-	public load(onProgress?:(progress:number)=>any):Promise<T>
+	public load(onProgress?:(progress:number)=>any):Promise<this>
 	{
 		return HttpRequest.waitForLoadable(this.children, onProgress).then(() => {
 			this._hasLoaded = true;
@@ -188,7 +188,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 
 		if(bufferAvailable)
 		{
-			var localCtx = buffer.context;
+			var localCtx = buffer.getContext();
 		}
 		else
 		{
@@ -237,7 +237,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {DisplayObject} child The display object to add.
 	 * @return {DisplayObject} The child that was added, or the last child if multiple children were added.
 	 **/
-	public addChild(...children:Array<T>):T
+	public addChild(...children:Array<DisplayObject>):this
 	{
 		var length = children.length;
 		if(length == 0)
@@ -252,7 +252,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 				this.addChild(children[i]);
 			}
 
-			return children[length - 1];
+			return this;
 		}
 
 		var child = children[0];
@@ -262,7 +262,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 			child.parent.removeChild(child);
 		}
 
-		child.parent = <Container<T>> this;
+		child.parent = <Container> this;
 		child.isDirty = true;
 
 		if(this.stage)
@@ -273,7 +273,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 		this.children.push(child);
 		child.onResize(child.parent.width, child.parent.height);
 
-		return child;
+		return this;
 	}
 
 	/**
@@ -312,7 +312,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {number} index The index to add the child at.
 	 * @return {IDisplayObject} Returns the last child that was added, or the last child if multiple children were added.
 	 **/
-	public addChildAt(child:T, index:number):T
+	public addChildAt(child:DisplayObject, index:number):this
 	{
 		if(child.parent)
 		{
@@ -324,13 +324,13 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 			child.setStage(this.stage)
 		}
 
-		child.parent = <Container<T>> this;
+		child.parent = <Container> this;
 		child.isDirty = true;
 
 		this.children.splice(index, 0, child);
 		child.onResize(this.width, this.height);
 
-		return child;
+		return this;
 	}
 
 	/**
@@ -350,7 +350,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {IDisplayObject} child The child to remove.
 	 * @return {Boolean} true if the child (or children) was removed, or false if it was not in the display list.
 	 **/
-	public removeChild(...children:Array<T>):boolean
+	public removeChild(...children:Array<any>):boolean
 	{
 		var l = children.length;
 		if(l > 1)
@@ -426,7 +426,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 *
 	 * @method removeAllChildren
 	 **/
-	public removeAllChildren():Container<T>
+	public removeAllChildren():Container
 	{
 		var children = this.children;
 		while(children.length)
@@ -490,7 +490,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {Function} sortFunction the function to use to sort the child list. See JavaScript's <code>Array.sort</code>
 	 * documentation for details.
 	 **/
-	public sortChildren(sortFunction:(a:IDisplayObject, b:IDisplayObject) => number):Container<T>
+	public sortChildren(sortFunction:(a:IDisplayObject, b:IDisplayObject) => number):Container
 	{
 		this.children.sort(sortFunction);
 		return this;
@@ -507,7 +507,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {IDisplayObject} child The child to return the index of.
 	 * @return {Number} The index of the specified child. -1 if the child is not found.
 	 **/
-	public getChildIndex(child:T):number
+	public getChildIndex(child:DisplayObject):number
 	{
 		return this.children.indexOf(child);
 	}
@@ -548,7 +548,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {IDisplayObject} child0
 	 * @param {IDisplayObject} child1
 	 **/
-	public swapChildren(child0:T, child1:T):Container<T>
+	public swapChildren(child0:DisplayObject, child1:DisplayObject):Container
 	{
 		var children = this.children;
 		var index1, index2;
@@ -585,7 +585,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {IDisplayObject} child
 	 * @param {Number} index
 	 **/
-	public setChildIndex(child:T, index:number):Container<T>
+	public setChildIndex(child:DisplayObject, index:number):Container
 	{
 		var children = this.children, l = children.length;
 		if(child.parent != this || index < 0 || index >= l)
@@ -679,7 +679,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @param {Number} y The y position in the container to test.
 	 * @return {IDisplayObject} The top-most display object under the specified coordinates.
 	 **/
-	public getObjectUnderPoint(x:number, y:number):Container<T>|IDisplayObject
+	public getObjectUnderPoint(x:number, y:number):Container|IDisplayObject
 	{
 		var pt = this.localToGlobal(x, y);
 		return this._getObjectsUnderPoint(pt.x, pt.y);
@@ -734,7 +734,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 **/
 	public toString():string
 	{
-		return "[Container<T> (name=" + this.name + ")]";
+		return "[Container (name=" + this.name + ")]";
 	}
 
 	public onResize(width:number, height:number):void
@@ -790,7 +790,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 	 * @return {Array}
 	 * @protected
 	 **/
-	public _getObjectsUnderPoint(x, y, arr?:Array<T>, mouse?:boolean, activeListener?:boolean):Container<T> | T
+	public _getObjectsUnderPoint(x, y, arr?:Array<DisplayObject>, mouse?:boolean, activeListener?:boolean):Container | DisplayObject
 	{
 		var ctx = DisplayObject._hitTestContext;
 		var mtx = this._matrix;
@@ -838,7 +838,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 				var result:any = (<any> child)._getObjectsUnderPoint(x, y, arr, mouse, activeListener);
 				if(!arr && result)
 				{
-					return (mouse && !this.mouseChildren) ? this : <T> result;
+					return (mouse && !this.mouseChildren) ? this : <DisplayObject> result;
 				}
 			}
 			else
@@ -878,7 +878,7 @@ class Container<T extends IDisplayObject> extends DisplayObject implements ILoad
 				}
 				else
 				{
-					return (mouse && !this.mouseChildren) ? (<Container<T>> this) : (<T> child);
+					return (mouse && !this.mouseChildren) ? (<Container> this) : (<DisplayObject> child);
 				}
 			}
 		}

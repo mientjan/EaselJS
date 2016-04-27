@@ -50,7 +50,7 @@ interface IDisplayObject extends ILoadable<any>
 	mouseEnabled:boolean;
 	mask:Shape;
 	hitArea:IDisplayObject;
-	parent:Container<IDisplayObject>;
+	parent:Container;
 
 	isDirty:boolean;
 

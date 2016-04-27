@@ -57,7 +57,7 @@ import SpriteSheet from "./SpriteSheet";
  * @constructor
  * @param {SpriteSheet} [spriteSheet] The spriteSheet to use for this SpriteContainer and its children.
  **/
-class SpriteContainer extends Container<DisplayObject>
+class SpriteContainer extends Container
 {
 	/**
 	 * The SpriteSheet that this container enforces use of.

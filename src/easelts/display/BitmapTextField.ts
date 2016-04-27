@@ -70,7 +70,7 @@ function cutHex(h)
  * @param    vAlign: Verticle alignment: accepter parameters: "top","center",""bottom", default:"center"
  * @param    autoScale: true, scales the text to fit in the space, default: true
  */
-class BitmapTextField extends Container<DisplayObject>
+class BitmapTextField extends Container
 {
 	public static EVENT_TEXT_CHANGE = 'text_change';
 
@@ -104,7 +104,7 @@ class BitmapTextField extends Container<DisplayObject>
 	color:string;
 
 	border:Shape;
-	textContainer:Container<DisplayObject>;
+	textContainer:Container;
 
 	actualWidth:number;
 	containerWidth:number;
@@ -135,7 +135,7 @@ class BitmapTextField extends Container<DisplayObject>
 		this.addChild(this.border);
 
 		this.border.visible = false;
-		this.textContainer = new Container<DisplayObject>();
+		this.textContainer = new Container();
 		this.addChild(this.textContainer);
 
 		this.containerWidth = width;

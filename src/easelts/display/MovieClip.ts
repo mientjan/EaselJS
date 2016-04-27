@@ -87,7 +87,7 @@ import IDisplayObject from "../interface/IDisplayObject";
  * @param {Object} [labels=null] A hash of labels to pass to the timeline instance associated with this MovieClip.
  * Labels only need to be passed if they need to be used.
  **/
-class MovieClip extends Container<IDisplayObject>
+class MovieClip extends Container
 {
 	// constants:
 	/**

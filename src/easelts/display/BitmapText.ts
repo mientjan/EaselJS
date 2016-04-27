@@ -42,7 +42,7 @@ class BitmapTextProperties
 	spaceWidth:number = 0;
 }
 
-class BitmapText extends Container<IDisplayObject|Sprite>
+class BitmapText extends Container
 {
 
 	// static properties:

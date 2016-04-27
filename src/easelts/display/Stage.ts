@@ -28,40 +28,31 @@
  */
 
 import TouchInjectProperties from "../ui/TouchInjectProperties";
-
-// display
 import {DisplayObject} from "./DisplayObject";
 import Container from "./Container";
-
-import * as Methods from "../../easelts/util/Methods";
-
-// interfaces
-import IVector2 from "../../core/interface/IVector2";
 import {IStageOption} from "../interface/IStageOption";
-import IDisplayObject from "../interface/IDisplayObject";
-// geom
 import Rectangle from "../geom/Rectangle";
 import Size from "../geom/Size";
 import PointerData from "../geom/PointerData";
-
-// enum
 import QualityType from "../enum/QualityType";
 import DisplayType from "../enum/DisplayType";
-
-// event / signal
 import PointerEvent from "../event/PointerEvent";
 import TimeEvent from "../../core/event/TimeEvent";
-import Signal1 from "../../core/event/Signal1";
 import Signal from "../../core/event/Signal";
-import SignalConnection from "../../core/event/SignalConnection";
 import Interval from "../../core/util/Interval";
 import Stats from "../component/Stats";
 import {StageOption} from "../data/StageOption";
-import IContext2D from "../interface/IContext2D";
 import IHashMap from "../../core/interface/IHashMap";
-import {CanvasBuffer} from "../renderer/buffer/CanvasBuffer";
-import RendererCanvas from "../renderer/canvas/RendererCanvas";
+import {Canvas2DElement, Canvas2DElementQuality} from "../renderer/Canvas2DElement";
 
+// display
+
+// interfaces
+// geom
+
+// enum
+
+// event / signal
 
 
 /**
@@ -89,7 +80,7 @@ import RendererCanvas from "../renderer/canvas/RendererCanvas";
  * of a canvas object in the current document.
  **/
 
-class Stage extends Container<IDisplayObject>
+class Stage extends Container
 {
 	// events:
 
@@ -127,7 +118,6 @@ class Stage extends Container<IDisplayObject>
 	protected _fps:number = 60;
 	protected _fpsCounter:Stats = null;
 	protected _ticker:Interval;
-	protected _buffer:RendererCanvas = null;
 
 	public _eventListeners:IHashMap<{
 		window: any;
@@ -344,7 +334,7 @@ class Stage extends Container<IDisplayObject>
 			height = this.holder.offsetHeight;
 		}
 
-		this.setBuffer(new RendererCanvas(width, height, {
+		this.setBuffer(new Canvas2DElement(width, height, {
 			domElement:canvas,
 			transparent:this._option.transparent
 		}), this._option.autoResize );
@@ -372,7 +362,7 @@ class Stage extends Container<IDisplayObject>
 	 * @param {QualityType} value
 	 * @public
 	 */
-	public setQuality(value:string):Stage
+	public setQuality(value:Canvas2DElementQuality):Stage
 	{
 		this._buffer.setQuality(value);
 		return this;
@@ -550,7 +540,7 @@ class Stage extends Container<IDisplayObject>
 	public enableDOMEvents(enable:boolean = true):void
 	{
 		var name, o, eventListeners = this._eventListeners;
-		var canvas = this._buffer.domElement;
+		var canvas = this._buffer.getDomElement();
 
 		if(!enable && eventListeners)
 		{
@@ -757,7 +747,7 @@ class Stage extends Container<IDisplayObject>
 	{
 		var buffer = this._buffer;
 
-		var rect = this._getElementRect(buffer.domElement);
+		var rect = this._getElementRect(buffer.getDomElement());
 		pageX -= rect.left;
 		pageY -= rect.top;
 
@@ -923,7 +913,7 @@ class Stage extends Container<IDisplayObject>
 		var o = this._getPointerData(-1), e = o.posEvtObj;
 
 
-		var isEventTarget = eventTarget || e && (e.target == this._buffer.domElement);
+		var isEventTarget = eventTarget || e && (e.target == this._buffer.getDomElement());
 		var target = null, common = -1, cursor = "", t, i, l;
 
 		if(!owner && (clear || this.mouseInBounds && isEventTarget))
@@ -950,7 +940,7 @@ class Stage extends Container<IDisplayObject>
 			t = t.parent;
 		}
 
-		this._buffer.domElement.style.cursor = cursor;
+		this._buffer.getDomElement().style.cursor = cursor;
 		if(!owner && eventTarget)
 		{
 			eventTarget.getContext().canvas.style.cursor = cursor;
@@ -1162,8 +1152,8 @@ class Stage extends Container<IDisplayObject>
 			this._buffer.width = width * pixelRatio;
 			this._buffer.height = height * pixelRatio;
 
-			this._buffer.domElement.style.width = '' + width + 'px';
-			this._buffer.domElement.style.height = '' + height + 'px';
+			this._buffer.getDomElement().style.width = '' + width + 'px';
+			this._buffer.getDomElement().style.height = '' + height + 'px';
 
 			super.onResize(width, height);
 

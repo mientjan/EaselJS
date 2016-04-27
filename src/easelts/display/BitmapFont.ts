@@ -70,7 +70,7 @@ class BitmapFont
 
 	private width;
 
-	private _container:Container<IDisplayObject> = null;
+	private _container:Container = null;
 	private hasParsedFontXml:boolean = false;
 	private hasCalledCreateSpriteSheet:boolean = false;
 	private cachedArgumentsCreateSpriteSheet:any[];

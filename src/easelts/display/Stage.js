@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption", "../renderer/canvas/RendererCanvas"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1, RendererCanvas_1) {
+define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption", "../renderer/Canvas2DElement"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1, Canvas2DElement_1) {
     "use strict";
     var Stage = (function (_super) {
         __extends(Stage, _super);
@@ -17,7 +17,6 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this._isRunning = false;
             this._fps = 60;
             this._fpsCounter = null;
-            this._buffer = null;
             this._eventListeners = null;
             this._onResizeEventListener = null;
             this.holder = null;
@@ -54,7 +53,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 width = this.holder.offsetWidth;
                 height = this.holder.offsetHeight;
             }
-            this.setBuffer(new RendererCanvas_1.default(width, height, {
+            this.setBuffer(new Canvas2DElement_1.Canvas2DElement(width, height, {
                 domElement: canvas,
                 transparent: this._option.transparent
             }), this._option.autoResize);
@@ -169,7 +168,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             var _this = this;
             if (enable === void 0) { enable = true; }
             var name, o, eventListeners = this._eventListeners;
-            var canvas = this._buffer.domElement;
+            var canvas = this._buffer.getDomElement();
             if (!enable && eventListeners) {
                 for (name in eventListeners) {
                     o = eventListeners[name];
@@ -262,7 +261,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
         };
         Stage.prototype._updatePointerPosition = function (id, e, pageX, pageY) {
             var buffer = this._buffer;
-            var rect = this._getElementRect(buffer.domElement);
+            var rect = this._getElementRect(buffer.getDomElement());
             pageX -= rect.left;
             pageY -= rect.top;
             var w = buffer.width;
@@ -347,7 +346,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 return;
             }
             var o = this._getPointerData(-1), e = o.posEvtObj;
-            var isEventTarget = eventTarget || e && (e.target == this._buffer.domElement);
+            var isEventTarget = eventTarget || e && (e.target == this._buffer.getDomElement());
             var target = null, common = -1, cursor = "", t, i, l;
             if (!owner && (clear || this.mouseInBounds && isEventTarget)) {
                 target = this._getObjectsUnderPoint(this.mouseX, this.mouseY, null, true);
@@ -365,7 +364,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 }
                 t = t.parent;
             }
-            this._buffer.domElement.style.cursor = cursor;
+            this._buffer.getDomElement().style.cursor = cursor;
             if (!owner && eventTarget) {
                 eventTarget.getContext().canvas.style.cursor = cursor;
             }
@@ -454,8 +453,8 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             if (this.width != width || this.height != height) {
                 this._buffer.width = width * pixelRatio;
                 this._buffer.height = height * pixelRatio;
-                this._buffer.domElement.style.width = '' + width + 'px';
-                this._buffer.domElement.style.height = '' + height + 'px';
+                this._buffer.getDomElement().style.width = '' + width + 'px';
+                this._buffer.getDomElement().style.height = '' + height + 'px';
                 _super.prototype.onResize.call(this, width, height);
                 if (!this._isRunning) {
                     this.update(0);
