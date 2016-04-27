@@ -1,6 +1,6 @@
 import Bitmap from '../../src/easelts/display/Bitmap';
 import Stage from "../../src/easelts/display/Stage";
-import {Vector3} from "../../src/core/math/Vector3";
+import {Vector3} from "../../src/core/math/Vector3"; 
 
 
 var v3 = new Vector3();

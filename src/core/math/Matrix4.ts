@@ -1,6 +1,6 @@
 import {Quaternion} from "./Quaternion";
 import {Vector3} from "./Vector3";
-import MathUtil from "./MathUtil";
+import {MathUtil} from "./MathUtil";
 import {Euler} from "./Euler";
 
 /**

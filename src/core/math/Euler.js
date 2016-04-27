@@ -92,7 +92,7 @@ define(["require", "exports", "./Quaternion", "./Matrix4", "./Vector3", "./MathU
             return this;
         };
         Euler.prototype.setFromRotationMatrix = function (m, order, update) {
-            var clamp = MathUtil_1.default.clamp;
+            var clamp = MathUtil_1.MathUtil.clamp;
             var te = m.elements;
             var m11 = te[0], m12 = te[4], m13 = te[8];
             var m21 = te[1], m22 = te[5], m23 = te[9];

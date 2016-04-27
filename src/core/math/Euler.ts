@@ -1,7 +1,7 @@
 import {Quaternion} from "./Quaternion";
 import {Matrix4} from "./Matrix4";
 import {Vector3} from "./Vector3";
-import MathUtil from "./MathUtil";
+import {MathUtil} from "./MathUtil";
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author WestLangley / http://github.com/WestLangley

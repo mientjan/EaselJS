@@ -26,7 +26,7 @@ define(["require", "exports", "../../src/easelts/display/Stage", "../../src/ease
         m.decompose(position, rotation, scale);
         image.x = position.x;
         image.y = position.y;
-        image.rotation = MathUtil_1.default.radToDeg(rotation.z);
+        image.rotation = MathUtil_1.MathUtil.radToDeg(rotation.z);
     };
     var inter = new Interval_1.default(60).attach(test);
     stage.start();

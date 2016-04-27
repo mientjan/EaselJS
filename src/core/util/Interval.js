@@ -88,9 +88,10 @@ define(["require", "exports", "../event/Signal1"], function (require, exports, S
             cancelAnimationFrame(rafInt);
         };
         Interval.prototype.attach = function (callback) {
-            this._connections.push(Interval.attach(this.fps, callback));
+            var connection = Interval.attach(this.fps, callback);
+            this._connections.push(connection);
             Interval.start();
-            return this;
+            return connection;
         };
         Interval.prototype.getDelay = function () {
             var delay = (time - this._delay);

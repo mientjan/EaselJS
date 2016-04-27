@@ -642,7 +642,7 @@ define(["require", "exports", "./Vector3", "./MathUtil", "./Euler"], function (r
             return this;
         };
         Matrix4.prototype.makePerspective = function (fov, aspect, near, far) {
-            var ymax = near * Math.tan(MathUtil_1.default.degToRad(fov * 0.5));
+            var ymax = near * Math.tan(MathUtil_1.MathUtil.degToRad(fov * 0.5));
             var ymin = -ymax;
             var xmin = ymin * aspect;
             var xmax = ymax * aspect;

@@ -1,4 +1,4 @@
-define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"], function (require, exports, Euler_1, Quaternion_1, Matrix4_1, MathUtil_1) {
+define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "./MathUtil"], function (require, exports, Euler_1, Quaternion_1, Matrix4_1, MathUtil_1) {
     "use strict";
     var Vector3 = (function () {
         function Vector3(x, y, z) {
@@ -375,7 +375,7 @@ define(["require", "exports", "./Euler", "./Quaternion", "./Matrix4", "MathUtil"
         };
         Vector3.prototype.angleTo = function (v) {
             var theta = this.dot(v) / (this.length() * v.length());
-            return Math.acos(MathUtil_1.default.clamp(theta, -1, 1));
+            return Math.acos(MathUtil_1.MathUtil.clamp(theta, -1, 1));
         };
         Vector3.prototype.distanceTo = function (v) {
             return Math.sqrt(this.distanceToSquared(v));

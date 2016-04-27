@@ -104,7 +104,7 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
         Texture.prototype.bindTexture = function (ctx) {
             var bitmap = this.source;
             if (this.hasLoaded()) {
-                if (!(MathUtil_1.default.isPowerOfTwo(this.width) && MathUtil_1.default.isPowerOfTwo(this.height))) {
+                if (!(MathUtil_1.MathUtil.isPowerOfTwo(this.width) && MathUtil_1.MathUtil.isPowerOfTwo(this.height))) {
                     if (console && console.warn)
                         console.warn("Texture " + this.width + "x" + this.height + " is not power of 2", this);
                 }

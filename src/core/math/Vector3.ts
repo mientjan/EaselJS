@@ -1,7 +1,8 @@
 import {Euler} from "./Euler";
 import {Quaternion} from "./Quaternion";
 import {Matrix4} from "./Matrix4";
-import MathUtil from "MathUtil";
+import {MathUtil} from "./MathUtil";
+
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author *kile / http://kile.stravaganza.org/
@@ -9,7 +10,7 @@ import MathUtil from "MathUtil";
  * @author mikael emtinger / http://gomo.se/
  * @author egraether / http://egraether.com/
  * @author WestLangley / http://github.com/WestLangley
- */
+ */ 
 
 export class Vector3 {
 

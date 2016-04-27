@@ -44,6 +44,7 @@ import Stats from "../component/Stats";
 import {StageOption} from "../data/StageOption";
 import IHashMap from "../../core/interface/IHashMap";
 import {Canvas2DElement, Canvas2DElementQuality} from "../renderer/Canvas2DElement";
+import {Context2dRenderer} from "../renderer/context2d/Context2dRenderer";
 
 // display
 
@@ -100,12 +101,14 @@ class Stage extends Container
 	/**
 	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it.
 	 * You can call preventDefault on the event object to cancel the draw.
+	 * @deprecated
 	 * @event drawstart
 	 */
 	public drawstartSignal:Signal = new Signal();
 
 	/**
-	 * Dispatched each update immediately after the display list is drawn to the canvas and the canvas context is restored.
+	 * is patched each update immediately after the display list is drawn to the canvas and the canvas context is restored.
+	 * @deprecated
 	 * @event drawend
 	 */
 	public drawendSignal:Signal = new Signal();
@@ -117,7 +120,9 @@ class Stage extends Container
 	protected _isRunning:boolean = false;
 	protected _fps:number = 60;
 	protected _fpsCounter:Stats = null;
-	protected _ticker:Interval;
+
+	protected _intervalTick:Interval;
+	protected _intervalRenderer:Interval;
 
 	public _eventListeners:IHashMap<{
 		window: any;
@@ -300,6 +305,7 @@ class Stage extends Container
 	 * @type Stage
 	 **/
 	public _prevStage = null;
+	protected _renderer:Context2dRenderer;
 
 	/**
 	 * @class Stage
@@ -336,7 +342,8 @@ class Stage extends Container
 
 		this.setBuffer(new Canvas2DElement(width, height, {
 			domElement:canvas,
-			transparent:this._option.transparent
+			transparent:this._option.transparent,
+			backgroundColor: '' + this._option.autoClearColor
 		}), this._option.autoResize );
 
 		if(element.tagName != 'CANVAS')
@@ -352,6 +359,9 @@ class Stage extends Container
 		if( this._option.autoResize ){
 			this.enableAutoResize();
 		}
+
+		this._renderer = new Context2dRenderer();
+		this._renderer.setElement(this._buffer);
 
 		this.onResize(this._buffer.width, this._buffer.height);
 	}
@@ -378,12 +388,19 @@ class Stage extends Container
 
 		return this;
 	}
+	
+	public render():void
+	{
+		var renderer = this._renderer;
+		renderer.render(this);
+	}
 
 	/**
 	 * Each time the update method is called, the stage will call {{#crossLink "Stage/tick"}}{{/crossLink}}
 	 * unless {{#crossLink "Stage/tickOnUpdate:property"}}{{/crossLink}} is set to false,
 	 * and then render the display list to the canvas.
 	 *
+	 * @deprecated
 	 * @method update
 	 * @param {TimeEvent} [timeEvent=0]
 	 **/
@@ -1088,14 +1105,13 @@ class Stage extends Container
 	 */
 	public start():Stage
 	{
-		if(this._ticker)
-		{
-			this._ticker.destruct();
-			this._ticker = null;
-		}
+		this.stop();
 
-		this._ticker = new Interval(this.getFps())
-				.attach(this.update.bind(this));
+		this._intervalTick = new Interval(60);
+		this._intervalTick.attach(this.onTick.bind(this));
+
+		this._intervalRenderer = new Interval(this.getFps());
+		this._intervalRenderer.attach(this.render.bind(this))
 
 		this._isRunning = true;
 
@@ -1111,10 +1127,17 @@ class Stage extends Container
 	public stop():Stage
 	{
 		// remove Signal connection
-		if(this._ticker)
+		if(this._intervalTick)
 		{
-			this._ticker.destruct();
-			this._ticker = null;
+			this._intervalTick.destruct();
+			this._intervalTick = null;
+		}
+
+		// remove Signal connection
+		if(this._intervalRenderer)
+		{
+			this._intervalRenderer.destruct();
+			this._intervalRenderer = null;
 		}
 
 		this._isRunning = false;

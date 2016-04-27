@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption", "../renderer/Canvas2DElement"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1, Canvas2DElement_1) {
+define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../component/Stats", "../data/StageOption", "../renderer/Canvas2DElement", "../renderer/context2d/Context2dRenderer"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, Stats_1, StageOption_1, Canvas2DElement_1, Context2dRenderer_1) {
     "use strict";
     var Stage = (function (_super) {
         __extends(Stage, _super);
@@ -55,7 +55,8 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             }
             this.setBuffer(new Canvas2DElement_1.Canvas2DElement(width, height, {
                 domElement: canvas,
-                transparent: this._option.transparent
+                transparent: this._option.transparent,
+                backgroundColor: '' + this._option.autoClearColor
             }), this._option.autoResize);
             if (element.tagName != 'CANVAS') {
                 this.holder.appendChild(canvas);
@@ -66,6 +67,8 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             if (this._option.autoResize) {
                 this.enableAutoResize();
             }
+            this._renderer = new Context2dRenderer_1.Context2dRenderer();
+            this._renderer.setElement(this._buffer);
             this.onResize(this._buffer.width, this._buffer.height);
         }
         Object.defineProperty(Stage.prototype, "nextStage", {
@@ -96,6 +99,10 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 this._fpsCounter = null;
             }
             return this;
+        };
+        Stage.prototype.render = function () {
+            var renderer = this._renderer;
+            renderer.render(this);
         };
         Stage.prototype.update = function (delta) {
             var autoClear = this._option.autoClear;
@@ -426,19 +433,22 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             _super.prototype.setMouseInteraction.call(this, value);
         };
         Stage.prototype.start = function () {
-            if (this._ticker) {
-                this._ticker.destruct();
-                this._ticker = null;
-            }
-            this._ticker = new Interval_1.default(this.getFps())
-                .attach(this.update.bind(this));
+            this.stop();
+            this._intervalTick = new Interval_1.default(60);
+            this._intervalTick.attach(this.onTick.bind(this));
+            this._intervalRenderer = new Interval_1.default(this.getFps());
+            this._intervalRenderer.attach(this.render.bind(this));
             this._isRunning = true;
             return this;
         };
         Stage.prototype.stop = function () {
-            if (this._ticker) {
-                this._ticker.destruct();
-                this._ticker = null;
+            if (this._intervalTick) {
+                this._intervalTick.destruct();
+                this._intervalTick = null;
+            }
+            if (this._intervalRenderer) {
+                this._intervalRenderer.destruct();
+                this._intervalRenderer = null;
             }
             this._isRunning = false;
             return this;

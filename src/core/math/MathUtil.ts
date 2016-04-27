@@ -5,7 +5,7 @@ import IVector3 from "../interface/IVector3";
  * @author Mient-jan Stelling
  * @class MathUtil
  */
-class MathUtil
+export class MathUtil
 {
 
 	private static degreeToRadiansFactor = Math.PI / 180;
@@ -314,5 +314,3 @@ class MathUtil
 		return 1 - Math.abs(v - .5) * 2;
 	}
 }
-
-export default MathUtil;

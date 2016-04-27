@@ -185,12 +185,13 @@ class Interval
 		this.fps = fps;
 	}
 
-	public attach(callback:(delta:number) => any):Interval
+	public attach(callback:(delta:number) => any):SignalConnection
 	{
-		this._connections.push(Interval.attach(this.fps, callback));
+		var connection = Interval.attach(this.fps, callback);
+		this._connections.push(connection);
 		Interval.start();
 
-		return this;
+		return connection;
 	}
 
 	private _delay:number = -1;
