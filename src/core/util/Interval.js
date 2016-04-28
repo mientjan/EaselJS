@@ -21,6 +21,11 @@ define(["require", "exports", "../event/Signal1"], function (require, exports, S
                 clearTimeout(id);
             };
     }());
+    if (!Date.now) {
+        Date.now = function now() {
+            return new Date().getTime();
+        };
+    }
     var FpsCollection = (function () {
         function FpsCollection(fps) {
             this.signal = new Signal1_1.default();

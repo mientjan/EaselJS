@@ -70,17 +70,13 @@ class SignalAbstract
 	 * @returns {SignalConnection}
 	 */
 
-	public connectImpl(listener:Function, prioritize:boolean = false):SignalConnection
+	public connect(listener:Function, prioritize:boolean = false):SignalConnection
 	{
-		var _g:SignalAbstract = this;
 		var conn:SignalConnection = new SignalConnection(this, listener);
 
 		if(this.dispatching())
 		{
-			this.defer(function()
-			{
-				_g.listAdd(conn, prioritize); 
-			});
+			this.defer(() => this.listAdd(conn, prioritize));
 		}
 		else
 		{
@@ -89,21 +85,16 @@ class SignalAbstract
 		return conn;
 	}
 
-	public connect = this.connectImpl;
-
 	/**
 	 *
 	 * @param {SignalConnection} conn
 	 */
 	public disconnect(conn:SignalConnection):void
 	{
-		var _g = this;
-		if(this.dispatching())
+		// inlining this.dispatching();
+		if(this._head == SignalAbstract.DISPATCHING_SENTINEL)
 		{
-			this.defer(function()
-			{
-				_g.listRemove(conn);
-			});
+			this.defer(() => this.listRemove(conn));
 		}
 		else
 		{
@@ -151,7 +142,7 @@ class SignalAbstract
 		}
 	}
 
-	public dispatching()
+	public dispatching():boolean
 	{
 		return this._head == SignalAbstract.DISPATCHING_SENTINEL;
 	}
@@ -187,6 +178,7 @@ class SignalAbstract
 	{
 		var prev:SignalConnection = null;
 		var p:SignalConnection = this._head;
+
 		while(p != null)
 		{
 			if(p == conn)

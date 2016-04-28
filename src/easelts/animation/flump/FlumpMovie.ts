@@ -217,15 +217,13 @@ class FlumpMovie extends DisplayObject implements IPlayable
 			var frame = this.frame;
 			var newFrame = this._queue.getFrame();
 
-			if(!this._queue.hasStopped())
+			for(var i = 0; i < this.flumpMovieLayers.length; i++)
 			{
-				for(var i = 0; i < this.flumpMovieLayers.length; i++)
-				{
-					var layer = this.flumpMovieLayers[i];
-					layer.onTick(delta);
-					layer.setFrame(newFrame);
-				}
+				var layer = this.flumpMovieLayers[i];
+				layer.onTick(delta);
+				layer.setFrame(newFrame);
 			}
+
 
 			this.frame = newFrame;
 		}
@@ -365,12 +363,6 @@ class FlumpMovie extends DisplayObject implements IPlayable
 		{
 			var layer = this.flumpMovieLayers[i];
 			layer.reset();
-
-			for(var symbol in layer._symbols)
-			{
-				layer._symbols[symbol].reset();
-			}
-
 		}
 	}
 }

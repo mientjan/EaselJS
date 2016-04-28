@@ -33,7 +33,7 @@ class FlumpTexture implements IFlumpMovie
 
 	public draw(ctx:CanvasRenderingContext2D):boolean
 	{
-		// ctx.drawImage(<HTMLImageElement> this.renderTexture, this.x, this.y, this.width, this.height, 0, 0, this.width, this.height);
+		ctx.drawImage(<HTMLImageElement> this.renderTexture, this.x, this.y, this.width, this.height, 0, 0, this.width, this.height);
 		return true;
 	}
 

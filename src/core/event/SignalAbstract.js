@@ -11,20 +11,17 @@ define(["require", "exports", "./SignalConnection"], function (require, exports,
         function SignalAbstract(listener) {
             if (listener === void 0) { listener = null; }
             this._deferredTasks = null;
-            this.connect = this.connectImpl;
             this._head = (listener != null) ? new SignalConnection_1.default(this, listener) : null;
         }
         SignalAbstract.prototype.hasListeners = function () {
             return this._head != null;
         };
-        SignalAbstract.prototype.connectImpl = function (listener, prioritize) {
+        SignalAbstract.prototype.connect = function (listener, prioritize) {
+            var _this = this;
             if (prioritize === void 0) { prioritize = false; }
-            var _g = this;
             var conn = new SignalConnection_1.default(this, listener);
             if (this.dispatching()) {
-                this.defer(function () {
-                    _g.listAdd(conn, prioritize);
-                });
+                this.defer(function () { return _this.listAdd(conn, prioritize); });
             }
             else {
                 this.listAdd(conn, prioritize);
@@ -32,11 +29,9 @@ define(["require", "exports", "./SignalConnection"], function (require, exports,
             return conn;
         };
         SignalAbstract.prototype.disconnect = function (conn) {
-            var _g = this;
-            if (this.dispatching()) {
-                this.defer(function () {
-                    _g.listRemove(conn);
-                });
+            var _this = this;
+            if (this._head == SignalAbstract.DISPATCHING_SENTINEL) {
+                this.defer(function () { return _this.listRemove(conn); });
             }
             else {
                 this.listRemove(conn);

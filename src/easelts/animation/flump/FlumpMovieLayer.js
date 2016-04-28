@@ -141,8 +141,11 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             this._frame = frame;
         };
         FlumpMovieLayer.prototype.reset = function () {
-            if (this._symbol && this._symbol.type == 2048)
+            if (this._symbol)
                 this._symbol.reset();
+            for (var symbol in this._symbols) {
+                this._symbols[symbol].reset();
+            }
         };
         FlumpMovieLayer.prototype.draw = function (ctx, ignoreCache) {
             if (this._symbol != null && this.visible && this.alpha > 0 && this.scaleX != 0 && this.scaleY != 0) {

@@ -4,19 +4,19 @@ define(["require", "exports"], function (require, exports) {
         function LinkedList() {
             this.firstNode = null;
             this.lastNode = null;
-            this.nElements = 0;
+            this.numberOfNodes = 0;
         }
         LinkedList.prototype.add = function (item, index) {
-            if (index === void 0) { index = this.nElements; }
-            if (index < 0 || index > this.nElements) {
+            if (index === void 0) { index = this.numberOfNodes; }
+            if (index < 0 || index > this.numberOfNodes) {
                 return false;
             }
             var newNode = this.createNode(item);
-            if (this.nElements === 0) {
+            if (this.numberOfNodes === 0) {
                 this.firstNode = newNode;
                 this.lastNode = newNode;
             }
-            else if (index === this.nElements) {
+            else if (index === this.numberOfNodes) {
                 this.lastNode.next = newNode;
                 this.lastNode = newNode;
             }
@@ -29,7 +29,7 @@ define(["require", "exports"], function (require, exports) {
                 newNode.next = prev.next;
                 prev.next = newNode;
             }
-            this.nElements++;
+            this.numberOfNodes++;
             return true;
         };
         LinkedList.prototype.first = function () {
@@ -69,7 +69,7 @@ define(["require", "exports"], function (require, exports) {
         };
         LinkedList.prototype.remove = function (item, equalsFunction) {
             var equalsF = equalsFunction || defaultEquals;
-            if (this.nElements < 1) {
+            if (this.numberOfNodes < 1) {
                 return false;
             }
             var previous = null;
@@ -91,7 +91,7 @@ define(["require", "exports"], function (require, exports) {
                         previous.next = currentNode.next;
                         currentNode.next = null;
                     }
-                    this.nElements--;
+                    this.numberOfNodes--;
                     return true;
                 }
                 previous = currentNode;
@@ -102,7 +102,7 @@ define(["require", "exports"], function (require, exports) {
         LinkedList.prototype.clear = function () {
             this.firstNode = null;
             this.lastNode = null;
-            this.nElements = 0;
+            this.numberOfNodes = 0;
         };
         LinkedList.prototype.equals = function (other, equalsFunction) {
             var eqF = equalsFunction || defaultEquals;
@@ -125,11 +125,11 @@ define(["require", "exports"], function (require, exports) {
             return true;
         };
         LinkedList.prototype.removeElementAtIndex = function (index) {
-            if (index < 0 || index >= this.nElements) {
+            if (index < 0 || index >= this.numberOfNodes) {
                 return undefined;
             }
             var element;
-            if (this.nElements === 1) {
+            if (this.numberOfNodes === 1) {
                 element = this.firstNode.element;
                 this.firstNode = null;
                 this.lastNode = null;
@@ -149,15 +149,13 @@ define(["require", "exports"], function (require, exports) {
                     previous.next = previous.next.next;
                 }
             }
-            this.nElements--;
+            this.numberOfNodes--;
             return element;
         };
         LinkedList.prototype.forEach = function (callback) {
             var currentNode = this.firstNode;
             while (currentNode !== null) {
-                if (callback(currentNode.element) === false) {
-                    break;
-                }
+                callback(currentNode.element);
                 currentNode = currentNode.next;
             }
         };
@@ -185,19 +183,19 @@ define(["require", "exports"], function (require, exports) {
             return array;
         };
         LinkedList.prototype.size = function () {
-            return this.nElements;
+            return this.numberOfNodes;
         };
         LinkedList.prototype.isEmpty = function () {
-            return this.nElements <= 0;
+            return this.numberOfNodes <= 0;
         };
         LinkedList.prototype.toString = function () {
             return this.toArray().toString();
         };
         LinkedList.prototype.nodeAtIndex = function (index) {
-            if (index < 0 || index >= this.nElements) {
+            if (index < 0 || index >= this.numberOfNodes) {
                 return null;
             }
-            if (index === (this.nElements - 1)) {
+            if (index === (this.numberOfNodes - 1)) {
                 return this.lastNode;
             }
             var node = this.firstNode;
@@ -214,6 +212,14 @@ define(["require", "exports"], function (require, exports) {
         };
         return LinkedList;
     }());
+    var LinkedListNode = (function () {
+        function LinkedListNode(element, next) {
+            this.element = element;
+            this.next = next;
+        }
+        return LinkedListNode;
+    }());
+    exports.LinkedListNode = LinkedListNode;
     function defaultEquals(a, b) {
         return a === b;
     }

@@ -47,7 +47,7 @@ class LinkedList<T>
 	 * @type {number}
 	 * @private
 	 */
-	private nElements:number = 0;
+	private numberOfNodes:number = 0;
 
 	/**
 	 * Creates an empty Linked List.
@@ -67,21 +67,21 @@ class LinkedList<T>
 	 * @return {boolean} true if the element was added or false if the index is invalid
 	 * or if the element is undefined.
 	 */
-	public add(item:T, index:number = this.nElements):boolean
+	public add(item:T, index:number = this.numberOfNodes):boolean
 	{
-		if(index < 0 || index > this.nElements)
+		if(index < 0 || index > this.numberOfNodes)
 		{
 			return false;
 		}
 
 		var newNode = this.createNode(item);
-		if(this.nElements === 0)
+		if(this.numberOfNodes === 0)
 		{
 			// First node in the list.
 			this.firstNode = newNode;
 			this.lastNode = newNode;
 		}
-		else if(index === this.nElements)
+		else if(index === this.numberOfNodes)
 		{
 			// Insert at the end.
 			this.lastNode.next = newNode;
@@ -99,7 +99,7 @@ class LinkedList<T>
 			newNode.next = prev.next;
 			prev.next = newNode;
 		}
-		this.nElements++;
+		this.numberOfNodes++;
 		return true;
 	}
 
@@ -110,11 +110,11 @@ class LinkedList<T>
 	 */
 	public first():T
 	{
-
 		if(this.firstNode !== null)
 		{
 			return this.firstNode.element;
 		}
+
 		return undefined;
 	}
 
@@ -125,11 +125,11 @@ class LinkedList<T>
 	 */
 	public last():T
 	{
-
 		if(this.lastNode !== null)
 		{
 			return this.lastNode.element;
 		}
+
 		return undefined;
 	}
 
@@ -231,7 +231,7 @@ class LinkedList<T>
 	public remove(item:T, equalsFunction?:IEqualsFunction<T>):boolean
 	{
 		var equalsF = equalsFunction || defaultEquals;
-		if(this.nElements < 1)
+		if(this.numberOfNodes < 1)
 		{
 			return false;
 		}
@@ -263,7 +263,7 @@ class LinkedList<T>
 					previous.next = currentNode.next;
 					currentNode.next = null;
 				}
-				this.nElements--;
+				this.numberOfNodes--;
 				return true;
 			}
 			previous = currentNode;
@@ -279,7 +279,7 @@ class LinkedList<T>
 	{
 		this.firstNode = null;
 		this.lastNode = null;
-		this.nElements = 0;
+		this.numberOfNodes = 0;
 	}
 
 	/**
@@ -330,12 +330,12 @@ class LinkedList<T>
 	 */
 	public removeElementAtIndex(index:number):T
 	{
-		if(index < 0 || index >= this.nElements)
+		if(index < 0 || index >= this.numberOfNodes)
 		{
 			return undefined;
 		}
 		var element:T;
-		if(this.nElements === 1)
+		if(this.numberOfNodes === 1)
 		{
 			//First node in the list.
 			element = this.firstNode.element;
@@ -361,7 +361,7 @@ class LinkedList<T>
 				previous.next = previous.next.next;
 			}
 		}
-		this.nElements--;
+		this.numberOfNodes--;
 		return element;
 	}
 
@@ -371,15 +371,12 @@ class LinkedList<T>
 	 * invoked with one argument: the element value, to break the iteration you can
 	 * optionally return false.
 	 */
-	public forEach(callback:(item:T) => boolean):void
+	public forEach(callback:(item:T) => any):void
 	{
 		var currentNode = this.firstNode;
 		while(currentNode !== null)
 		{
-			if(callback(currentNode.element) === false)
-			{
-				break;
-			}
+			callback(currentNode.element)
 			currentNode = currentNode.next;
 		}
 	}
@@ -429,7 +426,7 @@ class LinkedList<T>
 	 */
 	public size():number
 	{
-		return this.nElements;
+		return this.numberOfNodes;
 	}
 
 	/**
@@ -438,7 +435,7 @@ class LinkedList<T>
 	 */
 	public isEmpty():boolean
 	{
-		return this.nElements <= 0;
+		return this.numberOfNodes <= 0;
 	}
 
 	public toString():string
@@ -452,11 +449,11 @@ class LinkedList<T>
 	private nodeAtIndex(index:number):ILinkedListNode<T>
 	{
 
-		if(index < 0 || index >= this.nElements)
+		if(index < 0 || index >= this.numberOfNodes)
 		{
 			return null;
 		}
-		if(index === (this.nElements - 1))
+		if(index === (this.numberOfNodes - 1))
 		{
 			return this.lastNode;
 		}
@@ -480,9 +477,20 @@ class LinkedList<T>
 	}
 }
 
-export interface ILinkedListNode<T>{
+export interface ILinkedListNode<T> {
 	element: T;
 	next: ILinkedListNode<T>;
+}
+
+export class LinkedListNode<T> implements ILinkedListNode<T>
+{
+	element: T;
+	next: ILinkedListNode<T>;
+
+	constructor(element:T, next?:LinkedListNode<T>){
+		this.element = element;
+		this.next = next;
+	}
 }
 
 /**

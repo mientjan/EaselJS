@@ -39,7 +39,7 @@ import DisplayType from "../enum/DisplayType";
 import PointerEvent from "../event/PointerEvent";
 import TimeEvent from "../../core/event/TimeEvent";
 import Signal from "../../core/event/Signal";
-import Interval from "../../core/util/Interval";
+import {Interval2 as Interval} from "../../core/util/Interval2";
 
 import {StageOption} from "../data/StageOption";
 import IHashMap from "../../core/interface/IHashMap";
@@ -118,7 +118,7 @@ class Stage extends Container
 
 	protected _option:StageOption;
 	protected _isRunning:boolean = false;
-	protected _fps:number = 40;
+	protected _fps:number = -1;
 
 	protected _intervalTick:Interval;
 	protected _intervalRenderer:Interval;
@@ -383,8 +383,8 @@ class Stage extends Container
 
 		return this;
 	}
-	
-	public render():void
+
+	public render(delta:number):void
 	{
 		var renderer = this._renderer;
 		renderer.render(this);
@@ -399,7 +399,7 @@ class Stage extends Container
 	 * @method update
 	 * @param {TimeEvent} [timeEvent=0]
 	 **/
-	public update(delta:number):void 
+	public update(delta:number):void
 	{
 		var autoClear = this._option.autoClear;
 		var autoClearColor = this._option.autoClearColor;
@@ -416,7 +416,6 @@ class Stage extends Container
 		this.drawstartSignal.emit();
 
 		DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
-
 
 		/**
 		 *
@@ -1092,11 +1091,11 @@ class Stage extends Container
 	{
 		this.stop();
 
-		this._intervalTick = new Interval(120);
-		this._intervalTick.attach(this.onTick.bind(this));
+		this._intervalTick = new Interval(60);
+		this._intervalTick.add(this.onTick.bind(this));
 
 		this._intervalRenderer = new Interval(this.getFps());
-		this._intervalRenderer.attach(this.render.bind(this))
+		this._intervalRenderer.add(this.render.bind(this))
 
 		this._isRunning = true;
 

@@ -32,13 +32,17 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import LinkedList from "./LinkedList";
+import Signal1 from "../event/Signal1";
+import SignalConnection from "../event/SignalConnection";
+
 (function() {
 	var lastTime = 0;
 	var vendors = ['ms', 'moz', 'webkit', 'o'];
 	for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
 		window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
 		window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-				|| window[vendors[x]+'CancelRequestAnimationFrame'];
+			|| window[vendors[x]+'CancelRequestAnimationFrame'];
 	}
 
 	if (!window.requestAnimationFrame)
@@ -46,7 +50,7 @@
 			var currTime = new Date().getTime();
 			var timeToCall = Math.max(0, 16 - (currTime - lastTime));
 			var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-					timeToCall);
+				timeToCall);
 			lastTime = currTime + timeToCall;
 			return id;
 		};
@@ -56,15 +60,6 @@
 			clearTimeout(id);
 		};
 }());
-
-if (!Date.now) {
-	Date.now = function now() {
-		return new Date().getTime();
-	};
-}
-
-import Signal1 from "../event/Signal1";
-import SignalConnection from "../event/SignalConnection";
 
 /*
  * Interval
@@ -93,128 +88,149 @@ import SignalConnection from "../event/SignalConnection";
  * THE SOFTWARE.
  */
 
-class FpsCollection {
-
-	public signal:Signal1<number> = new Signal1<number>();
-	public frame:number = 0;
-	public time:number = 0;
-	public ptime:number = 0;
-	public accum:number = 0;
+class FramePerSecondCollection extends Signal1<number>
+{
+	private _intervalKey:number = -1;
+	private _fps:number;
+	private _mspf:number;
+	private _time:number = 0;
 
 	public fps:number;
-	public mspf:number;
 
-	constructor(fps){
-		this.fps = fps;
-		this.mspf = 1000 / fps;
-	}
-}
-
-var rafInt:number = 0;
-var time:number = 0;
-var list:Array<FpsCollection> = [];
-var listLength:number = 0;
-
-function requestAnimationFrame(timeUpdate:number):void
-{
-	rafInt = window.requestAnimationFrame(requestAnimationFrame);
-	var prevTime = time;
-	time = timeUpdate;
-
-	var delta = timeUpdate - prevTime;
-	var fc;
-
-	for(var i = 0; i < listLength; i++)
+	constructor(fps:number)
 	{
-		fc = list[i];
-		fc.time += delta;
-		fc.accum += delta;
+		super();
+		this.fps = fps;
+		this._fps = fps;
+		this._mspf = 1000 / fps;
+	}
 
-		if(fc.accum >= fc.mspf )
-		{
-			fc.signal.emit(fc.accum);
-			fc.accum = 0;
-			fc.ptime = fc.time;
+	public listAdd(conn:SignalConnection, prioritize:boolean):any
+	{
+		super.listAdd(conn, prioritize);
+
+		if(this.hasListeners()){
+			this.start();
 		}
 	}
 
+	public listRemove(conn:SignalConnection):any
+	{
+		super.listRemove(conn);
 
+		if(!this.hasListeners()){
+			this.stop();
+		}
+	}
+
+	public start():void
+	{
+		if(this._fps == -1){
+			this._runRequestAnimationFrame(Date.now());
+		} else {
+			this._runSetTimeout();
+		}
+	}
+
+	private _runRequestAnimationFrame = (time:number):void =>
+	{
+		var time:number, ptime:number;
+		this._intervalKey = requestAnimationFrame(this._runRequestAnimationFrame);
+		ptime = this._time;
+		this._time = time;
+		this.emit(time - ptime);
+	}
+
+	private _runSetTimeout = ():void =>
+	{
+		var time:number, ptime:number;
+		this._intervalKey = setTimeout(this._runSetTimeout, this._mspf);
+		ptime = this._time;
+		this._time = time = Date.now();
+		this.emit(time - ptime);
+	}
+
+	public stop():void
+	{
+		if(this._fps == -1){
+			cancelAnimationFrame(this._intervalKey);
+		} else {
+			clearTimeout(this._intervalKey);
+		}
+		this._intervalKey = -1;
+	}
 }
 
-class Interval
+export class Interval2
 {
-	public static isRunning:boolean = false;
-
-	public static attach(fps_:number, callback:(delta:number) => any):SignalConnection
+	private static _requestAnimationFrameList:FramePerSecondCollection = new FramePerSecondCollection(-1);
+	private static _setTimeoutList:LinkedList<FramePerSecondCollection> = new LinkedList<FramePerSecondCollection>();
+	
+	protected static add(framePerSecond:number, callback:(delta:number) => any):SignalConnection
 	{
-		// floor fps
-		var fps = fps_ | 0;
-		var fc:FpsCollection = null;
-		for(var i = 0; i < list.length; i++)
+		var connection:SignalConnection = null;
+		
+		if(framePerSecond === -1)
 		{
-			if( list[i].fps == fps )
+			Interval2._requestAnimationFrameList.connect(callback);
+		} 
+		else if(framePerSecond >= 1)
+		{
+			// floor fps
+			framePerSecond = framePerSecond | 0;
+			var fpsCollection:FramePerSecondCollection = null;
+			var list = Interval2._setTimeoutList;
+
+			var currentNode = list.firstNode;
+			while(currentNode !== null)
 			{
-				fc = list[i];
+				if(currentNode.element.fps == framePerSecond)
+				{
+					fpsCollection = currentNode.element;
+					break;
+				}
+				currentNode = currentNode.next;
 			}
+
+			if(!fpsCollection){
+				fpsCollection = new FramePerSecondCollection(framePerSecond);
+				list.add(fpsCollection);
+			}
+
+			connection = fpsCollection.connect(callback);
 		}
-
-		if(!fc){
-			fc = new FpsCollection(fps);
-			list.push(fc);
-			listLength = list.length;
-		}
-
-		return fc.signal.connect(callback);
-	}
-
-	private static start():void
-	{
-		if(!Interval.isRunning)
-		{
-			Interval.isRunning = true;
-			requestAnimationFrame(0);
-		}
-	}
-
-	private static stop():void
-	{
-		Interval.isRunning = false;
-		cancelAnimationFrame(rafInt);
-	}
-
-	private fps:number = 0;
-	private _connections:Array<SignalConnection> = [];
-
-	constructor(fps:number = 60)
-	{
-		this.fps = fps;
-	}
-
-	public attach(callback:(delta:number) => any):SignalConnection
-	{
-		var connection = Interval.attach(this.fps, callback);
-		this._connections.push(connection);
-		Interval.start();
-
+		
 		return connection;
 	}
 
-	private _delay:number = -1;
-	public getDelay():number
-	{
-		var delay = ( time - this._delay );
-		this._delay = time;
+	protected _framePerSecond:number;
+	protected _connections:Array<SignalConnection> = [];
 
-		return delay;
+	constructor(framePerSecond:number = -1, fixedTimeStep = false)
+	{
+		if(framePerSecond === 0){
+			throw new Error('framePerSecond can not be zero, only -1 or 1 and above is allowed. -1 will run as fast as possible.')
+		}
+		this._framePerSecond = framePerSecond;
+	}
+
+	public getFramePerSecond():number
+	{
+		return this._framePerSecond;
+	}
+
+	public add(callback:(delta:number) => any):SignalConnection
+	{
+		var connection = Interval2.add(this._framePerSecond, callback);
+		this._connections.push(connection);
+		return connection;
 	}
 
 	public destruct():void
 	{
 		var connections = this._connections;
-		while( connections.length){
+		while( connections.length ){
 			connections.pop().dispose();
 		}
 	}
 }
-
-export default Interval;

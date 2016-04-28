@@ -213,7 +213,12 @@ class FlumpMovieLayer extends DisplayObject
 
 	public reset()
 	{
-		if(this._symbol && this._symbol.type == DisplayType.FLUMPSYMBOL) this._symbol.reset();
+		if(this._symbol) this._symbol.reset();
+
+		for(var symbol in this._symbols)
+		{
+			this._symbols[symbol].reset();
+		}
 	}
 
 	public draw(ctx:CanvasRenderingContext2D, ignoreCache?:boolean):boolean

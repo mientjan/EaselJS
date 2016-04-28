@@ -36,21 +36,21 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 		'SupermanSuductionLose'
 	];
 
-	for(var i = 0; i < 600; i++)
+	for(var i = 0; i < 100; i++)
 	{
 
 		var movie = <FlumpMovie> fl.createMovie(ArrayUtil.getRandom(names));
 		movie.setXY(Math.random() * stage.width|0, Math.random() * stage.height|0);
-
-		var playMovie;
-		playMovie = (function(movie){
-			var play;
-			play = function(){
-				setTimeout(() => movie.play(1, null, play), 0);
-			}
-
-			return play;
-		})(movie); 
+		movie.play(-1)
+		// var playMovie;
+		// playMovie = (function(movie){
+		// 	var play;
+		// 	play = function(){
+		// 		setTimeout(() => movie.play(1, null, play), 0);
+		// 	}
+		//
+		// 	return play;
+		// })(movie);
 		////var movie = <FlumpMovie> fl.createMovie('SupermanWalk');
 
 		stage.addChild(movie);
@@ -60,7 +60,7 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 		//movie.play(-1);
 		//stage.addChild(movie);
 
-		playMovie();
+		// playMovie();
 	}
 
 	stage.children.sort((item0:IDisplayObject, item1:IDisplayObject) => {
