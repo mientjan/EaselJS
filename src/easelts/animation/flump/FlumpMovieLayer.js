@@ -61,28 +61,32 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             }
             return false;
         };
-        FlumpMovieLayer.prototype.onTick = function (delta) {
+        FlumpMovieLayer.prototype.onTick = function (delta, accumulated) {
             if (this._symbol != null && !(this._symbol instanceof FlumpTexture_1.default)) {
-                this._symbol.onTick(delta);
+                this._symbol.onTick(delta, accumulated);
             }
         };
         FlumpMovieLayer.prototype.setFrame = function (frame) {
-            var keyframe = this.flumpLayerData.getKeyframeForFrame(frame | 0);
-            if (!(keyframe instanceof FlumpKeyframeData_1.default)) {
-                this._symbol = null;
-                return;
-            }
+            var keyframe = this.flumpLayerData.getKeyframeForFrame(Math.floor(frame));
             if (keyframe.ref != -1 && keyframe.ref != null) {
                 if (this._symbol != this._symbols[keyframe.ref]) {
                     this._symbol = this._symbols[keyframe.ref];
-                    if (this._symbol.type == 2048)
+                    if (this._symbol.type == 2048) {
                         this._symbol.reset();
+                    }
                 }
+                this.setKeyframeData(keyframe, frame);
             }
             else {
                 this._symbol = null;
-                return;
             }
+            return true;
+        };
+        FlumpMovieLayer.prototype.setKeyframeData = function (keyframe, frame) {
+            var sinX = 0.0;
+            var cosX = 1.0;
+            var sinY = 0.0;
+            var cosY = 1.0;
             var x = keyframe.x;
             var y = keyframe.y;
             var scaleX = keyframe.scaleX;
@@ -92,15 +96,14 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             var pivotX = keyframe.pivotX;
             var pivotY = keyframe.pivotY;
             var alpha = keyframe.alpha;
-            var sinX = 0.0;
-            var cosX = 1.0;
-            var sinY = 0.0;
-            var cosY = 1.0;
+            var ease;
+            var interped;
+            var nextKeyframe;
             if (keyframe.index < frame && keyframe.tweened) {
-                var nextKeyframe = this.flumpLayerData.getKeyframeAfter(keyframe);
+                nextKeyframe = this.flumpLayerData.getKeyframeAfter(keyframe);
                 if (nextKeyframe instanceof FlumpKeyframeData_1.default) {
-                    var interped = (frame - keyframe.index) / keyframe.duration;
-                    var ease = keyframe.ease;
+                    interped = (frame - keyframe.index) / keyframe.duration;
+                    ease = keyframe.ease;
                     if (ease != 0) {
                         var t = 0.0;
                         if (ease < 0) {

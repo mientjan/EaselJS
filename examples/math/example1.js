@@ -28,6 +28,6 @@ define(["require", "exports", "../../src/easelts/display/Stage", "../../src/ease
         image.y = position.y;
         image.rotation = MathUtil_1.MathUtil.radToDeg(rotation.z);
     };
-    var inter = new Interval_1.default(60).attach(test);
+    var inter = new Interval_1.Interval(60).attach(test);
     stage.start();
 });

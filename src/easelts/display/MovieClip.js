@@ -116,7 +116,7 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
         };
         MovieClip.prototype.onTick = function (delta) {
             this.advance(delta);
-            _super.prototype.onTick.call(this, delta);
+            _super.prototype.onTick.call(this, delta, delta);
         };
         MovieClip.prototype._goto = function (positionOrLabel) {
             var pos = this.timeline.resolve(positionOrLabel);

@@ -205,9 +205,9 @@ class FlumpMovie extends DisplayObject implements IPlayable
 		return this;
 	}
 
-	public onTick(delta:number):void
+	public onTick(delta:number, accumulated:number):void
 	{
-		super.onTick(delta);
+		super.onTick(delta, accumulated);
 
 		delta *= this.speed;
 
@@ -220,7 +220,7 @@ class FlumpMovie extends DisplayObject implements IPlayable
 			for(var i = 0; i < this.flumpMovieLayers.length; i++)
 			{
 				var layer = this.flumpMovieLayers[i];
-				layer.onTick(delta);
+				layer.onTick(delta, accumulated);
 				layer.setFrame(newFrame);
 			}
 

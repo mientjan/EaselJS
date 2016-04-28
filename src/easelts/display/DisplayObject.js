@@ -575,7 +575,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
             ctx.shadowOffsetY = shadow.offsetY;
             ctx.shadowBlur = shadow.blur;
         };
-        DisplayObject.prototype.onTick = function (delta) {
+        DisplayObject.prototype.onTick = function (delta, accumulated) {
             if (this.isDirty) {
                 if (this.parent) {
                     this.onResize(this.parent.width, this.parent.height);

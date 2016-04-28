@@ -141,7 +141,7 @@ class Container extends DisplayObject implements ILoadable<Container>
 		super.setMouseInteraction(value);
 	}
 
-	public setBuffer(buffer:Canvas2DElement, autoResize:boolean = true):Container
+	public setBuffer(buffer:Canvas2DElement, autoResize:boolean = true):this
 	{
 		this._buffer = buffer;
 		this._willBufferAutoResize = autoResize;
@@ -756,7 +756,6 @@ class Container extends DisplayObject implements ILoadable<Container>
 			var child = this.children[i];
 			child.onResize(newWidth, newHeight);
 		}
-
 	}
 
 	/**
@@ -765,10 +764,10 @@ class Container extends DisplayObject implements ILoadable<Container>
 	 * function.
 	 * @protected
 	 **/
-	public onTick(delta:number):void
+	public onTick(delta:number, accumulated:number):void
 	{
-		super.onTick(delta);
-		
+		super.onTick(delta, accumulated);
+
 		if(this.tickChildren)
 		{
 			for(var children = this.children, child = null, i = children.length - 1; i >= 0; i--)
@@ -776,7 +775,6 @@ class Container extends DisplayObject implements ILoadable<Container>
 				child = children[i];
 				child.tickEnabled && child.onTick(delta);
 			}
-
 		}
 	}
 

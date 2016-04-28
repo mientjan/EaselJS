@@ -100,23 +100,17 @@ class FlumpMovieLayer extends DisplayObject
 
 
 
-	public onTick(delta:number):void
+	public onTick(delta:number, accumulated:number):void
 	{
 		if(this._symbol != null && !(this._symbol instanceof FlumpTexture))
 		{
-			( <FlumpMovie> this._symbol ).onTick(delta);
+			( <FlumpMovie> this._symbol ).onTick(delta, accumulated);
 		}
 	}
 
-	public setFrame(frame:number):void
+	public setFrame(frame:number):boolean
 	{
-		var keyframe:FlumpKeyframeData = this.flumpLayerData.getKeyframeForFrame(frame | 0);
-
-		if(!(keyframe instanceof FlumpKeyframeData))
-		{
-			this._symbol = null;
-			return;
-		}
+		var keyframe:FlumpKeyframeData = this.flumpLayerData.getKeyframeForFrame(Math.floor(frame));
 
 		if(( <any> keyframe.ref ) != -1 && ( <any> keyframe.ref ) != null)
 		{
@@ -124,39 +118,46 @@ class FlumpMovieLayer extends DisplayObject
 			{
 				this._symbol = this._symbols[keyframe.ref];
 
-				if(this._symbol.type == DisplayType.FLUMPSYMBOL) this._symbol.reset();
+				if(this._symbol.type == DisplayType.FLUMPSYMBOL){
+					this._symbol.reset();
+				}
 			}
-		}
-		else
-		{
+
+			this.setKeyframeData(keyframe, frame);
+		} else {
 			this._symbol = null;
-			return;
 		}
 
+		return true;
+	}
 
-		var x:number = keyframe.x;
-		var y:number = keyframe.y;
-		var scaleX:number = keyframe.scaleX;
-		var scaleY:number = keyframe.scaleY;
-		var skewX:number = keyframe.skewX;
-		var skewY:number = keyframe.skewY;
-		var pivotX:number = keyframe.pivotX;
-		var pivotY:number = keyframe.pivotY;
-		var alpha:number = keyframe.alpha;
+	public setKeyframeData(keyframe, frame){
 
 		var sinX = 0.0;
 		var cosX = 1.0;
 		var sinY = 0.0;
 		var cosY = 1.0;
+		var x = keyframe.x;
+		var y = keyframe.y;
+		var scaleX = keyframe.scaleX;
+		var scaleY = keyframe.scaleY;
+		var skewX = keyframe.skewX;
+		var skewY = keyframe.skewY;
+		var pivotX = keyframe.pivotX;
+		var pivotY = keyframe.pivotY;
+		var alpha = keyframe.alpha;
+		var ease:number;
+		var interped:number;
+		var nextKeyframe;
 
 		if(keyframe.index < frame && keyframe.tweened)
 		{
-			var nextKeyframe = this.flumpLayerData.getKeyframeAfter(keyframe);
+			nextKeyframe = this.flumpLayerData.getKeyframeAfter(keyframe);
 
 			if(nextKeyframe instanceof FlumpKeyframeData)
 			{
-				var interped = (frame - keyframe.index) / keyframe.duration;
-				var ease = keyframe.ease;
+				interped = (frame - keyframe.index) / keyframe.duration;
+				ease = keyframe.ease;
 
 				if(ease != 0)
 				{

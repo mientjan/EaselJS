@@ -56,7 +56,7 @@ define(["require", "exports", "../core/event/EventDispatcher", "../tweents/Ease"
         }
         Tween.start = function () {
             if (!Tween.interval) {
-                Tween.interval = new Interval_1.default(60);
+                Tween.interval = new Interval_1.Interval(60);
             }
             Tween.interval.attach(this.onTick);
         };

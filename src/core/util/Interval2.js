@@ -91,8 +91,9 @@ define(["require", "exports", "./LinkedList", "../event/Signal1"], function (req
                 throw new Error('framePerSecond can not be zero, only -1 or 1 and above is allowed. -1 will run as fast as possible.');
             }
             this._framePerSecond = framePerSecond;
+            this._fixedTimeStep = fixedTimeStep;
         }
-        Interval2.add = function (framePerSecond, callback) {
+        Interval2.add = function (framePerSecond, fixedTimeStep, callback) {
             var connection = null;
             if (framePerSecond === -1) {
                 Interval2._requestAnimationFrameList.connect(callback);
@@ -121,7 +122,7 @@ define(["require", "exports", "./LinkedList", "../event/Signal1"], function (req
             return this._framePerSecond;
         };
         Interval2.prototype.add = function (callback) {
-            var connection = Interval2.add(this._framePerSecond, callback);
+            var connection = Interval2.add(this._framePerSecond, this._fixedTimeStep, callback);
             this._connections.push(connection);
             return connection;
         };

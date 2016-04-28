@@ -204,9 +204,9 @@ class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, I
 		return this._queue.next();
 	}
 
-	public onTick(delta:number):void
+	public onTick(delta:number, accumulated:number):void
 	{
-		super.onTick(delta);
+		super.onTick(delta, accumulated);
 
 		if(this.paused == false)
 		{

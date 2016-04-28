@@ -1,4 +1,9 @@
-define(["require", "exports", "../event/Signal1"], function (require, exports, Signal1_1) {
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define(["require", "exports", "../event/Signal2"], function (require, exports, Signal2_1) {
     "use strict";
     (function () {
         var lastTime = 0;
@@ -26,18 +31,18 @@ define(["require", "exports", "../event/Signal1"], function (require, exports, S
             return new Date().getTime();
         };
     }
-    var FpsCollection = (function () {
-        function FpsCollection(fps) {
-            this.signal = new Signal1_1.default();
-            this.frame = 0;
-            this.time = 0;
-            this.ptime = 0;
+    var FramePerSecondCollection = (function (_super) {
+        __extends(FramePerSecondCollection, _super);
+        function FramePerSecondCollection(fps, fixed) {
+            _super.call(this);
             this.accum = 0;
+            this.fixed = false;
             this.fps = fps;
+            this.fixed = fixed;
             this.mspf = 1000 / fps;
         }
-        return FpsCollection;
-    }());
+        return FramePerSecondCollection;
+    }(Signal2_1.default));
     var rafInt = 0;
     var time = 0;
     var list = [];
@@ -48,39 +53,46 @@ define(["require", "exports", "../event/Signal1"], function (require, exports, S
         time = timeUpdate;
         var delta = timeUpdate - prevTime;
         var fc;
+        var mspf;
         for (var i = 0; i < listLength; i++) {
             fc = list[i];
-            fc.time += delta;
+            mspf = fc.mspf;
             fc.accum += delta;
-            if (fc.accum >= fc.mspf) {
-                fc.signal.emit(fc.accum);
+            if (fc.fixed) {
+                while (fc.accum > fc.mspf) {
+                    fc.accum -= fc.mspf;
+                    fc.emit(fc.mspf, fc.accum);
+                }
+            }
+            else {
+                fc.signal.emit(fc.accum, fc.accum);
                 fc.accum = 0;
-                fc.ptime = fc.time;
             }
         }
     }
     var Interval = (function () {
-        function Interval(fps) {
+        function Interval(fps, fixedTimeStep) {
             if (fps === void 0) { fps = 60; }
-            this.fps = 0;
+            if (fixedTimeStep === void 0) { fixedTimeStep = false; }
             this._connections = [];
-            this._delay = -1;
-            this.fps = fps;
+            this._fps = fps;
+            this._fixedTimeStep = fixedTimeStep;
         }
-        Interval.attach = function (fps_, callback) {
-            var fps = fps_ | 0;
+        Interval.attach = function (fps, fixed, callback) {
+            if (fixed === void 0) { fixed = false; }
+            var framePerSecond = fps | 0;
             var fc = null;
             for (var i = 0; i < list.length; i++) {
-                if (list[i].fps == fps) {
+                if (list[i].fps == framePerSecond && list[i].fixed == fixed) {
                     fc = list[i];
                 }
             }
             if (!fc) {
-                fc = new FpsCollection(fps);
+                fc = new FramePerSecondCollection(framePerSecond, fixed);
                 list.push(fc);
                 listLength = list.length;
             }
-            return fc.signal.connect(callback);
+            return fc.connect(callback);
         };
         Interval.start = function () {
             if (!Interval.isRunning) {
@@ -93,15 +105,10 @@ define(["require", "exports", "../event/Signal1"], function (require, exports, S
             cancelAnimationFrame(rafInt);
         };
         Interval.prototype.attach = function (callback) {
-            var connection = Interval.attach(this.fps, callback);
+            var connection = Interval.attach(this._fps, this._fixedTimeStep, callback);
             this._connections.push(connection);
             Interval.start();
             return connection;
-        };
-        Interval.prototype.getDelay = function () {
-            var delay = (time - this._delay);
-            this._delay = time;
-            return delay;
         };
         Interval.prototype.destruct = function () {
             var connections = this._connections;
@@ -112,6 +119,5 @@ define(["require", "exports", "../event/Signal1"], function (require, exports, S
         Interval.isRunning = false;
         return Interval;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Interval;
+    exports.Interval = Interval;
 });

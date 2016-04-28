@@ -166,7 +166,7 @@ export class Interval2
 	private static _requestAnimationFrameList:FramePerSecondCollection = new FramePerSecondCollection(-1);
 	private static _setTimeoutList:LinkedList<FramePerSecondCollection> = new LinkedList<FramePerSecondCollection>();
 	
-	protected static add(framePerSecond:number, callback:(delta:number) => any):SignalConnection
+	protected static add(framePerSecond:number, fixedTimeStep:boolean, callback:(delta:number) => any):SignalConnection
 	{
 		var connection:SignalConnection = null;
 		
@@ -204,6 +204,7 @@ export class Interval2
 	}
 
 	protected _framePerSecond:number;
+	protected _fixedTimeStep:boolean;
 	protected _connections:Array<SignalConnection> = [];
 
 	constructor(framePerSecond:number = -1, fixedTimeStep = false)
@@ -212,6 +213,7 @@ export class Interval2
 			throw new Error('framePerSecond can not be zero, only -1 or 1 and above is allowed. -1 will run as fast as possible.')
 		}
 		this._framePerSecond = framePerSecond;
+		this._fixedTimeStep = fixedTimeStep;
 	}
 
 	public getFramePerSecond():number
@@ -221,7 +223,7 @@ export class Interval2
 
 	public add(callback:(delta:number) => any):SignalConnection
 	{
-		var connection = Interval2.add(this._framePerSecond, callback);
+		var connection = Interval2.add(this._framePerSecond, this._fixedTimeStep, callback);
 		this._connections.push(connection);
 		return connection;
 	}

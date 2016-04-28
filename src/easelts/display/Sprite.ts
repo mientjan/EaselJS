@@ -389,14 +389,14 @@ class Sprite extends DisplayObject
 	 * @protected
 	 * @method _tick
 	 **/
-	public onTick(delta:number)
+	public onTick(delta:number, accumulated:number)
 	{
 		if(!this.paused)
 		{
 			this.advance(delta);
 		}
 
-		super.onTick(delta);
+		super.onTick(delta, accumulated);
 	}
 
 

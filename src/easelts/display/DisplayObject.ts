@@ -1757,7 +1757,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 * @param {number} delta
 	 * @protected
 	 **/
-	public onTick(delta:number)
+	public onTick(delta:number, accumulated:number)
 	{
 		if(this.isDirty ){
 			if( this.parent){

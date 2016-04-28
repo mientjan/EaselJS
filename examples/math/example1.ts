@@ -5,7 +5,7 @@ import {Matrix4} from "../../src/core/math/Matrix4";
 import {Vector3} from "../../src/core/math/Vector3";
 import {Quaternion} from "../../src/core/math/Quaternion";
 import {MathUtil} from "../../src/core/math/MathUtil";
-import Interval from "../../src/core/util/Interval";
+import {Interval} from "../../src/core/util/Interval";
 var holder = <HTMLBlockElement> document.getElementById('holder');
 var stage = new Stage(holder, true);
 

@@ -39,7 +39,7 @@ import DisplayType from "../enum/DisplayType";
 import PointerEvent from "../event/PointerEvent";
 import TimeEvent from "../../core/event/TimeEvent";
 import Signal from "../../core/event/Signal";
-import {Interval2 as Interval} from "../../core/util/Interval2";
+import {Interval} from "../../core/util/Interval";
 
 import {StageOption} from "../data/StageOption";
 import IHashMap from "../../core/interface/IHashMap";
@@ -120,8 +120,7 @@ class Stage extends Container
 	protected _isRunning:boolean = false;
 	protected _fps:number = -1;
 
-	protected _intervalTick:Interval;
-	protected _intervalRenderer:Interval;
+	protected _interval:Interval;
 
 	public _eventListeners:IHashMap<{
 		window: any;
@@ -377,14 +376,12 @@ class Stage extends Container
 		return this;
 	}
 
-	public setFpsCounter(value:boolean):Stage
+	public getRenderer():Context2dRenderer
 	{
-		this._renderer.setFpsCounter(value);
-
-		return this;
+		return this._renderer;
 	}
 
-	public render(delta:number):void
+	public render():void
 	{
 		var renderer = this._renderer;
 		renderer.render(this);
@@ -395,64 +392,19 @@ class Stage extends Container
 	 * unless {{#crossLink "Stage/tickOnUpdate:property"}}{{/crossLink}} is set to false,
 	 * and then render the display list to the canvas.
 	 *
-	 * @deprecated
 	 * @method update
 	 * @param {TimeEvent} [timeEvent=0]
 	 **/
-	public update(delta:number):void
+	public update = (delta:number, accumulated:number):void =>
 	{
-		var autoClear = this._option.autoClear;
-		var autoClearColor = this._option.autoClearColor;
-		var ctx = this.getContext();
-		var r = this.drawRect,
-			pixelRatio = this._option.pixelRatio;
+		this.onTick(delta, accumulated);
 
-		if(this.tickOnUpdate)
-		{
-			// update this logic in SpriteStage when necessary
-			this.onTick.call(this, Math.min(delta, 100));
+		console.log(delta, accumulated);
+		
+
+		if(delta > accumulated){
+			this.render();
 		}
-
-		this.drawstartSignal.emit();
-
-		DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
-
-		/**
-		 *
-		 */
-		ctx.setTransform(1, 0, 0, 1, 0, 0 );
-
-		if(autoClear)
-		{
-			if(autoClearColor)
-			{
-				ctx.fillStyle = autoClearColor;
-				ctx.fillRect(0,0,ctx.canvas.width + 1, ctx.canvas.height + 1);
-			}
-
-			if(r)
-			{
-				ctx.clearRect(r.x, r.y, r.width, r.height);
-			}
-			else
-			{
-				ctx.clearRect(0, 0, ctx.canvas.width + 1, ctx.canvas.height + 1);
-			}
-		}
-
-		ctx.save();
-		if(this.drawRect)
-		{
-			ctx.beginPath();
-			ctx.rect(r.x, r.y, r.width, r.height);
-			ctx.clip();
-		}
-
-		this.updateContext(ctx);
-		this.draw(ctx, false);
-		ctx.restore();
-
-		this.drawendSignal.emit();
 	}
 
 
@@ -1091,11 +1043,8 @@ class Stage extends Container
 	{
 		this.stop();
 
-		this._intervalTick = new Interval(60);
-		this._intervalTick.add(this.onTick.bind(this));
-
-		this._intervalRenderer = new Interval(this.getFps());
-		this._intervalRenderer.add(this.render.bind(this))
+		this._interval = new Interval(60, true);
+		this._interval.attach(this.update);
 
 		this._isRunning = true;
 
@@ -1111,17 +1060,10 @@ class Stage extends Container
 	public stop():Stage
 	{
 		// remove Signal connection
-		if(this._intervalTick)
+		if(this._interval)
 		{
-			this._intervalTick.destruct();
-			this._intervalTick = null;
-		}
-
-		// remove Signal connection
-		if(this._intervalRenderer)
-		{
-			this._intervalRenderer.destruct();
-			this._intervalRenderer = null;
+			this._interval.destruct();
+			this._interval = null;
 		}
 
 		this._isRunning = false;
@@ -1166,7 +1108,7 @@ class Stage extends Container
 
 			if(!this._isRunning)
 			{
-				this.update(0);
+				this.render();
 			}
 		}
 	}

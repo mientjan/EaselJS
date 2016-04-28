@@ -82,11 +82,11 @@ define(["require", "exports", "../../core/event/Event", "./DisplayObject"], func
         Sprite.prototype.toString = function () {
             return "[Sprite (name=" + this.name + ")]";
         };
-        Sprite.prototype.onTick = function (delta) {
+        Sprite.prototype.onTick = function (delta, accumulated) {
             if (!this.paused) {
                 this.advance(delta);
             }
-            _super.prototype.onTick.call(this, delta);
+            _super.prototype.onTick.call(this, delta, accumulated);
         };
         Sprite.prototype._normalizeFrame = function () {
             var animation = this._animation;

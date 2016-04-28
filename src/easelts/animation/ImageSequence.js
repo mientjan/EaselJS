@@ -123,8 +123,8 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
         ImageSequence.prototype.next = function () {
             return this._queue.next();
         };
-        ImageSequence.prototype.onTick = function (delta) {
-            _super.prototype.onTick.call(this, delta);
+        ImageSequence.prototype.onTick = function (delta, accumulated) {
+            _super.prototype.onTick.call(this, delta, accumulated);
             if (this.paused == false) {
                 this._queue.onTick(delta);
                 this.frame = this._queue.getFrame();

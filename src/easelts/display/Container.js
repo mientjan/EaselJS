@@ -291,8 +291,8 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
                 child.onResize(newWidth, newHeight);
             }
         };
-        Container.prototype.onTick = function (delta) {
-            _super.prototype.onTick.call(this, delta);
+        Container.prototype.onTick = function (delta, accumulated) {
+            _super.prototype.onTick.call(this, delta, accumulated);
             if (this.tickChildren) {
                 for (var children = this.children, child = null, i = children.length - 1; i >= 0; i--) {
                     child = children[i];

@@ -32,6 +32,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import Signal2 from "../event/Signal2";
 (function() {
 	var lastTime = 0;
 	var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -93,26 +94,25 @@ import SignalConnection from "../event/SignalConnection";
  * THE SOFTWARE.
  */
 
-class FpsCollection {
+class FramePerSecondCollection extends Signal2<number, number> {
 
-	public signal:Signal1<number> = new Signal1<number>();
-	public frame:number = 0;
-	public time:number = 0;
-	public ptime:number = 0;
 	public accum:number = 0;
+	public fixed:boolean = false;
 
 	public fps:number;
 	public mspf:number;
 
-	constructor(fps){
+	constructor(fps, fixed:boolean){
+		super();
 		this.fps = fps;
+		this.fixed = fixed;
 		this.mspf = 1000 / fps;
 	}
 }
 
 var rafInt:number = 0;
 var time:number = 0;
-var list:Array<FpsCollection> = [];
+var list:Array<FramePerSecondCollection> = [];
 var listLength:number = 0;
 
 function requestAnimationFrame(timeUpdate:number):void
@@ -123,48 +123,52 @@ function requestAnimationFrame(timeUpdate:number):void
 
 	var delta = timeUpdate - prevTime;
 	var fc;
+	var mspf;
 
 	for(var i = 0; i < listLength; i++)
 	{
 		fc = list[i];
-		fc.time += delta;
+		mspf = fc.mspf;
 		fc.accum += delta;
 
-		if(fc.accum >= fc.mspf )
-		{
-			fc.signal.emit(fc.accum);
+		if(fc.fixed){
+			while(fc.accum > fc.mspf)
+			{
+				fc.accum -= fc.mspf;
+				fc.emit(fc.mspf, fc.accum);
+			}
+		} else {
+			fc.signal.emit(fc.accum, fc.accum);
 			fc.accum = 0;
-			fc.ptime = fc.time;
 		}
 	}
-
-
 }
 
-class Interval
+export class Interval
 {
 	public static isRunning:boolean = false;
 
-	public static attach(fps_:number, callback:(delta:number) => any):SignalConnection
+	public static attach(fps:number, fixed:boolean = false, callback:(delta:number, accumulated:number) => any):SignalConnection
 	{
 		// floor fps
-		var fps = fps_ | 0;
-		var fc:FpsCollection = null;
+		var framePerSecond = fps | 0;
+		var fc:FramePerSecondCollection = null;
+
 		for(var i = 0; i < list.length; i++)
 		{
-			if( list[i].fps == fps )
+			if( list[i].fps == framePerSecond && list[i].fixed == fixed )
 			{
 				fc = list[i];
 			}
 		}
 
 		if(!fc){
-			fc = new FpsCollection(fps);
+			fc = new FramePerSecondCollection(framePerSecond, fixed);
 			list.push(fc);
 			listLength = list.length;
 		}
 
-		return fc.signal.connect(callback);
+		return fc.connect(callback);
 	}
 
 	private static start():void
@@ -182,30 +186,23 @@ class Interval
 		cancelAnimationFrame(rafInt);
 	}
 
-	private fps:number = 0;
+	private _fps:number;
+	private _fixedTimeStep:boolean;
 	private _connections:Array<SignalConnection> = [];
 
-	constructor(fps:number = 60)
+	constructor(fps:number = 60, fixedTimeStep:boolean = false)
 	{
-		this.fps = fps;
+		this._fps = fps;
+		this._fixedTimeStep = fixedTimeStep;
 	}
 
-	public attach(callback:(delta:number) => any):SignalConnection
+	public attach(callback:(delta:number, accumulate:number) => any):SignalConnection
 	{
-		var connection = Interval.attach(this.fps, callback);
+		var connection = Interval.attach(this._fps, this._fixedTimeStep, callback);
 		this._connections.push(connection);
 		Interval.start();
 
 		return connection;
-	}
-
-	private _delay:number = -1;
-	public getDelay():number
-	{
-		var delay = ( time - this._delay );
-		this._delay = time;
-
-		return delay;
 	}
 
 	public destruct():void
@@ -216,5 +213,3 @@ class Interval
 		}
 	}
 }
-
-export default Interval;

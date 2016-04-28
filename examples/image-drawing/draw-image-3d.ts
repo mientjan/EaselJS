@@ -3,7 +3,7 @@ import {Vector3} from "../../src/core/math/Vector3";
 import {Matrix4} from "../../src/core/math/Matrix4";
 import Stage from "../../src/easelts/display/Stage";
 import Shape from "../../src/easelts/display/Shape";
-import Interval from "../../src/core/util/Interval";
+import {Interval} from "../../src/core/util/Interval";
 var v3_0 = new Vector3();
 var v3_1 = new Vector3();
 var v3_2 = new Vector3();

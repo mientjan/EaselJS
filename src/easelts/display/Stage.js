@@ -3,11 +3,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval2", "../data/StageOption", "../renderer/Canvas2DElement", "../renderer/context2d/Context2dRenderer"], function (require, exports, DisplayObject_1, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval2_1, StageOption_1, Canvas2DElement_1, Context2dRenderer_1) {
+define(["require", "exports", "./Container", "../geom/PointerData", "../event/PointerEvent", "../../core/event/Signal", "../../core/util/Interval", "../data/StageOption", "../renderer/Canvas2DElement", "../renderer/context2d/Context2dRenderer"], function (require, exports, Container_1, PointerData_1, PointerEvent_1, Signal_1, Interval_1, StageOption_1, Canvas2DElement_1, Context2dRenderer_1) {
     "use strict";
     var Stage = (function (_super) {
         __extends(Stage, _super);
         function Stage(element, option) {
+            var _this = this;
             _super.call(this, '100%', '100%', 0, 0, 0, 0);
             this.tickstartSignal = new Signal_1.default();
             this.tickendSignal = new Signal_1.default();
@@ -32,6 +33,13 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this._mouseOverIntervalID = null;
             this._nextStage = null;
             this._prevStage = null;
+            this.update = function (delta, accumulated) {
+                _this.onTick(delta, accumulated);
+                console.log(delta, accumulated);
+                if (delta > accumulated) {
+                    _this.render();
+                }
+            };
             this._option = new StageOption_1.StageOption(option);
             var canvas, width, height;
             if (element.tagName == 'CANVAS') {
@@ -90,47 +98,12 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this._buffer.setQuality(value);
             return this;
         };
-        Stage.prototype.setFpsCounter = function (value) {
-            this._renderer.setFpsCounter(value);
-            return this;
+        Stage.prototype.getRenderer = function () {
+            return this._renderer;
         };
-        Stage.prototype.render = function (delta) {
+        Stage.prototype.render = function () {
             var renderer = this._renderer;
             renderer.render(this);
-        };
-        Stage.prototype.update = function (delta) {
-            var autoClear = this._option.autoClear;
-            var autoClearColor = this._option.autoClearColor;
-            var ctx = this.getContext();
-            var r = this.drawRect, pixelRatio = this._option.pixelRatio;
-            if (this.tickOnUpdate) {
-                this.onTick.call(this, Math.min(delta, 100));
-            }
-            this.drawstartSignal.emit();
-            DisplayObject_1.DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            if (autoClear) {
-                if (autoClearColor) {
-                    ctx.fillStyle = autoClearColor;
-                    ctx.fillRect(0, 0, ctx.canvas.width + 1, ctx.canvas.height + 1);
-                }
-                if (r) {
-                    ctx.clearRect(r.x, r.y, r.width, r.height);
-                }
-                else {
-                    ctx.clearRect(0, 0, ctx.canvas.width + 1, ctx.canvas.height + 1);
-                }
-            }
-            ctx.save();
-            if (this.drawRect) {
-                ctx.beginPath();
-                ctx.rect(r.x, r.y, r.width, r.height);
-                ctx.clip();
-            }
-            this.updateContext(ctx);
-            this.draw(ctx, false);
-            ctx.restore();
-            this.drawendSignal.emit();
         };
         Stage.prototype.clear = function () {
             this._buffer.clear();
@@ -422,21 +395,15 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
         };
         Stage.prototype.start = function () {
             this.stop();
-            this._intervalTick = new Interval2_1.Interval2(60);
-            this._intervalTick.add(this.onTick.bind(this));
-            this._intervalRenderer = new Interval2_1.Interval2(this.getFps());
-            this._intervalRenderer.add(this.render.bind(this));
+            this._interval = new Interval_1.Interval(60, true);
+            this._interval.attach(this.update);
             this._isRunning = true;
             return this;
         };
         Stage.prototype.stop = function () {
-            if (this._intervalTick) {
-                this._intervalTick.destruct();
-                this._intervalTick = null;
-            }
-            if (this._intervalRenderer) {
-                this._intervalRenderer.destruct();
-                this._intervalRenderer = null;
+            if (this._interval) {
+                this._interval.destruct();
+                this._interval = null;
             }
             this._isRunning = false;
             return this;
@@ -455,7 +422,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
                 this._buffer.getDomElement().style.height = '' + height + 'px';
                 _super.prototype.onResize.call(this, width, height);
                 if (!this._isRunning) {
-                    this.update(0);
+                    this.render();
                 }
             }
         };

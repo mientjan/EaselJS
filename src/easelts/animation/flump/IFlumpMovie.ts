@@ -7,7 +7,7 @@ interface IFlumpMovie
 {
 	type:DisplayType;
 	name:string;
-	onTick(delta:number):void;
+	onTick(delta:number, accumulated:number):void;
 	draw(ctx:CanvasRenderingContext2D):boolean;
 	reset():void;
 }

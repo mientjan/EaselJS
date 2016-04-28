@@ -135,8 +135,8 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             this._queue.add(queue);
             return this;
         };
-        FlumpMovie.prototype.onTick = function (delta) {
-            _super.prototype.onTick.call(this, delta);
+        FlumpMovie.prototype.onTick = function (delta, accumulated) {
+            _super.prototype.onTick.call(this, delta, accumulated);
             delta *= this.speed;
             if (this.paused == false) {
                 this._queue.onTick(delta);
@@ -144,7 +144,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
                 var newFrame = this._queue.getFrame();
                 for (var i = 0; i < this.flumpMovieLayers.length; i++) {
                     var layer = this.flumpMovieLayers[i];
-                    layer.onTick(delta);
+                    layer.onTick(delta, accumulated);
                     layer.setFrame(newFrame);
                 }
                 this.frame = newFrame;

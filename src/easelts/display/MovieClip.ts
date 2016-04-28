@@ -520,7 +520,7 @@ class MovieClip extends Container
 
 	public onTick(delta:number){
 		this.advance(delta);
-		super.onTick(delta);
+		super.onTick(delta, delta);
 
 	}
 

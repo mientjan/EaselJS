@@ -18,7 +18,7 @@ define(["require", "exports", "../../src/core/math/Vector3", "../../src/core/mat
         stage.addChild(shape);
         items.push(new Vector3_1.Vector3(shape.x, shape.y, shape.x));
     }
-    var interval = new Interval_1.default(60).attach(function (delta) {
+    var interval = new Interval_1.Interval(60).attach(function (delta) {
         var children = stage.children;
         var end = camera.clone().multiply(world);
         children.forEach(function (element) {
