@@ -130,12 +130,6 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             this.updateContext(ctx);
             this.draw(ctx, false);
             ctx.restore();
-            if (this._fpsCounter) {
-                this._fpsCounter.update();
-                ctx.save();
-                this._fpsCounter.draw(ctx, false);
-                ctx.restore();
-            }
             this.drawendSignal.emit();
         };
         Stage.prototype.clear = function () {

@@ -36,7 +36,7 @@ FlumpLibrary.load('../assets/flump/animations-100/character').then((fl:FlumpLibr
 		'SupermanSuductionLose'
 	];
 
-	for(var i = 0; i < 60; i++)
+	for(var i = 0; i < 600; i++)
 	{
 
 		var movie = <FlumpMovie> fl.createMovie(ArrayUtil.getRandom(names));

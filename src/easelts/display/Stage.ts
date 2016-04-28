@@ -399,7 +399,7 @@ class Stage extends Container
 	 * @method update
 	 * @param {TimeEvent} [timeEvent=0]
 	 **/
-	public update(delta:number):void
+	public update(delta:number):void 
 	{
 		var autoClear = this._option.autoClear;
 		var autoClearColor = this._option.autoClearColor;
@@ -452,16 +452,6 @@ class Stage extends Container
 		this.updateContext(ctx);
 		this.draw(ctx, false);
 		ctx.restore();
-
-		if(this._fpsCounter)
-		{
-			this._fpsCounter.update();
-
-			ctx.save();
-			//this._fpsCounter.updateContext(ctx);
-			this._fpsCounter.draw(ctx, false);
-			ctx.restore();
-		}
 
 		this.drawendSignal.emit();
 	}
