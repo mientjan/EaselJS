@@ -171,11 +171,6 @@ export class Canvas2DElement extends CanvasElement
 		return this._context;
 	}
 
-	public getDomElement():HTMLCanvasElement
-	{
-		return this._domElement;
-	}
-
 	/**
 	 *
 	 * @param width
@@ -185,6 +180,18 @@ export class Canvas2DElement extends CanvasElement
 	{
 		this._domElement.width = this._width = width;
 		this._domElement.height = this._height = height;
+		this.setQuality(this._quality);
+	}
+
+	public setWidth(value:number):void
+	{
+		super.setWidth(value);
+		this.setQuality(this._quality);
+	}
+
+	public setHeight(value:number):void
+	{
+		super.setHeight(value);
 		this.setQuality(this._quality);
 	}
 

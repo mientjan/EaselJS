@@ -387,7 +387,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 **/
 	public stage:Stage = null;
 
-	protected _behaviorList:IBehavior[] = null;
+	protected _behaviorList:IBehavior[];
 
 	/**
 	 *
@@ -534,15 +534,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 * @type {Matrix2D}
 	 * @default null
 	 **/
-	public _matrix:Matrix2 = new Matrix2();
-
-	/**
-	 * @property _rectangle
-	 * @protected
-	 * @type {Rectangle}
-	 * @default null
-	 **/
-	protected _rectangle:Rectangle = new Rectangle(0, 0, 0, 0);
+	public matrix:Matrix2 = new Matrix2();
 
 	/**
 	 * @property _bounds

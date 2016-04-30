@@ -54,7 +54,6 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
             this.skewY = 0;
             this.shadow = null;
             this.stage = null;
-            this._behaviorList = null;
             this.compositeOperation = null;
             this.snapToPixel = true;
             this.filters = null;
@@ -67,8 +66,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
             this._cacheScale = 1;
             this._cacheDataURLID = 0;
             this._cacheDataURL = null;
-            this._matrix = new Matrix2_1.Matrix2();
-            this._rectangle = new Rectangle_1.Rectangle(0, 0, 0, 0);
+            this.matrix = new Matrix2_1.Matrix2();
             this._bounds = null;
             this._hasLoaded = true;
             this._off = false;

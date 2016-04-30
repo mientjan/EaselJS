@@ -11,6 +11,9 @@ define(["require", "exports", "./CanvasElement"], function (require, exports, Ca
             _super.call(this, width, height, domElement);
             this._context = this._domElement.getContext('webgl');
         }
+        CanvasWebGLElement.prototype.getContext = function () {
+            return this._context;
+        };
         CanvasWebGLElement.prototype.clear = function () {
             this._context.clear(this._context.COLOR_BUFFER_BIT);
         };

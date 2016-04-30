@@ -95,12 +95,17 @@ define(["require", "exports", "./CanvasElement", "../geom/Rectangle"], function 
         Canvas2DElement.prototype.getContext = function () {
             return this._context;
         };
-        Canvas2DElement.prototype.getDomElement = function () {
-            return this._domElement;
-        };
         Canvas2DElement.prototype.setSize = function (width, height) {
             this._domElement.width = this._width = width;
             this._domElement.height = this._height = height;
+            this.setQuality(this._quality);
+        };
+        Canvas2DElement.prototype.setWidth = function (value) {
+            _super.prototype.setWidth.call(this, value);
+            this.setQuality(this._quality);
+        };
+        Canvas2DElement.prototype.setHeight = function (value) {
+            _super.prototype.setHeight.call(this, value);
             this.setQuality(this._quality);
         };
         Canvas2DElement.prototype.setQuality = function (name) {

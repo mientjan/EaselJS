@@ -17,6 +17,11 @@ export class CanvasWebGLElement extends CanvasElement
 		this._context = <WebGLRenderingContext> this._domElement.getContext('webgl');
 	}
 
+	public getContext():WebGLRenderingContext
+	{
+		return this._context;
+	}
+
 	public clear():void
 	{
 		this._context.clear(this._context.COLOR_BUFFER_BIT);
