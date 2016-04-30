@@ -23,9 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import SignalAbstract from "./SignalAbstract";
+import {SignalAbstract} from "./SignalAbstract";
 
-class SignalConnection
+export class SignalConnection
 {
 	public _next:SignalConnection = null;
 	public _signal:SignalAbstract;
@@ -66,4 +66,3 @@ class SignalConnection
 	}
 }
 
-export default SignalConnection;

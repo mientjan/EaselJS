@@ -26,14 +26,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Container from "./Container";
-import Shape from "./Shape";
-import Sprite from "./Sprite";
-import Graphics from "./Graphics";
-import VAlign from "./bitmapfont/VAlign";
-import HAlign from "./bitmapfont/HAlign";
-import BitmapFont from "./BitmapFont";
-import ColorFilter from "../filters/ColorFilter";
+import {Container} from "./Container";
+import {Shape} from "./Shape";
+import {Graphics} from "./Graphics";
+import {VAlign} from "./bitmapfont/VAlign";
+import {HAlign} from "./bitmapfont/HAlign";
+import {BitmapFont} from "./BitmapFont";
+import {ColorFilter} from "../filters/ColorFilter";
 import {DisplayObject} from "./DisplayObject";
 
 
@@ -70,7 +69,7 @@ function cutHex(h)
  * @param    vAlign: Verticle alignment: accepter parameters: "top","center",""bottom", default:"center"
  * @param    autoScale: true, scales the text to fit in the space, default: true
  */
-class BitmapTextField extends Container
+export class BitmapTextField extends Container
 {
 	public static EVENT_TEXT_CHANGE = 'text_change';
 
@@ -232,4 +231,4 @@ class BitmapTextField extends Container
 
 	}
 }
-export default BitmapTextField;
+

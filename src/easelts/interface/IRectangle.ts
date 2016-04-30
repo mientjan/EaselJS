@@ -27,7 +27,7 @@
  * @module easelts
  */
 
-interface IRectangle
+export interface IRectangle
 {
 	x:number;
 	y:number;
@@ -35,4 +35,3 @@ interface IRectangle
 	height:number;
 }
 
-export default IRectangle;

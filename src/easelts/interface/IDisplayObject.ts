@@ -23,16 +23,16 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import DisplayType from "../enum/DisplayType";
-import Stage from "../display/Stage";
-import Container from "../display/Container";
-import Rectangle from "../geom/Rectangle";
-import IRectangle from "./IRectangle";
-import Shape from "../display/Shape";
-import Matrix2 from "../geom/Matrix2";
-import ILoadable from "./../../core/interface/ILoadable";
+import {DisplayType} from "../enum/DisplayType";
+import {Stage} from "../display/Stage";
+import {Container} from "../display/Container";
+import {Rectangle} from "../geom/Rectangle";
+import {IRectangle} from "./IRectangle";
+import {Shape} from "../display/Shape";
+import {Matrix2} from "../geom/Matrix2";
+import {ILoadable} from "./../../core/interface/ILoadable";
 
-interface IDisplayObject extends ILoadable<any>
+export interface IDisplayObject extends ILoadable<any>
 {
 	type:DisplayType;
 
@@ -74,4 +74,3 @@ interface IDisplayObject extends ILoadable<any>
 }
 
 
-export default IDisplayObject;

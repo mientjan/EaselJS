@@ -9,6 +9,5 @@ define(["require", "exports"], function (require, exports) {
         }
         return NinePatchCoordinates;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = NinePatchCoordinates;
+    exports.NinePatchCoordinates = NinePatchCoordinates;
 });

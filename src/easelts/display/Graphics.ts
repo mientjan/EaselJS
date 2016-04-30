@@ -27,9 +27,9 @@
  */
 
 import * as Methods from "../util/Methods";
-import DisplayType from "../enum/DisplayType";
-import Matrix2 from "../geom/Matrix2";
-import IContext2D from "../interface/IContext2D";
+import {DisplayType} from "../enum/DisplayType";
+import {Matrix2} from "../geom/Matrix2";
+import {IContext2D} from "../interface/IContext2D";
 
 /**
  * @module easelts
@@ -80,7 +80,7 @@ import IContext2D from "../interface/IContext2D";
  * @property radiusBL
  * @type Number
  */
-class RoundRect
+export class RoundRect
 {
 	public x:number;
 	public y:number;
@@ -155,7 +155,7 @@ class RoundRect
 	}
 }
 
-class Oval
+export class Oval
 {
 	x:number;
 	y:number;
@@ -209,7 +209,7 @@ class Oval
  * @param {Number} y
  **/
 
-class LineTo
+export class LineTo
 {
 	public x:number;
 	public y:number;
@@ -241,7 +241,7 @@ class LineTo
  * @property y
  * @type Number
  */
-class MoveTo
+export class MoveTo
 {
 	public x:number;
 	public y:number;
@@ -289,7 +289,7 @@ class MoveTo
  * @property radius
  * @type Number
  */
-class ArcTo
+export class ArcTo
 {
 	public x1:number;
 	public y1:number;
@@ -347,7 +347,7 @@ class ArcTo
  * @property anticlockwise
  * @type Number
  */
-class Arc
+export class Arc
 {
 	x:number;
 	y:number;
@@ -397,7 +397,7 @@ class Arc
  * @property y
  * @type Number
  */
-class QuadraticCurveTo
+export class QuadraticCurveTo
 {
 	cpx:number;
 	cpy:number;
@@ -453,7 +453,7 @@ class QuadraticCurveTo
  * @property y
  * @type Number
  */
-class BezierCurveTo
+export class BezierCurveTo
 {
 	public cp1x:number;
 	public cp1y:number;
@@ -503,7 +503,7 @@ class BezierCurveTo
  * @property h
  * @type Number
  */
-class Rect
+export class Rect
 {
 	public x:number;
 	public y:number;
@@ -529,7 +529,7 @@ class Rect
  * @class ClosePath
  * @constructor
  **/
-class ClosePath
+export class ClosePath
 {
 	constructor()
 	{
@@ -546,7 +546,7 @@ class ClosePath
  * @class BeginPath
  * @constructor
  **/
-class BeginPath
+export class BeginPath
 {
 	constructor()
 	{
@@ -574,7 +574,7 @@ class BeginPath
  * @property matrix
  * @type Matrix2D
  */
-class Fill
+export class Fill
 {
 	public style:any;
 	public matrix:Matrix2;
@@ -687,7 +687,7 @@ class Fill
  * @property ignoreScale
  * @type Boolean
  */
-class Stroke
+export class Stroke
 {
 	style:string;
 	ignoreScale:boolean;
@@ -783,7 +783,7 @@ class Stroke
  * @property miterLimit
  * @type Number
  */
-class StrokeStyle
+export class StrokeStyle
 {
 	width:string;
 	caps:string;
@@ -809,7 +809,7 @@ class StrokeStyle
 	public path = false;
 }
 
-class StrokeDash
+export class StrokeDash
 {
 	segments:Array<number>;
 	offset:number;
@@ -848,7 +848,7 @@ class StrokeDash
  * @property radius
  * @type Number
  */
-class Circle
+export class Circle
 {
 	public x:number;
 	public y:number;
@@ -868,7 +868,7 @@ class Circle
 	}
 }
 
-class Ellipse
+export class Ellipse
 {
 	public x:number;
 	public y:number;
@@ -940,7 +940,7 @@ class Ellipse
  * @property angle
  * @type Number
  */
-class PolyStar
+export class PolyStar
 {
 	x:number;
 	y:number;
@@ -1078,7 +1078,7 @@ class PolyStar
  * @class Graphics
  * @constructor
  **/
-class Graphics
+export class Graphics
 {
 
 	public static RoundRect = RoundRect;
@@ -2393,4 +2393,4 @@ class Graphics
 
 Graphics._canvas.width = Graphics._canvas.height = 1;
 
-export default Graphics;
+

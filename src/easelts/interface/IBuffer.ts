@@ -1,6 +1,6 @@
 
-import RGBA from "../data/RGBA";
-interface IBuffer
+import {RGBA} from "../data/RGBA";
+export interface IBuffer
 {
 	context:WebGLRenderingContext|CanvasRenderingContext2D;
 	width:number;
@@ -12,4 +12,3 @@ interface IBuffer
 	destruct():void;
 }
 
-export default IBuffer;

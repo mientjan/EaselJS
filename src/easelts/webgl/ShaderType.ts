@@ -1,7 +1,6 @@
-enum ShaderType
+export const enum ShaderType
 {
 	FRAGMENT,
 	VERTEX
 }
 
-export default ShaderType;

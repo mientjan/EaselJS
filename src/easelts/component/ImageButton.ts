@@ -1,19 +1,19 @@
-import Bitmap from "../display/Bitmap";
-import BitmapNinePatch from "./BitmapNinePatch";
+import {Bitmap} from "../display/Bitmap";
+import {BitmapNinePatch} from "./BitmapNinePatch";
 
 import {DisplayObject} from "../display/DisplayObject";
-import DisplayType from "../enum/DisplayType";
-import TimeEvent from "../../core/event/TimeEvent";
-import Signal from "../../core/event/Signal";
-import SignalConnection from "../../core/event/SignalConnection";
-import IImageButtonData from "./imagebutton/IImageButtonData";
+import {DisplayType} from "../enum/DisplayType";
+import {TimeEvent} from "../../core/event/TimeEvent";
+import {Signal} from "../../core/event/Signal";
+import {SignalConnection} from "../../core/event/SignalConnection";
+import {IImageButtonData} from "./imagebutton/IImageButtonData";
 import * as Methods from "../util/Methods";
-import ButtonBehavior from "../behavior/ButtonBehavior";
+import {ButtonBehavior} from "../behavior/ButtonBehavior";
 
 /**
  * @class ImageSequence
  */
-class ImageButton extends DisplayObject
+export class ImageButton extends DisplayObject
 {
 	public static EVENT_DISABLED = 'disabled';
 
@@ -99,4 +99,3 @@ class ImageButton extends DisplayObject
 	}
 }
 
-export default ImageButton;

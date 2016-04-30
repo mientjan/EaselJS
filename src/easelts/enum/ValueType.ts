@@ -1,11 +1,10 @@
 /**
  * @enum ValueType
  */
-const enum ValueType {
+export const enum ValueType {
 	NUMBER,
 	ARRAY,
 	STRING,
 	OBJECT 
 }
 
-export default ValueType;

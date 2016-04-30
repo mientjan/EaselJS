@@ -1,11 +1,11 @@
-import Container from "./Container";
-import Timeline from "../../tweents/Timeline";
-import Tween from "../../tweents/Tween";
-import TimeEvent from "../../core/event/TimeEvent";
+import {Container} from "./Container";
+import {Timeline} from "../../tweents/Timeline";
+import {Tween} from "../../tweents/Tween";
+import {TimeEvent} from "../../core/event/TimeEvent";
 import {DisplayObject} from "./DisplayObject";
-import IDisplayObject from "../interface/IDisplayObject";
+import {IDisplayObject} from "../interface/IDisplayObject";
 
-//import MovieClipPlugin from "./MovieClipPlugin";
+//import {MovieClipPlugin} from "./MovieClipPlugin";
 /**
  * MovieClip
  *
@@ -87,7 +87,7 @@ import IDisplayObject from "../interface/IDisplayObject";
  * @param {Object} [labels=null] A hash of labels to pass to the timeline instance associated with this MovieClip.
  * Labels only need to be passed if they need to be used.
  **/
-class MovieClip extends Container
+export class MovieClip extends Container
 {
 	// constants:
 	/**
@@ -711,7 +711,7 @@ class MovieClip extends Container
  * @class MovieClipPlugin
  * @constructor
  **/
-class MovieClipPlugin
+export class MovieClipPlugin
 {
 	/**
 	 * @method priority
@@ -777,4 +777,4 @@ class MovieClipPlugin
 
 }
 
-export default MovieClip;
+

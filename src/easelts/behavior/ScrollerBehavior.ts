@@ -1,16 +1,16 @@
-import AbstractBehavior from "./AbstractBehavior";
+import {AbstractBehavior} from "./AbstractBehavior";
 import {DisplayObject} from "../display/DisplayObject";
-import Stage from "../display/Stage";
-import Container from "../display/Container";
-import PointerEvent from "../event/PointerEvent";
-import DisplayType from "../enum/DisplayType";
-import MouseEvent from "../event/MouseEvent";
-import Size from "../geom/Size";
-import Scroller from "../../zynga/Scroller";
-import Animate from "../../zynga/Animate";
-import IScrollerOptions from "../../zynga/IScrollerOptions";
+import {Stage} from "../display/Stage";
+import {Container} from "../display/Container";
+import {PointerEvent} from "../event/PointerEvent";
+import {DisplayType} from "../enum/DisplayType";
+import {MouseEvent} from "../event/MouseEvent";
+import {Size} from "../geom/Size";
+import {Scroller} from "../../zynga/Scroller";
+import {Animate} from "../../zynga/Animate";
+import {IScrollerOptions} from "../../zynga/IScrollerOptions";
 
-class ScrollerBehavior extends AbstractBehavior
+export class ScrollerBehavior extends AbstractBehavior
 {
 	protected _scroller:Scroller = null;
 	protected _mousedown:boolean = false;
@@ -142,4 +142,3 @@ class ScrollerBehavior extends AbstractBehavior
 	}
 }
 
-export default ScrollerBehavior;

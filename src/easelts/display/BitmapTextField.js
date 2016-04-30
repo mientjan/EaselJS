@@ -22,8 +22,8 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./bitmapf
         function BitmapTextField(width, height, textDisplay, fontName, fontSize, horizantalLetterSpacing, verticalLetterSpacing, hAlign, vAlign, autoScale) {
             if (horizantalLetterSpacing === void 0) { horizantalLetterSpacing = 1; }
             if (verticalLetterSpacing === void 0) { verticalLetterSpacing = 1; }
-            if (hAlign === void 0) { hAlign = HAlign_1.default.CENTER; }
-            if (vAlign === void 0) { vAlign = VAlign_1.default.CENTER; }
+            if (hAlign === void 0) { hAlign = HAlign_1.HAlign.CENTER; }
+            if (vAlign === void 0) { vAlign = VAlign_1.VAlign.CENTER; }
             if (autoScale === void 0) { autoScale = false; }
             _super.call(this);
             this.font = null;
@@ -31,13 +31,13 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./bitmapf
             this.vAlign = vAlign;
             this.autoScale = autoScale;
             this.color = "";
-            this.border = new Shape_1.default();
+            this.border = new Shape_1.Shape();
             this.border.graphics.setStrokeStyle(2);
-            this.border.graphics.beginStroke(Graphics_1.default.getRGB(0, 0, 0));
+            this.border.graphics.beginStroke(Graphics_1.Graphics.getRGB(0, 0, 0));
             this.border.graphics.drawRect(0, 0, width, height);
             this.addChild(this.border);
             this.border.visible = false;
-            this.textContainer = new Container_1.default();
+            this.textContainer = new Container_1.Container();
             this.addChild(this.textContainer);
             this.containerWidth = width;
             this.containerHeight = height;
@@ -96,7 +96,7 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./bitmapf
             var G = hexToG(color);
             var B = hexToB(color);
             if (color != this.color) {
-                this.colorFilter = new ColorFilter_1.default(0, 0, 0, 1, R, G, B, 0);
+                this.colorFilter = new ColorFilter_1.ColorFilter(0, 0, 0, 1, R, G, B, 0);
             }
             this.textContainer.filters = [this.colorFilter];
             this.textContainer.cache(0, 0, this.containerWidth, this.containerHeight);
@@ -105,7 +105,6 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./bitmapf
         BitmapTextField.EVENT_TEXT_CHANGE = 'text_change';
         BitmapTextField.bitmapFonts = [];
         return BitmapTextField;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = BitmapTextField;
+    }(Container_1.Container));
+    exports.BitmapTextField = BitmapTextField;
 });

@@ -1,4 +1,4 @@
-class Bounds {
+export class Bounds {
 	public x0:number = 0;
 	public y0:number = 0;
 	public x1:number = 0;
@@ -11,4 +11,3 @@ class Bounds {
 	}
 }
 
-export default Bounds;

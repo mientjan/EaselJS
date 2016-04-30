@@ -80,7 +80,6 @@ define(["require", "exports", "../util/Methods", "./Filter"], function (require,
             }
         };
         return AlphaMapFilter;
-    }(Filter_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = AlphaMapFilter;
+    }(Filter_1.Filter));
+    exports.AlphaMapFilter = AlphaMapFilter;
 });

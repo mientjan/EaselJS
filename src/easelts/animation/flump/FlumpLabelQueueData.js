@@ -29,7 +29,6 @@ define(["require", "exports", './FlumpLabelData'], function (require, exports, F
             this._complete = null;
         };
         return FlumpLabelQueueData;
-    }(FlumpLabelData_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FlumpLabelQueueData;
+    }(FlumpLabelData_1.FlumpLabelData));
+    exports.FlumpLabelQueueData = FlumpLabelQueueData;
 });

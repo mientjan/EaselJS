@@ -8,7 +8,7 @@
  * @author Mient-jan Stelling
  * @class Vector4
  */
-class Vector4
+export class Vector4
 {
 
 	constructor(public x:number = 0, public y:number = 0, public z:number = 0, public w:number = 1)
@@ -748,4 +748,3 @@ class Vector4
 	}
 }
 
-export default Vector4;

@@ -155,7 +155,7 @@ define(["require", "exports", "../core/event/EventDispatcher", "../tweents/Ease"
                 return this;
             }
             var o = this._cloneProps(this._curQueueProps);
-            return this._addStep({ d: duration, p0: o, e: Ease_1.default.linear, p1: o, v: passive });
+            return this._addStep({ d: duration, p0: o, e: Ease_1.Ease.linear, p1: o, v: passive });
         };
         Tween.prototype.to = function (props, duration, ease) {
             if (isNaN(duration) || duration < 0) {
@@ -408,7 +408,6 @@ define(["require", "exports", "../core/event/EventDispatcher", "../tweents/Ease"
             }
         };
         return Tween;
-    }(EventDispatcher_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Tween;
+    }(EventDispatcher_1.EventDispatcher));
+    exports.Tween = Tween;
 });

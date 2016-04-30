@@ -1,5 +1,5 @@
 import {IStageOption} from "../interface/IStageOption";
-import RGBA from "./RGBA";
+import {RGBA} from "./RGBA";
 
 export class StageOption implements IStageOption
 {

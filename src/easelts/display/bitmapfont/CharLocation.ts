@@ -1,6 +1,6 @@
-import BitmapChar from "./BitmapChar";
+import {BitmapChar} from "./BitmapChar";
 
-class CharLocation {
+export class CharLocation {
 
 	public scale:number = 0;
 	public x:number = 0;
@@ -13,4 +13,4 @@ class CharLocation {
 	}
 }
 
-export default CharLocation;
+

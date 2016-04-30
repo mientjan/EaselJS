@@ -38,7 +38,6 @@ define(["require", "exports", "./Filter"], function (require, exports, Filter_1)
             return "[AlphaMaskFilter]";
         };
         return AlphaMaskFilter;
-    }(Filter_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = AlphaMaskFilter;
+    }(Filter_1.Filter));
+    exports.AlphaMaskFilter = AlphaMaskFilter;
 });

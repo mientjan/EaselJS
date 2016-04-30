@@ -21,7 +21,7 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
             this._hasLoaded = false;
             this.spriteSheet = spriteSheet;
             this._fps = fps;
-            this._queue = new AnimationQueue_1.default(fps, 1000);
+            this._queue = new AnimationQueue_1.AnimationQueue(fps, 1000);
         }
         ImageSequence.createFromString = function (images, fps, width, height) {
             var sequenceStructure = {
@@ -31,7 +31,7 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
                     "animation": [0, images.length - 1]
                 }
             };
-            return new ImageSequence(new SpriteSheet_1.default(sequenceStructure), fps, width, height);
+            return new ImageSequence(new SpriteSheet_1.SpriteSheet(sequenceStructure), fps, width, height);
         };
         ImageSequence.prototype.hasLoaded = function () {
             return this._hasLoaded;
@@ -48,7 +48,7 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
             if (this._hasLoaded) {
                 if (onProgress)
                     onProgress(1);
-                return new Promise_1.default(function (resolve, reject) {
+                return new Promise_1.Promise(function (resolve, reject) {
                     resolve(_this);
                 });
             }
@@ -135,6 +135,5 @@ define(["require", "exports", "../display/DisplayObject", "../display/SpriteShee
         };
         return ImageSequence;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ImageSequence;
+    exports.ImageSequence = ImageSequence;
 });

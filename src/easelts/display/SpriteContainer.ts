@@ -25,9 +25,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Container from "./Container";
+import {Container} from "./Container";
 import {DisplayObject} from "./DisplayObject";
-import SpriteSheet from "./SpriteSheet";
+import {SpriteSheet} from "./SpriteSheet";
 
 /**
  * A SpriteContainer is a nestable display list that enables aggressively optimized rendering of bitmap content.
@@ -57,7 +57,7 @@ import SpriteSheet from "./SpriteSheet";
  * @constructor
  * @param {SpriteSheet} [spriteSheet] The spriteSheet to use for this SpriteContainer and its children.
  **/
-class SpriteContainer extends Container
+export class SpriteContainer extends Container
 {
 	/**
 	 * The SpriteSheet that this container enforces use of.
@@ -193,4 +193,3 @@ class SpriteContainer extends Container
 	}
 }
 
-export default SpriteContainer;

@@ -1,21 +1,21 @@
-import ILoadable from "../../core/interface/ILoadable";
-import IPlayable from "../../core/interface/IPlayable";
+import {ILoadable} from "../../core/interface/ILoadable";
+import {IPlayable} from "../../core/interface/IPlayable";
 
 import {DisplayObject} from "../display/DisplayObject";
-import SpriteSheet from "../display/SpriteSheet";
-import DisplayType from "../enum/DisplayType";
+import {SpriteSheet} from "../display/SpriteSheet";
+import {DisplayType} from "../enum/DisplayType";
 import * as Methods from "../util/Methods";
-import TimeEvent from "../../core/event/TimeEvent";
-import Signal from "../../core/event/Signal";
-import SignalConnection from "../../core/event/SignalConnection";
-import Promise from "../../core/util/Promise";
-import AnimationQueue from "../../core/util/AnimationQueue";
+import {TimeEvent} from "../../core/event/TimeEvent";
+import {Signal} from "../../core/event/Signal";
+import {SignalConnection} from "../../core/event/SignalConnection";
+import {Promise} from "../../core/util/Promise";
+import {AnimationQueue} from "../../core/util/AnimationQueue";
 import {QueueItem} from "../../core/util/QueueItem";
 
 /**
  * @class ImageSequence
  */
-class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, IPlayable
+export class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, IPlayable
 {
 	/**
 	 * @static
@@ -222,4 +222,4 @@ class ImageSequence extends DisplayObject implements ILoadable<ImageSequence>, I
 
 }
 
-export default ImageSequence;
+

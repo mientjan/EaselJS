@@ -1,6 +1,5 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var ComponentType;
     (function (ComponentType) {
         ComponentType[ComponentType["UNKNOWN"] = 0] = "UNKNOWN";
         ComponentType[ComponentType["STAGE"] = 1] = "STAGE";
@@ -10,7 +9,6 @@ define(["require", "exports"], function (require, exports) {
         ComponentType[ComponentType["TEXT"] = 5] = "TEXT";
         ComponentType[ComponentType["SHAPE"] = 6] = "SHAPE";
         ComponentType[ComponentType["DEBUG"] = 7] = "DEBUG";
-    })(ComponentType || (ComponentType = {}));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ComponentType;
+    })(exports.ComponentType || (exports.ComponentType = {}));
+    var ComponentType = exports.ComponentType;
 });

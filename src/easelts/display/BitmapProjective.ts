@@ -27,20 +27,20 @@
  */
 
 import {DisplayObject} from "./DisplayObject";
-import Bitmap from "./Bitmap";
-import DisplayType from "../enum/DisplayType";
-import Rectangle from "../geom/Rectangle";
-import IVector2 from "../../core/interface/IVector2";
-import Vector2 from "../geom/Vector2";
-import Signal from "../../core/event/Signal";
-import Size from "../geom/Size";
-import Texture from "./Texture";
+import {Bitmap} from "./Bitmap";
+import {DisplayType} from "../enum/DisplayType";
+import {Rectangle} from "../geom/Rectangle";
+import {IVector2} from "../../core/interface/IVector2";
+import {Vector2} from "../geom/Vector2";
+import {Signal} from "../../core/event/Signal";
+import {Size} from "../geom/Size";
+import {Texture} from "./Texture";
 
 /**
  * @author Mient-jan Stelling
  * @class BitmapProjective
  */
-class BitmapProjective extends Bitmap
+export class BitmapProjective extends Bitmap
 {
 	protected options:any = {
 		subdivisionLimit:5,
@@ -398,9 +398,9 @@ class BitmapProjective extends Bitmap
 	}
 }
 
-export default BitmapProjective;
 
-class Matrix
+
+export class Matrix
 {
 	public static allocate(w:number, h:number):Array<Array<number>>
 	{

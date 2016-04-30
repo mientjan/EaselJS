@@ -16,7 +16,7 @@ define(["require", "exports", "./Graphics", "./DisplayObject"], function (requir
             if (regY === void 0) { regY = 0; }
             _super.call(this, width, height, x, y, regX, regY);
             this.type = 16;
-            this.graphics = graphics ? graphics : new Graphics_1.default();
+            this.graphics = graphics ? graphics : new Graphics_1.Graphics();
         }
         Shape.prototype.isVisible = function () {
             var hasContent = this.cacheCanvas || (this.graphics && !this.graphics.isEmpty());
@@ -40,6 +40,5 @@ define(["require", "exports", "./Graphics", "./DisplayObject"], function (requir
         };
         return Shape;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Shape;
+    exports.Shape = Shape;
 });

@@ -27,10 +27,10 @@
  */
 
 import {DisplayObject} from "./DisplayObject";
-import Point from "../geom/Point";
-import TimeEvent from "../../core/event/TimeEvent";
+import {Point} from "../geom/Point";
+import {TimeEvent} from "../../core/event/TimeEvent";
 
-class DOMElement<T extends HTMLElement> extends DisplayObject
+export class DOMElement<T extends HTMLElement> extends DisplayObject
 {
 
 	// public properties:
@@ -300,4 +300,3 @@ class DOMElement<T extends HTMLElement> extends DisplayObject
 	}*/
 
 }
-export default DOMElement;

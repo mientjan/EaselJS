@@ -29,7 +29,7 @@
 
 import {DisplayObject} from "../../easelts/display/DisplayObject";
 
-class Event
+export class Event
 {
 	public type:string = null;
 
@@ -259,4 +259,3 @@ class Event
 		return "[Event (type=" + this.type + ")]";
 	}
 }
-export default Event;

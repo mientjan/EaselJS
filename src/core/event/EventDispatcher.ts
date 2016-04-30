@@ -32,7 +32,7 @@
 
 "use strict";
 
-import Event from "./Event";
+import {Event} from "./Event";
 
 /**
  * EventDispatcher provides methods for managing queues of event listeners and dispatching events.
@@ -84,7 +84,7 @@ import Event from "./Event";
  * @constructor
  **/
 
-class EventDispatcher
+export class EventDispatcher
 {
 
 	/**
@@ -453,4 +453,3 @@ class EventDispatcher
 	}
 }
 
-export default EventDispatcher;

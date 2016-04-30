@@ -34,7 +34,7 @@
  * @param {Number} [y=0] Y position.
  * @constructor
  **/
-interface IVector2
+export interface IVector2
 {
 	/**
 	 * X position.
@@ -51,4 +51,3 @@ interface IVector2
 	y:number;
 }
 
-export default IVector2;

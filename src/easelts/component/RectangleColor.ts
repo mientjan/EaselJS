@@ -1,10 +1,10 @@
-import Shape from "../display/Shape";
-import Size from "../geom/Size";
+import {Shape} from "../display/Shape";
+import {Size} from "../geom/Size";
 
 /**
  * @class BackgroundColor
  */
-class RectangleColor extends Shape
+export class RectangleColor extends Shape
 {
 	public set color(value:string)
 	{
@@ -59,4 +59,3 @@ class RectangleColor extends Shape
 	}
 }
 
-export default RectangleColor;

@@ -1,6 +1,6 @@
-import Stage from '../../src/easelts/display/Stage';
-import Shape from '../../src/easelts/display/Shape';
-import FollowMouseBehavior from '../../src/easelts/behavior/FollowMouseBehavior';
+import {Stage} from '../../src/easelts/display/Stage';
+import {Shape} from '../../src/easelts/display/Shape';
+import {FollowMouseBehavior} from '../../src/easelts/behavior/FollowMouseBehavior';
 
 var holder = <HTMLBlockElement> document.getElementById('holder');
 var stage = new Stage(holder, {});

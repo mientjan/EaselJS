@@ -1,5 +1,5 @@
-import EventDispatcher from '../core/event/EventDispatcher';
-import Tween from './Tween';
+import {EventDispatcher} from '../core/event/EventDispatcher';
+import {Tween} from './Tween';
 
 /*
  * Copyright (c) 2010 gskinner.com, inc.
@@ -50,7 +50,7 @@ import Tween from './Tween';
  * @extends EventDispatcher
  * @constructor
  **/
-class Timeline extends EventDispatcher
+export class Timeline extends EventDispatcher
 {
 
 	// public properties:
@@ -507,4 +507,3 @@ class Timeline extends EventDispatcher
 	}
 }
 
-export default Timeline;

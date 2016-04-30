@@ -26,8 +26,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import IPoint from "./../../core/interface/IVector2";
-import NumberUtil from "./../util/NumberUtil";
+import {IVector2} from "./../../core/interface/IVector2";
+import {NumberUtil} from "./../util/NumberUtil";
 
 /**
  * @module easelts
@@ -45,7 +45,7 @@ import NumberUtil from "./../util/NumberUtil";
  * @param {Number} [y=0] Y position.
  * @constructor
  **/
-class Point implements IPoint
+export class Point implements IVector2
 {
 	/**
 	 * X position.
@@ -132,4 +132,3 @@ class Point implements IPoint
 	}
 }
 
-export default Point;

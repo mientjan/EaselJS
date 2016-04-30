@@ -1,14 +1,14 @@
-import AbstractBehavior from "./AbstractBehavior";
+import {AbstractBehavior} from "./AbstractBehavior";
 import {DisplayObject} from "../display/DisplayObject";
-import Stage from "../display/Stage";
-import Container from "../display/Container";
-import DisplayType from "../enum/DisplayType";
+import {Stage} from "../display/Stage";
+import {Container} from "../display/Container";
+import {DisplayType} from "../enum/DisplayType";
 
 /**
  * @method ButtonBehavior
  * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
  */
-class ButtonBehavior extends AbstractBehavior
+export class ButtonBehavior extends AbstractBehavior
 {
 	private _stage:Stage;
 
@@ -74,4 +74,3 @@ class ButtonBehavior extends AbstractBehavior
 	}
 }
 
-export default ButtonBehavior;

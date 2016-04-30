@@ -15,7 +15,7 @@ define(["require", "exports", "./TouchInjectProperties"], function (require, exp
             if (!stage || !stage.getContext() || !stage.getContext().canvas || !Touch.isSupported()) {
                 return false;
             }
-            stage.__touch = new TouchInjectProperties_1.default();
+            stage.__touch = new TouchInjectProperties_1.TouchInjectProperties();
             stage.__touch.multitouch = singleTouch;
             stage.__touch.preventDefault = !allowDefault;
             stage.__touch.count = 0;
@@ -189,6 +189,5 @@ define(["require", "exports", "./TouchInjectProperties"], function (require, exp
         };
         return Touch;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Touch;
+    exports.Touch = Touch;
 });

@@ -5,8 +5,8 @@ define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
             throw ("MotionGuidePlugin cannot be instantiated.");
         }
         MotionGuidePlugin.install = function () {
-            Tween_1.default.installPlugin(MotionGuidePlugin, ["guide", "x", "y", "rotation"]);
-            return Tween_1.default.IGNORE;
+            Tween_1.Tween.installPlugin(MotionGuidePlugin, ["guide", "x", "y", "rotation"]);
+            return Tween_1.Tween.IGNORE;
         };
         MotionGuidePlugin.init = function (tween, prop, value) {
             var target = tween.target;
@@ -201,6 +201,5 @@ define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
         MotionGuidePlugin.priority = 0;
         return MotionGuidePlugin;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = MotionGuidePlugin;
+    exports.MotionGuidePlugin = MotionGuidePlugin;
 });

@@ -1,8 +1,7 @@
-const enum RenderType
+export const enum RenderType
 {
 	UNKNOWN,
 	CANVAS,
 	WEBGL
 }
 
-export default RenderType;

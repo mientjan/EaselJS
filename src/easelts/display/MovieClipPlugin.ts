@@ -1,5 +1,5 @@
-import Tween from "../../tweents/Tween";
-import MovieClip from "./MovieClip";
+import {Tween} from "../../tweents/Tween";
+import {MovieClip} from "./MovieClip";
 
 // MovieClipPlugin for TweenJS:
 /**
@@ -9,7 +9,7 @@ import MovieClip from "./MovieClip";
  * @class MovieClipPlugin
  * @constructor
  **/
-class MovieClipPlugin
+export class MovieClipPlugin
 {
 	/**
 	 * @method priority
@@ -75,4 +75,3 @@ class MovieClipPlugin
 
 }
 
-export default MovieClipPlugin;

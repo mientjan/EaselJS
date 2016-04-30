@@ -1,7 +1,7 @@
 /**
  * @enum ComponentType
  */
-const enum ComponentType {
+export const enum ComponentType {
 	UNKNOWN,
 	STAGE,
 	CONTAINER,
@@ -12,4 +12,3 @@ const enum ComponentType {
 	DEBUG
 }
 
-export default ComponentType;

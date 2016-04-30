@@ -28,15 +28,13 @@
  */
 
 
-import Bitmap from "./Bitmap";
-import SpriteSheet from "./SpriteSheet";
-import Sprite from "./Sprite";
-import BitmapChar from "./bitmapfont/BitmapChar";
-import CharLocation from "./bitmapfont/CharLocation";
-import VAlign from "./bitmapfont/VAlign";
-import HAlign from "./bitmapfont/HAlign";
-import Container from "./Container";
-import IDisplayObject from "../interface/IDisplayObject";
+import {SpriteSheet} from "./SpriteSheet";
+import {BitmapChar} from "./bitmapfont/BitmapChar";
+import {CharLocation} from "./bitmapfont/CharLocation";
+import {VAlign} from "./bitmapfont/VAlign";
+import {HAlign} from "./bitmapfont/HAlign";
+import {Container} from "./Container";
+import {SpriteAnimation} from "./SpriteAnimation";
 
 /**
  *
@@ -44,7 +42,7 @@ import IDisplayObject from "../interface/IDisplayObject";
  * @param    fontXML: xml exported from bmFonts software
  * @param    size: size of the font we exported using bmFonts, useful for a reference.
  */
-class BitmapFont
+export class BitmapFont
 {
 
 	public static NATIVE_SIZE = -1;
@@ -139,7 +137,7 @@ class BitmapFont
 		for(var k = 0; k < allChars.length; k++)
 		{
 			//var texture = createjs.SpriteSheetUtils.extractFrame(spriteSheet,k);
-			var texture = new Sprite(spriteSheet);
+			var texture = new SpriteAnimation(spriteSheet);
 			texture.gotoAndStop(k);
 			//mStage.addChild(texture);
 			texture.x = Math.random() * 800;
@@ -489,4 +487,3 @@ class BitmapFont
 	}
 }
 
-export default BitmapFont;

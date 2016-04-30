@@ -9,16 +9,15 @@ define(["require", "exports", '../../../src/easelts/display/Container', '../../.
         __extends(TopButton, _super);
         function TopButton() {
             _super.call(this, 10, 10, '50%', '0%', '50%', '0%');
-            this._ninepatch = new NinePatch_1.default('assets/image/ninepatch_blue.png', new Rectangle_1.default(5, 12, 139, 8));
-            this._bg = new BitmapNinePatch_1.default(this._ninepatch);
-            this._text = new Text_1.default('top');
-            this.addBehavior(new ButtonBehavior_1.default);
+            this._ninepatch = new NinePatch_1.NinePatch('assets/image/ninepatch_blue.png', new Rectangle_1.Rectangle(5, 12, 139, 8));
+            this._bg = new BitmapNinePatch_1.BitmapNinePatch(this._ninepatch);
+            this._text = new Text_1.Text('top');
+            this.addBehavior(new ButtonBehavior_1.ButtonBehavior);
             this.hitArea = this._bg;
             this.addChild(this._bg);
             this.addChild(this._text);
         }
         return TopButton;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = TopButton;
+    }(Container_1.Container));
+    exports.TopButton = TopButton;
 });

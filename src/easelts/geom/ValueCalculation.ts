@@ -1,9 +1,9 @@
-import FluidMeasurementsUnit from "./FluidMeasurementsUnit";
-import FluidCalculation from "./FluidCalculation";
+import {FluidMeasurementsUnit} from "./FluidMeasurementsUnit";
+import {FluidCalculation} from "./FluidCalculation";
 
-import CalculationType from "../enum/CalculationType";
-import CalculationUnitType from "../enum/CalculationUnitType";
-import MeasurementUnitType from "../enum/MeasurementUnitType";
+import {CalculationType} from "../enum/CalculationType";
+import {CalculationUnitType} from "../enum/CalculationUnitType";
+import {MeasurementUnitType} from "../enum/MeasurementUnitType";
 
 
 /**
@@ -11,7 +11,7 @@ import MeasurementUnitType from "../enum/MeasurementUnitType";
  * @class ValueCalculation
  * @author Mient-jan Stelling
  */
-class ValueCalculation
+export class ValueCalculation
 {
 	public type:CalculationType = CalculationType.UNKOWN;
 
@@ -92,4 +92,3 @@ class ValueCalculation
 	}
 }
 
-export default ValueCalculation;

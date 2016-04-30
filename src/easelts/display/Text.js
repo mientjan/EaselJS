@@ -160,7 +160,7 @@ define(["require", "exports", "./DisplayObject", "../geom/Rectangle", "../util/M
                 cacheArguments = [this._cacheX, this._cacheY, this._cacheWidth, this._cacheHeight, this._cacheScale];
             }
             this.cache(x, y, width, height, 1);
-            var ctx = this.cacheCanvas.getContext('2d');
+            var ctx = this.cacheCanvas.getContext();
             var img = ctx.getImageData(0, 0, width, height);
             if (cacheArguments) {
                 this.cache.apply(this, cacheArguments);
@@ -187,7 +187,7 @@ define(["require", "exports", "./DisplayObject", "../geom/Rectangle", "../util/M
             y0 += y;
             x1 += x;
             y1 += y;
-            return new Rectangle_1.default(x0, y0, x1 - x0, y1 - y0);
+            return new Rectangle_1.Rectangle(x0, y0, x1 - x0, y1 - y0);
         };
         Text.prototype.getMeasuredLineHeight = function () {
             return this._getMeasuredWidth("M") * 1.2;
@@ -333,11 +333,10 @@ define(["require", "exports", "./DisplayObject", "../geom/Rectangle", "../util/M
         Text.V_OFFSETS = { top: 0, hanging: -0.01, middle: -0.4, alphabetic: -0.8, ideographic: -0.85, bottom: -1 };
         return Text;
     }(DisplayObject_1.DisplayObject));
+    exports.Text = Text;
     var canvas = Methods.createCanvas();
     if (canvas.getContext) {
         Text._workingContext = canvas.getContext("2d");
         canvas.width = canvas.height = 1;
     }
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Text;
 });

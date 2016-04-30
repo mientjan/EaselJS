@@ -1,6 +1,6 @@
-import ILoadable from "../../core/interface/ILoadable";
-import Promise from "../../core/util/Promise";
-import Size from "../geom/Size";
+import {ILoadable} from "../../core/interface/ILoadable";
+import {Promise} from "../../core/util/Promise";
+import {Size} from "../geom/Size";
 import {MathUtil} from "../../core/math/MathUtil";
 
 /**
@@ -8,12 +8,13 @@ import {MathUtil} from "../../core/math/MathUtil";
  *
  * @class Texture
  */
-class Texture implements ILoadable<Texture>
+export class Texture implements ILoadable<Texture>
 {
 	public static createFromString(source:string, autoload:boolean = false):Texture
 	{
 		var img = document.createElement('img');
 		img.src = source;
+
 		return new Texture(img, autoload);
 	}
 
@@ -30,8 +31,7 @@ class Texture implements ILoadable<Texture>
 	{
 		this.source = source;
 
-		if(autoload)
-		{
+		if(autoload){
 			this.load();
 		}
 	}
@@ -152,6 +152,11 @@ class Texture implements ILoadable<Texture>
 		return this.height;
 	}
 
+	public getSource():HTMLCanvasElement|HTMLImageElement
+	{
+		return this.source;
+	}
+
 	public draw(ctx:CanvasRenderingContext2D, sx:number, sy:number, sw:number, sh:number, dx:number, dy:number, dw:number, dh:number):boolean
 	{
 		if(this._hasLoaded)
@@ -228,5 +233,3 @@ class Texture implements ILoadable<Texture>
 		this._loadPromise = null;
 	}
 }
-
-export default Texture;

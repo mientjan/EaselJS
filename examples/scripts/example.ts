@@ -1,5 +1,5 @@
-import Stage from '../../src/easelts/display/Stage';
-import Debug from '../../src/easelts/display/Debug';
+import {Stage} from '../../src/easelts/display/Stage';
+import {Debug} from '../../src/easelts/display/Debug';
 
 var holder = document.getElementById('holder');
 

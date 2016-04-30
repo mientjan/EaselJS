@@ -1,6 +1,5 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var DisplayType;
     (function (DisplayType) {
         DisplayType[DisplayType["UNKNOWN"] = 1] = "UNKNOWN";
         DisplayType[DisplayType["DISPLAYOBJECT"] = 2] = "DISPLAYOBJECT";
@@ -14,7 +13,6 @@ define(["require", "exports"], function (require, exports) {
         DisplayType[DisplayType["BITMAPTEXT"] = 512] = "BITMAPTEXT";
         DisplayType[DisplayType["TEXTURE"] = 1024] = "TEXTURE";
         DisplayType[DisplayType["FLUMPSYMBOL"] = 2048] = "FLUMPSYMBOL";
-    })(DisplayType || (DisplayType = {}));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = DisplayType;
+    })(exports.DisplayType || (exports.DisplayType = {}));
+    var DisplayType = exports.DisplayType;
 });

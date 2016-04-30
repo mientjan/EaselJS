@@ -10,9 +10,9 @@ define(["require", "exports", './FlumpTextureGroupAtlas', '../../../core/util/Pr
             var loaders = [];
             for (var i = 0; i < atlases.length; i++) {
                 var atlas = atlases[i];
-                loaders.push(FlumpTextureGroupAtlas_1.default.load(flumpLibrary, atlas));
+                loaders.push(FlumpTextureGroupAtlas_1.FlumpTextureGroupAtlas.load(flumpLibrary, atlas));
             }
-            return Promise_1.default.all(loaders).then(function (atlases) {
+            return Promise_1.Promise.all(loaders).then(function (atlases) {
                 var flumpTextures = {};
                 for (var i = 0; i < atlases.length; i++) {
                     var atlas = atlases[i];
@@ -30,6 +30,5 @@ define(["require", "exports", './FlumpTextureGroupAtlas', '../../../core/util/Pr
         };
         return FlumpTextureGroup;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FlumpTextureGroup;
+    exports.FlumpTextureGroup = FlumpTextureGroup;
 });

@@ -23,9 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Graphics from "./Graphics";
+import {Graphics} from "./Graphics";
 import {DisplayObject} from "./DisplayObject";
-import DisplayType from "../enum/DisplayType";
+import {DisplayType} from "../enum/DisplayType";
 
 /**
  * @module easelts
@@ -55,7 +55,7 @@ import DisplayType from "../enum/DisplayType";
  * @param {Graphics} graphics Optional. The graphics instance to display. If null, a new Graphics instance will be created.
  **/
 
-class Shape extends DisplayObject
+export class Shape extends DisplayObject
 {
 	// public properties:
 	public type:DisplayType = DisplayType.SHAPE;
@@ -139,4 +139,3 @@ class Shape extends DisplayObject
 	}
 }
 
-export default Shape;

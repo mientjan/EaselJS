@@ -1,15 +1,15 @@
-import Sprite from "../Sprite";
 
-class BitmapChar
+import {SpriteAnimation} from "../SpriteAnimation";
+export class BitmapChar
 {
-	mTexture:Sprite;
+	mTexture:SpriteAnimation;
 	mCharId:number;
 	mXOffset;
 	mYOffset;
 	mXAdvance;
 	mKernings;
 
-	constructor(id:number, texture:Sprite, xOffset:number, yOffset:number, xAdvance)
+	constructor(id:number, texture:SpriteAnimation, xOffset:number, yOffset:number, xAdvance)
 	{
 		this.mTexture = texture;
 		this.mCharId = id;
@@ -35,7 +35,7 @@ class BitmapChar
 		return (this.mKernings == null || this.mKernings[charId] == null || this.mKernings[charId] == undefined) ? 0 : this.mKernings[charId];
 	}
 
-	public createImage():Sprite
+	public createImage():SpriteAnimation
 	{
 		return this.mTexture.clone();
 	}
@@ -60,7 +60,7 @@ class BitmapChar
 		return this.mXAdvance;
 	}
 
-	public getTexture():Sprite
+	public getTexture():SpriteAnimation
 	{
 		return this.mTexture;
 	}
@@ -76,4 +76,4 @@ class BitmapChar
 	}
 }
 
-export default BitmapChar;
+

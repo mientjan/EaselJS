@@ -121,7 +121,7 @@ function doResolve(fn, onFulfilled, onRejected) {
 	}
 }
 
-class Promise<T>
+export class Promise<T>
 {
 	public static all(promiseList:Array<Promise<any>>):Promise<any>
 	{
@@ -233,4 +233,3 @@ class Promise<T>
 	}
 }
 
-export default Promise;

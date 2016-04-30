@@ -1,9 +1,9 @@
-import DisplayType from "../../enum/DisplayType";
+import {DisplayType} from "../../enum/DisplayType";
 
 /**
  * @author Mient-jan Stelling
  */
-interface IFlumpMovie
+export interface IFlumpMovie
 {
 	type:DisplayType;
 	name:string;
@@ -12,4 +12,4 @@ interface IFlumpMovie
 	reset():void;
 }
 
-export default IFlumpMovie;
+

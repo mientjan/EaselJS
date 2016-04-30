@@ -1,8 +1,8 @@
 ///<reference path="../../assets/scripts/lib/gsap/greensock.d.ts" />
 
-import Container from '../../../src/easelts/display/Container';
+import {Container} from '../../../src/easelts/display/Container';
 
-class Carousel extends Container
+export class Carousel extends Container
 {
 	prevScrollX = 0;
 	prevScrollY = 0;
@@ -124,4 +124,3 @@ class Carousel extends Container
 	}
 }
 
-export default Carousel;

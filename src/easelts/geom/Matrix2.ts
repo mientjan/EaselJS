@@ -31,7 +31,7 @@
  * @module EaselJS
  */
 
-import Point from "./Point";
+import {Point} from "./Point";
 /**
  * Represents an affine transformation matrix, and provides tools for constructing and concatenating matrixes.
  * @class Matrix2D
@@ -43,7 +43,7 @@ import Point from "./Point";
  * @param {Number} [ty=0] Specifies the ty property for the new matrix.
  * @constructor
  **/
-export default class Matrix2
+export class Matrix2
 {
 
 	/**

@@ -26,8 +26,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Rectangle from "../geom/Rectangle";
-import Filter from "./Filter";
+import {Rectangle} from "../geom/Rectangle";
+import {Filter} from "./Filter";
 
 /**
  * Applies a box blur to DisplayObjects. Note that this filter is fairly CPU intensive, particularly if the quality is
@@ -54,7 +54,7 @@ import Filter from "./Filter";
  * @param {Number} [blurY=0] The vertical blur radius in pixels.
  * @param {Number} [quality=1] The number of blur iterations.
  **/
-class BlurFilter extends Filter
+export class BlurFilter extends Filter
 {
 	constructor(blurX, blurY, quality)
 	{
@@ -391,4 +391,3 @@ class BlurFilter extends Filter
 	}
 }
 
-export default BlurFilter;

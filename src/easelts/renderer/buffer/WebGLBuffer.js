@@ -45,6 +45,5 @@ define(["require", "exports"], function (require, exports) {
         };
         return WebGLBuffer;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = WebGLBuffer;
+    exports.WebGLBuffer = WebGLBuffer;
 });

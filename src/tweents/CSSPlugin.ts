@@ -26,13 +26,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Tween from "./Tween";
+import {Tween} from "./Tween";
 
 /**
  * @module tweents
  */
 
-class CSSPlugin
+export class CSSPlugin
 {
 	/**
 	 * Defines the default suffix map for CSS tweens. This can be overridden on a per tween basis by specifying a
@@ -149,4 +149,4 @@ class CSSPlugin
 	}
 }
 
-export default CSSPlugin;
+

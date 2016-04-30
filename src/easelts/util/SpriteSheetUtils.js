@@ -109,9 +109,8 @@ define(["require", "exports"], function (require, exports) {
         };
         return SpriteSheetUtils;
     }());
+    exports.SpriteSheetUtils = SpriteSheetUtils;
     SpriteSheetUtils['_workingCanvas'] = document.createElement("canvas");
     SpriteSheetUtils['_workingContext'] = SpriteSheetUtils['_workingCanvas'].getContext("2d");
     SpriteSheetUtils['_workingCanvas'].width = SpriteSheetUtils['_workingCanvas'].height = 1;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = SpriteSheetUtils;
 });

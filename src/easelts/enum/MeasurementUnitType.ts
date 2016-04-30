@@ -2,7 +2,7 @@
  * @enum MeasurementUnitType
  * %|px|pt|in|cm|mm|vw|vh
  */
-enum MeasurementUnitType {
+export enum MeasurementUnitType {
 	PROCENT,
 	PIXEL,
 	POINT,
@@ -13,4 +13,3 @@ enum MeasurementUnitType {
 	VIEWPORT_HEIGHT,
 }
 
-export default MeasurementUnitType;

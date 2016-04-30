@@ -1,12 +1,12 @@
-import Stage from '../../src/easelts/display/Stage';
-import Debug from '../../src/easelts/display/Debug';
-import Bitmap from '../../src/easelts/display/Bitmap';
-import BitmapNinePatch from '../../src/easelts/component/BitmapNinePatch';
-import NinePatch from '../../src/easelts/component/bitmapninepatch/NinePatch';
-import Rectangle from '../../src/easelts/geom/Rectangle';
+import {Stage} from '../../src/easelts/display/Stage';
+import {Debug} from '../../src/easelts/display/Debug';
+import {Bitmap} from '../../src/easelts/display/Bitmap';
+import {BitmapNinePatch} from '../../src/easelts/component/BitmapNinePatch';
+import {NinePatch} from '../../src/easelts/component/bitmapninepatch/NinePatch';
+import {Rectangle} from '../../src/easelts/geom/Rectangle';
 
-import ButtonBehavior from '../../src/easelts/behavior/ButtonBehavior';
-import Texture from "../../src/easelts/display/Texture";
+import {ButtonBehavior} from '../../src/easelts/behavior/ButtonBehavior';
+import {Texture} from "../../src/easelts/display/Texture";
 
 //var holder = <HTMLBlockElement> document.getElementById('holder');
 //var stage = new Stage(holder, true);

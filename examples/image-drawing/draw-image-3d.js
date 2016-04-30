@@ -7,11 +7,11 @@ define(["require", "exports", "../../src/core/math/Vector3", "../../src/core/mat
     var world = new Matrix4_1.Matrix4().identity();
     var end = new Matrix4_1.Matrix4().identity();
     var holder = document.getElementById('holder');
-    var stage = new Stage_1.default(holder, {});
+    var stage = new Stage_1.Stage(holder, {});
     var total = 100;
     var items = [];
     for (var i = 0; i < total; i++) {
-        var shape = new Shape_1.default();
+        var shape = new Shape_1.Shape();
         shape.graphics.beginFill('#FFFFFF').drawRect(0, 0, 10, 10);
         shape.x = Math.random() * stage.width;
         shape.y = Math.random() * stage.height;

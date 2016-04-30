@@ -11,6 +11,5 @@ define(["require", "exports"], function (require, exports) {
         }
         return Bounds;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Bounds;
+    exports.Bounds = Bounds;
 });

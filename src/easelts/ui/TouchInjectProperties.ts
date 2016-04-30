@@ -1,4 +1,4 @@
-class TouchInjectProperties
+export class TouchInjectProperties
 {
 	pointers = {};
 	multitouch:boolean = false;
@@ -6,4 +6,3 @@ class TouchInjectProperties
 	count:number = 0;
 }
 
-export default TouchInjectProperties;

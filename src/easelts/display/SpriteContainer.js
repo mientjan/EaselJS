@@ -60,7 +60,6 @@ define(["require", "exports", "./Container"], function (require, exports, Contai
             return "[SpriteContainer (name=" + this.name + ")]";
         };
         return SpriteContainer;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = SpriteContainer;
+    }(Container_1.Container));
+    exports.SpriteContainer = SpriteContainer;
 });

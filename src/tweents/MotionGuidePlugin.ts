@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Tween from "./Tween";
+import {Tween} from "./Tween";
 
 /**
  * @module tweents
@@ -64,7 +64,7 @@ import Tween from "./Tween";
  * @class MotionGuidePlugin
  * @constructor
  **/
-class MotionGuidePlugin
+export class MotionGuidePlugin
 {
 
 
@@ -453,4 +453,3 @@ class MotionGuidePlugin
 	}
 }
 
-export default MotionGuidePlugin;

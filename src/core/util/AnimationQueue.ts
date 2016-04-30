@@ -1,7 +1,7 @@
 import {QueueItem} from "./QueueItem";
 import {Queue} from "./Queue";
 
-class AnimationQueue extends Queue
+export class AnimationQueue extends Queue
 {
 	protected frame:number = 0;
 
@@ -68,4 +68,4 @@ class AnimationQueue extends Queue
 	}
 }
 
-export default AnimationQueue;
+

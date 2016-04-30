@@ -8,7 +8,7 @@ import {Vector3} from "Vector3";
  * @author WestLangley / http://github.com/WestLangley
  * @author bhouston / http://exocortex.com
  */
-export default class Matrix3
+export class Matrix3
 {
 	public elements:Float32Array;
 

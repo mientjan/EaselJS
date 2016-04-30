@@ -1,9 +1,9 @@
 define(["require", "exports", '../../src/easelts/display/Stage', '../../src/easelts/animation/FlumpLibrary', "../../src/easelts/util/ArrayUtil"], function (require, exports, Stage_1, FlumpLibrary_1, ArrayUtil_1) {
     "use strict";
     var holder = document.getElementById('holder');
-    var stage = new Stage_1.default(holder, { autoResize: true });
+    var stage = new Stage_1.Stage(holder, { autoResize: true });
     stage.getRenderer().setFpsCounter(true);
-    FlumpLibrary_1.default.load('../assets/flump/animations-100/character').then(function (fl) {
+    FlumpLibrary_1.FlumpLibrary.load('../assets/flump/animations-100/character').then(function (fl) {
         var names = [
             'SupermanSuduction1',
             'SupermanSuduction2',
@@ -14,7 +14,7 @@ define(["require", "exports", '../../src/easelts/display/Stage', '../../src/ease
             'SupermanSuductionLose'
         ];
         for (var i = 0; i < 100; i++) {
-            var movie = fl.createMovie(ArrayUtil_1.default.getRandom(names));
+            var movie = fl.createMovie(ArrayUtil_1.ArrayUtil.getRandom(names));
             movie.setXY(Math.random() * stage.width | 0, Math.random() * stage.height | 0);
             movie.play(-1);
             stage.addChild(movie);

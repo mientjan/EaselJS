@@ -4,12 +4,12 @@ define(["require", "exports", "../../../core/event/Signal", "../../component/Sta
         function Context2dRenderer() {
             this._autoClear = true;
             this.sourceRect = null;
-            this.drawstartSignal = new Signal_1.default();
-            this.drawendSignal = new Signal_1.default();
+            this.drawstartSignal = new Signal_1.Signal();
+            this.drawendSignal = new Signal_1.Signal();
         }
         Context2dRenderer.prototype.setFpsCounter = function (value) {
             if (value) {
-                this._fpsCounter = new Stats_1.default;
+                this._fpsCounter = new Stats_1.Stats;
             }
             else {
                 this._fpsCounter = null;

@@ -5,6 +5,7 @@ define(["require", "exports", "./Functional"], function (require, exports, Funct
         }
         return Decorator;
     }());
+    exports.Decorator = Decorator;
     function log(name) {
         if (name === void 0) { name = ''; }
         return function (target, propertyKey, descriptor) {

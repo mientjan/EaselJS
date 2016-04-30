@@ -58,7 +58,6 @@ define(["require", "exports", "./Filter"], function (require, exports, Filter_1)
             return new ColorFilter(this.redMultiplier, this.greenMultiplier, this.blueMultiplier, this.alphaMultiplier, this.redOffset, this.greenOffset, this.blueOffset, this.alphaOffset);
         };
         return ColorFilter;
-    }(Filter_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ColorFilter;
+    }(Filter_1.Filter));
+    exports.ColorFilter = ColorFilter;
 });

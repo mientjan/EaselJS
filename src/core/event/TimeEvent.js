@@ -17,7 +17,6 @@ define(["require", "exports", "./Event"], function (require, exports, Event_1) {
             this.runTime = runtime;
         }
         return TimeEvent;
-    }(Event_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = TimeEvent;
+    }(Event_1.Event));
+    exports.TimeEvent = TimeEvent;
 });

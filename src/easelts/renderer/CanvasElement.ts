@@ -40,6 +40,11 @@ export class CanvasElement
 		this._domElement.width = value;
 	}
 
+	public getWidth():number
+	{
+		return this._width;
+	}
+
 	set height(value:number)
 	{
 		this.setHeight(value);
@@ -54,6 +59,11 @@ export class CanvasElement
 	{
 		this._height = value;
 		this._domElement.height = value;
+	}
+
+	public getHeight():number
+	{
+		return this._height;
 	}
 
 

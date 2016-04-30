@@ -1,4 +1,4 @@
-import Event from "./Event";
+import {Event} from "./Event";
 
 /*
  * Signal
@@ -29,9 +29,9 @@ import Event from "./Event";
  * Signal provides method for managing queues of a single event listener and dispatching it.
  **/
 
-import SignalConnection from "./SignalConnection";
+import {SignalConnection} from "./SignalConnection";
 
-class Task
+export class Task
 {
 	public fn:Function;
 	public next:Task = null;
@@ -42,7 +42,7 @@ class Task
 	}
 }
 
-class SignalAbstract
+export class SignalAbstract
 {
 	public static DISPATCHING_SENTINEL = new SignalConnection(null, null);
 
@@ -200,4 +200,3 @@ class SignalAbstract
 	}
 }
 
-export default SignalAbstract;

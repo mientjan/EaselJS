@@ -11,5 +11,5 @@ define(["require", "exports"], function (require, exports) {
         }
         return FlumpMtx;
     }());
-    return FlumpMtx;
+    exports.FlumpMtx = FlumpMtx;
 });

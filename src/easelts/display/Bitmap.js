@@ -13,19 +13,17 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
             _super.call(this, width, height, x, y, regX, regY);
             this.type = 32;
             this.source = null;
-            this._imageNaturalWidth = null;
-            this._imageNaturalHeight = null;
             this._isTiled = false;
             this.sourceRect = null;
             this.destinationRect = null;
             if (typeof imageOrUri == 'string') {
-                this.source = Texture_1.default.createFromString(imageOrUri, false);
+                this.source = Texture_1.Texture.createFromString(imageOrUri, false);
             }
-            else if (imageOrUri instanceof Texture_1.default) {
+            else if (imageOrUri instanceof Texture_1.Texture) {
                 this.source = imageOrUri;
             }
             else {
-                this.source = new Texture_1.default(imageOrUri);
+                this.source = new Texture_1.Texture(imageOrUri);
             }
             this.source.load();
         }
@@ -55,7 +53,7 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
                 source.draw(ctx, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, width, height);
             }
             else if (!sourceRect && destRect) {
-                source.draw(ctx, 0, 0, width, height, destRect.x, destRect.y, destRect.width, destRect.height);
+                source.draw(ctx, 0, 0, source.getWidth(), source.getHeight(), destRect.x, destRect.y, destRect.width, destRect.height);
             }
             else if (sourceRect && destRect) {
                 source.draw(ctx, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, destRect.x, destRect.y, destRect.width, destRect.height);
@@ -67,7 +65,7 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
                 if (!height) {
                     height = source.height;
                 }
-                source.draw(ctx, 0, 0, source.width, source.height, 0, 0, width, height);
+                source.draw(ctx, 0, 0, source.getWidth(), source.getHeight(), 0, 0, width, height);
             }
             return true;
         };
@@ -102,12 +100,9 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
             this.source = null;
             this.sourceRect = null;
             this.destinationRect = null;
-            this._imageNaturalWidth = null;
-            this._imageNaturalHeight = null;
             _super.prototype.destruct.call(this);
         };
         return Bitmap;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Bitmap;
+    exports.Bitmap = Bitmap;
 });

@@ -26,8 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import IPoint from "./../../core/interface/IVector2";
-import NumberUtil from "./../util/NumberUtil";
+import {IVector2} from "./../../core/interface/IVector2";
 
 /**
  * @module easelts
@@ -45,7 +44,7 @@ import NumberUtil from "./../util/NumberUtil";
  * @param {Number} [y=0] Y position.
  * @constructor
  **/
-class PointerData implements IPoint
+export class PointerData implements IVector2
 {
 	/**
 	 * X position.
@@ -71,11 +70,10 @@ class PointerData implements IPoint
 	rawX = 0;
 	rawY = 0;
 
-	constructor(x:number, y:number)
+	constructor(x:number = 0, y:number = 0)
 	{
 		this.x = x;
 		this.y = y;
 	}
 }
 
-export default PointerData;

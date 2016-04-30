@@ -1,8 +1,8 @@
 define(["require", "exports", "../../src/easelts/display/Stage", "../../src/easelts/display/Bitmap", "../../src/core/math/Matrix4", "../../src/core/math/Vector3", "../../src/core/math/Quaternion", "../../src/core/math/MathUtil", "../../src/core/util/Interval"], function (require, exports, Stage_1, Bitmap_1, Matrix4_1, Vector3_1, Quaternion_1, MathUtil_1, Interval_1) {
     "use strict";
     var holder = document.getElementById('holder');
-    var stage = new Stage_1.default(holder, true);
-    var image = new Bitmap_1.default('../assets/image/ninepatch_red.png', 0, 0, '50%', '50%', '50%', '50%');
+    var stage = new Stage_1.Stage(holder, true);
+    var image = new Bitmap_1.Bitmap('../assets/image/ninepatch_red.png', 0, 0, '50%', '50%', '50%', '50%');
     stage.addChild(image);
     var m = new Matrix4_1.Matrix4();
     var x = new Matrix4_1.Matrix4();

@@ -1,4 +1,4 @@
-import Event from "./Event";
+import {Event} from "./Event";
 
 /*
  * Signal2
@@ -25,14 +25,14 @@ import Event from "./Event";
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import SignalAbstract from "./SignalAbstract";
+import {SignalAbstract} from "./SignalAbstract";
 
 /**
  * @namespace createts.events
  * @module createts
  * @class Signal2
  */
-class Signal2<T1,T2> extends SignalAbstract
+export class Signal2<T1,T2> extends SignalAbstract
 {
 	/**
 	 * Emit the signal, notifying each connected listener.
@@ -68,4 +68,3 @@ class Signal2<T1,T2> extends SignalAbstract
 	}
 }
 
-export default Signal2;

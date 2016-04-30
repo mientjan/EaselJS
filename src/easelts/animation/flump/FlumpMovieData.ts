@@ -1,10 +1,9 @@
 
-import Flump from '../FlumpLibrary';
-import FlumpLayerData from './FlumpLayerData';
-import FlumpLabelData from './FlumpLabelData';
+import {FlumpLibrary} from "../FlumpLibrary";
+import {FlumpLayerData} from "./FlumpLayerData";
 import {IMovie} from "./IFlumpLibrary";
 
-class FlumpMovieData {
+export class FlumpMovieData {
 
 	public id:string;
 	public flumpLibrary;
@@ -12,7 +11,7 @@ class FlumpMovieData {
 
 	public frames:number = 0;
 
-	constructor(flumpLibrary:Flump, json:IMovie)
+	constructor(flumpLibrary:FlumpLibrary, json:IMovie)
 	{
 		this.flumpLibrary = flumpLibrary;
 		this.id = json.id;
@@ -28,4 +27,3 @@ class FlumpMovieData {
 	}
 }
 
-export default FlumpMovieData;

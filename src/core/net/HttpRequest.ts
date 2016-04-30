@@ -29,14 +29,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import IHashMap from "../interface/IHashMap";
-import Promise from "../util/Promise";
-import ILoadable from "../interface/ILoadable";
+import {IHashMap} from "../interface/IHashMap";
+import {Promise} from "../util/Promise";
+import {ILoadable} from "../interface/ILoadable";
 
 /**
  * @class HttpRequest
  */
-class HttpRequest
+export class HttpRequest
 {
 	/**
 	 * @static
@@ -185,4 +185,3 @@ class HttpRequest
 	}
 }
 
-export default HttpRequest;

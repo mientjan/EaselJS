@@ -1,7 +1,6 @@
-import Stage from '../../src/easelts/display/Stage';
-import Bitmap from '../../src/easelts/display/Bitmap';
-import Debug from '../../src/easelts/display/Debug';
-import Container from '../../src/easelts/display/Container';
+import {Stage} from "../../src/easelts/display/Stage";
+import {Bitmap} from "../../src/easelts/display/Bitmap";
+import {Container} from "../../src/easelts/display/Container";
 import {Canvas2DElement} from "../../src/easelts/renderer/Canvas2DElement";
 
 

@@ -32,7 +32,6 @@ define(["require", "exports", "./SignalAbstract"], function (require, exports, S
             this.didEmit(head);
         };
         return Signal;
-    }(SignalAbstract_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Signal;
+    }(SignalAbstract_1.SignalAbstract));
+    exports.Signal = Signal;
 });

@@ -55,7 +55,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ut
                 }
                 url += (url.substr(url.length - 1) != '/' ? '/' : '') + 'library.json';
             }
-            return HttpRequest_1.default
+            return HttpRequest_1.HttpRequest
                 .getJSON(url)
                 .then(function (json) {
                 spriteSheet.url = url;
@@ -105,7 +105,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ut
                 a = data.frames;
                 for (i = 0, l = a.length; i < l; i++) {
                     var arr = a[i];
-                    this._frames.push({ image: this._images[arr[4] ? arr[4] : 0], rect: new Rectangle_1.default(arr[0], arr[1], arr[2], arr[3]), regX: arr[5] || 0, regY: arr[6] || 0 });
+                    this._frames.push({ image: this._images[arr[4] ? arr[4] : 0], rect: new Rectangle_1.Rectangle(arr[0], arr[1], arr[2], arr[3]), regX: arr[5] || 0, regY: arr[6] || 0 });
                 }
             }
             else {
@@ -170,12 +170,12 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ut
             if (this.hasLoaded()) {
                 if (onProgress)
                     onProgress(1);
-                return new Promise_1.default(function (resolve, reject) {
+                return new Promise_1.Promise(function (resolve, reject) {
                     resolve(_this);
                 });
             }
             if (this._animations.length > 0) {
-                return new Promise_1.default(function (resolve, reject) {
+                return new Promise_1.Promise(function (resolve, reject) {
                     var total = _this.loadCount;
                     var kill = setInterval(function () {
                         if (onProgress) {
@@ -227,7 +227,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ut
         };
         SpriteSheet.prototype.getFrameBounds = function (frameIndex, rectangle) {
             var frame = this.getFrame(frameIndex);
-            return frame ? (rectangle || new Rectangle_1.default(-frame.regX, -frame.regY, frame.rect.width, frame.rect.height)) : null;
+            return frame ? (rectangle || new Rectangle_1.Rectangle(-frame.regX, -frame.regY, frame.rect.width, frame.rect.height)) : null;
         };
         SpriteSheet.prototype.toString = function () {
             return "[SpriteSheet]";
@@ -273,7 +273,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ut
                         frameCount++;
                         this._frames.push({
                             image: img,
-                            rect: new Rectangle_1.default(x, y, frameWidth, frameHeight),
+                            rect: new Rectangle_1.Rectangle(x, y, frameWidth, frameHeight),
                             regX: this._regX,
                             regY: this._regY
                         });
@@ -285,7 +285,6 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ut
             this._numFrames = frameCount;
         };
         return SpriteSheet;
-    }(EventDispatcher_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = SpriteSheet;
+    }(EventDispatcher_1.EventDispatcher));
+    exports.SpriteSheet = SpriteSheet;
 });

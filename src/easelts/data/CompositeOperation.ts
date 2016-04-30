@@ -1,4 +1,4 @@
-class CompositeOperation
+export class CompositeOperation
 {
 	public static SOURCE_ATOP:string = 'source-atop';
 	public static SOURCE_IN:string = 'source-in';
@@ -37,4 +37,3 @@ class CompositeOperation
 	}
 }
 
-export default CompositeOperation;

@@ -34,7 +34,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
             var movieLayers = new Array(length);
             for (var i = 0; i < length; i++) {
                 var layerData = layers[i];
-                movieLayers[i] = new FlumpMovieLayer_1.default(this, layerData);
+                movieLayers[i] = new FlumpMovieLayer_1.FlumpMovieLayer(this, layerData);
             }
             this.flumpMovieLayers = movieLayers;
             this.frames = this.flumpMovieData.frames;
@@ -47,7 +47,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
         }
         FlumpMovie.prototype.getQueue = function () {
             if (!this._queue) {
-                this._queue = new AnimationQueue_1.default(this.fps, 1000);
+                this._queue = new AnimationQueue_1.AnimationQueue(this.fps, 1000);
             }
             return this._queue;
         };
@@ -217,6 +217,5 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpMovieLayer'
         };
         return FlumpMovie;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FlumpMovie;
+    exports.FlumpMovie = FlumpMovie;
 });

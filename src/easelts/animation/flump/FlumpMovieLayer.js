@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeData', './FlumpTexture', './FlumpMovie', './FlumpLabelData', "./FlumpMtx"], function (require, exports, DisplayObject_1, FlumpKeyframeData_1, FlumpTexture_1, FlumpMovie_1, FlumpLabelData_1, FlumpMtx) {
+define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeData', './FlumpTexture', './FlumpMovie', './FlumpMtx', './FlumpLabelData'], function (require, exports, DisplayObject_1, FlumpKeyframeData_1, FlumpTexture_1, FlumpMovie_1, FlumpMtx_1, FlumpLabelData_1) {
     "use strict";
     var FlumpMovieLayer = (function (_super) {
         __extends(FlumpMovieLayer, _super);
@@ -14,14 +14,14 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             this._symbols = {};
             this._symbolName = null;
             this.enabled = true;
-            this._storedMtx = new FlumpMtx(1, 0, 0, 1, 0, 0);
+            this._storedMtx = new FlumpMtx_1.FlumpMtx(1, 0, 0, 1, 0, 0);
             this.flumpLayerData = flumpLayerData;
             this.name = flumpLayerData.name;
             var flumpLibrary = flumpMove.flumpLibrary;
             for (var i = 0; i < flumpLayerData.flumpKeyframeDatas.length; i++) {
                 var keyframe = flumpLayerData.flumpKeyframeDatas[i];
                 if (keyframe.label) {
-                    flumpMove['_labels'][keyframe.label] = new FlumpLabelData_1.default(keyframe.label, keyframe.index, keyframe.duration);
+                    flumpMove['_labels'][keyframe.label] = new FlumpLabelData_1.FlumpLabelData(keyframe.label, keyframe.index, keyframe.duration);
                 }
                 if ((keyframe.ref != -1 && keyframe.ref != null) && (keyframe.ref in this._symbols) == false) {
                     this._symbols[keyframe.ref] = flumpMove.flumpLibrary.createSymbol(keyframe.ref, false);
@@ -33,7 +33,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             var symbols = this._symbols;
             for (var val in symbols) {
                 var symbol = symbols[val];
-                if (symbol instanceof FlumpMovie_1.default) {
+                if (symbol instanceof FlumpMovie_1.FlumpMovie) {
                     if (symbol.name == name) {
                         return symbol;
                     }
@@ -55,14 +55,14 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
                     this._symbols[val] = item;
                     return true;
                 }
-                else if (symbol instanceof FlumpMovie_1.default && symbol.replaceSymbol(name, item)) {
+                else if (symbol instanceof FlumpMovie_1.FlumpMovie && symbol.replaceSymbol(name, item)) {
                     return true;
                 }
             }
             return false;
         };
         FlumpMovieLayer.prototype.onTick = function (delta, accumulated) {
-            if (this._symbol != null && !(this._symbol instanceof FlumpTexture_1.default)) {
+            if (this._symbol != null && !(this._symbol instanceof FlumpTexture_1.FlumpTexture)) {
                 this._symbol.onTick(delta, accumulated);
             }
         };
@@ -101,7 +101,7 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             var nextKeyframe;
             if (keyframe.index < frame && keyframe.tweened) {
                 nextKeyframe = this.flumpLayerData.getKeyframeAfter(keyframe);
-                if (nextKeyframe instanceof FlumpKeyframeData_1.default) {
+                if (nextKeyframe instanceof FlumpKeyframeData_1.FlumpKeyframeData) {
                     interped = (frame - keyframe.index) / keyframe.duration;
                     ease = keyframe.ease;
                     if (ease != 0) {
@@ -144,8 +144,9 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
             this._frame = frame;
         };
         FlumpMovieLayer.prototype.reset = function () {
-            if (this._symbol)
+            if (this._symbol) {
                 this._symbol.reset();
+            }
             for (var symbol in this._symbols) {
                 this._symbols[symbol].reset();
             }
@@ -158,6 +159,5 @@ define(["require", "exports", '../../display/DisplayObject', './FlumpKeyframeDat
         };
         return FlumpMovieLayer;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FlumpMovieLayer;
+    exports.FlumpMovieLayer = FlumpMovieLayer;
 });

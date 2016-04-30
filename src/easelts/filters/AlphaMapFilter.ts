@@ -31,7 +31,7 @@
  */
 
 import * as Methods from "../util/Methods";
-import Filter from "./Filter";
+import {Filter} from "./Filter";
 
 /**
  * Applies a greyscale alpha map image (or canvas) to the target, such that the alpha channel of the result will
@@ -62,7 +62,7 @@ import Filter from "./Filter";
  * @param {Image|HTMLCanvasElement} alphaMap The greyscale image (or canvas) to use as the alpha value for the
  * result. This should be exactly the same dimensions as the target.
  **/
-class AlphaMapFilter extends Filter
+export class AlphaMapFilter extends Filter
 {
 
 	// constructor:
@@ -185,4 +185,4 @@ class AlphaMapFilter extends Filter
 	}
 }
 
-export default AlphaMapFilter;
+

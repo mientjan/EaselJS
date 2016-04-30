@@ -8,6 +8,5 @@ define(["require", "exports"], function (require, exports) {
         }
         return FlumpLabelData;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FlumpLabelData;
+    exports.FlumpLabelData = FlumpLabelData;
 });

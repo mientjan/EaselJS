@@ -21,8 +21,8 @@
 // Easing Equations (c) 2003 Robert Penner, all rights reserved.
 // Open source under the BSD License.
 
-import Animate from "./Animate";
-import IScrollerOptions from "./IScrollerOptions";
+import {Animate} from "./Animate";
+import {IScrollerOptions} from "./IScrollerOptions";
 
 /**
  * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
@@ -52,7 +52,7 @@ var NOOP = function()
 /**
  * A pure logic 'component' for 'virtual' scrolling/zooming.
  */
-class Scroller
+export class Scroller
 {
 
 	protected options:IScrollerOptions = {
@@ -1513,4 +1513,3 @@ class Scroller
 	}
 }
 
-export default Scroller;

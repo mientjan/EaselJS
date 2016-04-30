@@ -1,8 +1,8 @@
-import EventDispatcher from "../core/event/EventDispatcher";
-//import Ticker from "../createts/util/Ticker";
-import Ease from "../tweents/Ease";
+import {EventDispatcher} from "../core/event/EventDispatcher";
+//import {Ticker} from "../createts/util/Ticker";
+import {Ease} from "../tweents/Ease";
 import {Interval} from "../core/util/Interval";
-import IHashMap from "../core/interface/IHashMap";
+import {IHashMap} from "../core/interface/IHashMap";
 
 
 /*
@@ -119,7 +119,7 @@ import IHashMap from "../core/interface/IHashMap";
  * @extends EventDispatcher
  * @constructor
  */
-class Tween extends EventDispatcher
+export class Tween extends EventDispatcher
 {
 
 	public static _inited = false;
@@ -1144,4 +1144,3 @@ class Tween extends EventDispatcher
 
 }
 
-export default Tween;

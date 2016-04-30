@@ -52,6 +52,5 @@ define(["require", "exports", "./Queue"], function (require, exports, Queue_1) {
         };
         return AnimationQueue;
     }(Queue_1.Queue));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = AnimationQueue;
+    exports.AnimationQueue = AnimationQueue;
 });

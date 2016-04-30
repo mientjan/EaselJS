@@ -35,7 +35,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setDownScaleBreakPoint = function (width, height) {
             if (!this._downScaleBreakPoint) {
-                this._downScaleBreakPoint = new Size_1.default(width, height);
+                this._downScaleBreakPoint = new Size_1.Size(width, height);
             }
             else {
                 this._downScaleBreakPoint.width = width;
@@ -45,7 +45,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setDownScaleBreakPointWidth = function (width) {
             if (!this._downScaleBreakPoint) {
-                this._downScaleBreakPoint = new Size_1.default(width, 0);
+                this._downScaleBreakPoint = new Size_1.Size(width, 0);
             }
             else {
                 this._downScaleBreakPoint.width = width;
@@ -54,7 +54,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setDownScaleBreakPointHeight = function (height) {
             if (!this._downScaleBreakPoint) {
-                this._downScaleBreakPoint = new Size_1.default(0, height);
+                this._downScaleBreakPoint = new Size_1.Size(0, height);
             }
             else {
                 this._downScaleBreakPoint.height = height;
@@ -63,7 +63,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setDownScaleLimit = function (width, height) {
             if (!this._downScaleLimit) {
-                this._downScaleLimit = new Size_1.default(width, height);
+                this._downScaleLimit = new Size_1.Size(width, height);
             }
             else {
                 this._downScaleLimit.width = width;
@@ -73,7 +73,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setDownScaleLimitWidth = function (width) {
             if (!this._downScaleLimit) {
-                this._downScaleLimit = new Size_1.default(width, 0);
+                this._downScaleLimit = new Size_1.Size(width, 0);
             }
             else {
                 this._downScaleLimit.width = width;
@@ -82,7 +82,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setDownScaleLimitHeight = function (height) {
             if (!this._downScaleLimit) {
-                this._downScaleLimit = new Size_1.default(0, height);
+                this._downScaleLimit = new Size_1.Size(0, height);
             }
             else {
                 this._downScaleLimit.height = height;
@@ -91,7 +91,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setUpScaleBreakPoint = function (width, height) {
             if (!this._upScaleBreakPoint) {
-                this._upScaleBreakPoint = new Size_1.default(width, height);
+                this._upScaleBreakPoint = new Size_1.Size(width, height);
             }
             else {
                 this._upScaleBreakPoint.width = width;
@@ -101,7 +101,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setUpScaleBreakPointWidth = function (width) {
             if (!this._upScaleBreakPoint) {
-                this._upScaleBreakPoint = new Size_1.default(width, Number.MAX_VALUE);
+                this._upScaleBreakPoint = new Size_1.Size(width, Number.MAX_VALUE);
             }
             else {
                 this._upScaleBreakPoint.width = width;
@@ -110,7 +110,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setUpScaleBreakPointHeight = function (height) {
             if (!this._upScaleBreakPoint) {
-                this._upScaleBreakPoint = new Size_1.default(Number.MAX_VALUE, height);
+                this._upScaleBreakPoint = new Size_1.Size(Number.MAX_VALUE, height);
             }
             else {
                 this._upScaleBreakPoint.height = height;
@@ -119,7 +119,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setUpScaleLimit = function (width, height) {
             if (!this._upScaleLimit) {
-                this._upScaleLimit = new Size_1.default(width, height);
+                this._upScaleLimit = new Size_1.Size(width, height);
             }
             else {
                 this._upScaleLimit.width = width;
@@ -129,7 +129,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setUpScaleLimitWidth = function (width) {
             if (!this._upScaleLimit) {
-                this._upScaleLimit = new Size_1.default(width, 0);
+                this._upScaleLimit = new Size_1.Size(width, 0);
             }
             else {
                 this._upScaleLimit.width = width;
@@ -138,7 +138,7 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
         };
         AutoScaleBehavior.prototype.setUpScaleLimitHeight = function (height) {
             if (!this._upScaleLimit) {
-                this._upScaleLimit = new Size_1.default(0, height);
+                this._upScaleLimit = new Size_1.Size(0, height);
             }
             else {
                 this._upScaleLimit.height = height;
@@ -198,7 +198,6 @@ define(["require", "exports", "./AbstractBehavior", "../geom/Size"], function (r
             _super.prototype.destruct.call(this);
         };
         return AutoScaleBehavior;
-    }(AbstractBehavior_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = AutoScaleBehavior;
+    }(AbstractBehavior_1.AbstractBehavior));
+    exports.AutoScaleBehavior = AutoScaleBehavior;
 });

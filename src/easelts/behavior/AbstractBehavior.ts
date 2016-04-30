@@ -1,5 +1,5 @@
 import {DisplayObject} from "../display/DisplayObject";
-import IBehavior from "./IBehavior";
+import {IBehavior} from "./IBehavior";
 
 /**
  * AbstractBehaviour
@@ -8,7 +8,7 @@ import IBehavior from "./IBehavior";
  * @method AbstractBehavior
  * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
  */
-class AbstractBehavior implements IBehavior
+export class AbstractBehavior implements IBehavior
 {
 	/**
 	 * @property owner
@@ -35,4 +35,3 @@ class AbstractBehavior implements IBehavior
 	}
 }
 
-export default AbstractBehavior;

@@ -89,7 +89,6 @@ define(["require", "exports", '../../../src/easelts/display/Container'], functio
             this.reset();
         };
         return Carousel;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Carousel;
+    }(Container_1.Container));
+    exports.Carousel = Carousel;
 });

@@ -1,24 +1,24 @@
 import {DisplayObject} from '../../display/DisplayObject';
 
-import IHashMap from '../../../core/interface/IHashMap';
+import {IHashMap} from '../../../core/interface/IHashMap';
 
 
-import FlumpLibrary from '../FlumpLibrary';
-import FlumpMovieLayer from './FlumpMovieLayer';
-import FlumpLabelData from './FlumpLabelData';
-import FlumpLabelQueueData from './FlumpLabelQueueData';
-import FlumpTexture from "./FlumpTexture";
-import AnimationQueue from '../../../core/util/AnimationQueue';
+import {FlumpLibrary} from '../FlumpLibrary';
+import {FlumpMovieLayer} from './FlumpMovieLayer';
+import {FlumpLabelData} from './FlumpLabelData';
+import {FlumpLabelQueueData} from './FlumpLabelQueueData';
+import {FlumpTexture} from "./FlumpTexture";
+import {AnimationQueue} from '../../../core/util/AnimationQueue';
 
-import IFlumpMovie from "./IFlumpMovie";
-import DisplayType from "../../enum/DisplayType";
+import {IFlumpMovie} from "./IFlumpMovie";
+import {DisplayType} from "../../enum/DisplayType";
 import {QueueItem} from "../../../core/util/QueueItem";
-import IPlayable from "../../../core/interface/IPlayable";
+import {IPlayable} from "../../../core/interface/IPlayable";
 
 /**
  * @author Mient-jan Stelling
  */
-class FlumpMovie extends DisplayObject implements IPlayable
+export class FlumpMovie extends DisplayObject implements IPlayable
 {
 	public type:DisplayType = DisplayType.FLUMPSYMBOL;
 
@@ -367,4 +367,4 @@ class FlumpMovie extends DisplayObject implements IPlayable
 	}
 }
 
-export default FlumpMovie;
+

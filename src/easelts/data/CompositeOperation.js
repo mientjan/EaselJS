@@ -18,6 +18,5 @@ define(["require", "exports"], function (require, exports) {
         CompositeOperation.SCREEN = 'screen';
         return CompositeOperation;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = CompositeOperation;
+    exports.CompositeOperation = CompositeOperation;
 });

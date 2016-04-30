@@ -27,22 +27,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import TouchInjectProperties from "../ui/TouchInjectProperties";
+import {TouchInjectProperties} from "../ui/TouchInjectProperties";
 import {DisplayObject} from "./DisplayObject";
-import Container from "./Container";
+import {Container} from "./Container";
 import {IStageOption} from "../interface/IStageOption";
-import Rectangle from "../geom/Rectangle";
-import Size from "../geom/Size";
-import PointerData from "../geom/PointerData";
-import QualityType from "../enum/QualityType";
-import DisplayType from "../enum/DisplayType";
-import PointerEvent from "../event/PointerEvent";
-import TimeEvent from "../../core/event/TimeEvent";
-import Signal from "../../core/event/Signal";
+import {Rectangle} from "../geom/Rectangle";
+import {Size} from "../geom/Size";
+import {PointerData} from "../geom/PointerData";
+import {QualityType} from "../enum/QualityType";
+import {DisplayType} from "../enum/DisplayType";
+import {PointerEvent} from "../event/PointerEvent";
+import {TimeEvent} from "../../core/event/TimeEvent";
+import {Signal} from "../../core/event/Signal";
 import {Interval} from "../../core/util/Interval";
 
 import {StageOption} from "../data/StageOption";
-import IHashMap from "../../core/interface/IHashMap";
+import {IHashMap} from "../../core/interface/IHashMap";
 import {Canvas2DElement, Canvas2DElementQuality} from "../renderer/Canvas2DElement";
 import {Context2dRenderer} from "../renderer/context2d/Context2dRenderer";
 
@@ -81,7 +81,7 @@ import {Context2dRenderer} from "../renderer/context2d/Context2dRenderer";
  * of a canvas object in the current document.
  **/
 
-class Stage extends Container
+export class Stage extends Container
 {
 	// events:
 
@@ -1121,5 +1121,3 @@ class Stage extends Container
 		super.destruct();
 	}
 }
-
-export default Stage;

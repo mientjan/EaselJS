@@ -23,8 +23,8 @@
  * THE SOFTWARE.
  */
 
-import IVector2 from "./../../core/interface/IVector2";
-import NumberUtil from "./../util/NumberUtil";
+import {IVector2} from "./../../core/interface/IVector2";
+import {NumberUtil} from "./../util/NumberUtil";
 
 /**
  * @module easelts
@@ -38,7 +38,7 @@ import NumberUtil from "./../util/NumberUtil";
  * @author zz85 / http://www.lab4games.net/zz85/blog
  * @author Mient-jan Stelling
  */
-class Vector2 implements IVector2
+export class Vector2 implements IVector2
 {
 	public static radToDegree = 180 / Math.PI;
 	public static degreeToRad = Math.PI / 180;
@@ -478,4 +478,3 @@ class Vector2 implements IVector2
 
 }
 
-export default Vector2;

@@ -1,7 +1,7 @@
 
 import {IKeyframe} from "./IFlumpLibrary";
 
-class FlumpKeyframeData
+export class FlumpKeyframeData
 {
 	index:number;
 	duration:number;
@@ -95,4 +95,3 @@ class FlumpKeyframeData
 	}
 }
 
-export default FlumpKeyframeData;

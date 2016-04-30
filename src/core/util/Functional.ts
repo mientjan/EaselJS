@@ -1,4 +1,4 @@
-class Functional
+export class Functional
 {
 }
 

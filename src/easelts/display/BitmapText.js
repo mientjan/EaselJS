@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./Container", "./Sprite"], function (require, exports, Container_1, Sprite_1) {
+define(["require", "exports", "./Container", "./SpriteAnimation"], function (require, exports, Container_1, SpriteAnimation_1) {
     "use strict";
     var BitmapTextProperties = (function () {
         function BitmapTextProperties() {
@@ -15,6 +15,7 @@ define(["require", "exports", "./Container", "./Sprite"], function (require, exp
         }
         return BitmapTextProperties;
     }());
+    exports.BitmapTextProperties = BitmapTextProperties;
     var BitmapText = (function (_super) {
         __extends(BitmapText, _super);
         function BitmapText(text, spriteSheet) {
@@ -104,7 +105,7 @@ define(["require", "exports", "./Container", "./Sprite"], function (require, exp
                     sprite = kids[childIndex];
                 }
                 else {
-                    sprite = this.addChild(pool.length ? pool.pop() : new Sprite_1.default(ss));
+                    sprite = this.addChild(pool.length ? pool.pop() : new SpriteAnimation_1.SpriteAnimation(ss));
                     numKids++;
                 }
                 sprite.spriteSheet = ss;
@@ -126,7 +127,6 @@ define(["require", "exports", "./Container", "./Sprite"], function (require, exp
         BitmapText.maxPoolSize = 100;
         BitmapText._spritePool = [];
         return BitmapText;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = BitmapText;
+    }(Container_1.Container));
+    exports.BitmapText = BitmapText;
 });

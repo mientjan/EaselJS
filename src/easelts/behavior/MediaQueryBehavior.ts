@@ -1,14 +1,14 @@
 /**
  * Created by pieters on 12-Mar-15.
  */
-import AbstractBehavior from "./AbstractBehavior";
+import {AbstractBehavior} from "./AbstractBehavior";
 import {DisplayObject} from "../display/DisplayObject";
 import * as IMediaQuery from "../interface/IMediaQuery";
-import Point from "../geom/Point";
-import Size from "../geom/Size";
-import SignalConnection from "../../core/event/SignalConnection";
+import {Point} from "../geom/Point";
+import {Size} from "../geom/Size";
+import {SignalConnection} from "../../core/event/SignalConnection";
 
-class MediaQueryBehavior extends AbstractBehavior
+export class MediaQueryBehavior extends AbstractBehavior
 {
 	private _data:IMediaQuery.IMediaQuery = {};
 	private _restore:IMediaQuery.IMediaQuery = {};
@@ -242,4 +242,3 @@ class MediaQueryBehavior extends AbstractBehavior
 	}
 }
 
-export default MediaQueryBehavior;

@@ -1,8 +1,8 @@
-import IFlumpMovie from "./IFlumpMovie";
-import DisplayType from "../../enum/DisplayType";
+import {IFlumpMovie} from "./IFlumpMovie";
+import {DisplayType} from "../../enum/DisplayType";
 import {ITexture} from "./IFlumpLibrary";
 
-class FlumpTexture implements IFlumpMovie
+export class FlumpTexture implements IFlumpMovie
 {
 	public type:DisplayType = DisplayType.FLUMPSYMBOL;
 	public name:string;
@@ -43,4 +43,3 @@ class FlumpTexture implements IFlumpMovie
 	}
 }
 
-export default FlumpTexture;

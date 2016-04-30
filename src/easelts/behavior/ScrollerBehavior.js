@@ -48,10 +48,10 @@ define(["require", "exports", "./AbstractBehavior", "../display/Container", "../
                 throw new Error('owner can have only one child that holds all the gallery items');
             }
             this.holder = this.owner.children[0];
-            this._scroller = new Scroller_1.default(this.onChange.bind(this), this.options);
-            this.owner.addEventListener(Container_1.default.EVENT_MOUSE_DOWN, this.onMouseDown);
-            this.owner.addEventListener(Container_1.default.EVENT_PRESS_MOVE, this.onMouseMove);
-            this.owner.addEventListener(Container_1.default.EVENT_PRESS_UP, this.onMouseUp);
+            this._scroller = new Scroller_1.Scroller(this.onChange.bind(this), this.options);
+            this.owner.addEventListener(Container_1.Container.EVENT_MOUSE_DOWN, this.onMouseDown);
+            this.owner.addEventListener(Container_1.Container.EVENT_PRESS_MOVE, this.onMouseMove);
+            this.owner.addEventListener(Container_1.Container.EVENT_PRESS_UP, this.onMouseUp);
         };
         ScrollerBehavior.prototype.setDimensions = function (containerWidth, containerHeight, contentWidth, contentHeight) {
             this._scroller.setDimensions(containerWidth, containerHeight, contentWidth, contentHeight);
@@ -68,13 +68,12 @@ define(["require", "exports", "./AbstractBehavior", "../display/Container", "../
             this.holder.y = -top;
         };
         ScrollerBehavior.prototype.destruct = function () {
-            this.owner.removeEventListener(Container_1.default.EVENT_MOUSE_DOWN, this.onMouseDown);
-            this.owner.removeEventListener(Container_1.default.EVENT_PRESS_UP, this.onMouseUp);
-            this.owner.removeEventListener(Container_1.default.EVENT_PRESS_MOVE, this.onMouseMove);
+            this.owner.removeEventListener(Container_1.Container.EVENT_MOUSE_DOWN, this.onMouseDown);
+            this.owner.removeEventListener(Container_1.Container.EVENT_PRESS_UP, this.onMouseUp);
+            this.owner.removeEventListener(Container_1.Container.EVENT_PRESS_MOVE, this.onMouseMove);
             _super.prototype.destruct.call(this);
         };
         return ScrollerBehavior;
-    }(AbstractBehavior_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ScrollerBehavior;
+    }(AbstractBehavior_1.AbstractBehavior));
+    exports.ScrollerBehavior = ScrollerBehavior;
 });

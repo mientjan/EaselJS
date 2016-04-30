@@ -1,10 +1,8 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var ShaderType;
     (function (ShaderType) {
         ShaderType[ShaderType["FRAGMENT"] = 0] = "FRAGMENT";
         ShaderType[ShaderType["VERTEX"] = 1] = "VERTEX";
-    })(ShaderType || (ShaderType = {}));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ShaderType;
+    })(exports.ShaderType || (exports.ShaderType = {}));
+    var ShaderType = exports.ShaderType;
 });

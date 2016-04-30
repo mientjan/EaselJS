@@ -38,7 +38,7 @@
  * @param {Number} [y=0] Y position.
  * @constructor
  **/
-class Size
+export class Size
 {
 	/**
 	 * Width
@@ -100,4 +100,3 @@ class Size
 	}
 }
 
-export default Size;

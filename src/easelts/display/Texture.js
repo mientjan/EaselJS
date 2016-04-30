@@ -29,7 +29,7 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
             var _this = this;
             if (!this._hasLoaded) {
                 if (!this._loadPromise) {
-                    this._loadPromise = new Promise_1.default(function (resolve, reject) {
+                    this._loadPromise = new Promise_1.Promise(function (resolve, reject) {
                         return _this._load(function (scope) {
                             resolve(scope);
                             _this._loadPromise = null;
@@ -92,6 +92,9 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
         Texture.prototype.getHeight = function () {
             return this.height;
         };
+        Texture.prototype.getSource = function () {
+            return this.source;
+        };
         Texture.prototype.draw = function (ctx, sx, sy, sw, sh, dx, dy, dw, dh) {
             if (this._hasLoaded) {
                 ctx.drawImage(this.source, sx, sy, sw, sh, dx, dy, dw, dh);
@@ -121,7 +124,7 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
             }
         };
         Texture.prototype.getSize = function () {
-            return new Size_1.default(this.width, this.height);
+            return new Size_1.Size(this.width, this.height);
         };
         Texture.prototype.destruct = function () {
             this.source = null;
@@ -132,6 +135,5 @@ define(["require", "exports", "../../core/util/Promise", "../geom/Size", "../../
         };
         return Texture;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Texture;
+    exports.Texture = Texture;
 });

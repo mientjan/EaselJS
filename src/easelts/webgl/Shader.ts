@@ -1,11 +1,11 @@
-import ShaderType from "./ShaderType";
-import HttpRequest from "../../core/net/HttpRequest";
-import Promise from "../../core/util/Promise";
+import {ShaderType} from "./ShaderType";
+import {HttpRequest} from "../../core/net/HttpRequest";
+import {Promise} from "../../core/util/Promise";
 
 /**
  *
  */
-class Shader
+export class Shader
 {
 	public static createFromUrl(type:ShaderType, url:string):Promise<Shader>
 	{
@@ -73,4 +73,3 @@ class Shader
 	}
 }
 
-export default Shader;

@@ -23,10 +23,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Vector2 from "./../../core/interface/IVector2";
-import Vector3 from "./../../core/interface/IVector3";
 
-interface IDisplayObjectGeometry extends Vector2
+import {IVector2} from "../../core/interface/IVector2";
+
+export interface IDisplayObjectGeometry extends IVector2
 {
 
 	x:number;
@@ -41,4 +41,3 @@ interface IDisplayObjectGeometry extends Vector2
 
 }
 
-export default IDisplayObjectGeometry;

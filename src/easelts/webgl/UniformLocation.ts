@@ -1,6 +1,6 @@
-import ShaderProgram from "./ShaderProgram";
+import {ShaderProgram} from "./ShaderProgram";
 
-class UniformLocation
+export class UniformLocation
 {
 	protected _gl:WebGLRenderingContext = null;
 	protected _name:string;
@@ -95,4 +95,3 @@ class UniformLocation
 	}
 }
 
-export default UniformLocation;

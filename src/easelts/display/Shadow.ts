@@ -46,7 +46,7 @@
  * @param {Number} blur The size of the blurring effect.
  **/
 
-class Shadow
+export class Shadow
 {
 	/**
 	 * An identity shadow object (all properties are set to 0).
@@ -129,4 +129,3 @@ class Shadow
 
 Shadow.identity = new Shadow("transparent", 0, 0, 0);
 
-export default Shadow;

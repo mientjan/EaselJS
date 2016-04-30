@@ -64,6 +64,5 @@ define(["require", "exports", "../display/DisplayObject"], function (require, ex
         };
         return Stats;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Stats;
+    exports.Stats = Stats;
 });

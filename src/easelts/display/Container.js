@@ -42,7 +42,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
         };
         Container.prototype.load = function (onProgress) {
             var _this = this;
-            return HttpRequest_1.default.waitForLoadable(this.children, onProgress).then(function () {
+            return HttpRequest_1.HttpRequest.waitForLoadable(this.children, onProgress).then(function () {
                 _this._hasLoaded = true;
                 return _this;
             });
@@ -400,6 +400,5 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
         };
         return Container;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Container;
+    exports.Container = Container;
 });

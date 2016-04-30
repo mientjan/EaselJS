@@ -1,9 +1,8 @@
 /**
  * @enum QualityType
  */
-const enum QualityType {
+export const enum QualityType {
 	NORMAL,
 	LOW
 }
 
-export default QualityType;

@@ -31,7 +31,7 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
             this.mode = mode;
             this.startPosition = startPosition;
             this.loop = loop;
-            this.timeline = new Timeline_1.default(null, labels, { paused: true, position: startPosition, useTicks: true });
+            this.timeline = new Timeline_1.Timeline(null, labels, { paused: true, position: startPosition, useTicks: true });
         }
         MovieClip.init = function () {
             if (MovieClip.inited) {
@@ -140,10 +140,10 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
             var synched = this.mode != MovieClip.INDEPENDENT;
             tl.loop = (this.loop == null) ? true : this.loop;
             if (synched) {
-                tl.setPosition(this.startPosition + (this.mode == MovieClip.SINGLE_FRAME ? 0 : this._synchOffset), Tween_1.default.NONE);
+                tl.setPosition(this.startPosition + (this.mode == MovieClip.SINGLE_FRAME ? 0 : this._synchOffset), Tween_1.Tween.NONE);
             }
             else {
-                tl.setPosition(this._prevPos < 0 ? 0 : this._prevPosition, this.actionsEnabled ? null : Tween_1.default.NONE);
+                tl.setPosition(this._prevPos < 0 ? 0 : this._prevPosition, this.actionsEnabled ? null : Tween_1.Tween.NONE);
             }
             this._prevPosition = tl._prevPosition;
             if (this._prevPos == tl._prevPos) {
@@ -222,13 +222,14 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
         MovieClip.SYNCHED = "synched";
         MovieClip.inited = false;
         return MovieClip;
-    }(Container_1.default));
+    }(Container_1.Container));
+    exports.MovieClip = MovieClip;
     var MovieClipPlugin = (function () {
         function MovieClipPlugin() {
             throw ("MovieClipPlugin cannot be instantiated.");
         }
         MovieClipPlugin.install = function () {
-            Tween_1.default.installPlugin(MovieClipPlugin, ["startPosition"]);
+            Tween_1.Tween.installPlugin(MovieClipPlugin, ["startPosition"]);
         };
         MovieClipPlugin.init = function (tween, prop, value) {
             return value;
@@ -244,6 +245,5 @@ define(["require", "exports", "./Container", "../../tweents/Timeline", "../../tw
         MovieClipPlugin.priority = 100;
         return MovieClipPlugin;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = MovieClip;
+    exports.MovieClipPlugin = MovieClipPlugin;
 });

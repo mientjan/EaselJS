@@ -40,7 +40,6 @@ define(["require", "exports", "../display/Shape"], function (require, exports, S
             this.setColor();
         };
         return RectangleColor;
-    }(Shape_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = RectangleColor;
+    }(Shape_1.Shape));
+    exports.RectangleColor = RectangleColor;
 });

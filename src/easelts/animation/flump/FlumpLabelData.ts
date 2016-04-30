@@ -1,4 +1,4 @@
-class FlumpLabelData
+export class FlumpLabelData
 {
 	public label:string;
 	public index:number;
@@ -12,4 +12,3 @@ class FlumpLabelData
 	}
 }
 
-export default FlumpLabelData;

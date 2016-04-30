@@ -1,16 +1,16 @@
 import {DisplayObject} from '../../display/DisplayObject';
-import FlumpLibrary from '../FlumpLibrary';
-import FlumpLayerData from './FlumpLayerData';
-import FlumpKeyframeData from './FlumpKeyframeData';
-import FlumpTexture from './FlumpTexture';
-import FlumpMovie from './FlumpMovie';
-import FlumpLabelData from './FlumpLabelData';
-import IHashMap from "../../../core/interface/IHashMap";
-import FlumpMtx = require("./FlumpMtx");
-import IFlumpMovie from "./IFlumpMovie";
-import DisplayType from "../../enum/DisplayType";
+import {FlumpLibrary} from '../FlumpLibrary';
+import {FlumpLayerData} from './FlumpLayerData';
+import {FlumpKeyframeData} from './FlumpKeyframeData';
+import {FlumpTexture} from './FlumpTexture';
+import {FlumpMovie} from './FlumpMovie';
+import {FlumpMtx} from './FlumpMtx';
+import {FlumpLabelData} from './FlumpLabelData';
+import {IHashMap} from "../../../core/interface/IHashMap";
+import {IFlumpMovie} from "./IFlumpMovie";
+import {DisplayType} from "../../enum/DisplayType";
 
-class FlumpMovieLayer extends DisplayObject
+export class FlumpMovieLayer extends DisplayObject
 {
 	public name:string = '';
 	private _frame:number = 0;
@@ -59,15 +59,18 @@ class FlumpMovieLayer extends DisplayObject
 		for(var val in symbols)
 		{
 			var symbol = symbols[val];
-			
-			if( symbol instanceof FlumpMovie)
-			{
-				if( symbol.name == name ){
-					return symbol;
-				} else {
-					var data =  symbol.getSymbol(name);
 
-					if( data != null )
+			if(symbol instanceof FlumpMovie)
+			{
+				if(symbol.name == name)
+				{
+					return symbol;
+				}
+				else
+				{
+					var data = symbol.getSymbol(name);
+
+					if(data != null)
 					{
 						return data;
 					}
@@ -85,11 +88,12 @@ class FlumpMovieLayer extends DisplayObject
 		{
 			var symbol = symbols[val];
 
-			if( symbol.name == name ){
+			if(symbol.name == name)
+			{
 				this._symbols[val] = <IFlumpMovie> item;
 				return true;
 			}
-			else if( symbol instanceof FlumpMovie && symbol.replaceSymbol(name, item) )
+			else if(symbol instanceof FlumpMovie && symbol.replaceSymbol(name, item))
 			{
 				return true
 			}
@@ -97,7 +101,6 @@ class FlumpMovieLayer extends DisplayObject
 
 		return false;
 	}
-
 
 
 	public onTick(delta:number, accumulated:number):void
@@ -118,20 +121,24 @@ class FlumpMovieLayer extends DisplayObject
 			{
 				this._symbol = this._symbols[keyframe.ref];
 
-				if(this._symbol.type == DisplayType.FLUMPSYMBOL){
+				if(this._symbol.type == DisplayType.FLUMPSYMBOL)
+				{
 					this._symbol.reset();
 				}
 			}
 
 			this.setKeyframeData(keyframe, frame);
-		} else {
+		}
+		else
+		{
 			this._symbol = null;
 		}
 
 		return true;
 	}
 
-	public setKeyframeData(keyframe, frame){
+	public setKeyframeData(keyframe, frame)
+	{
 
 		var sinX = 0.0;
 		var cosX = 1.0;
@@ -214,7 +221,10 @@ class FlumpMovieLayer extends DisplayObject
 
 	public reset()
 	{
-		if(this._symbol) this._symbol.reset();
+		if(this._symbol)
+		{
+			this._symbol.reset();
+		}
 
 		for(var symbol in this._symbols)
 		{
@@ -232,4 +242,3 @@ class FlumpMovieLayer extends DisplayObject
 	}
 }
 
-export default FlumpMovieLayer;

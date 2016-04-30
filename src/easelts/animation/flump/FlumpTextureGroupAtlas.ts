@@ -1,10 +1,10 @@
-import FlumpLibrary from '../FlumpLibrary';
-import IHashMap from '../../../core/interface/IHashMap';
-import Promise from '../../../core/util/Promise';
+import {FlumpLibrary} from '../FlumpLibrary';
+import {IHashMap} from '../../../core/interface/IHashMap';
+import {Promise} from '../../../core/util/Promise';
 import {IAtlas} from "./IFlumpLibrary";
-import FlumpTexture from "./FlumpTexture";
+import {FlumpTexture} from "./FlumpTexture";
 
-class FlumpTextureGroupAtlas
+export class FlumpTextureGroupAtlas
 {
 	public static load(flumpLibrary:FlumpLibrary, json:IAtlas):Promise<FlumpTextureGroupAtlas>
 	{
@@ -43,4 +43,3 @@ class FlumpTextureGroupAtlas
 	}
 }
 
-export default FlumpTextureGroupAtlas;

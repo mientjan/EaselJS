@@ -52,6 +52,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return RoundRect;
     }());
+    exports.RoundRect = RoundRect;
     var Oval = (function () {
         function Oval(x, y, xRadius, yRadius, rotationAngle, startAngle, endAngle) {
             this.x = x;
@@ -78,6 +79,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return Oval;
     }());
+    exports.Oval = Oval;
     var LineTo = (function () {
         function LineTo(x, y) {
             this.x = x;
@@ -88,6 +90,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return LineTo;
     }());
+    exports.LineTo = LineTo;
     var MoveTo = (function () {
         function MoveTo(x, y) {
             this.x = x;
@@ -98,6 +101,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return MoveTo;
     }());
+    exports.MoveTo = MoveTo;
     var ArcTo = (function () {
         function ArcTo(x1, y1, x2, y2, radius) {
             this.x1 = x1;
@@ -111,6 +115,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return ArcTo;
     }());
+    exports.ArcTo = ArcTo;
     var Arc = (function () {
         function Arc(x, y, radius, startAngle, endAngle, anticlockwise) {
             this.exec = function (ctx) {
@@ -125,6 +130,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         }
         return Arc;
     }());
+    exports.Arc = Arc;
     var QuadraticCurveTo = (function () {
         function QuadraticCurveTo(cpx, cpy, x, y) {
             this.exec = function (ctx) {
@@ -137,6 +143,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         }
         return QuadraticCurveTo;
     }());
+    exports.QuadraticCurveTo = QuadraticCurveTo;
     var BezierCurveTo = (function () {
         function BezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
             this.exec = function (ctx) {
@@ -151,6 +158,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         }
         return BezierCurveTo;
     }());
+    exports.BezierCurveTo = BezierCurveTo;
     var Rect = (function () {
         function Rect(x, y, w, h) {
             this.exec = function (ctx) {
@@ -163,6 +171,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         }
         return Rect;
     }());
+    exports.Rect = Rect;
     var ClosePath = (function () {
         function ClosePath() {
             this.exec = function (ctx) {
@@ -171,6 +180,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         }
         return ClosePath;
     }());
+    exports.ClosePath = ClosePath;
     var BeginPath = (function () {
         function BeginPath() {
         }
@@ -179,6 +189,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return BeginPath;
     }());
+    exports.BeginPath = BeginPath;
     var Fill = (function () {
         function Fill(style, matrix) {
             this.path = false;
@@ -223,6 +234,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return Fill;
     }());
+    exports.Fill = Fill;
     var Stroke = (function () {
         function Stroke(style, ignoreScale) {
             this.linearGradient = Fill.prototype.linearGradient;
@@ -248,6 +260,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return Stroke;
     }());
+    exports.Stroke = Stroke;
     var StrokeStyle = (function () {
         function StrokeStyle(width, caps, joints, miterLimit) {
             this.path = false;
@@ -264,6 +277,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return StrokeStyle;
     }());
+    exports.StrokeStyle = StrokeStyle;
     var StrokeDash = (function () {
         function StrokeDash(segments, offset) {
             this.segments = segments;
@@ -275,6 +289,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return StrokeDash;
     }());
+    exports.StrokeDash = StrokeDash;
     var Circle = (function () {
         function Circle(x, y, radius) {
             this.x = x;
@@ -286,6 +301,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return Circle;
     }());
+    exports.Circle = Circle;
     var Ellipse = (function () {
         function Ellipse(x, y, w, h) {
             this.x = x;
@@ -311,6 +327,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return Ellipse;
     }());
+    exports.Ellipse = Ellipse;
     var PolyStar = (function () {
         function PolyStar(x, y, radius, sides, pointSize, angle) {
             this.x = x;
@@ -340,6 +357,7 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         };
         return PolyStar;
     }());
+    exports.PolyStar = PolyStar;
     var Graphics = (function () {
         function Graphics() {
             this.command = null;
@@ -720,7 +738,6 @@ define(["require", "exports", "../util/Methods"], function (require, exports, Me
         Graphics._ctx = Graphics._canvas.getContext('2d');
         return Graphics;
     }());
+    exports.Graphics = Graphics;
     Graphics._canvas.width = Graphics._canvas.height = 1;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Graphics;
 });

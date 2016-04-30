@@ -62,7 +62,7 @@ define(["require", "exports", "./UniformLocation"], function (require, exports, 
                 var name = info.name;
                 var type = info.type;
                 var location = this.getUniformLocation(name);
-                uniforms[name] = new UniformLocation_1.default(this.gl, name, location, type);
+                uniforms[name] = new UniformLocation_1.UniformLocation(this.gl, name, location, type);
             }
             return uniforms;
         };
@@ -86,6 +86,5 @@ define(["require", "exports", "./UniformLocation"], function (require, exports, 
         };
         return ShaderProgram;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ShaderProgram;
+    exports.ShaderProgram = ShaderProgram;
 });

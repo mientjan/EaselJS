@@ -1,5 +1,5 @@
-import IBuffer from "../../interface/IBuffer";
-import RGBA from "../../data/RGBA";
+import {IBuffer} from "../../interface/IBuffer";
+import {RGBA} from "../../data/RGBA";
 
 /**
  * Creates a Canvas element of the given size.
@@ -8,7 +8,7 @@ import RGBA from "../../data/RGBA";
  * @param width {number} the width for the newly created canvas
  * @param height {number} the height for the newly created canvas
  */
-class WebGLBuffer implements IBuffer
+export class WebGLBuffer implements IBuffer
 {
 
 	/**
@@ -73,4 +73,3 @@ class WebGLBuffer implements IBuffer
 	}
 }
 
-export default WebGLBuffer;

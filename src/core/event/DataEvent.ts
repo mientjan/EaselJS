@@ -23,9 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Event from "./Event";
+import {Event} from "./Event";
 
-class DataEvent<T> extends Event
+export class DataEvent<T> extends Event
 {
 	public data:T;
 
@@ -35,4 +35,3 @@ class DataEvent<T> extends Event
 		this.data = data;
 	}
 }
-export default DataEvent;

@@ -28,7 +28,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Filter from "./Filter";
+import {Filter} from "./Filter";
 
 /**
  * Applies the alpha from the mask image (or canvas) to the target, such that the alpha channel of the result will
@@ -59,7 +59,7 @@ import Filter from "./Filter";
  * @param {Image} mask
  **/
 
-class AlphaMaskFilter extends Filter
+export class AlphaMaskFilter extends Filter
 {
 
 	// constructor:
@@ -142,4 +142,3 @@ class AlphaMaskFilter extends Filter
 	}
 }
 
-export default AlphaMaskFilter;

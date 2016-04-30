@@ -10,10 +10,10 @@ define(["require", "exports", "./Container", "../geom/PointerData", "../event/Po
         function Stage(element, option) {
             var _this = this;
             _super.call(this, '100%', '100%', 0, 0, 0, 0);
-            this.tickstartSignal = new Signal_1.default();
-            this.tickendSignal = new Signal_1.default();
-            this.drawstartSignal = new Signal_1.default();
-            this.drawendSignal = new Signal_1.default();
+            this.tickstartSignal = new Signal_1.Signal();
+            this.tickendSignal = new Signal_1.Signal();
+            this.drawstartSignal = new Signal_1.Signal();
+            this.drawendSignal = new Signal_1.Signal();
             this.type = 4;
             this._isRunning = false;
             this._fps = -1;
@@ -196,7 +196,7 @@ define(["require", "exports", "./Container", "../geom/PointerData", "../event/Po
         Stage.prototype._getPointerData = function (id) {
             var data = this._pointerData[id];
             if (!data) {
-                data = this._pointerData[id] = new PointerData_1.default(0, 0);
+                data = this._pointerData[id] = new PointerData_1.PointerData(0, 0);
                 if (this._primaryPointerID == null) {
                     this._primaryPointerID = id;
                 }
@@ -371,7 +371,7 @@ define(["require", "exports", "./Container", "../geom/PointerData", "../event/Po
             if (!target || (!bubbles && !target.hasEventListener(type))) {
                 return;
             }
-            var evt = new PointerEvent_1.default(type, bubbles, false, o.x, o.y, nativeEvent, pointerId, pointerId == this._primaryPointerID, o.rawX, o.rawY);
+            var evt = new PointerEvent_1.PointerEvent(type, bubbles, false, o.x, o.y, nativeEvent, pointerId, pointerId == this._primaryPointerID, o.rawX, o.rawY);
             target.dispatchEvent(evt);
         };
         Stage.prototype.setFps = function (value) {
@@ -435,7 +435,6 @@ define(["require", "exports", "./Container", "../geom/PointerData", "../event/Po
         Stage.EVENT_MOUSE_ENTER = 'mouseenter';
         Stage.EVENT_STAGE_MOUSE_MOVE = 'stagemousemove';
         return Stage;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Stage;
+    }(Container_1.Container));
+    exports.Stage = Stage;
 });

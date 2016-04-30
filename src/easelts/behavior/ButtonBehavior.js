@@ -47,7 +47,6 @@ define(["require", "exports", "./AbstractBehavior", "../display/DisplayObject"],
             _super.prototype.destruct.call(this);
         };
         return ButtonBehavior;
-    }(AbstractBehavior_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ButtonBehavior;
+    }(AbstractBehavior_1.AbstractBehavior));
+    exports.ButtonBehavior = ButtonBehavior;
 });

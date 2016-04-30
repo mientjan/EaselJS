@@ -27,10 +27,9 @@
  * @module easelts
  */
 
-interface ISize
+export interface ISize
 {
 	width:number;
 	height:number;
 }
 
-export default ISize;

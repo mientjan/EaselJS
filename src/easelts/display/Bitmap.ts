@@ -28,14 +28,14 @@
  */
 
 import {DisplayObject} from "./DisplayObject";
-import Texture from "./Texture";
-import Promise from "../../core/util/Promise";
-import DisplayType from "../enum/DisplayType";
-import BitmapType from "../enum/BitmapType";
-import Rectangle from "../geom/Rectangle";
-import Signal from "../../core/event/Signal";
-import Size from "../geom/Size";
-import ILoadable from "../../core/interface/ILoadable";
+import {Texture} from "./Texture";
+import {Promise} from "../../core/util/Promise";
+import {DisplayType} from "../enum/DisplayType";
+import {BitmapType} from "../enum/BitmapType";
+import {Rectangle} from "../geom/Rectangle";
+import {Signal} from "../../core/event/Signal";
+import {Size} from "../geom/Size";
+import {ILoadable} from "../../core/interface/ILoadable";
 
 /**
  * A Bitmap represents an Image, Canvas, or Video in the display list. A Bitmap can be instantiated using an existing
@@ -66,7 +66,7 @@ import ILoadable from "../../core/interface/ILoadable";
  * display. This can be either an Image, Canvas, or Video object, or a string URI to an image file to load and use.
  * If it is a URI, a new Image object will be constructed and assigned to the .image property.
  **/
-class Bitmap extends DisplayObject implements ILoadable<Bitmap>
+export class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 {
 	public type:DisplayType = DisplayType.BITMAP;
 
@@ -77,8 +77,8 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 	 **/
 	public source:Texture = null;
 
-	protected _imageNaturalWidth:number = null;
-	protected _imageNaturalHeight:number = null;
+	// protected _imageNaturalWidth:number = null;
+	// protected _imageNaturalHeight:number = null;
 	protected _isTiled:boolean = false;
 
 	/**
@@ -191,7 +191,7 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 		}
 		else if(!sourceRect && destRect)
 		{
-			source.draw(ctx, 0, 0, width, height, destRect.x, destRect.y, destRect.width, destRect.height );
+			source.draw(ctx, 0, 0, source.getWidth(), source.getHeight(), destRect.x, destRect.y, destRect.width, destRect.height );
 		}
 		else if(sourceRect && destRect)
 		{
@@ -209,7 +209,7 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 				height = source.height;
 			}
 
-			source.draw(ctx, 0, 0, source.width, source.height, 0, 0, width, height );
+			source.draw(ctx, 0, 0, source.getWidth(), source.getHeight(), 0, 0, width, height );
 		}
 
 		return true;
@@ -276,11 +276,7 @@ class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 		this.source = null;
 		this.sourceRect = null;
 		this.destinationRect = null;
-		this._imageNaturalWidth = null;
-		this._imageNaturalHeight = null;
 
 		super.destruct();
 	}
-
 }
-export default Bitmap;

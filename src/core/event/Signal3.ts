@@ -1,4 +1,4 @@
-import Event from "./Event";
+import {Event} from "./Event";
 
 /*
  * Signal3
@@ -25,14 +25,14 @@ import Event from "./Event";
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import SignalAbstract from "./SignalAbstract";
+import {SignalAbstract} from "./SignalAbstract";
 
 /**
  * @namespace core.events
  * @module weasel
  * @class Signal3
  */
-class Signal3<T1,T2,T3> extends SignalAbstract
+export class Signal3<T1,T2,T3> extends SignalAbstract
 {
 	/**
 	 * Emit the signal, notifying each connected listener.
@@ -68,4 +68,3 @@ class Signal3<T1,T2,T3> extends SignalAbstract
 	}
 }
 
-export default Signal3;

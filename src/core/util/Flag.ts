@@ -54,7 +54,7 @@
  * @class Flag
  * @author Mient-jan Stelling <mient-jan@mediamonks.com>
  */
-class Flag<T>
+export class Flag<T>
 {
 	protected _value:number;
 
@@ -168,4 +168,3 @@ class Flag<T>
 	}
 }
 
-export default Flag;

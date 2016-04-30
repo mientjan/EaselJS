@@ -7,6 +7,5 @@ define(["require", "exports"], function (require, exports) {
         }
         return FluidMeasurementsUnit;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FluidMeasurementsUnit;
+    exports.FluidMeasurementsUnit = FluidMeasurementsUnit;
 });

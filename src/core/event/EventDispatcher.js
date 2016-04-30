@@ -77,7 +77,7 @@ define(["require", "exports", "./Event"], function (require, exports, Event_1) {
                 if (!listeners || !listeners[eventObj]) {
                     return false;
                 }
-                eventObj = new Event_1.default(eventObj);
+                eventObj = new Event_1.Event(eventObj);
             }
             try {
                 eventObj.target = target || this;
@@ -158,6 +158,5 @@ define(["require", "exports", "./Event"], function (require, exports, Event_1) {
         };
         return EventDispatcher;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = EventDispatcher;
+    exports.EventDispatcher = EventDispatcher;
 });

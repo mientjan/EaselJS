@@ -3,7 +3,7 @@ import {DisplayObject} from "../display/DisplayObject";
 
 var now = ( window.performance && window.performance.now ) ? window.performance.now.bind( performance ) : Date.now;
 
-class Stats extends DisplayObject
+export class Stats extends DisplayObject
 {
 	private text:string = '';
 	private startTime:number = now();
@@ -126,4 +126,3 @@ class Stats extends DisplayObject
 	}
 }
 
-export default Stats;

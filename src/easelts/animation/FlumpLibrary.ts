@@ -1,14 +1,14 @@
-import ILoadable from "../../core/interface/ILoadable";
-import HttpRequest from "../../core/net/HttpRequest";
-import Promise from "../../core/util/Promise";
-import FlumpMovieData from "./flump/FlumpMovieData";
-import FlumpTextureGroup from "./flump/FlumpTextureGroup";
-import FlumpMovie from "./flump/FlumpMovie";
-import IFlumpMovie from "./flump/IFlumpMovie";
+import {ILoadable} from "../../core/interface/ILoadable";
+import {HttpRequest} from "../../core/net/HttpRequest";
+import {Promise} from "../../core/util/Promise";
+import {FlumpMovieData} from "./flump/FlumpMovieData";
+import {FlumpTextureGroup} from "./flump/FlumpTextureGroup";
+import {FlumpMovie} from "./flump/FlumpMovie";
+import {IFlumpMovie} from "./flump/IFlumpMovie";
 import {QueueItem} from "../../core/util/QueueItem";
 import {ILibrary} from "./flump/IFlumpLibrary";
 
-class FlumpLibrary implements ILoadable<FlumpLibrary>
+export class FlumpLibrary implements ILoadable<FlumpLibrary>
 {
 	public static EVENT_LOAD = 'load';
 
@@ -216,4 +216,3 @@ class FlumpLibrary implements ILoadable<FlumpLibrary>
 	}
 }
 
-export default FlumpLibrary;

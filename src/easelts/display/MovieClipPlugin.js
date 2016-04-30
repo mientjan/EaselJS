@@ -5,7 +5,7 @@ define(["require", "exports", "../../tweents/Tween", "./MovieClip"], function (r
             throw ("MovieClipPlugin cannot be instantiated.");
         }
         MovieClipPlugin.install = function () {
-            Tween_1.default.installPlugin(MovieClipPlugin, ["startPosition"]);
+            Tween_1.Tween.installPlugin(MovieClipPlugin, ["startPosition"]);
         };
         MovieClipPlugin.init = function (tween, prop, value) {
             return value;
@@ -13,7 +13,7 @@ define(["require", "exports", "../../tweents/Tween", "./MovieClip"], function (r
         MovieClipPlugin.step = function () {
         };
         MovieClipPlugin.tween = function (tween, prop, value, startValues, endValues, ratio, wait, end) {
-            if (!(tween.target instanceof MovieClip_1.default)) {
+            if (!(tween.target instanceof MovieClip_1.MovieClip)) {
                 return value;
             }
             return (ratio == 1 ? endValues[prop] : startValues[prop]);
@@ -21,6 +21,5 @@ define(["require", "exports", "../../tweents/Tween", "./MovieClip"], function (r
         MovieClipPlugin.priority = 100;
         return MovieClipPlugin;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = MovieClipPlugin;
+    exports.MovieClipPlugin = MovieClipPlugin;
 });

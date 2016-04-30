@@ -1,7 +1,7 @@
 /**
  * @enum ValueType
  */
-const enum DisplayType {
+export const enum DisplayType {
 	UNKNOWN = 1 << 0,
 	DISPLAYOBJECT = 1 << 1,
 	STAGE = 1 << 2,
@@ -16,4 +16,3 @@ const enum DisplayType {
 	FLUMPSYMBOL = 1 << 11,
 }
 
-export default DisplayType;

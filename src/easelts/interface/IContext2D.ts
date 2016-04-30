@@ -1,4 +1,4 @@
-interface IContext2D {
+export interface IContext2D {
 	canvas: HTMLCanvasElement;
 	fillStyle: any;
 	font: string;
@@ -60,4 +60,3 @@ interface IContext2D {
 	translate(x: number, y: number): void;
 }
 
-export default IContext2D;

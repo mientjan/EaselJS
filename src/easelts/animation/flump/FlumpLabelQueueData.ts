@@ -1,6 +1,6 @@
-import FlumpLabelData from './FlumpLabelData';
+import {FlumpLabelData} from './FlumpLabelData';
 
-class FlumpLabelQueueData extends FlumpLabelData
+export class FlumpLabelQueueData extends FlumpLabelData
 {
 	public times:number;
 	public delay:number;
@@ -37,4 +37,3 @@ class FlumpLabelQueueData extends FlumpLabelData
 	}
 }
 
-export default FlumpLabelQueueData;

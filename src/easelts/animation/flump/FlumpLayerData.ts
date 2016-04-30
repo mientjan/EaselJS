@@ -1,10 +1,7 @@
-import {DisplayObject} from '../../display/DisplayObject';
-import Flump from '../FlumpLibrary';
-import FlumpMovieLayer from './FlumpMovieLayer';
-import FlumpKeyframeData from './FlumpKeyframeData';
+import {FlumpKeyframeData} from "./FlumpKeyframeData";
 import {ILayer} from "./IFlumpLibrary";
 
-class FlumpLayerData {
+export class FlumpLayerData {
 
 	public name:string;
 	public flipbook:boolean;
@@ -55,4 +52,3 @@ class FlumpLayerData {
 	}
 }
 
-export default FlumpLayerData;

@@ -15,4 +15,5 @@ define(["require", "exports", "../../src/core/util/Decorator"], function (requir
         ], FooBar.prototype, "logStatement", null);
         return FooBar;
     }());
+    exports.FooBar = FooBar;
 });

@@ -4,7 +4,7 @@
 
 import {DisplayObject} from "../display/DisplayObject";
 
-interface IBehavior
+export interface IBehavior
 {
 	owner:DisplayObject;
 
@@ -12,4 +12,3 @@ interface IBehavior
 	destruct():void
 }
 
-export default IBehavior;

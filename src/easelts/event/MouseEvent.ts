@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Event from "../../core/event/Event";
+import {Event} from "../../core/event/Event";
 
 /**
  * @module Easel
@@ -51,7 +51,7 @@ import Event from "../../core/event/Event";
  * @constructor
  **/
 
-class MouseEvent extends Event
+export class MouseEvent extends Event
 {
 
 	// events:
@@ -238,4 +238,4 @@ class MouseEvent extends Event
 
 }
 
-export default MouseEvent;
+

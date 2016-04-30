@@ -8,7 +8,7 @@ import {Vector3} from "../Vector3";
  * @author WestLangley / http://github.com/WestLangley
  */
 
-class Camera
+export class Camera
 {
 	public matrixWorldInverse:Matrix4;
 	public projectionMatrix:Matrix4;
@@ -64,4 +64,3 @@ class Camera
 //
 //THREE.Camera.prototype = Object.create( THREE.Object3D.prototype );
 //THREE.Camera.prototype.constructor = THREE.Camera;
-export default Camera;

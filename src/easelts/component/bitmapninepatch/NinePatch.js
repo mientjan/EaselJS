@@ -8,13 +8,13 @@ define(["require", "exports", "../../geom/Rectangle", "../../geom/Size", "../../
             this._textures = [];
             this._isLoaded = false;
             if (typeof texture == 'string') {
-                this.texture = Texture_1.default.createFromString(texture);
+                this.texture = Texture_1.Texture.createFromString(texture);
             }
             else {
                 this.texture = texture;
             }
-            if (!(rectangle instanceof Rectangle_1.default)) {
-                this.rectangle = new Rectangle_1.default(rectangle[0], rectangle[1], rectangle[2], rectangle[3]);
+            if (!(rectangle instanceof Rectangle_1.Rectangle)) {
+                this.rectangle = new Rectangle_1.Rectangle(rectangle[0], rectangle[1], rectangle[2], rectangle[3]);
             }
             else {
                 this.rectangle = rectangle;
@@ -28,18 +28,18 @@ define(["require", "exports", "../../geom/Rectangle", "../../geom/Size", "../../
         }
         NinePatch.prototype.onLoad = function () {
             if (!this._isLoaded) {
-                var source = new Rectangle_1.default(0, 0, 10, 10);
-                var dest = new Rectangle_1.default(0, 0, 10, 10);
+                var source = new Rectangle_1.Rectangle(0, 0, 10, 10);
+                var dest = new Rectangle_1.Rectangle(0, 0, 10, 10);
                 var texture = this.texture;
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
-                this._textures.push(new TexturePosition_1.default(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
+                this._textures.push(new TexturePosition_1.TexturePosition(texture, source.x, source.y, source.width, source.height, dest.x, dest.y, dest.width, dest.height));
                 this._isLoaded = true;
             }
         };
@@ -47,7 +47,7 @@ define(["require", "exports", "../../geom/Rectangle", "../../geom/Size", "../../
             if (width != this._prevWidth || height != this._prevHeight && this._textures.length == 9) {
                 this._prevWidth = width;
                 this._prevHeight = height;
-                var size = new Size_1.default(this.texture.width, this.texture.height);
+                var size = new Size_1.Size(this.texture.width, this.texture.height);
                 var iw = size.width;
                 var ih = size.height;
                 var rx = this.rectangle.x;
@@ -83,6 +83,5 @@ define(["require", "exports", "../../geom/Rectangle", "../../geom/Size", "../../
         };
         return NinePatch;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = NinePatch;
+    exports.NinePatch = NinePatch;
 });

@@ -178,6 +178,5 @@ define(["require", "exports"], function (require, exports) {
         };
         return Promise;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Promise;
+    exports.Promise = Promise;
 });

@@ -23,9 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Event from "./Event";
+import {Event} from "./Event";
 
-class TimeEvent extends Event
+export class TimeEvent extends Event
 {
 	public delta:number;
 	public paused:boolean;
@@ -42,4 +42,3 @@ class TimeEvent extends Event
 		this.runTime = runtime;
 	}
 }
-export default TimeEvent;

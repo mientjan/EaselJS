@@ -45,7 +45,7 @@
  * @param {Number} [height=0] The height of the Rectangle.
  * @constructor
  **/
-class Rectangle
+export class Rectangle
 {
 	// public properties:
 	/**
@@ -132,5 +132,3 @@ class Rectangle
 		return "[Rectangle (x=" + this.x + " y=" + this.y + " width=" + this.width + " height=" + this.height + ")]";
 	}
 }
-
-export default Rectangle;

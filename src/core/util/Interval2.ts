@@ -32,9 +32,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import LinkedList from "./LinkedList";
-import Signal1 from "../event/Signal1";
-import SignalConnection from "../event/SignalConnection";
+import {LinkedList} from "./LinkedList";
+import {Signal1} from "../event/Signal1";
+import {SignalConnection} from "../event/SignalConnection";
 
 (function() {
 	var lastTime = 0;
@@ -88,7 +88,7 @@ import SignalConnection from "../event/SignalConnection";
  * THE SOFTWARE.
  */
 
-class FramePerSecondCollection extends Signal1<number>
+export class FramePerSecondCollection extends Signal1<number>
 {
 	private _intervalKey:number = -1;
 	private _fps:number;

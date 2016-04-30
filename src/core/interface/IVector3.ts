@@ -32,7 +32,7 @@
  * @interface IVector2
  * @constructor
  **/
-interface IVector3
+export interface IVector3
 {
 	/**
 	 * X position.
@@ -56,4 +56,3 @@ interface IVector3
 	z:number;
 }
 
-export default IVector3;

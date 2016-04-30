@@ -34,7 +34,7 @@ define(["require", "exports", "../display/DisplayObject", "../geom/Size"], funct
             return this._isLoaded;
         };
         BitmapNinePatch.prototype.setContentSize = function (width, height) {
-            var imageSize = new Size_1.default(this._patch.texture.width, this._patch.texture.height);
+            var imageSize = new Size_1.Size(this._patch.texture.width, this._patch.texture.height);
             this.setWidth(this._patch.rectangle.x
                 + Math.max(this._patch.rectangle.width, width)
                 + imageSize.width - (this._patch.rectangle.x + this._patch.rectangle.width));
@@ -62,6 +62,5 @@ define(["require", "exports", "../display/DisplayObject", "../geom/Size"], funct
         };
         return BitmapNinePatch;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = BitmapNinePatch;
+    exports.BitmapNinePatch = BitmapNinePatch;
 });

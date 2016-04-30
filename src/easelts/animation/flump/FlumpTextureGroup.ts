@@ -1,13 +1,13 @@
-import ILoadable from '../../../core/interface/ILoadable';
-import FlumpLibrary from '../FlumpLibrary';
-import IHashMap from '../../../core/interface/IHashMap';
-import FlumpTextureGroupAtlas from './FlumpTextureGroupAtlas';
-import FlumpTexture from './FlumpTexture';
-import HttpRequest from '../../../core/net/HttpRequest';
-import Promise from '../../../core/util/Promise';
+import {ILoadable} from '../../../core/interface/ILoadable';
+import {FlumpLibrary} from '../FlumpLibrary';
+import {IHashMap} from '../../../core/interface/IHashMap';
+import {FlumpTextureGroupAtlas} from './FlumpTextureGroupAtlas';
+import {FlumpTexture} from './FlumpTexture';
+import {HttpRequest} from '../../../core/net/HttpRequest';
+import {Promise} from '../../../core/util/Promise';
 import {ITextureGroup, IAtlas} from "./IFlumpLibrary";
 
-class FlumpTextureGroup
+export class FlumpTextureGroup
 {
 	public static load(flumpLibrary:FlumpLibrary, json:ITextureGroup):Promise<FlumpTextureGroup>
 	{
@@ -54,4 +54,3 @@ class FlumpTextureGroup
 
 }
 
-export default FlumpTextureGroup;

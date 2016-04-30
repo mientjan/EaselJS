@@ -27,13 +27,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Container from "./Container";
-import SpriteSheet from "./SpriteSheet";
-import Sprite from "./Sprite";
-import IContext2D from "../interface/IContext2D";
-import IDisplayObject from "../interface/IDisplayObject";
+import {Container} from "./Container";
+import {SpriteSheet} from "./SpriteSheet";
+import {IContext2D} from "../interface/IContext2D";
+import {IDisplayObject} from "../interface/IDisplayObject";
+import {SpriteAnimation} from "./SpriteAnimation";
 
-class BitmapTextProperties
+export class BitmapTextProperties
 {
 	text:string = '';
 	spriteSheet:string = null;
@@ -42,7 +42,7 @@ class BitmapTextProperties
 	spaceWidth:number = 0;
 }
 
-class BitmapText extends Container
+export class BitmapText extends Container
 {
 
 	// static properties:
@@ -264,7 +264,7 @@ class BitmapText extends Container
 			kids = this.children,
 			childIndex = 0,
 			numKids = kids.length,
-			sprite:Sprite;
+			sprite:SpriteAnimation;
 
 		for(var n in oldProperties)
 		{
@@ -318,11 +318,11 @@ class BitmapText extends Container
 
 			if(childIndex < numKids)
 			{
-				sprite = <Sprite> kids[childIndex];
+				sprite = <SpriteAnimation> kids[childIndex];
 			}
 			else
 			{
-				sprite = <any> this.addChild(pool.length ? pool.pop() : new Sprite(ss));
+				sprite = <any> this.addChild(pool.length ? pool.pop() : new SpriteAnimation(ss));
 				numKids++;
 			}
 
@@ -337,7 +337,7 @@ class BitmapText extends Container
 
 		while(numKids > childIndex)
 		{
-			pool.push(sprite = <Sprite> kids.pop());
+			pool.push(sprite = <SpriteAnimation> kids.pop());
 			sprite.parent = null;
 			numKids--;
 		}
@@ -352,4 +352,3 @@ class BitmapText extends Container
 
 }
 
-export default BitmapText;

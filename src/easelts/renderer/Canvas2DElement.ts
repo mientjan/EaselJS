@@ -1,5 +1,5 @@
 import {CanvasElement} from "./CanvasElement";
-import Rectangle from "../geom/Rectangle";
+import {Rectangle} from "../geom/Rectangle";
 
 export interface ICanvas2DElementOptions {
 	domElement?:HTMLCanvasElement;
@@ -169,6 +169,11 @@ export class Canvas2DElement extends CanvasElement
 	public getContext():CanvasRenderingContext2D
 	{
 		return this._context;
+	}
+
+	public getDomElement():HTMLCanvasElement
+	{
+		return this._domElement;
 	}
 
 	/**

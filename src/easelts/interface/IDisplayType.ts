@@ -23,12 +23,11 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import DisplayType from "../enum/DisplayType";
+import {DisplayType} from "../enum/DisplayType";
 
-interface IDisplayType
+export interface IDisplayType
 {
 	type:DisplayType;
 }
 
 
-export default IDisplayType;

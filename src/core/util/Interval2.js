@@ -81,7 +81,8 @@ define(["require", "exports", "./LinkedList", "../event/Signal1"], function (req
             this._intervalKey = -1;
         };
         return FramePerSecondCollection;
-    }(Signal1_1.default));
+    }(Signal1_1.Signal1));
+    exports.FramePerSecondCollection = FramePerSecondCollection;
     var Interval2 = (function () {
         function Interval2(framePerSecond, fixedTimeStep) {
             if (framePerSecond === void 0) { framePerSecond = -1; }
@@ -133,7 +134,7 @@ define(["require", "exports", "./LinkedList", "../event/Signal1"], function (req
             }
         };
         Interval2._requestAnimationFrameList = new FramePerSecondCollection(-1);
-        Interval2._setTimeoutList = new LinkedList_1.default();
+        Interval2._setTimeoutList = new LinkedList_1.LinkedList();
         return Interval2;
     }());
     exports.Interval2 = Interval2;

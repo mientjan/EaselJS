@@ -9,7 +9,7 @@ define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
             for (var n in map) {
                 arr.push(n);
             }
-            Tween_1.default.installPlugin(CSSPlugin, arr);
+            Tween_1.Tween.installPlugin(CSSPlugin, arr);
         };
         CSSPlugin.init = function (tween, prop, value) {
             var sfx0, sfx1, style, map = CSSPlugin.cssSuffixMap;
@@ -36,7 +36,7 @@ define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
                 return value;
             }
             style[prop] = value + map[prop];
-            return Tween_1.default.IGNORE;
+            return Tween_1.Tween.IGNORE;
         };
         CSSPlugin.cssSuffixMap = {
             top: "px",
@@ -50,6 +50,5 @@ define(["require", "exports", "./Tween"], function (require, exports, Tween_1) {
         CSSPlugin.priority = -100;
         return CSSPlugin;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = CSSPlugin;
+    exports.CSSPlugin = CSSPlugin;
 });

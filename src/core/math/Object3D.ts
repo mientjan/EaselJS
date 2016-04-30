@@ -2,9 +2,9 @@ import {Vector3} from "./Vector3";
 import {MathUtil} from "./MathUtil";
 import {Euler} from "./Euler";
 import {Quaternion} from "./Quaternion";
-import Matrix3 from "./Matrix3";
+import {Matrix3} from "./Matrix3";
 import {Matrix4} from "./Matrix4";
-import UID from "../util/UID";
+import {UID} from "../util/UID";
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author mikael emtinger / http://gomo.se/

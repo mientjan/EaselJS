@@ -32,7 +32,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Signal2 from "../event/Signal2";
+import {Signal2} from "../event/Signal2";
 (function() {
 	var lastTime = 0;
 	var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -64,8 +64,8 @@ if (!Date.now) {
 	};
 }
 
-import Signal1 from "../event/Signal1";
-import SignalConnection from "../event/SignalConnection";
+import {Signal1} from "../event/Signal1";
+import {SignalConnection} from "../event/SignalConnection";
 
 /*
  * Interval
@@ -94,7 +94,7 @@ import SignalConnection from "../event/SignalConnection";
  * THE SOFTWARE.
  */
 
-class FramePerSecondCollection extends Signal2<number, number> {
+export class FramePerSecondCollection extends Signal2<number, number> {
 
 	public accum:number = 0;
 	public fixed:boolean = false;

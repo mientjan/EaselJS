@@ -1,4 +1,4 @@
-interface IScrollerOptions {
+export interface IScrollerOptions {
 	scrollingX?: boolean;
 	scrollingY?: boolean;
 	animating?: boolean;
@@ -16,4 +16,3 @@ interface IScrollerOptions {
 	penetrationAcceleration?: number;
 }
 
-export default IScrollerOptions;

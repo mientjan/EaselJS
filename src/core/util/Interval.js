@@ -42,7 +42,8 @@ define(["require", "exports", "../event/Signal2"], function (require, exports, S
             this.mspf = 1000 / fps;
         }
         return FramePerSecondCollection;
-    }(Signal2_1.default));
+    }(Signal2_1.Signal2));
+    exports.FramePerSecondCollection = FramePerSecondCollection;
     var rafInt = 0;
     var time = 0;
     var list = [];

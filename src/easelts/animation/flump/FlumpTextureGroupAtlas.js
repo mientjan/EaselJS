@@ -7,13 +7,13 @@ define(["require", "exports", '../../../core/util/Promise', "./FlumpTexture"], f
             var textures = json.textures;
             for (var i = 0; i < textures.length; i++) {
                 var texture = textures[i];
-                this.flumpTextures[texture.symbol] = new FlumpTexture_1.default(renderTexture, texture);
+                this.flumpTextures[texture.symbol] = new FlumpTexture_1.FlumpTexture(renderTexture, texture);
             }
         }
         FlumpTextureGroupAtlas.load = function (flumpLibrary, json) {
             var file = json.file;
             var url = flumpLibrary.url + '/' + file;
-            return new Promise_1.default(function (resolve, reject) {
+            return new Promise_1.Promise(function (resolve, reject) {
                 var img = document.createElement('img');
                 img.onload = function () {
                     resolve(img);
@@ -28,6 +28,5 @@ define(["require", "exports", '../../../core/util/Promise', "./FlumpTexture"], f
         };
         return FlumpTextureGroupAtlas;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FlumpTextureGroupAtlas;
+    exports.FlumpTextureGroupAtlas = FlumpTextureGroupAtlas;
 });

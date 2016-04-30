@@ -27,9 +27,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import SpriteSheet from "../display/SpriteSheet";
+import {SpriteSheet} from "../display/SpriteSheet";
 
-class SpriteSheetUtils
+export class SpriteSheetUtils
 {
 
 	protected static _workingCanvas:HTMLCanvasElement;
@@ -226,4 +226,4 @@ SpriteSheetUtils['_workingCanvas'] = document.createElement("canvas");
 SpriteSheetUtils['_workingContext'] = SpriteSheetUtils['_workingCanvas'].getContext("2d");
 SpriteSheetUtils['_workingCanvas'].width = SpriteSheetUtils['_workingCanvas'].height = 1
 
-export default SpriteSheetUtils;
+

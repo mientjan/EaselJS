@@ -16,6 +16,5 @@ define(["require", "exports"], function (require, exports) {
         };
         return RGBA;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = RGBA;
+    exports.RGBA = RGBA;
 });

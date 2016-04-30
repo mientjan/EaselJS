@@ -41,7 +41,6 @@ define(["require", "exports", "../../core/event/Event"], function (require, expo
             return "[MouseEvent (type=" + this.type + " stageX=" + this.stageX + " stageY=" + this.stageY + ")]";
         };
         return MouseEvent;
-    }(Event_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = MouseEvent;
+    }(Event_1.Event));
+    exports.MouseEvent = MouseEvent;
 });

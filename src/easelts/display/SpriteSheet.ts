@@ -130,13 +130,13 @@
  * @extends EventDispatcher
  **/
 
-import EventDispatcher from "../../core/event/EventDispatcher";
-import Promise from "../../core/util/Promise";
-import HttpRequest from "../../core/net/HttpRequest";
-import Rectangle from "../geom/Rectangle";
-import ILoadable from "../../core/interface/ILoadable";
+import {EventDispatcher} from "../../core/event/EventDispatcher";
+import {Promise} from "../../core/util/Promise";
+import {HttpRequest} from "../../core/net/HttpRequest";
+import {Rectangle} from "../geom/Rectangle";
+import {ILoadable} from "../../core/interface/ILoadable";
 
-class SpriteSheet extends EventDispatcher implements ILoadable<SpriteSheet>
+export class SpriteSheet extends EventDispatcher implements ILoadable<SpriteSheet>
 {
 	public static createSequenceDataFromString(images:string[], width:number, height:number):any
 	{
@@ -677,4 +677,4 @@ class SpriteSheet extends EventDispatcher implements ILoadable<SpriteSheet>
 	}
 }
 
-export default SpriteSheet;
+

@@ -33,7 +33,7 @@
  * @static
  **/
 
-class UID
+export class UID
 {
 	/**
 	 * @property _nextID
@@ -54,7 +54,7 @@ class UID
 	}
 }
 
-export default UID;
+
 
 
 

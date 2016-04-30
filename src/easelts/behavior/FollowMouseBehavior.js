@@ -24,15 +24,14 @@ define(["require", "exports", "./AbstractBehavior", "../display/Stage"], functio
             if (!this._stage) {
                 throw new Error('stage must be known before adding this behavior to a component.');
             }
-            this._stage.addEventListener(Stage_1.default.EVENT_STAGE_MOUSE_MOVE, this.onMouseMove);
+            this._stage.addEventListener(Stage_1.Stage.EVENT_STAGE_MOUSE_MOVE, this.onMouseMove);
         };
         FollowMouseBehavior.prototype.destruct = function () {
-            this._stage.removeEventListener(Stage_1.default.EVENT_STAGE_MOUSE_MOVE, this.onMouseMove);
+            this._stage.removeEventListener(Stage_1.Stage.EVENT_STAGE_MOUSE_MOVE, this.onMouseMove);
             this._stage = null;
             _super.prototype.destruct.call(this);
         };
         return FollowMouseBehavior;
-    }(AbstractBehavior_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FollowMouseBehavior;
+    }(AbstractBehavior_1.AbstractBehavior));
+    exports.FollowMouseBehavior = FollowMouseBehavior;
 });

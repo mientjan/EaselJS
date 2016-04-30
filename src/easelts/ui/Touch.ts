@@ -25,8 +25,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-import Stage from "../display/Stage";
-import TouchInjectProperties from "./TouchInjectProperties";
+import {Stage} from "../display/Stage";
+import {TouchInjectProperties} from "./TouchInjectProperties";
 
 /**
  * Global utility for working with multi-touch enabled devices in EaselJS. Currently supports W3C Touch API (iOS and
@@ -47,7 +47,7 @@ import TouchInjectProperties from "./TouchInjectProperties";
  * @class Touch
  * @static
  **/
-class Touch
+export class Touch
 {
 
 	constructor()
@@ -407,4 +407,4 @@ class Touch
 	}
 }
 
-export default Touch;
+

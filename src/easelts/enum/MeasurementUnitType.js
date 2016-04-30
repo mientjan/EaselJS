@@ -1,6 +1,5 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var MeasurementUnitType;
     (function (MeasurementUnitType) {
         MeasurementUnitType[MeasurementUnitType["PROCENT"] = 0] = "PROCENT";
         MeasurementUnitType[MeasurementUnitType["PIXEL"] = 1] = "PIXEL";
@@ -10,7 +9,6 @@ define(["require", "exports"], function (require, exports) {
         MeasurementUnitType[MeasurementUnitType["MILLIMETER"] = 5] = "MILLIMETER";
         MeasurementUnitType[MeasurementUnitType["VIEWPORT_WIDTH"] = 6] = "VIEWPORT_WIDTH";
         MeasurementUnitType[MeasurementUnitType["VIEWPORT_HEIGHT"] = 7] = "VIEWPORT_HEIGHT";
-    })(MeasurementUnitType || (MeasurementUnitType = {}));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = MeasurementUnitType;
+    })(exports.MeasurementUnitType || (exports.MeasurementUnitType = {}));
+    var MeasurementUnitType = exports.MeasurementUnitType;
 });

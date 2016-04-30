@@ -14,7 +14,6 @@ define(["require", "exports", "./Event"], function (require, exports, Event_1) {
             this.data = data;
         }
         return DataEvent;
-    }(Event_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = DataEvent;
+    }(Event_1.Event));
+    exports.DataEvent = DataEvent;
 });

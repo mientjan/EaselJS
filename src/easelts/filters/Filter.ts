@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Rectangle from "../geom/Rectangle";
+import {Rectangle} from "../geom/Rectangle";
 
 /**
  * @module EaselJS
@@ -63,7 +63,7 @@ import Rectangle from "../geom/Rectangle";
  * @constructor
  **/
 
-class Filter
+export class Filter
 {
 	/**
 	 * Initialization method.
@@ -124,4 +124,3 @@ class Filter
 	}
 }
 
-export default Filter;

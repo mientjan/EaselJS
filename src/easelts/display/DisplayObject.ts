@@ -27,47 +27,48 @@
  */
 
 // event
-import EventDispatcher from "../../core/event/EventDispatcher";
-import Event from "../../core/event/Event";
-import TimeEvent from "../../core/event/TimeEvent";
-import Signal2 from "../../core/event/Signal2";
+import {EventDispatcher} from "../../core/event/EventDispatcher";
+import {Event} from "../../core/event/Event";
+import {TimeEvent} from "../../core/event/TimeEvent";
+import {Signal2} from "../../core/event/Signal2";
 
 // utils
-import UID from "../../core/util/UID";
-import Promise from "../../core/util/Promise";
+import {UID} from "../../core/util/UID";
+import {Promise} from "../../core/util/Promise";
 import * as Methods from "../util/Methods";
 
 // display
-import Shape from "./Shape";
-import Shadow from "./Shadow";
-import Stage from "./Stage";
-import Container from "./Container";
+import {Shape} from "./Shape";
+import {Shadow} from "./Shadow";
+import {Stage} from "./Stage";
+import {Container} from "./Container";
 
 // filter
-import Filter from "../filters/Filter";
+import {Filter} from "../filters/Filter";
 
 // enum
-import CalculationType from "../enum/CalculationType";
-import DisplayType from "../enum/DisplayType";
+import {CalculationType} from "../enum/CalculationType";
+import {DisplayType} from "../enum/DisplayType";
 
 // geom
-import FluidCalculation from "../geom/FluidCalculation";
-import FluidMeasurementsUnit from "../geom/FluidMeasurementsUnit";
-import CalculationUnitType from "../enum/CalculationUnitType";
-import ValueCalculation from "../geom/ValueCalculation";
+import {FluidCalculation} from "../geom/FluidCalculation";
+import {FluidMeasurementsUnit} from "../geom/FluidMeasurementsUnit";
+import {CalculationUnitType} from "../enum/CalculationUnitType";
+import {ValueCalculation} from "../geom/ValueCalculation";
 
-import Matrix2 from "../geom/Matrix2";
-import Rectangle from "../geom/Rectangle";
-import Size from "../geom/Size";
-import Point from "../geom/Point";
+import {Matrix2} from "../geom/Matrix2";
+import {Rectangle} from "../geom/Rectangle";
+import {Size} from "../geom/Size";
+import {Point} from "../geom/Point";
 
-import IVector2 from "../../core/interface/IVector2";
-import ISize from "../interface/ISize";
-import IDisplayType from "../interface/IDisplayType";
-import IBehavior from "../behavior/IBehavior";
-import IContext2D from "../interface/IContext2D";
-import IDisplayObject from "../interface/IDisplayObject";
-import ILoadable from "../../core/interface/ILoadable";
+import {IVector2} from "../../core/interface/IVector2";
+import {ISize} from "../interface/ISize";
+import {IDisplayType} from "../interface/IDisplayType";
+import {IBehavior} from "../behavior/IBehavior";
+import {IContext2D} from "../interface/IContext2D";
+import {IDisplayObject} from "../interface/IDisplayObject";
+import {ILoadable} from "../../core/interface/ILoadable";
+import {Canvas2DElement} from "../renderer/Canvas2DElement";
 
 /**
  * @author Mient-jan Stelling <mientjan.stelling@gmail.com>
@@ -198,7 +199,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 * @default null
 	 * @readonly
 	 **/
-	public cacheCanvas:HTMLCanvasElement = null;
+	public cacheCanvas:Canvas2DElement = null;
 
 	/**
 	 * Unique ID for this display object. Makes display objects easier for some uses.
@@ -1054,12 +1055,12 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 			offY = fBounds.y;
 		}
 
-		ctx.drawImage(cacheCanvas, offX, offY, cacheCanvas.width / scale, cacheCanvas.height / scale);
+		ctx.drawImage(cacheCanvas.getDomElement(), 0, 0, cacheCanvas.getWidth(), cacheCanvas.getHeight(), offX, offY, cacheCanvas.width / scale, cacheCanvas.height / scale);
 
 		return true;
 	}
 
-	public DisplayObject_draw(ctx:IContext2D, ignoreCache?:boolean):boolean
+	/*public DisplayObject_draw(ctx:IContext2D, ignoreCache?:boolean):boolean
 	{
 		var cacheCanvas = this.cacheCanvas;
 		if(ignoreCache || !cacheCanvas)
@@ -1081,7 +1082,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 		ctx.drawImage(cacheCanvas, offX, offY, cacheCanvas.width / scale, cacheCanvas.height / scale);
 
 		return true;
-	}
+	}*/
 
 	/**
 	 * Applies this display object's transformation, alpha, globalCompositeOperation, clipping path (mask), and shadow
@@ -1162,7 +1163,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 		// draw to canvas.
 		if(!this.cacheCanvas)
 		{
-			this.cacheCanvas = Methods.createCanvas();
+			this.cacheCanvas = new Canvas2DElement(width, height);
 		}
 
 		this._cacheWidth = <number> width;
@@ -1201,7 +1202,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 		{
 			throw "cache() must be called before updateCache()";
 		}
-		var ctx = cacheCanvas.getContext("2d");
+		var ctx = cacheCanvas.getContext();
 
 		// update bounds based on filters:
 		if(fBounds = this._applyFilterBounds(offX, offY, w, h))
@@ -1372,7 +1373,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 * @param {Number} [regY=0] The vertical registration point in pixels
 	 * @return {DisplayObject} Returns this instance. Useful for chaining commands.
 	 */
-	public setTransform(x:number = 0, y:number = 0, scaleX:number = 1, scaleY:number = 1, rotation:number = 0, skewX:number = 0, skewY:number = 0, regX:number = 0, regY:number = 0)
+	public setTransform3(x:number = 0, y:number = 0, scaleX:number = 1, scaleY:number = 1, rotation:number = 0, skewX:number = 0, skewY:number = 0, regX:number = 0, regY:number = 0)
 	{
 		this.x = x;
 		this.y = y;
@@ -1632,7 +1633,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 		{
 			return this._rectangle.copy(this._bounds);
 		}
-		var cacheCanvas = <HTMLCanvasElement> this.cacheCanvas;
+		var cacheCanvas = <Canvas2DElement> this.cacheCanvas;
 		if(cacheCanvas)
 		{
 			var scale = this._cacheScale;
@@ -1802,9 +1803,9 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 			return;
 		}
 		var l = this.filters.length;
-		var ctx = this.cacheCanvas.getContext("2d");
-		var w = this.cacheCanvas.width;
-		var h = this.cacheCanvas.height;
+		var ctx = this.cacheCanvas.getContext();
+		var w = this.cacheCanvas.getWidth();
+		var h = this.cacheCanvas.getHeight();
 		for(var i = 0; i < l; i++)
 		{
 			this.filters[i].applyFilter(ctx, 0, 0, w, h);

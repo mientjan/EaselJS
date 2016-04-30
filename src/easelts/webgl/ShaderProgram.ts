@@ -1,8 +1,8 @@
 
-import Shader from "./Shader";
-import IHashMap from "../../core/interface/IHashMap";
-import UniformLocation from "./UniformLocation";
-class ShaderProgram
+import {Shader} from "./Shader";
+import {IHashMap} from "../../core/interface/IHashMap";
+import {UniformLocation} from "./UniformLocation";
+export class ShaderProgram
 {
 	gl:WebGLRenderingContext;
 	program:WebGLProgram;
@@ -144,4 +144,3 @@ class ShaderProgram
 	}
 }
 
-export default ShaderProgram;

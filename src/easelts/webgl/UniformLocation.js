@@ -74,6 +74,5 @@ define(["require", "exports"], function (require, exports) {
         });
         return UniformLocation;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = UniformLocation;
+    exports.UniformLocation = UniformLocation;
 });

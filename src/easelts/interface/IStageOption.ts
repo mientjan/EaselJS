@@ -1,4 +1,4 @@
-import RGBA from "../data/RGBA";
+import {RGBA} from "../data/RGBA";
 
 export interface IStageOption
 {

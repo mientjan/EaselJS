@@ -24,6 +24,5 @@ define(["require", "exports"], function (require, exports) {
         };
         return FlumpTexture;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FlumpTexture;
+    exports.FlumpTexture = FlumpTexture;
 });

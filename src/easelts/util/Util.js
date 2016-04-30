@@ -49,6 +49,5 @@ define(["require", "exports"], function (require, exports) {
         };
         return Util;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Util;
+    exports.Util = Util;
 });

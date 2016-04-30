@@ -1,10 +1,10 @@
-import Container from "./Container";
-import Shape from "./Shape";
-import Graphics from "./Graphics";
-import Text from "./Text";
-import Size from "../geom/Size";
+import {Container} from "./Container";
+import {Shape} from "./Shape";
+import {Graphics} from "./Graphics";
+import {Text} from "./Text";
+import {Size} from "../geom/Size";
 
-class Debug extends Container
+export class Debug extends Container
 {
 	private _shape:Shape = new Shape();
 	private _text:Text = new Text('', 'bold 16px Arial', '#FFF');
@@ -82,4 +82,3 @@ class Debug extends Container
 	}
 }
 
-export default Debug;

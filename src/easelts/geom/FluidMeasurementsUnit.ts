@@ -1,10 +1,9 @@
-import MeasurementUnitType from "../enum/MeasurementUnitType";
+import {MeasurementUnitType} from "../enum/MeasurementUnitType";
 
-class FluidMeasurementsUnit
+export class FluidMeasurementsUnit
 {
 	constructor(public value:number, public unit:MeasurementUnitType)
 	{
 	}
 }
 
-export default FluidMeasurementsUnit;

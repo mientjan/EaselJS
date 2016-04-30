@@ -1,17 +1,17 @@
 /**
  * Created by pieters on 12-Mar-15.
  */
-import AbstractBehavior from "./AbstractBehavior";
+import {AbstractBehavior} from "./AbstractBehavior";
 import {DisplayObject} from "../display/DisplayObject";
-import Point from "../geom/Point";
-import Size from "../geom/Size";
-import SignalConnection from "../../core/event/SignalConnection";
+import {Point} from "../geom/Point";
+import {Size} from "../geom/Size";
+import {SignalConnection} from "../../core/event/SignalConnection";
 
 
 /**
  * @example new Bitmap('src/tool.png').addBehavior(new AutoScaleBehavior().setAlwaysCover(true))
  */
-class AutoScaleBehavior extends AbstractBehavior
+export class AutoScaleBehavior extends AbstractBehavior
 {
 	private _downScaleBreakPoint:Size = null;
 	private _downScaleLimit:Size = null;
@@ -310,4 +310,3 @@ class AutoScaleBehavior extends AbstractBehavior
 	}
 }
 
-export default AutoScaleBehavior;

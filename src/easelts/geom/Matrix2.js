@@ -180,7 +180,7 @@ define(["require", "exports", "./Point"], function (require, exports, Point_1) {
             return this.tx == 0 && this.ty == 0 && this.a == 1 && this.b == 0 && this.c == 0 && this.d == 1;
         };
         Matrix2.prototype.transformPoint = function (x, y, pt) {
-            if (pt === void 0) { pt = new Point_1.default(0, 0); }
+            if (pt === void 0) { pt = new Point_1.Point(0, 0); }
             pt.x = x * this.a + y * this.c + this.tx;
             pt.y = x * this.b + y * this.d + this.ty;
             return pt;
@@ -248,6 +248,5 @@ define(["require", "exports", "./Point"], function (require, exports, Point_1) {
         Matrix2.DEG_TO_RAD = Math.PI / 180;
         return Matrix2;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Matrix2;
+    exports.Matrix2 = Matrix2;
 });

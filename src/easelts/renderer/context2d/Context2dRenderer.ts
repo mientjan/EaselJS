@@ -1,8 +1,8 @@
 import {DisplayObject} from "../../display/DisplayObject";
 import {Canvas2DElement} from "../Canvas2DElement";
-import Signal from "../../../core/event/Signal";
-import Stats from "../../component/Stats";
-import Rectangle from "../../geom/Rectangle";
+import {Signal} from "../../../core/event/Signal";
+import {Stats} from "../../component/Stats";
+import {Rectangle} from "../../geom/Rectangle";
 
 export class Context2dRenderer
 {

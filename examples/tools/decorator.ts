@@ -7,7 +7,7 @@
 //import {debounce, throttle, log} from "../../src/createts/util/Decorator";
 import {debounce, throttle, log} from "../../src/core/util/Decorator";
 
-class FooBar { sadasdasdasd
+export class FooBar { sadasdasdasd
 	constructor(){}
 
 	@log()

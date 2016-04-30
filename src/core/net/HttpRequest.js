@@ -4,7 +4,7 @@ define(["require", "exports", "../util/Promise"], function (require, exports, Pr
         function HttpRequest() {
         }
         HttpRequest.request = function (method, url, args) {
-            var promise = new Promise_1.default(function (resolve, reject) {
+            var promise = new Promise_1.Promise(function (resolve, reject) {
                 var client = new XMLHttpRequest();
                 var uri = url;
                 if (args && (method === 'POST' || method === 'PUT')) {
@@ -47,7 +47,7 @@ define(["require", "exports", "../util/Promise"], function (require, exports, Pr
         };
         HttpRequest.wait = function (list, onProgress) {
             if (onProgress === void 0) { onProgress = function (progress) { }; }
-            return new Promise_1.default(function (resolve) {
+            return new Promise_1.Promise(function (resolve) {
                 var newList = [];
                 var then = function (response) {
                     newList.push(response);
@@ -85,6 +85,5 @@ define(["require", "exports", "../util/Promise"], function (require, exports, Pr
         };
         return HttpRequest;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = HttpRequest;
+    exports.HttpRequest = HttpRequest;
 });

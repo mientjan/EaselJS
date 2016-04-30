@@ -1,6 +1,6 @@
-import Promise from "../util/Promise";
+import {Promise} from "../util/Promise";
 
-interface ILoadable<T>
+export interface ILoadable<T>
 {
 	/**
 	 * Set to true once the class has successfully loaded.
@@ -17,4 +17,3 @@ interface ILoadable<T>
 	load(onProgress?:(progress:number) => any):Promise<T>
 }
 
-export default ILoadable;

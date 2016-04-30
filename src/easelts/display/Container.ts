@@ -28,19 +28,19 @@
 
 import {DisplayObject} from "./DisplayObject";
 import * as Methods from "../util/Methods";
-import DisplayType from "../enum/DisplayType";
-import Size from "../geom/Size";
-import m2 from "../geom/Matrix2";
-import Rectangle from "../geom/Rectangle";
+import {DisplayType} from "../enum/DisplayType";
+import {Size} from "../geom/Size";
+import {Matrix2 as m2} from "../geom/Matrix2";
+import {Rectangle} from "../geom/Rectangle";
 
-import TimeEvent from "../../core/event/TimeEvent";
-import Stage from "./Stage";
+import {TimeEvent} from "../../core/event/TimeEvent";
+import {Stage} from "./Stage";
 
-import Matrix2 from "../geom/Matrix2";
-import IDisplayObject from "../interface/IDisplayObject";
-import HttpRequest from "../../core/net/HttpRequest";
-import Promise from "../../core/util/Promise";
-import ILoadable from "../../core/interface/ILoadable";
+import {Matrix2} from "../geom/Matrix2";
+import {IDisplayObject} from "../interface/IDisplayObject";
+import {HttpRequest} from "../../core/net/HttpRequest";
+import {Promise} from "../../core/util/Promise";
+import {ILoadable} from "../../core/interface/ILoadable";
 import {Canvas2DElement} from "../renderer/Canvas2DElement";
 
 /**
@@ -64,7 +64,7 @@ import {Canvas2DElement} from "../renderer/Canvas2DElement";
  * @extends DisplayObject
  * @constructor
  **/
-class Container extends DisplayObject implements ILoadable<Container>
+export class Container extends DisplayObject implements ILoadable<Container>
 {
 	// public properties:
 	public type:DisplayType = DisplayType.CONTAINER;
@@ -949,5 +949,3 @@ class Container extends DisplayObject implements ILoadable<Container>
 		super.destruct();
 	}
 }
-
-export default Container;

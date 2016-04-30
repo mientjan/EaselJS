@@ -9,7 +9,7 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
             this.channels = new Channels();
             this.children = [];
             this.up = Object3D.DefaultUp.clone();
-            this.uuid = UID_1.default.get();
+            this.uuid = UID_1.UID.get();
             this.rotationAutoUpdate = true;
             this.matrix = new Matrix4_1.Matrix4();
             this.matrixWorld = new Matrix4_1.Matrix4();
@@ -155,7 +155,7 @@ define(["require", "exports", "./Vector3", "./Euler", "./Quaternion", "./Matrix3
                     value: new Matrix4_1.Matrix4()
                 },
                 normalMatrix: {
-                    value: new Matrix3_1.default()
+                    value: new Matrix3_1.Matrix3()
                 }
             });
         }

@@ -25,7 +25,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-import Filter from "./Filter";
+import {Filter} from "./Filter";
 
 /**
  * Applies a color transform to DisplayObjects.
@@ -59,7 +59,7 @@ import Filter from "./Filter";
  * @constructor
  * @extends Filter
  **/
-class ColorFilter extends Filter
+export class ColorFilter extends Filter
 {
 
 	// public properties:
@@ -199,4 +199,3 @@ class ColorFilter extends Filter
 	}
 }
 
-export default ColorFilter;

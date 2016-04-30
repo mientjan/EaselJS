@@ -53,7 +53,6 @@ define(["require", "exports", './Filter'], function (require, exports, Filter_1)
             return new ColorMatrixFilter(this.matrix);
         };
         return ColorMatrixFilter;
-    }(Filter_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ColorMatrixFilter;
+    }(Filter_1.Filter));
+    exports.ColorMatrixFilter = ColorMatrixFilter;
 });

@@ -29,7 +29,7 @@ define(["require", "exports", "../geom/Rectangle", "./Filter"], function (requir
         }
         BlurFilter.prototype.getBounds = function () {
             var q = Math.pow(this.quality, 0.6) * 0.5;
-            return new Rectangle_1.default(-this.blurX * q, -this.blurY * q, 2 * this.blurX * q, 2 * this.blurY * q);
+            return new Rectangle_1.Rectangle(-this.blurX * q, -this.blurY * q, 2 * this.blurX * q, 2 * this.blurY * q);
         };
         BlurFilter.prototype.applyFilter = function (ctx, x, y, width, height, targetCtx, targetX, targetY) {
             targetCtx = targetCtx || ctx;
@@ -222,7 +222,6 @@ define(["require", "exports", "../geom/Rectangle", "./Filter"], function (requir
             return "[BlurFilter]";
         };
         return BlurFilter;
-    }(Filter_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = BlurFilter;
+    }(Filter_1.Filter));
+    exports.BlurFilter = BlurFilter;
 });

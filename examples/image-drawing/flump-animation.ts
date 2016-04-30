@@ -1,8 +1,8 @@
-import Stage from '../../src/easelts/display/Stage';
-import FlumpLibrary from '../../src/easelts/animation/FlumpLibrary';
-import FlumpMovie from '../../src/easelts/animation/flump/FlumpMovie';
-import ArrayUtil from "../../src/easelts/util/ArrayUtil";
-import IDisplayObject from "../../src/easelts/interface/IDisplayObject";
+import {Stage} from '../../src/easelts/display/Stage';
+import {FlumpLibrary} from '../../src/easelts/animation/FlumpLibrary';
+import {FlumpMovie} from '../../src/easelts/animation/flump/FlumpMovie';
+import {ArrayUtil} from "../../src/easelts/util/ArrayUtil";
+import {IDisplayObject} from "../../src/easelts/interface/IDisplayObject";
 import {StageOption} from "../../src/easelts/data/StageOption";
 
 var holder = <HTMLBlockElement> document.getElementById('holder');

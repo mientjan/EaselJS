@@ -42,7 +42,7 @@ var time = Date.now || function()
 //	core.effect = {};
 //}
 
-class Animate
+export class Animate
 {
 	public static desiredFrames = 60;
 	public static millisecondsPerSecond = 1000;
@@ -255,4 +255,4 @@ class Animate
 	}
 }
 
-export default Animate;
+

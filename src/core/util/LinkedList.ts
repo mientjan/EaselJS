@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-class LinkedList<T>
+export class LinkedList<T>
 {
 	/**
 	 * First node in the list
@@ -504,4 +504,3 @@ export function defaultEquals<T>(a: T, b: T): boolean {
 	return a === b;
 }
 
-export default LinkedList;

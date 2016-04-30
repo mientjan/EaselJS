@@ -90,10 +90,13 @@ define(["require", "exports", "./CanvasElement", "../geom/Rectangle"], function 
                     y1 = Math.max(y1, py);
                 }
             }
-            return new Rectangle_1.default(x0, y0, x1 - x0, y1 - y0);
+            return new Rectangle_1.Rectangle(x0, y0, x1 - x0, y1 - y0);
         };
         Canvas2DElement.prototype.getContext = function () {
             return this._context;
+        };
+        Canvas2DElement.prototype.getDomElement = function () {
+            return this._domElement;
         };
         Canvas2DElement.prototype.setSize = function (width, height) {
             this._domElement.width = this._width = width;

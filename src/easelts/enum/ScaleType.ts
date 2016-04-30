@@ -1,4 +1,4 @@
-const enum ScaleType {
+export const enum ScaleType {
 	LINEAR,
 	NEAREST
 }

@@ -14,10 +14,10 @@ define(["require", "exports", "./../util/NumberUtil"], function (require, export
             return new Point(point.x, point.y);
         };
         Point.prototype.toNumber = function () {
-            return NumberUtil_1.default.pair(this.x, this.y);
+            return NumberUtil_1.NumberUtil.pair(this.x, this.y);
         };
         Point.prototype.fromNumber = function (value) {
-            var xy = NumberUtil_1.default.depair(value);
+            var xy = NumberUtil_1.NumberUtil.depair(value);
             this.x = xy[0];
             this.y = xy[1];
         };
@@ -29,6 +29,5 @@ define(["require", "exports", "./../util/NumberUtil"], function (require, export
         };
         return Point;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Point;
+    exports.Point = Point;
 });

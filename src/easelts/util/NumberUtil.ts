@@ -1,4 +1,4 @@
-class NumberUtil
+export class NumberUtil
 {
 	public static pair(x:number, y:number)
 	{
@@ -18,4 +18,3 @@ class NumberUtil
 	}
 }
 
-export default NumberUtil;

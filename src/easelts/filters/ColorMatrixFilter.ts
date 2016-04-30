@@ -28,7 +28,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Filter from './Filter';
+import {Filter} from './Filter';
 
 /**
  * Allows you to carry out complex color operations such as modifying saturation, brightness, or inverting. See the
@@ -56,7 +56,7 @@ import Filter from './Filter';
  * class.
  **/
 
-class ColorMatrixFilter extends Filter
+export class ColorMatrixFilter extends Filter
 {
 
 	// public properties:
@@ -131,4 +131,3 @@ class ColorMatrixFilter extends Filter
 	}
 }
 
-export default ColorMatrixFilter;

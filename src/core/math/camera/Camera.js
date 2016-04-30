@@ -27,6 +27,5 @@ define(["require", "exports", "../Matrix4", "../Quaternion", "../Vector3"], func
         };
         return Camera;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Camera;
+    exports.Camera = Camera;
 });

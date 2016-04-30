@@ -9,16 +9,15 @@ define(["require", "exports", '../../../src/easelts/display/Container', '../../.
         __extends(BottomButton, _super);
         function BottomButton() {
             _super.call(this, 200, 50, '50%', '100%', '50%', '100%');
-            this._ninepatch = new NinePatch_1.default('assets/image/ninepatch_blue.png', new Rectangle_1.default(5, 12, 139, 8));
-            this._bg = new BitmapNinePatch_1.default(this._ninepatch);
-            this._text = new Text_1.default('bottom');
-            this.addBehavior(new ButtonBehavior_1.default);
+            this._ninepatch = new NinePatch_1.NinePatch('assets/image/ninepatch_blue.png', new Rectangle_1.Rectangle(5, 12, 139, 8));
+            this._bg = new BitmapNinePatch_1.BitmapNinePatch(this._ninepatch);
+            this._text = new Text_1.Text('bottom');
+            this.addBehavior(new ButtonBehavior_1.ButtonBehavior);
             this.hitArea = this._bg;
             this.addChild(this._bg);
             this.addChild(this._text);
         }
         return BottomButton;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = BottomButton;
+    }(Container_1.Container));
+    exports.BottomButton = BottomButton;
 });

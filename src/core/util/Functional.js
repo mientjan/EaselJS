@@ -5,6 +5,7 @@ define(["require", "exports"], function (require, exports) {
         }
         return Functional;
     }());
+    exports.Functional = Functional;
     function debounce(callback, wait, immediate) {
         if (immediate === void 0) { immediate = false; }
         var timeout = -1;

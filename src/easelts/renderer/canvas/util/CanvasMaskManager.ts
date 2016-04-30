@@ -6,7 +6,7 @@
  * @class
  * @memberof PIXI
  */
-class CanvasMaskManager
+export class CanvasMaskManager
 {
 	constructor(){}
 

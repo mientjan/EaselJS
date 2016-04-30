@@ -1,14 +1,14 @@
-import Bitmap from "../../display/Bitmap";
-import Rectangle from "../../geom/Rectangle";
-import NinePatchCoordinates from "./NinePatchCoordinates";
-import Size from "../../geom/Size";
-import Texture from "../../display/Texture";
-import TexturePosition from "../../display/TexturePosition";
+import {Bitmap} from "../../display/Bitmap";
+import {Rectangle} from "../../geom/Rectangle";
+import {NinePatchCoordinates} from "./NinePatchCoordinates";
+import {Size} from "../../geom/Size";
+import {Texture} from "../../display/Texture";
+import {TexturePosition} from "../../display/TexturePosition";
 
 /**
  *
  */
-class NinePatch
+export class NinePatch
 {
 
 	public texture:Texture;
@@ -176,4 +176,3 @@ class NinePatch
 	}
 }
 
-export default NinePatch;

@@ -1,11 +1,9 @@
-import AbstractBehavior from "./AbstractBehavior";
+import {AbstractBehavior} from "./AbstractBehavior";
 import {DisplayObject} from "../display/DisplayObject";
-import Stage from "../display/Stage";
-import Container from "../display/Container";
-import PointerEvent from "../event/PointerEvent";
-import DisplayType from "../enum/DisplayType";
+import {PointerEvent} from "../event/PointerEvent";
+import {Stage} from "../display/Stage";
 
-class FollowMouseBehavior extends AbstractBehavior
+export class FollowMouseBehavior extends AbstractBehavior
 {
 	private _stage:Stage;
 
@@ -38,4 +36,3 @@ class FollowMouseBehavior extends AbstractBehavior
 	}
 }
 
-export default FollowMouseBehavior;

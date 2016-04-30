@@ -212,6 +212,7 @@ define(["require", "exports"], function (require, exports) {
         };
         return LinkedList;
     }());
+    exports.LinkedList = LinkedList;
     var LinkedListNode = (function () {
         function LinkedListNode(element, next) {
             this.element = element;
@@ -224,6 +225,4 @@ define(["require", "exports"], function (require, exports) {
         return a === b;
     }
     exports.defaultEquals = defaultEquals;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = LinkedList;
 });

@@ -35,10 +35,10 @@ define(["require", "exports", '../core/event/EventDispatcher', './Tween'], funct
                 this._paused = true;
             }
             else {
-                Tween_1.default._register(this, true);
+                Tween_1.Tween._register(this, true);
             }
             if (props && props.position != null) {
-                this.setPosition(props.position, Tween_1.default.NONE);
+                this.setPosition(props.position, Tween_1.Tween.NONE);
             }
         }
         Timeline.prototype.addTween = function (tween) {
@@ -61,7 +61,7 @@ define(["require", "exports", '../core/event/EventDispatcher', './Tween'], funct
                 this.duration = tween.duration;
             }
             if (this._prevPos >= 0) {
-                tween.setPosition(this._prevPos, Tween_1.default.NONE);
+                tween.setPosition(this._prevPos, Tween_1.Tween.NONE);
             }
             return tween;
         };
@@ -166,7 +166,7 @@ define(["require", "exports", '../core/event/EventDispatcher', './Tween'], funct
         };
         Timeline.prototype.setPaused = function (value) {
             this._paused = !!value;
-            Tween_1.default._register(this, !value);
+            Tween_1.Tween._register(this, !value);
         };
         Timeline.prototype.updateDuration = function () {
             this.duration = 0;
@@ -200,7 +200,6 @@ define(["require", "exports", '../core/event/EventDispatcher', './Tween'], funct
             }
         };
         return Timeline;
-    }(EventDispatcher_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Timeline;
+    }(EventDispatcher_1.EventDispatcher));
+    exports.Timeline = Timeline;
 });

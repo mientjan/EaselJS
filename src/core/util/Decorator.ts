@@ -1,7 +1,7 @@
 import * as Functional from "./Functional";
 
 // for auto import
-class Decorator {}
+export class Decorator {}
 
 export function log(name:string = '')
 {

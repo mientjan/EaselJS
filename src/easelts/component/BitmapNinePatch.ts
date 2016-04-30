@@ -1,12 +1,12 @@
-import NinePatch from "./bitmapninepatch/NinePatch";
-import NinePatchCoordinates from "./bitmapninepatch/NinePatchCoordinates";
-import Bitmap from "../display/Bitmap";
+import {NinePatch} from "./bitmapninepatch/NinePatch";
+import {NinePatchCoordinates} from "./bitmapninepatch/NinePatchCoordinates";
+import {Bitmap} from "../display/Bitmap";
 import {DisplayObject} from "../display/DisplayObject";
-import Rectangle from "../geom/Rectangle";
-import DisplayType from "../enum/DisplayType";
-import Size from "../geom/Size";
+import {Rectangle} from "../geom/Rectangle";
+import {DisplayType} from "../enum/DisplayType";
+import {Size} from "../geom/Size";
 
-class BitmapNinePatch extends DisplayObject {
+export class BitmapNinePatch extends DisplayObject {
 
 	public type:DisplayType = DisplayType.TEXTURE;
 
@@ -90,4 +90,3 @@ class BitmapNinePatch extends DisplayObject {
 	}
 }
 
-export default BitmapNinePatch;

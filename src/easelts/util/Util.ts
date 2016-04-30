@@ -25,7 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-class Util
+export class Util
 {
 	public static createCanvas():HTMLCanvasElement
 	{
@@ -89,4 +89,3 @@ class Util
 	}
 }
 
-export default Util;

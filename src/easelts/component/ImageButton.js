@@ -22,7 +22,7 @@ define(["require", "exports", "../display/DisplayObject", "../behavior/ButtonBeh
                 disabled: null
             };
             this._bitmap = null;
-            this.addBehavior(new ButtonBehavior_1.default());
+            this.addBehavior(new ButtonBehavior_1.ButtonBehavior());
             this._bitmaps.idle = data.idle;
             if (data.over)
                 this._bitmaps.over = data.over;
@@ -67,6 +67,5 @@ define(["require", "exports", "../display/DisplayObject", "../behavior/ButtonBeh
         ImageButton.EVENT_DISABLED = 'disabled';
         return ImageButton;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = ImageButton;
+    exports.ImageButton = ImageButton;
 });

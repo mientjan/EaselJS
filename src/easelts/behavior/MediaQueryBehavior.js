@@ -177,7 +177,6 @@ define(["require", "exports", "./AbstractBehavior"], function (require, exports,
             }
         };
         return MediaQueryBehavior;
-    }(AbstractBehavior_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = MediaQueryBehavior;
+    }(AbstractBehavior_1.AbstractBehavior));
+    exports.MediaQueryBehavior = MediaQueryBehavior;
 });

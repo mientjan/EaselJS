@@ -20,14 +20,14 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
             }
             var unit;
             var match = FluidCalculation._valueUnitDisolvement.exec(val);
-            var mesUnitTypeString = match.length >= 3 ? match[2] : MeasurementUnitType_1.default[MeasurementUnitType_1.default.PIXEL];
+            var mesUnitTypeString = match.length >= 3 ? match[2] : MeasurementUnitType_1.MeasurementUnitType[MeasurementUnitType_1.MeasurementUnitType.PIXEL];
             var mesUnitType = FluidCalculation._measurementUnitTypeString.indexOf(mesUnitTypeString);
             if (match) {
                 var v = match.length >= 2 ? match[1] : match[0];
-                unit = new FluidMeasurementsUnit_1.default(FluidCalculation.toFloat(v), mesUnitType);
+                unit = new FluidMeasurementsUnit_1.FluidMeasurementsUnit(FluidCalculation.toFloat(v), mesUnitType);
             }
             else {
-                unit = new FluidMeasurementsUnit_1.default(FluidCalculation.toFloat(val), mesUnitType);
+                unit = new FluidMeasurementsUnit_1.FluidMeasurementsUnit(FluidCalculation.toFloat(val), mesUnitType);
             }
             return unit;
         };
@@ -86,7 +86,7 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
         FluidCalculation.getCalcUnitSize = function (size, data) {
             var result = 0;
             switch (data.unit) {
-                case MeasurementUnitType_1.default.PROCENT:
+                case MeasurementUnitType_1.MeasurementUnitType.PROCENT:
                     {
                         result = size * (data.value / 100);
                         break;
@@ -116,6 +116,5 @@ define(["require", "exports", "./FluidMeasurementsUnit", "../enum/MeasurementUni
         FluidCalculation._spaceSplit = /\s+/;
         return FluidCalculation;
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = FluidCalculation;
+    exports.FluidCalculation = FluidCalculation;
 });

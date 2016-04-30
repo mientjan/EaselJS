@@ -49,7 +49,7 @@
  * @class Ease
  * @static
  **/
-class Ease
+export class Ease
 {
 
 	constructor()
@@ -472,4 +472,3 @@ class Ease
 	public static elasticInOut = Ease.getElasticInOut(1, 0.3 * 1.5);
 }
 
-export default Ease;

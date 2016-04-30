@@ -85,6 +85,5 @@ define(["require", "exports", "./DisplayObject"], function (require, exports, Di
         };
         return DOMElement;
     }(DisplayObject_1.DisplayObject));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = DOMElement;
+    exports.DOMElement = DOMElement;
 });

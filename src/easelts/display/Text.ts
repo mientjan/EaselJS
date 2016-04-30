@@ -28,7 +28,7 @@
  */
 
 import {DisplayObject} from "./DisplayObject";
-import Rectangle from "../geom/Rectangle";
+import {Rectangle} from "../geom/Rectangle";
 import * as Methods from "../util/Methods";
 
 /**
@@ -61,7 +61,7 @@ import * as Methods from "../util/Methods";
  * @param {String} [font] The font style to use. Any valid value for the CSS font attribute is acceptable (ex. "bold 36px Arial").
  * @param {String} [color] The color to draw the text in. Any valid value for the CSS color attribute is acceptable (ex. "#F00", "red", or "#FF0000").
  */
-class Text extends DisplayObject
+export class Text extends DisplayObject
 {
 	public static EVENT_ON_TEXT_CHANGE = 'onTextChange';
 
@@ -412,7 +412,7 @@ class Text extends DisplayObject
 
 		this.cache(x, y, width, height, 1);
 
-		var ctx = this.cacheCanvas.getContext('2d');
+		var ctx = this.cacheCanvas.getContext();
 		var img = ctx.getImageData(0, 0, width, height);
 
 		if(cacheArguments)
@@ -722,4 +722,4 @@ if(canvas.getContext)
 	canvas.width = canvas.height = 1;
 }
 
-export default Text;
+

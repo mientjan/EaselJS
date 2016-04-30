@@ -17,8 +17,8 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./Text"],
             if (regY === void 0) { regY = '50%'; }
             _super.call(this);
             this.name = name;
-            this._shape = new Shape_1.default();
-            this._text = new Text_1.default('', 'bold 16px Arial', '#FFF');
+            this._shape = new Shape_1.Shape();
+            this._text = new Text_1.Text('', 'bold 16px Arial', '#FFF');
             this.setWidth(width);
             this.setHeight(height);
             this.setRegX(regX);
@@ -41,7 +41,7 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./Text"],
                     this._text.visible = false;
                 }
                 this._shape.graphics.clear()
-                    .beginStroke(Graphics_1.default.getRGB(0, 0, 0))
+                    .beginStroke(Graphics_1.Graphics.getRGB(0, 0, 0))
                     .setStrokeStyle(1)
                     .drawRect(0, 0, this.width, this.height)
                     .setStrokeStyle(1)
@@ -52,7 +52,7 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./Text"],
                 if (this.width > 150 && this.height > 150) {
                     var w = this._text.getMeasuredWidth();
                     var h = this._text.getMeasuredHeight();
-                    this._shape.graphics.beginFill(Graphics_1.default.getRGB(0, 0, 0))
+                    this._shape.graphics.beginFill(Graphics_1.Graphics.getRGB(0, 0, 0))
                         .drawRect(this.width - w >> 1, this.height - h >> 1, w, h);
                 }
                 this.cache(0, 0, this.width, this.height);
@@ -67,7 +67,6 @@ define(["require", "exports", "./Container", "./Shape", "./Graphics", "./Text"],
             }
         };
         return Debug;
-    }(Container_1.default));
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = Debug;
+    }(Container_1.Container));
+    exports.Debug = Debug;
 });

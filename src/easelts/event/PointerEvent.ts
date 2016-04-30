@@ -26,7 +26,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Event from "../../core/event/Event";
+import {Event} from "../../core/event/Event";
 
 /**
  * @module easelts
@@ -35,7 +35,7 @@ import Event from "../../core/event/Event";
 /**
  * Passed as the parameter to all mouse/pointer/touch related events. For a listing of mouse events and their properties,
  * see the {{#crossLink "DisplayObject"}}{{/crossLink}} and {{#crossLink "Stage"}}{{/crossLink}} event listings.
- * @class MouseEvent
+ * @class PointerEvent
  * @param {String} type The event type.
  * @param {Boolean} bubbles Indicates whether the event will bubble through the display list.
  * @param {Boolean} cancelable Indicates whether the default behaviour of this event can be cancelled.
@@ -50,7 +50,7 @@ import Event from "../../core/event/Event";
  * @constructor
  **/
 
-class MouseEvent extends Event
+export class PointerEvent extends Event
 {
 
 	// events:
@@ -118,22 +118,6 @@ class MouseEvent extends Event
 	 * @default null
 	 **/
 	public nativeEvent = null;
-
-	// TODO: deprecated:
-	/**
-	 * REMOVED. Use the {{#crossLink "DisplayObject"}}{{/crossLink}} {{#crossLink "DisplayObject/pressmove:event"}}{{/crossLink}}
-	 * event.
-	 * @property onMouseMove
-	 * @type Function
-	 * @deprecated Use the DisplayObject "pressmove" event.
-	 */
-	/**
-	 * REMOVED. Use the {{#crossLink "DisplayObject"}}{{/crossLink}} {{#crossLink "DisplayObject/pressup:event"}}{{/crossLink}}
-	 * event.
-	 * @property onMouseUp
-	 * @type Function
-	 * @deprecated Use the DisplayObject "pressup" event.
-	 */
 
 	/**
 	 * The unique id for the pointer (touch point or cursor). This will be either -1 for the mouse, or the system
@@ -218,9 +202,9 @@ class MouseEvent extends Event
 	 * @method clone
 	 * @return {MouseEvent} a clone of the MouseEvent instance.
 	 **/
-	public clone()
+	public clone():PointerEvent
 	{
-		var m = new MouseEvent(this.type, this.bubbles, this.cancelable, this.stageX, this.stageY, this.nativeEvent, this.pointerID, this.primary, this.rawX, this.rawY);
+		var m = new PointerEvent(this.type, this.bubbles, this.cancelable, this.stageX, this.stageY, this.nativeEvent, this.pointerID, this.primary, this.rawX, this.rawY);
 		m.target = this.target;
 		return m;
 	}
@@ -232,9 +216,9 @@ class MouseEvent extends Event
 	 **/
 	public toString()
 	{
-		return "[MouseEvent (type=" + this.type + " stageX=" + this.stageX + " stageY=" + this.stageY + ")]";
+		return "[PointerEvent (type=" + this.type + " stageX=" + this.stageX + " stageY=" + this.stageY + ")]";
 	}
 
 }
 
-export default MouseEvent;
+

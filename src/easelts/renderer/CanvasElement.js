@@ -20,6 +20,9 @@ define(["require", "exports"], function (require, exports) {
             this._width = value;
             this._domElement.width = value;
         };
+        CanvasElement.prototype.getWidth = function () {
+            return this._width;
+        };
         Object.defineProperty(CanvasElement.prototype, "height", {
             get: function () {
                 return this._height;
@@ -33,6 +36,9 @@ define(["require", "exports"], function (require, exports) {
         CanvasElement.prototype.setHeight = function (value) {
             this._height = value;
             this._domElement.height = value;
+        };
+        CanvasElement.prototype.getHeight = function () {
+            return this._height;
         };
         CanvasElement.prototype.setSize = function (width, height) {
             this.setWidth(width);
