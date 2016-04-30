@@ -55,7 +55,6 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
             this.shadow = null;
             this.stage = null;
             this._behaviorList = null;
-            this._resizeSignal = null;
             this.compositeOperation = null;
             this.snapToPixel = true;
             this.filters = null;
@@ -78,7 +77,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
         }
         Object.defineProperty(DisplayObject.prototype, "resizeSignal", {
             get: function () {
-                if (this._resizeSignal === void 0) {
+                if (this._resizeSignal == void 0) {
                     this._resizeSignal = new Signal2_1.Signal2();
                 }
                 return this._resizeSignal;

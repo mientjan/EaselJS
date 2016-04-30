@@ -392,7 +392,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	/**
 	 *
 	 */
-	protected _resizeSignal:Signal2<number, number> = null;
+	protected _resizeSignal:Signal2<number, number>;
 
 	/**
 	 *
@@ -400,7 +400,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 */
 	public get resizeSignal():Signal2<number, number>
 	{
-		if (this._resizeSignal === void 0)
+		if (this._resizeSignal == void 0)
 		{
 			this._resizeSignal = new Signal2<number, number>();
 		}
