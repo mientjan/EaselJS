@@ -54,7 +54,7 @@ export class WebGLRenderer
 		}
 
 		// render the scene!
-		item.renderWebGL(this);
+		// item.renderWebGL(this);
 
 		this.drawendSignal.emit();
 	}
