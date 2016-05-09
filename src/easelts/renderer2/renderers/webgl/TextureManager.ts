@@ -27,7 +27,7 @@ export class TextureManager
 	 *
 	 * @member {WebGLRenderingContext}
 	 */
-	public gl:WebGLRenderingContext = renderer.gl;
+	public gl:WebGLRenderingContext;
 
 	/**
 	 * Track textures in the renderer so we can no longer listen to them on destruction.
@@ -147,7 +147,7 @@ export class TextureManager
 	 *
 	 * @param texture {PIXI.BaseTexture|PIXI.Texture} the texture to destroy
 	 */
-	public destroyTexture(texture, _skipRemove)
+	public destroyTexture(texture:Texture, _skipRemove)
 	{
 		texture = texture.baseTexture || texture;
 

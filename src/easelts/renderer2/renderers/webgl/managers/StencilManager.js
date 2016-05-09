@@ -56,7 +56,7 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         StencilMaskManager.prototype.destroy = function () {
-            _super.prototype.de;
+            _super.prototype.destroy.call(this);
             this.stencilMaskStack.stencilStack = null;
         };
         return StencilMaskManager;

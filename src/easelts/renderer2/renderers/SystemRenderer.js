@@ -6,6 +6,7 @@ define(["require", "exports", "../../display/Container"], function (require, exp
             this.type = 0;
             this.width = 800;
             this.height = 600;
+            this.resolution = 1;
             this.blendModes = null;
             this._backgroundColor = 0x000000;
             this._backgroundColorRgba = [0, 0, 0, 0];
@@ -16,7 +17,7 @@ define(["require", "exports", "../../display/Container"], function (require, exp
             this.preserveDrawingBuffer = options.preserveDrawingBuffer;
             this.clearBeforeRender = options.clearBeforeRender;
             this.roundPixels = options.roundPixels;
-            this.resolution = options.resolution;
+            this.resolution = options.resolution || 1;
             this.transparent = options.transparent;
             this.backgroundColor = options.backgroundColor || 0x000000;
             this.autoResize = options.autoResize || false;
@@ -53,7 +54,7 @@ define(["require", "exports", "../../display/Container"], function (require, exp
             if (removeView && this.view.parentNode) {
                 this.view.parentNode.removeChild(this.view);
             }
-            this.type = CONST.RENDERER_TYPE.UNKNOWN;
+            this.type = 0;
             this.width = 0;
             this.height = 0;
             this.view = null;

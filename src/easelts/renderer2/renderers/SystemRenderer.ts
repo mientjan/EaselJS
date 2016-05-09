@@ -50,14 +50,14 @@ export class SystemRenderer
 	 * @member {number}
 	 * @default 1
 	 */
-	public resolution:number;
+	public resolution:number = 1;
 
 	/**
 	 * Whether the render view is transparent
 	 *
 	 * @member {boolean}
 	 */
-	public transparent:number;
+	public transparent:boolean;
 
 	/**
 	 * Whether the render view should be resized automatically
@@ -123,15 +123,13 @@ export class SystemRenderer
 	 */
 	public _backgroundColorString = '#000000';
 
-	public backgroundColor; // run bg color setter
-
 	/**
 	 * This temporary display object used as the parent of the currently being rendered item
 	 *
 	 * @member {PIXI.DisplayObject}
 	 * @private
 	 */
-	_tempDisplayObjectParent = new Container();
+	protected _tempDisplayObjectParent = new Container();
 
 	/**
 	 * The last root object that the renderer tried to render.
@@ -139,7 +137,7 @@ export class SystemRenderer
 	 * @member {PIXI.DisplayObject}
 	 * @private
 	 */
-	_lastObjectRendered = this._tempDisplayObjectParent;
+	protected _lastObjectRendered = this._tempDisplayObjectParent;
 
 	constructor(system:string, width:number, height:number, options:any = {})
 	{
@@ -161,7 +159,7 @@ export class SystemRenderer
 		this.clearBeforeRender = options.clearBeforeRender;
 		this.roundPixels = options.roundPixels;
 
-		this.resolution = options.resolution;
+		this.resolution = options.resolution || 1;
 
 		this.transparent = options.transparent;
 		this.backgroundColor = options.backgroundColor || 0x000000
@@ -244,7 +242,7 @@ export class SystemRenderer
 			this.view.parentNode.removeChild(this.view);
 		}
 
-		this.type = CONST.RENDERER_TYPE.UNKNOWN;
+		this.type = RenderType.UNKNOWN;
 
 		this.width = 0;
 		this.height = 0;

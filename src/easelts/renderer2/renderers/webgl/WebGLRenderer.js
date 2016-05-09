@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./TextureManager", "../SystemRenderer", "./TextureGarbageCollector", "./WebGLState"], function (require, exports, TextureManager_1, SystemRenderer_1, TextureGarbageCollector_1, WebGLState_1) {
     "use strict";
     var CONTEXT_UID = 0;
     var WebGLRenderer = (function (_super) {
@@ -18,6 +18,10 @@ define(["require", "exports"], function (require, exports) {
             this.stencilManager = new StencilManager(this);
             this.emptyRenderer = new ObjectRenderer(this);
             this.currentRenderer = this.emptyRenderer;
+            this._activeShader = null;
+            this._activeRenderTarget = null;
+            this._activeTextureLocation = 999;
+            this._activeTexture = null;
             this.bindProjection = function (worldProjection) {
                 var aRT = this._activeRenderTarget;
                 var aS = this._activeShader;
@@ -49,21 +53,17 @@ define(["require", "exports"], function (require, exports) {
             this._backgroundColorRgba[3] = this.transparent ? 0 : 1;
             this.initPlugins();
             this.gl = options.context || createContext(this.view, this._contextOptions);
-            this.state = new WebGLState(this.gl);
+            this.state = new WebGLState_1.WebGLState(this.gl);
             this.renderingToScreen = true;
             this._initContext();
             this.filterManager = new FilterManager(this);
             this.drawModes = mapWebGLDrawModesToPixi(this.gl);
-            this._activeShader = null;
-            this._activeRenderTarget = null;
-            this._activeTextureLocation = 999;
-            this._activeTexture = null;
             this.setBlendMode(0);
         }
         WebGLRenderer.prototype._initContext = function () {
             var gl = this.gl;
-            this.textureManager = new TextureManager(this);
-            this.textureGC = new TextureGarbageCollector(this);
+            this.textureManager = new TextureManager_1.TextureManager(this);
+            this.textureGarbageCollector = new TextureGarbageCollector_1.TextureGarbageCollector(this);
             this.state.resetToDefault();
             this.rootRenderTarget = new RenderTarget(gl, this.width, this.height, null, this.resolution, true);
             this.rootRenderTarget.clearColor = this._backgroundColorRgba;
@@ -112,7 +112,7 @@ define(["require", "exports"], function (require, exports) {
         };
         ;
         WebGLRenderer.prototype.resize = function (width, height) {
-            SystemRenderer.prototype.resize.call(this, width, height);
+            SystemRenderer_1.SystemRenderer.prototype.resize.call(this, width, height);
             this.rootRenderTarget.resize(width, height);
             if (this._activeRenderTarget === this.rootRenderTarget) {
                 this.rootRenderTarget.activate();
@@ -218,7 +218,7 @@ define(["require", "exports"], function (require, exports) {
             this.view.removeEventListener('webglcontextlost', this.handleContextLost);
             this.view.removeEventListener('webglcontextrestored', this.handleContextRestored);
             this.textureManager.destroy();
-            SystemRenderer.prototype.destroy.call(this, removeView);
+            SystemRenderer_1.SystemRenderer.prototype.destroy.call(this, removeView);
             this.uid = 0;
             this.maskManager.destroy();
             this.stencilManager.destroy();
@@ -237,6 +237,6 @@ define(["require", "exports"], function (require, exports) {
             this.gl = null;
         };
         return WebGLRenderer;
-    }(SystemRenderer));
+    }(SystemRenderer_1.SystemRenderer));
     exports.WebGLRenderer = WebGLRenderer;
 });

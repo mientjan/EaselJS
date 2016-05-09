@@ -2,7 +2,6 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var TextureManager = (function () {
         function TextureManager(renderer) {
-            this.gl = renderer.gl;
             this._managedTextures = [];
             this.renderer = renderer;
             this.gl = renderer.gl;

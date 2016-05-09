@@ -14,6 +14,10 @@
 //     CONST = require('../../const');
 
 import {RenderType} from "../../../enum/RenderType";
+import {TextureManager} from "./TextureManager";
+import {SystemRenderer} from "../SystemRenderer";
+import {TextureGarbageCollector} from "./TextureGarbageCollector";
+import {WebGLState} from "./WebGLState";
 var CONTEXT_UID = 0;
 
 /**
@@ -60,6 +64,27 @@ export class WebGLRenderer extends SystemRenderer
 	public stencilManager = new StencilManager(this);
 
 	/**
+	 *
+	 */
+	public textureManager:TextureManager;
+
+	/**
+	 *
+	 */
+	public textureGarbageCollector:TextureGarbageCollector;
+
+	/**
+	 *
+	 */
+	public state:WebGLState;
+
+	/**
+	 *
+	 */
+	public filterManager:FilterManager;
+	public renderingToScreen:boolean;
+
+	/**
 	 * An empty renderer.
 	 *
 	 * @member {PIXI.ObjectRenderer}
@@ -72,6 +97,22 @@ export class WebGLRenderer extends SystemRenderer
 	 * @member {PIXI.ObjectRenderer}
 	 */
 	public currentRenderer = this.emptyRenderer;
+
+	/**
+	 * Holds the current shader
+	 *
+	 * @member {PIXI.Shader}
+	 */
+	protected _activeShader = null;
+
+	/**
+	 * Holds the current render target
+	 *
+	 * @member {PIXI.RenderTarget}
+	 */
+	protected _activeRenderTarget = null;
+	protected _activeTextureLocation = 999;
+	protected _activeTexture = null;
 
 	constructor(width:number, height:number, options:any = {})
 	{
@@ -128,22 +169,6 @@ export class WebGLRenderer extends SystemRenderer
 		this.drawModes = mapWebGLDrawModesToPixi(this.gl);
 
 
-		/**
-		 * Holds the current shader
-		 *
-		 * @member {PIXI.Shader}
-		 */
-		this._activeShader = null;
-
-		/**
-		 * Holds the current render target
-		 *
-		 * @member {PIXI.RenderTarget}
-		 */
-		this._activeRenderTarget = null;
-		this._activeTextureLocation = 999;
-		this._activeTexture = null;
-
 		this.setBlendMode(0);
 	}
 
@@ -152,13 +177,13 @@ export class WebGLRenderer extends SystemRenderer
 	 *
 	 * @private
 	 */
-	public _initContext()
+	private _initContext()
 	{
 		var gl = this.gl;
 
 		// create a texture manager...
 		this.textureManager = new TextureManager(this);
-		this.textureGC = new TextureGarbageCollector(this);
+		this.textureGarbageCollector = new TextureGarbageCollector(this);
 
 		this.state.resetToDefault();
 
