@@ -40,9 +40,6 @@ define(["require", "exports"], function (require, exports) {
         CanvasElement.prototype.getHeight = function () {
             return this._height;
         };
-        CanvasElement.prototype.getDomElement = function () {
-            return this._domElement;
-        };
         CanvasElement.prototype.setSize = function (width, height) {
             this.setWidth(width);
             this.setHeight(height);

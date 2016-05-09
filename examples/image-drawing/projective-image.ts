@@ -1,9 +1,7 @@
 import {Stage} from '../../src/easelts/display/Stage';
 import {Shape} from '../../src/easelts/display/Shape';
-import {BitmapNinePatch} from '../../src/easelts/component/BitmapNinePatch';
 import {MouseEvent} from '../../src/easelts/event/MouseEvent';
 import {ButtonBehavior} from '../../src/easelts/behavior/ButtonBehavior';
-import {NinePatch} from '../../src/easelts/component/bitmapninepatch/NinePatch';
 import {BitmapProjective} from '../../src/easelts/display/BitmapProjective';
 
 var holder = <HTMLBlockElement> document.getElementById('holder');

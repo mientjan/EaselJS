@@ -791,7 +791,7 @@ export class Container extends DisplayObject implements ILoadable<Container>
 	public _getObjectsUnderPoint(x, y, arr?:Array<DisplayObject>, mouse?:boolean, activeListener?:boolean):Container | DisplayObject
 	{
 		var ctx = DisplayObject._hitTestContext;
-		var mtx = this._matrix;
+		var mtx = this.matrix;
 		activeListener = activeListener || (mouse && this.hasMouseEventListener());
 
 		// draw children one at a time, and check if we get a hit:
@@ -812,7 +812,7 @@ export class Container extends DisplayObject implements ILoadable<Container>
 
 			if(!hitArea && mask && mask.graphics && !mask.graphics.isEmpty())
 			{
-				var maskMtx = mask.getMatrix(mask._matrix).prependMatrix(this.getConcatenatedMatrix(mtx));
+				var maskMtx = mask.getMatrix(mask.matrix).prependMatrix(this.getConcatenatedMatrix(mtx));
 				ctx.setTransform(maskMtx.a, maskMtx.b, maskMtx.c, maskMtx.d, maskMtx.tx - x, maskMtx.ty - y);
 
 				// draw the mask as a solid fill:
@@ -900,7 +900,7 @@ export class Container extends DisplayObject implements ILoadable<Container>
 		}
 
 		var minX = null, maxX = null, minY = null, maxY = null;
-		var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
+		var mtx = ignoreTransform ? this.matrix.identity() : this.getMatrix(this.matrix);
 		if(matrix)
 		{
 			mtx.prependMatrix(matrix);

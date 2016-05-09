@@ -272,6 +272,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 * @default 1
 	 **/
 	public alpha:number = 1;
+	public _rectangle:Rectangle = new Rectangle(0, 0, 0, 0);
 
 	/**
 	 * @property isDirty
@@ -529,7 +530,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	protected _cacheDataURL:string = null;
 
 	/**
-	 * @property _matrix
+	 * @property matrix
 	 * @protected
 	 * @type {Matrix2D}
 	 * @default null
@@ -1028,7 +1029,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 * used for drawing the cache (to prevent it from simply drawing an existing cache back into itself).
 	 * @return {Boolean}
 	 **/
-	public draw(ctx:IContext2D, ignoreCache?:boolean):boolean
+	public draw(ctx:CanvasRenderingContext2D, ignoreCache?:boolean):boolean
 	{
 		var cacheCanvas = this.cacheCanvas;
 		if(ignoreCache || !cacheCanvas)
@@ -1089,7 +1090,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 
 		if(mask && mask.graphics && !mask.graphics.isEmpty())
 		{
-			mtx = mask.getMatrix(mask._matrix);
+			mtx = mask.getMatrix(mask.matrix);
 			ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
 
 			mask.graphics.drawAsPath(ctx);
@@ -1099,7 +1100,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 			ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
 		}
 
-		mtx = o._matrix.identity().appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+		mtx = o.matrix.identity().appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
 		var tx = mtx.tx, ty = mtx.ty;
 		if(DisplayObject._snapToPixelEnabled && o.snapToPixel)
 		{
@@ -1282,7 +1283,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 **/
 	public localToGlobal(x:number, y:number):Point
 	{
-		var mtx = this.getConcatenatedMatrix(this._matrix);
+		var mtx = this.getConcatenatedMatrix(this.matrix);
 		if(mtx == null)
 		{
 			return null;
@@ -1313,7 +1314,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 	 **/
 	public globalToLocal(x:number, y:number):Point
 	{
-		var mtx = this.getConcatenatedMatrix(this._matrix);
+		var mtx = this.getConcatenatedMatrix(this.matrix);
 		if(mtx == null)
 		{
 			return null;
@@ -1625,6 +1626,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 		{
 			return this._rectangle.copy(this._bounds);
 		}
+		
 		var cacheCanvas = <Canvas2DElement> this.cacheCanvas;
 		if(cacheCanvas)
 		{
@@ -1872,7 +1874,7 @@ export class DisplayObject extends EventDispatcher implements IDisplayObject
 			return bounds;
 		}
 		var x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
-		var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
+		var mtx = ignoreTransform ? this.matrix.identity() : this.getMatrix(this.matrix);
 
 		if(x || y)
 		{

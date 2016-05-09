@@ -24,6 +24,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
             this.parent = null;
             this.visible = true;
             this.alpha = 1;
+            this._rectangle = new Rectangle_1.Rectangle(0, 0, 0, 0);
             this.isDirty = false;
             this.isHitable = true;
             this.x = 0;
@@ -299,14 +300,14 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
         DisplayObject.prototype.updateContext = function (ctx) {
             var mtx, mask = this.mask, o = this;
             if (mask && mask.graphics && !mask.graphics.isEmpty()) {
-                mtx = mask.getMatrix(mask._matrix);
+                mtx = mask.getMatrix(mask.matrix);
                 ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
                 mask.graphics.drawAsPath(ctx);
                 ctx.clip();
                 mtx.invert();
                 ctx.transform(mtx.a, mtx.b, mtx.c, mtx.d, mtx.tx, mtx.ty);
             }
-            mtx = o._matrix.identity().appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
+            mtx = o.matrix.identity().appendTransform(o.x, o.y, o.scaleX, o.scaleY, o.rotation, o.skewX, o.skewY, o.regX, o.regY);
             var tx = mtx.tx, ty = mtx.ty;
             if (DisplayObject._snapToPixelEnabled && o.snapToPixel) {
                 tx = tx + (tx < 0 ? -0.5 : 0.5) | 0;
@@ -382,7 +383,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
             return this._cacheDataURL;
         };
         DisplayObject.prototype.localToGlobal = function (x, y) {
-            var mtx = this.getConcatenatedMatrix(this._matrix);
+            var mtx = this.getConcatenatedMatrix(this.matrix);
             if (mtx == null) {
                 return null;
             }
@@ -390,7 +391,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
             return new Point_1.Point(mtx.tx, mtx.ty);
         };
         DisplayObject.prototype.globalToLocal = function (x, y) {
-            var mtx = this.getConcatenatedMatrix(this._matrix);
+            var mtx = this.getConcatenatedMatrix(this.matrix);
             if (mtx == null) {
                 return null;
             }
@@ -611,7 +612,7 @@ define(["require", "exports", "../../core/event/EventDispatcher", "../../core/ev
                 return bounds;
             }
             var x = bounds.x, y = bounds.y, width = bounds.width, height = bounds.height;
-            var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
+            var mtx = ignoreTransform ? this.matrix.identity() : this.getMatrix(this.matrix);
             if (x || y) {
                 mtx.appendTransform(0, 0, 1, 1, 0, 0, 0, -x, -y);
             }

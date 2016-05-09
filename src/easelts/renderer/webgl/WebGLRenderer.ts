@@ -7,10 +7,10 @@ import {CanvasWebGLElement} from "../CanvasWebGLElement";
 
 export class WebGLRenderer
 {
-	_context:WebGLRenderingContext;
-	_element:CanvasWebGLElement;
+	protected _context:WebGLRenderingContext;
+	protected _element:CanvasWebGLElement;
 
-	_autoClear:boolean = true;
+	protected _autoClear:boolean = true;
 
 	/**
 	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it.

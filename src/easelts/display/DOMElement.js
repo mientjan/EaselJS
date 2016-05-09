@@ -33,7 +33,7 @@ define(["require", "exports", "./DisplayObject"], function (require, exports, Di
                 return;
             }
             var style = o.style;
-            var mtx = this.getConcatenatedMatrix(this._matrix);
+            var mtx = this.getConcatenatedMatrix(this.matrix);
             var visibility = mtx.visible ? "visible" : "hidden";
             if (visibility != style.visibility) {
                 style.visibility = visibility;

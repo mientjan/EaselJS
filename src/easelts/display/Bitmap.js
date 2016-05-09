@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./DisplayObject", "./Texture"], function (require, exports, DisplayObject_1, Texture_1) {
+define(["require", "exports", "./DisplayObject", "./Texture", "../geom/Rectangle"], function (require, exports, DisplayObject_1, Texture_1, Rectangle_1) {
     "use strict";
     var Bitmap = (function (_super) {
         __extends(Bitmap, _super);
@@ -74,8 +74,7 @@ define(["require", "exports", "./DisplayObject", "./Texture"], function (require
             if (rect) {
                 return rect;
             }
-            var obj = this.sourceRect || this.source;
-            return this.hasLoaded() ? this._rectangle.setProperies(0, 0, obj.width, obj.height) : null;
+            return new Rectangle_1.Rectangle(this.x, this.y, this.width, this.height);
         };
         Bitmap.prototype.getImageSize = function () {
             if (!this.hasLoaded()) {

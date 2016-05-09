@@ -25,7 +25,6 @@ define(["require", "exports", "../../../core/event/Signal"], function (require, 
                 gl.clearColor(0, 0, 0, 0);
                 gl.clear(gl.COLOR_BUFFER_BIT);
             }
-            item.renderWebGL(this);
             this.drawendSignal.emit();
         };
         return WebGLRenderer;
