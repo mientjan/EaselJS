@@ -9,7 +9,7 @@ export class WebGLRenderer
 {
 	_context:WebGLRenderingContext;
 	_element:CanvasWebGLElement;
-
+	_currentRenderer:any = null;
 	_autoClear:boolean = true;
 
 	/**
@@ -38,6 +38,18 @@ export class WebGLRenderer
 		this._element = element;
 		this._context = element.getContext();
 	}
+
+	public setObjectRenderer(objectRenderer)
+{
+    if (this.currentRenderer === objectRenderer)
+    {
+        return;
+    }
+
+    this.currentRenderer.stop();
+    this.currentRenderer = objectRenderer;
+    this.currentRenderer.start();
+}
 
 	public render(item:DisplayObject):void
 	{

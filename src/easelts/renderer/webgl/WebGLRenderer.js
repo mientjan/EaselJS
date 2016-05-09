@@ -2,6 +2,7 @@ define(["require", "exports", "../../../core/event/Signal"], function (require, 
     "use strict";
     var WebGLRenderer = (function () {
         function WebGLRenderer() {
+            this._currentRenderer = null;
             this._autoClear = true;
             this.drawstartSignal = new Signal_1.Signal();
             this.drawendSignal = new Signal_1.Signal();
@@ -16,6 +17,14 @@ define(["require", "exports", "../../../core/event/Signal"], function (require, 
             this._element = element;
             this._context = element.getContext();
         };
+        WebGLRenderer.prototype.setObjectRenderer = function (objectRenderer) {
+            if (this.currentRenderer === objectRenderer) {
+                return;
+            }
+            this.currentRenderer.stop();
+            this.currentRenderer = objectRenderer;
+            this.currentRenderer.start();
+        };
         WebGLRenderer.prototype.render = function (item) {
             var gl = this._context;
             var element = this._element;
@@ -25,7 +34,6 @@ define(["require", "exports", "../../../core/event/Signal"], function (require, 
                 gl.clearColor(0, 0, 0, 0);
                 gl.clear(gl.COLOR_BUFFER_BIT);
             }
-            item.renderWebGL(this);
             this.drawendSignal.emit();
         };
         return WebGLRenderer;
