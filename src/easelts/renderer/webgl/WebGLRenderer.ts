@@ -7,10 +7,10 @@ import {CanvasWebGLElement} from "../CanvasWebGLElement";
 
 export class WebGLRenderer
 {
-	protected _context:WebGLRenderingContext;
-	protected _element:CanvasWebGLElement;
-
-	protected _autoClear:boolean = true;
+	_context:WebGLRenderingContext;
+	_element:CanvasWebGLElement;
+	_currentRenderer:any = null;
+	_autoClear:boolean = true;
 
 	/**
 	 * Dispatched each update immediately before the canvas is cleared and the display list is drawn to it.
@@ -38,6 +38,18 @@ export class WebGLRenderer
 		this._element = element;
 		this._context = element.getContext();
 	}
+
+	public setObjectRenderer(objectRenderer)
+{
+    if (this.currentRenderer === objectRenderer)
+    {
+        return;
+    }
+
+    this.currentRenderer.stop();
+    this.currentRenderer = objectRenderer;
+    this.currentRenderer.start();
+}
 
 	public render(item:DisplayObject):void
 	{
