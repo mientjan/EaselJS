@@ -2,7 +2,6 @@ define(["require", "exports", "../../../core/event/Signal"], function (require, 
     "use strict";
     var WebGLRenderer = (function () {
         function WebGLRenderer() {
-            this._currentRenderer = null;
             this._autoClear = true;
             this.drawstartSignal = new Signal_1.Signal();
             this.drawendSignal = new Signal_1.Signal();
