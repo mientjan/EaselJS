@@ -430,7 +430,7 @@ declare var Power1:Power1;
 declare var Power2:Power2;
 declare var Power3:Power3;
 declare var Power4:Power4;
-declare var Quad:Quad;
+declare var Quad:any;
 declare var Quart:Quart;
 declare var Quint:Quint;
 declare var Sine:Sine;

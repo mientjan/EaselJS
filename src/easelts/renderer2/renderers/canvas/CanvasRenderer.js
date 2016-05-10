@@ -30,7 +30,6 @@ define(["require", "exports", "../SystemRenderer", "./utils/CanvasMaskManager"],
                     this.smoothProperty = 'msImageSmoothingEnabled';
                 }
             }
-            this.initPlugins();
             this.blendModes = mapCanvasBlendModesToPixi();
             this._activeBlendMode = null;
             this.context = null;

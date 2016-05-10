@@ -64,7 +64,7 @@ export class SystemRenderer
 	 *
 	 * @member {boolean}
 	 */
-	public autoResize:number;
+	public autoResize:boolean;
 
 	/**
 	 * Tracks the blend modes useful for this renderer.
@@ -215,20 +215,20 @@ export class SystemRenderer
 	 * @param resolution {number} The resolution of the texture being generated
 	 * @return {PIXI.Texture} a texture of the graphics object
 	 */
-	public generateTexture(displayObject, scaleMode, resolution)
-	{
-
-		var bounds = displayObject.getLocalBounds();
-
-		var renderTexture = RenderTexture.create(bounds.width | 0, bounds.height | 0, scaleMode, resolution);
-
-		tempMatrix.tx = -bounds.x;
-		tempMatrix.ty = -bounds.y;
-
-		this.render(displayObject, renderTexture, false, tempMatrix, true);
-
-		return renderTexture;
-	}
+	// public generateTexture(displayObject, scaleMode, resolution)
+	// {
+	//
+	// 	var bounds = displayObject.getLocalBounds();
+	//
+	// 	var renderTexture = RenderTexture.create(bounds.width | 0, bounds.height | 0, scaleMode, resolution);
+	//
+	// 	tempMatrix.tx = -bounds.x;
+	// 	tempMatrix.ty = -bounds.y;
+	//
+	// 	this.render(displayObject, renderTexture, false, tempMatrix, true);
+	//
+	// 	return renderTexture;
+	// }
 
 	/**
 	 * Removes everything from the renderer and optionally removes the Canvas DOM element.

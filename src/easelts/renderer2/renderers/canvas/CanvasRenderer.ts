@@ -59,7 +59,7 @@ export class CanvasRenderer extends SystemRenderer
 
         super('Canvas', width, height, options);
 
-        this.rootContext = this.view.getContext('2d', {alpha: this.transparent});
+        this.rootContext = <CanvasRenderingContext2D> this.view.getContext('2d', {alpha: this.transparent});
         this.rootResolution = this.resolution;
 
 
@@ -78,7 +78,7 @@ export class CanvasRenderer extends SystemRenderer
             }
         }
 
-        this.initPlugins();
+        // this.initPlugins();
 
         this.blendModes = mapCanvasBlendModesToPixi();
         this._activeBlendMode = null;

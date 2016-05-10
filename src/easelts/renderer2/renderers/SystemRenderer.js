@@ -42,14 +42,6 @@ define(["require", "exports", "../../display/Container"], function (require, exp
                 this.view.style.height = this.height / this.resolution + 'px';
             }
         };
-        SystemRenderer.prototype.generateTexture = function (displayObject, scaleMode, resolution) {
-            var bounds = displayObject.getLocalBounds();
-            var renderTexture = RenderTexture.create(bounds.width | 0, bounds.height | 0, scaleMode, resolution);
-            tempMatrix.tx = -bounds.x;
-            tempMatrix.ty = -bounds.y;
-            this.render(displayObject, renderTexture, false, tempMatrix, true);
-            return renderTexture;
-        };
         SystemRenderer.prototype.destroy = function (removeView) {
             if (removeView && this.view.parentNode) {
                 this.view.parentNode.removeChild(this.view);
