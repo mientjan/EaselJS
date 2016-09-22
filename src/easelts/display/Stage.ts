@@ -700,6 +700,9 @@ class Stage extends Container<IDisplayObject>
 		//			var b = <MouseEvent> window['event'];
 		//		 }
 
+		e.pageX *= this._option.pixelRatio;
+		e.pageY *= this._option.pixelRatio;
+
 		this._handlePointerMove(-1, e, e.pageX, e.pageY);
 	}
 
@@ -851,6 +854,9 @@ class Stage extends Container<IDisplayObject>
 	 **/
 	public _handleMouseDown(e):void
 	{
+		e.pageX *= this._option.pixelRatio;
+		e.pageY *= this._option.pixelRatio;
+
 		this._handlePointerDown(-1, e, e.pageX, e.pageY);
 	}
 

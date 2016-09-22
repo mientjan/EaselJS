@@ -108,7 +108,7 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             }
             this.drawstartSignal.emit();
             DisplayObject_1.DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.setTransform(this._option.pixelRatio, 0, 0, this._option.pixelRatio, 0, 0);
             if (autoClear) {
                 if (autoClearColor) {
                     ctx.fillStyle = autoClearColor;
@@ -241,6 +241,8 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
         };
         Stage.prototype._handleMouseMove = function (e) {
             if (e === void 0) { e = window['event']; }
+            e.pageX *= this._option.pixelRatio;
+            e.pageY *= this._option.pixelRatio;
             this._handlePointerMove(-1, e, e.pageX, e.pageY);
         };
         Stage.prototype._handlePointerMove = function (id, e, pageX, pageY, owner) {
@@ -316,6 +318,8 @@ define(["require", "exports", "./DisplayObject", "./Container", "../geom/Pointer
             nextStage && nextStage._handlePointerUp(id, e, clear, owner || target && this);
         };
         Stage.prototype._handleMouseDown = function (e) {
+            e.pageX *= this._option.pixelRatio;
+            e.pageY *= this._option.pixelRatio;
             this._handlePointerDown(-1, e, e.pageX, e.pageY);
         };
         Stage.prototype._handlePointerDown = function (id, e, pageX, pageY, owner) {
