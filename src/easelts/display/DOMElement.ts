@@ -120,7 +120,7 @@ export class DOMElement<T extends HTMLElement> extends DisplayObject
 		}
 		var style = o.style;
 
-		var mtx = this.getConcatenatedMatrix(this._matrix);
+		var mtx = this.getConcatenatedMatrix(this.matrix);
 
 		var visibility = mtx.visible ? "visible" : "hidden";
 		if(visibility != style.visibility)

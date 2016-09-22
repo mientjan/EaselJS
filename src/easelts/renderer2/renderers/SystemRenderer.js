@@ -3,9 +3,10 @@ define(["require", "exports", "../../display/Container"], function (require, exp
     var SystemRenderer = (function () {
         function SystemRenderer(system, width, height, options) {
             if (options === void 0) { options = {}; }
-            this.type = CONST.RENDERER_TYPE.UNKNOWN;
+            this.type = 0;
             this.width = 800;
             this.height = 600;
+            this.resolution = 1;
             this.blendModes = null;
             this._backgroundColor = 0x000000;
             this._backgroundColorRgba = [0, 0, 0, 0];
@@ -16,7 +17,7 @@ define(["require", "exports", "../../display/Container"], function (require, exp
             this.preserveDrawingBuffer = options.preserveDrawingBuffer;
             this.clearBeforeRender = options.clearBeforeRender;
             this.roundPixels = options.roundPixels;
-            this.resolution = options.resolution;
+            this.resolution = options.resolution || 1;
             this.transparent = options.transparent;
             this.backgroundColor = options.backgroundColor || 0x000000;
             this.autoResize = options.autoResize || false;
@@ -41,19 +42,11 @@ define(["require", "exports", "../../display/Container"], function (require, exp
                 this.view.style.height = this.height / this.resolution + 'px';
             }
         };
-        SystemRenderer.prototype.generateTexture = function (displayObject, scaleMode, resolution) {
-            var bounds = displayObject.getLocalBounds();
-            var renderTexture = RenderTexture.create(bounds.width | 0, bounds.height | 0, scaleMode, resolution);
-            tempMatrix.tx = -bounds.x;
-            tempMatrix.ty = -bounds.y;
-            this.render(displayObject, renderTexture, false, tempMatrix, true);
-            return renderTexture;
-        };
         SystemRenderer.prototype.destroy = function (removeView) {
             if (removeView && this.view.parentNode) {
                 this.view.parentNode.removeChild(this.view);
             }
-            this.type = CONST.RENDERER_TYPE.UNKNOWN;
+            this.type = 0;
             this.width = 0;
             this.height = 0;
             this.view = null;

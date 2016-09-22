@@ -100,8 +100,6 @@ var calculateSpriteMatrix = function (outputMatrix, filterArea, textureSize, spr
     return mappedMatrix;
 };
 
-module.exports = {
-    calculateScreenSpaceMatrix:calculateScreenSpaceMatrix,
-    calculateNormalisedScreenSpaceMatrix:calculateNormalisedScreenSpaceMatrix,
-    calculateSpriteMatrix:calculateSpriteMatrix
-};
+export calculateScreenSpaceMatrix;
+export calculateNormalisedScreenSpaceMatrix;
+export calculateSpriteMatrix;

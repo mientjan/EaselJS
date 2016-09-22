@@ -302,7 +302,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
         };
         Container.prototype._getObjectsUnderPoint = function (x, y, arr, mouse, activeListener) {
             var ctx = DisplayObject_1.DisplayObject._hitTestContext;
-            var mtx = this._matrix;
+            var mtx = this.matrix;
             activeListener = activeListener || (mouse && this.hasMouseEventListener());
             var children = this.children;
             var l = children.length;
@@ -314,7 +314,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
                     continue;
                 }
                 if (!hitArea && mask && mask.graphics && !mask.graphics.isEmpty()) {
-                    var maskMtx = mask.getMatrix(mask._matrix).prependMatrix(this.getConcatenatedMatrix(mtx));
+                    var maskMtx = mask.getMatrix(mask.matrix).prependMatrix(this.getConcatenatedMatrix(mtx));
                     ctx.setTransform(maskMtx.a, maskMtx.b, maskMtx.c, maskMtx.d, maskMtx.tx - x, maskMtx.ty - y);
                     mask.graphics.drawAsPath(ctx);
                     ctx.fillStyle = "#000";
@@ -364,7 +364,7 @@ define(["require", "exports", "./DisplayObject", "../../core/net/HttpRequest"], 
                 return this._transformBounds(bounds, matrix, ignoreTransform);
             }
             var minX = null, maxX = null, minY = null, maxY = null;
-            var mtx = ignoreTransform ? this._matrix.identity() : this.getMatrix(this._matrix);
+            var mtx = ignoreTransform ? this.matrix.identity() : this.getMatrix(this.matrix);
             if (matrix) {
                 mtx.prependMatrix(matrix);
             }

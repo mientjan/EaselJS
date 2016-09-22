@@ -1,9 +1,12 @@
-var SystemRenderer = require('../SystemRenderer'),
-    CanvasMaskManager = require('./utils/CanvasMaskManager'),
-    CanvasRenderTarget = require('./utils/CanvasRenderTarget'),
-    mapCanvasBlendModesToPixi = require('./utils/mapCanvasBlendModesToPixi'),
-    utils = require('../../utils'),
-    CONST = require('../../const');
+import {RenderType} from "../../../enum/RenderType";
+import {SystemRenderer} from "../SystemRenderer";
+import {CanvasMaskManager} from "./utils/CanvasMaskManager";
+// var SystemRenderer = require('../SystemRenderer'),
+//     CanvasMaskManager = require('./utils/CanvasMaskManager'),
+//     CanvasRenderTarget = require('./utils/CanvasRenderTarget'),
+//     mapCanvasBlendModesToPixi = require('./utils/mapCanvasBlendModesToPixi'),
+//     utils = require('../../utils'),
+//     CONST = require('../../const');
 
 /**
  * The CanvasRenderer draws the scene and all its content onto a 2d canvas. This renderer should be used for browsers that do not support webGL.
@@ -24,57 +27,58 @@ var SystemRenderer = require('../SystemRenderer'),
  *      not before the new render pass.
  * @param [options.roundPixels=false] {boolean} If true Pixi will Math.floor() x/y values when rendering, stopping pixel interpolation.
  */
-class CanvasRenderer extends SystemRenderer
+export class CanvasRenderer extends SystemRenderer
 {
 
-    type = CONST.RENDERER_TYPE.CANVAS;
-    rootContext:CanvasRenderingContext2D;
-    rootResolution:number;
+    public type:RenderType = RenderType.CANVAS;
+    public rootContext:CanvasRenderingContext2D;
+    public rootResolution:number;
+    /**
+     * Boolean flag controlling canvas refresh.
+     *
+     * @member {boolean}
+     */
+    public refresh = true;
+
+    /**
+     * Instance of a CanvasMaskManager, handles masking when using the canvas renderer.
+     *
+     * @member {PIXI.CanvasMaskManager}
+     */
+    public maskManager = new CanvasMaskManager(this);
+
+    /**
+     * The canvas property used to set the canvas smoothing property.
+     *
+     * @member {string}
+     */
+    public smoothProperty = 'imageSmoothingEnabled';
+
 
     constructor(width, height, options:any = {}) {
 
         super('Canvas', width, height, options);
 
-        this.rootContext = this.view.getContext('2d', {alpha: this.transparent});
+        this.rootContext = <CanvasRenderingContext2D> this.view.getContext('2d', {alpha: this.transparent});
         this.rootResolution = this.resolution;
 
-        /**
-         * Boolean flag controlling canvas refresh.
-         *
-         * @member {boolean}
-         */
-        this.refresh = true;
 
-        /**
-         * Instance of a CanvasMaskManager, handles masking when using the canvas renderer.
-         *
-         * @member {PIXI.CanvasMaskManager}
-         */
-        this.maskManager = new CanvasMaskManager(this);
-
-        /**
-         * The canvas property used to set the canvas smoothing property.
-         *
-         * @member {string}
-         */
-        this.smoothProperty = 'imageSmoothingEnabled';
-
-        if (!this.rootContext.imageSmoothingEnabled) {
-            if (this.rootContext.webkitImageSmoothingEnabled) {
+        if (!this.rootContext['imageSmoothingEnabled']) {
+            if (this.rootContext['webkitImageSmoothingEnabled']) {
                 this.smoothProperty = 'webkitImageSmoothingEnabled';
             }
-            else if (this.rootContext.mozImageSmoothingEnabled) {
+            else if (this.rootContext['mozImageSmoothingEnabled']) {
                 this.smoothProperty = 'mozImageSmoothingEnabled';
             }
-            else if (this.rootContext.oImageSmoothingEnabled) {
+            else if (this.rootContext['oImageSmoothingEnabled']) {
                 this.smoothProperty = 'oImageSmoothingEnabled';
             }
-            else if (this.rootContext.msImageSmoothingEnabled) {
+            else if (this.rootContext['msImageSmoothingEnabled']) {
                 this.smoothProperty = 'msImageSmoothingEnabled';
             }
         }
 
-        this.initPlugins();
+        // this.initPlugins();
 
         this.blendModes = mapCanvasBlendModesToPixi();
         this._activeBlendMode = null;

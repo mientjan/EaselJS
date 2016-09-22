@@ -65,11 +65,6 @@ export class CanvasElement
 	{
 		return this._height;
 	}
-	
-	public getDomElement():HTMLCanvasElement
-	{
-		return this._domElement;
-	}
 
 	/**
 	 *

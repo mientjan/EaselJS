@@ -225,8 +225,8 @@ export class Bitmap extends DisplayObject implements ILoadable<Bitmap>
 		{
 			return rect;
 		}
-		var obj = <{width:number;height:number;}> this.sourceRect || this.source;
-		return this.hasLoaded() ? this._rectangle.setProperies(0, 0, obj.width, obj.height) : null;
+
+		return new Rectangle(this.x, this.y, this.width, this.height);
 	}
 
 	/**
