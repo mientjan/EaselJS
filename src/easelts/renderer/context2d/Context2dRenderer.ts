@@ -4,6 +4,10 @@ import {Signal} from "../../../core/event/Signal";
 import {Stats} from "../../component/Stats";
 import {Rectangle} from "../../geom/Rectangle";
 
+export interface IContext2dRendererOptions {
+	pixelRatio?:number;
+}
+
 export class Context2dRenderer
 {
 	_context:CanvasRenderingContext2D;
@@ -11,6 +15,7 @@ export class Context2dRenderer
 
 	_autoClear:boolean = true;
 	_fpsCounter:Stats;
+	_pixelRatio:number;
 
 	public sourceRect:Rectangle = null;
 
@@ -26,6 +31,21 @@ export class Context2dRenderer
 	 * @event drawend
 	 */
 	public drawendSignal:Signal = new Signal();
+
+	constructor(element:Canvas2DElement|HTMLCanvasElement = document.createElement('canvas'), options:IContext2dRendererOptions = {})
+	{
+		if(element instanceof Canvas2DElement){
+			this.setElement(element);
+		} else {
+			this.setElement(new Canvas2DElement(element.width, element.height, {
+				transparent:false,
+				backgroundColor:'#000000',
+				domElement: element
+			}));
+		}
+
+		this._pixelRatio = options.pixelRatio || 1;
+	}
 
 	public setFpsCounter(value:boolean):this
 	{
@@ -54,7 +74,9 @@ export class Context2dRenderer
 
 		// DisplayObject._snapToPixelEnabled = this.snapToPixelEnabled;
 
-		ctx.setTransform(1, 0, 0, 1, 0, 0 );
+
+
+		ctx.setTransform(this._pixelRatio, 0, 0, this._pixelRatio, 0, 0 );
 
 		if(autoClear)
 		{

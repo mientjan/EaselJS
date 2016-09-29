@@ -5,7 +5,7 @@ import {Vector3} from "../../src/core/math/Vector3";
 
 var v3 = new Vector3();
 
-var holder = <HTMLBlockElement> document.getElementById('holder');
+var holder = <HTMLDivElement> document.getElementById('holder');
 var stage = new Stage(holder, {});
 
 var image = new Bitmap('../assets/image/ninepatch_red.png', 0, 0, 0, 0, 0, 0);

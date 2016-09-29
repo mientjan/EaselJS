@@ -132,7 +132,7 @@ export class Stage extends Container
 	/**
 	 *
 	 */
-	public holder:HTMLBlockElement = null;
+	public holder:HTMLDivElement = null;
 
 	/**
 	 * The current mouse X position on the canvas. If the mouse leaves the canvas, this will indicate the most recent
@@ -311,7 +311,7 @@ export class Stage extends Container
 	 * @param {HTMLCanvasElement|HTMLBlockElement} element A canvas or div element. If it's a div element, a canvas object will be created and appended to the div.
 	 * @param {boolean} [triggerResizeOnWindowResize=false] Indicates whether onResize should be called when the window is resized
 	 **/
-	constructor(element:HTMLBlockElement|HTMLDivElement|HTMLCanvasElement, option:IStageOption)
+	constructor(element:HTMLDivElement|HTMLCanvasElement, option:IStageOption)
 	{
 		super('100%', '100%', 0, 0, 0, 0);
 
@@ -322,7 +322,7 @@ export class Stage extends Container
 		if(element.tagName == 'CANVAS')
 		{
 			canvas = <HTMLCanvasElement> element;
-			this.holder = <HTMLBlockElement> element.parentElement;
+			this.holder = <HTMLDivElement> element.parentElement;
 			if(this._option.autoResize){
 				width = this.holder.offsetWidth;
 				height = this.holder.offsetHeight;
@@ -332,7 +332,7 @@ export class Stage extends Container
 			}
 		} else {
 			canvas = document.createElement('canvas');
-			this.holder = <HTMLBlockElement> element;
+			this.holder = <HTMLDivElement> element;
 
 			width = this.holder.offsetWidth;
 			height = this.holder.offsetHeight;

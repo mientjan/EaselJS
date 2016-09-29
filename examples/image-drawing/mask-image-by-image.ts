@@ -4,7 +4,7 @@ import {Container} from "../../src/easelts/display/Container";
 import {Canvas2DElement} from "../../src/easelts/renderer/Canvas2DElement";
 
 
-var holder = <HTMLBlockElement> document.getElementById('holder');
+var holder = <HTMLDivElement> document.getElementById('holder');
 var stage = new Stage(holder, {autoResize:true});
 
 var container = new Container().setBuffer(new Canvas2DElement(500, 500), true)

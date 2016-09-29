@@ -4,7 +4,7 @@ import {MouseEvent} from '../../src/easelts/event/MouseEvent';
 import {ButtonBehavior} from '../../src/easelts/behavior/ButtonBehavior';
 import {BitmapProjective} from '../../src/easelts/display/BitmapProjective';
 
-var holder = <HTMLBlockElement> document.getElementById('holder');
+var holder = <HTMLDivElement> document.getElementById('holder');
 var stage = new Stage(holder, true);
 stage.enableMouseOver(20);
 

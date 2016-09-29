@@ -6,7 +6,8 @@ import {Vector3} from "../../src/core/math/Vector3";
 import {Quaternion} from "../../src/core/math/Quaternion";
 import {MathUtil} from "../../src/core/math/MathUtil";
 import {Interval} from "../../src/core/util/Interval";
-var holder = <HTMLBlockElement> document.getElementById('holder');
+
+var holder = <HTMLDivElement> document.getElementById('holder');
 var stage = new Stage(holder, true);
 
 var image = new Bitmap('../assets/image/ninepatch_red.png', 0, 0, '50%', '50%', '50%', '50%');

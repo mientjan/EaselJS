@@ -5,7 +5,7 @@ import {ArrayUtil} from "../../src/easelts/util/ArrayUtil";
 import {IDisplayObject} from "../../src/easelts/interface/IDisplayObject";
 import {StageOption} from "../../src/easelts/data/StageOption";
 
-var holder = <HTMLBlockElement> document.getElementById('holder');
+var holder = <HTMLDivElement> document.getElementById('holder');
 var stage = new Stage(holder, {autoResize:true});
 stage.getRenderer().setFpsCounter(true);
 

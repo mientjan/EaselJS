@@ -2,7 +2,7 @@ import {Stage} from '../../src/easelts/display/Stage';
 import {Bitmap} from '../../src/easelts/display/Bitmap';
 import {Shape} from '../../src/easelts/display/Shape';
 
-var holder = <HTMLBlockElement> document.getElementById('holder');
+var holder = <HTMLDivElement> document.getElementById('holder');
 var stage = new Stage(holder, {autoResize:true});
 
 var image = new Bitmap('../assets/image/ninepatch_red.png', 0, 0, 0, 0, 0, 0);

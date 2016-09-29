@@ -151,7 +151,7 @@ export class BitmapText extends Container
 	/**
 	 * Docced in superclass.
 	 **/
-	public draw(ctx:IContext2D, ignoreCache:boolean):boolean
+	public draw(ctx:CanvasRenderingContext2D, ignoreCache:boolean):boolean
 	{
 		// throws maximumiteration
 		//		if(this.DisplayObject_draw(ctx, ignoreCache))
