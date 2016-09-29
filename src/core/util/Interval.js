@@ -60,13 +60,13 @@ define(["require", "exports", "../event/Signal2"], function (require, exports, S
             mspf = fc.mspf;
             fc.accum += delta;
             if (fc.fixed) {
-                while (fc.accum > fc.mspf) {
+                while (fc.accum >= fc.mspf) {
                     fc.accum -= fc.mspf;
                     fc.emit(fc.mspf, fc.accum);
                 }
             }
-            else {
-                fc.signal.emit(fc.accum, fc.accum);
+            else if (fc.accum >= fc.mspf) {
+                fc.signal.emit(fc.mspf, fc.accum);
                 fc.accum = 0;
             }
         }
